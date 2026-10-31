@@ -4,11 +4,12 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Logo } from "./Logo";
 
-export type NavLink = { href: string; label: string };
+export type NavLink = { href: string; label: string; children?: { href: string; label: string }[] };
 
 export function HeaderClient({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [sub, setSub] = useState<string | null>(null); // açık alt menü
   const [lang, setLang] = useState<"TR" | "EN">("TR");
 
   useEffect(() => {
@@ -30,15 +31,36 @@ export function HeaderClient({ links }: { links: NavLink[] }) {
         </Link>
 
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Ana menü">
-          {links.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              className="text-sm font-medium text-navy transition-colors hover:text-turquoise"
-            >
-              {l.label}
-            </a>
-          ))}
+          {links.map((l) =>
+            l.children ? (
+              <div key={l.label} className="relative" onMouseEnter={() => setSub(l.label)} onMouseLeave={() => setSub(null)}>
+                <button
+                  type="button"
+                  aria-expanded={sub === l.label}
+                  onClick={() => setSub(sub === l.label ? null : l.label)}
+                  className="flex items-center gap-1 text-sm font-medium text-navy transition-colors hover:text-turquoise"
+                >
+                  {l.label}
+                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={sub === l.label ? "rotate-180" : ""}><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                {sub === l.label && (
+                  <div className="absolute left-0 top-full pt-3">
+                    <ul className="min-w-52 rounded-2xl bg-white p-2 shadow-xl ring-1 ring-navy/10">
+                      {l.children.map((c) => (
+                        <li key={c.href}>
+                          <Link href={c.href} onClick={() => setSub(null)} className="block rounded-xl px-4 py-2.5 text-sm font-medium text-navy hover:bg-mist hover:text-turquoise-dark">{c.label}</Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            ) : (
+              <a key={l.label} href={l.href} className="text-sm font-medium text-navy transition-colors hover:text-turquoise">
+                {l.label}
+              </a>
+            ),
+          )}
         </nav>
 
         <div className="flex items-center gap-3">
@@ -75,16 +97,34 @@ export function HeaderClient({ links }: { links: NavLink[] }) {
 
       {open && (
         <nav className="border-t border-navy/10 bg-white px-5 pb-6 pt-2 lg:hidden" aria-label="Mobil menü">
-          {links.map((l) => (
-            <a
-              key={l.label}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="block border-b border-navy/5 py-4 text-base font-medium text-navy"
-            >
-              {l.label}
-            </a>
-          ))}
+          {links.map((l) =>
+            l.children ? (
+              <div key={l.label} className="border-b border-navy/5">
+                <button
+                  type="button"
+                  aria-expanded={sub === l.label}
+                  onClick={() => setSub(sub === l.label ? null : l.label)}
+                  className="flex w-full items-center justify-between py-4 text-base font-medium text-navy"
+                >
+                  {l.label}
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" className={sub === l.label ? "rotate-180" : ""}><path d="M6 9l6 6 6-6" /></svg>
+                </button>
+                {sub === l.label && (
+                  <ul className="pb-3 pl-3">
+                    {l.children.map((c) => (
+                      <li key={c.href}>
+                        <Link href={c.href} onClick={() => { setOpen(false); setSub(null); }} className="block py-2.5 text-base text-navy/80">{c.label}</Link>
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
+            ) : (
+              <a key={l.label} href={l.href} onClick={() => setOpen(false)} className="block border-b border-navy/5 py-4 text-base font-medium text-navy">
+                {l.label}
+              </a>
+            ),
+          )}
         </nav>
       )}
     </header>
