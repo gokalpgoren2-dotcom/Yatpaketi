@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { shrink } from "@/lib/shrink";
 import { slugify } from "@/lib/slug";
-import { refreshSite } from "@/app/admin/(panel)/icerik/actions";
+
 
 type Table = "destinations" | "categories";
 export type EntityRow = {
@@ -78,7 +78,7 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
       const m = res.error?.message ?? "";
       return fail(res.error?.code === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + m + (m.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
     }
-    await refreshSite();
+    
     if (!row) { router.push(`${back}/${res.data.id}`); return; }
     setMsg({ ok: true, text: "Kaydedildi." });
     window.scrollTo({ top: 0, behavior: "smooth" });
