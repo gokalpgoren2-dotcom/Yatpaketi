@@ -247,6 +247,7 @@ export async function Footer() {
         </div>
         <ul className="flex flex-col gap-2 md:items-end">
           {links.map((l) => <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}
+          <li><Link href="/musteri" className="hover:text-white">Müşteri Girişi</Link></li>
         </ul>
       </div>
       <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. Tüm hakları saklıdır.</p>
