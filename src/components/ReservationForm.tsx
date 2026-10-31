@@ -9,7 +9,7 @@ const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/
 
 export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: string; boatName: string; maxGuests: number }) {
   const [t0] = useState(() => Date.now());
-  const [pending, start] = useTransition();
+  const [pending, begin] = useTransition();
   const [result, setResult] = useState<{ ok: boolean; message?: string } | null>(null);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
@@ -23,7 +23,7 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
     const fd = new FormData(e.currentTarget);
     fd.set("elapsed", String(Date.now() - t0));
     setResult(null);
-    start(async () => {
+    begin(async () => {
       const r = await submitReservation(fd);
       setResult(r.ok ? { ok: true } : { ok: false, message: r.message });
     });
