@@ -32,12 +32,12 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
   const raw = (data ?? []) as RawReq[];
   const nodate = raw.filter((r) => !r.start_date || !r.end_date);
   const all = raw.filter((r) => r.start_date && r.end_date) as Req[];
-  const year = today.slice(0, 4);
-  const seasonAll = all.filter((r) => r.start_date.startsWith(year));
-  const seasonTotal = seasonAll.length + nodate.length;
-  const seasonDone = seasonAll.filter((r) => r.end_date < today).length;
-  const seasonNow = seasonAll.filter((r) => r.start_date <= today && r.end_date >= today).length;
-  const seasonNext = seasonAll.filter((r) => r.start_date > today).length;
+  const grandTotal = all.length + nodate.length;
+  const done = all.filter((r) => r.end_date < today).length;
+  const nowCount = all.filter((r) => r.start_date <= today && r.end_date >= today).length;
+  const nextCount = all.filter((r) => r.start_date > today).length;
+  const byYear = new Map<string, number>();
+  for (const r of all) byYear.set(r.start_date.slice(0, 4), (byYear.get(r.start_date.slice(0, 4)) ?? 0) + 1);
   const pastCount = all.filter((r) => r.end_date < today).length;
   const rows = past ? all.filter((r) => r.end_date < today) : all.filter((r) => r.end_date >= today);
 
@@ -116,10 +116,10 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
       {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">Okunamadı: {error.message}</p>}
 
       <div className="mt-4 rounded-2xl bg-navy p-4 text-white">
-        <p className="text-xs uppercase tracking-wide text-white/70">{year} sezonu toplam</p>
-        <p className="mt-1 text-3xl font-semibold">{seasonTotal} <span className="text-base font-normal text-white/80">tur (dosya)</span></p>
-        <p className="mt-1 text-sm text-white/80">{seasonDone} tamamlandı · {seasonNow} turda · {seasonNext} yaklaşıyor{nodate.length > 0 ? ` · ${nodate.length} tarihsiz` : ""}</p>
-        {all.length + nodate.length !== seasonTotal && <p className="mt-1 text-xs text-white/60">Tüm zamanlar: {all.length + nodate.length} tur</p>}
+        <p className="text-xs uppercase tracking-wide text-white/70">Toplam onaylı tur (açılan dosya)</p>
+        <p className="mt-1 text-3xl font-semibold">{grandTotal}</p>
+        <p className="mt-1 text-sm text-white/80">{done} tamamlandı · {nowCount} turda · {nextCount} yaklaşıyor{nodate.length > 0 ? ` · ${nodate.length} tarihsiz` : ""}</p>
+        {byYear.size > 0 && <p className="mt-1 text-xs text-white/70">Yıllara göre: {[...byYear.entries()].sort().map(([y, n]) => `${y}: ${n}`).join(" · ")}</p>}
       </div>
 
       <nav aria-label="Görünüm" className="mt-5 flex gap-2">
