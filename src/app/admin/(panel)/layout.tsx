@@ -6,11 +6,13 @@ const active = [
   { href: "/admin", label: "Genel Bakış" },
   { href: "/admin/tekneler", label: "Tekneler" },
   { href: "/admin/rezervasyonlar", label: "Rezervasyonlar" },
+  { href: "/admin/kategoriler", label: "Tekne Tipleri" },
+  { href: "/admin/destinasyonlar", label: "Destinasyonlar" },
   { href: "/admin/yazilar", label: "Yazılar" },
   { href: "/admin/icerik", label: "Site İçeriği" },
   { href: "/admin/ayarlar", label: "Ayarlar" },
 ];
-const soon = ["Destinasyonlar"];
+const soon: string[] = [];
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAdmin();

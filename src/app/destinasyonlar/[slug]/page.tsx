@@ -6,6 +6,7 @@ import { Footer } from "@/components/Sections";
 import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
+import { RichText } from "@/components/RichText";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
 
@@ -17,8 +18,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const d = destinations.find((x) => x.slug === slug);
   if (!d) return {};
   return {
-    title: `${d.name} Tekne Kiralama`,
-    description: `${d.name} çıkışlı gulet, motoryat, katamaran ve yelkenli kiralama seçenekleri. ${d.intro}`,
+    title: d.seoTitle || `${d.name} Tekne Kiralama`,
+    description: d.seoDescription || `${d.name} çıkışlı gulet, motoryat, katamaran ve yelkenli kiralama seçenekleri. ${d.intro.slice(0, 120)}`,
     alternates: { canonical: `/destinasyonlar/${d.slug}` },
     // Gerçek tekne yokken sayfa indekslenmez.
     robots: boatsFor(boats, d.slug).length > 0 ? { index: false, follow: true } : { index: false, follow: false },
@@ -49,7 +50,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
           </div>
         </section>
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
-          <p className="mt-8 max-w-2xl leading-relaxed text-navy/70">{d.intro}</p>
+          {d.intro && <div className="mt-8 max-w-3xl"><RichText text={d.intro} /></div>}
           {sample && <p className="mt-2 text-sm text-navy/50">Örnek içerik: Veritabanı bağlı olmadığı için örnek veri gösteriliyor.</p>}
           <div className="mt-10 flex items-end justify-between">
             <h2 className="font-display text-2xl text-navy">{d.name} çıkışlı tekneler</h2>

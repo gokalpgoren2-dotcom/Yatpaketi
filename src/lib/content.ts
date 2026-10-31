@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { boats as sampleBoats, categories as sampleCategories, destinations as sampleDestinations, type Boat, type Destination } from "./data";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import { normalizePhone } from "./phone";
+import { slugify } from "./slug";
 
 // Herkese açık okuma: oturum/çerez gerektirmez, yalnızca RLS'in izin verdiği (yayınlanmış) içerik gelir.
 function db() {
@@ -39,7 +40,7 @@ export async function getDestinations(): Promise<Destination[]> {
   try {
     const { data, error } = await db()
       .from("destinations")
-      .select("slug,name_tr,blurb_tr,intro_tr,cover_path")
+      .select("slug,name_tr,blurb_tr,intro_tr,cover_path,seo_title,seo_description")
       .eq("is_published", true)
       .order("sort_order");
     if (error || !data || data.length === 0) return sampleDestinations;
@@ -50,6 +51,8 @@ export async function getDestinations(): Promise<Destination[]> {
       intro: (d.intro_tr as string | null) ?? "",
       hue: 175 + i * 9,
       image: publicImageUrl(d.cover_path as string | null),
+      seoTitle: (d.seo_title as string | null) ?? "",
+      seoDescription: (d.seo_description as string | null) ?? "",
     }));
   } catch {
     return sampleDestinations;
@@ -126,15 +129,31 @@ export async function getBoatBySlug(slug: string): Promise<{ boat: Boat | null; 
   return { boat: boats.find((b) => b.slug === slug) ?? null, all: boats, sample };
 }
 
-export async function getCategoryNames(): Promise<string[]> {
-  if (!supabaseConfigured()) return sampleCategories;
+export type Category = { slug: string; name: string; intro: string; image: string | null; seoTitle: string; seoDescription: string };
+
+const toCategory = (n: string): Category => ({ slug: slugify(n), name: n, intro: "", image: null, seoTitle: "", seoDescription: "" });
+
+// Tekne tipleri. Yeni alanlar (tanıtım metni vb.) henüz eklenmediyse yalnızca ad ve adres okunur.
+export async function getCategories(): Promise<Category[]> {
+  if (!supabaseConfigured()) return sampleCategories.map(toCategory);
   try {
-    const { data, error } = await db().from("categories").select("name_tr").eq("is_active", true).order("sort_order");
-    if (error || !data || data.length === 0) return sampleCategories;
-    return data.map((c) => c.name_tr as string);
+    const full = await db().from("categories").select("slug,name_tr,intro_tr,cover_path,seo_title,seo_description").eq("is_active", true).order("sort_order");
+    if (!full.error && full.data && full.data.length > 0) {
+      return full.data.map((c) => ({
+        slug: c.slug as string, name: c.name_tr as string, intro: (c.intro_tr as string | null) ?? "",
+        image: publicImageUrl(c.cover_path as string | null), seoTitle: (c.seo_title as string | null) ?? "", seoDescription: (c.seo_description as string | null) ?? "",
+      }));
+    }
+    const basic = await db().from("categories").select("slug,name_tr").eq("is_active", true).order("sort_order");
+    if (basic.error || !basic.data || basic.data.length === 0) return sampleCategories.map(toCategory);
+    return basic.data.map((c) => ({ slug: c.slug as string, name: c.name_tr as string, intro: "", image: null, seoTitle: "", seoDescription: "" }));
   } catch {
-    return sampleCategories;
+    return sampleCategories.map(toCategory);
   }
+}
+
+export async function getCategoryNames(): Promise<string[]> {
+  return (await getCategories()).map((c) => c.name);
 }
 
 // ---- İletişim ayarları (Panel > Ayarlar) ----

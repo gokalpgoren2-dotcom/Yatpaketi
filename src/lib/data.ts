@@ -30,7 +30,7 @@ export type Boat = {
   featured?: boolean;
 };
 
-export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string; image?: string | null };
+export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string; image?: string | null; seoTitle?: string; seoDescription?: string };
 
 export const categories = [
   "Gulet",

@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
 import { routes, type Boat, type Destination } from "@/lib/data";
+import type { Category } from "@/lib/content";
 import { getContact } from "@/lib/content";
 import { formatPhone } from "@/lib/phone";
 import { getNavInfo, type Post } from "@/lib/posts";
@@ -28,7 +29,7 @@ function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: strin
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
-export function Categories({ items }: { items: string[] }) {
+export function Categories({ items }: { items: Category[] }) {
   return (
     <section className="pb-4 pt-14 lg:pt-20">
       <div className={wrap}>
@@ -36,11 +37,11 @@ export function Categories({ items }: { items: string[] }) {
         <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
           {items.map((c) => (
             <Link
-              key={c}
-              href={`/tekneler?tip=${encodeURIComponent(c)}`}
+              key={c.slug}
+              href={`/tekne-tipleri/${c.slug}`}
               className="shrink-0 rounded-full bg-mist px-6 py-3 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:bg-turquoise hover:text-white hover:ring-turquoise"
             >
-              {c}
+              {c.name}
             </Link>
           ))}
         </div>
