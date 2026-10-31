@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
-import { SeedCategoryIntros } from "@/components/admin/SeedCategoryIntros";
 
 export const dynamic = "force-dynamic";
 
@@ -18,7 +17,6 @@ export default async function List() {
       </div>
       <p className="mt-1 text-sm text-navy/60">Gulet, motoryat gibi tipler. Her tipin sitede kendi sayfası vardır.</p>
       {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">Okunamadı: {error.message}</p>}
-      <SeedCategoryIntros />
       <ul className="mt-5 divide-y divide-navy/10 rounded-2xl bg-white shadow-sm">
         {rows.map((r) => (
           <li key={r.id}>
