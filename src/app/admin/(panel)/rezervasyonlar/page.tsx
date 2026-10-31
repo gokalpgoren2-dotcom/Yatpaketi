@@ -13,7 +13,7 @@ const tone: Record<string, string> = {
 type Req = {
   id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null;
   start_date: string | null; end_date: string | null; guests: number | null; message: string | null;
-  status: string; admin_notes: string | null; created_at: string;
+  status: string; admin_notes: string | null; cancel_reason?: string | null; created_at: string;
 };
 
 const fmt = (d: string | null) => (d ? new Date(d + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "—");
@@ -51,6 +51,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                   <span className="min-w-0">
                     <span className="block font-semibold">{r.customer_name}</span>
                     <span className="block text-sm text-navy/60">{r.boat_name ?? "Tekne belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
+                    {r.status === "cancelled" && r.cancel_reason && <span className="mt-1 block text-sm text-red-700">İptal sebebi: {r.cancel_reason}</span>}
                   </span>
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold ${tone[r.status] ?? "bg-navy/10"}`}>{labels[r.status] ?? r.status}</span>
                 </summary>
@@ -77,6 +78,10 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                       <select id={`st-${r.id}`} name="status" defaultValue={r.status} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base">
                         {Object.entries(labels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
+                    </div>
+                    <div>
+                      <label htmlFor={`cr-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">İptal sebebi (durum "İptal" ise zorunlu)</label>
+                      <textarea id={`cr-${r.id}`} name="cancel_reason" rows={2} maxLength={1000} defaultValue={r.cancel_reason ?? ""} placeholder="Örn. Müşteri tarih değiştirdi, tekne müsait değil, fiyatta anlaşılamadı" className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" />
                     </div>
                     <div>
                       <label htmlFor={`nt-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Not (yalnızca siz görürsünüz)</label>
