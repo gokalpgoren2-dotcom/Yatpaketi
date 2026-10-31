@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { boats as sampleBoats, categories as sampleCategories, destinations as sampleDestinations, type Boat, type Destination } from "./data";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
+import { normalizePhone } from "./phone";
 
 // Herkese açık okuma: oturum/çerez gerektirmez, yalnızca RLS'in izin verdiği (yayınlanmış) içerik gelir.
 function db() {
@@ -145,7 +146,7 @@ export async function getContact(): Promise<Contact> {
   try {
     const { data } = await db().from("site_settings").select("value").eq("key", "contact").maybeSingle();
     const v = (data?.value ?? {}) as Partial<Contact>;
-    return { phone: v.phone ?? "", whatsapp: v.whatsapp ?? "", email: v.email ?? "" };
+    return { phone: normalizePhone(v.phone ?? ""), whatsapp: normalizePhone(v.whatsapp ?? ""), email: v.email ?? "" };
   } catch {
     return empty;
   }

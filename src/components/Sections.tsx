@@ -4,7 +4,8 @@ import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
 import { posts, routes, type Boat, type Destination } from "@/lib/data";
-import { getContact, type Contact } from "@/lib/content";
+import { getContact } from "@/lib/content";
+import { formatPhone } from "@/lib/phone";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -224,34 +225,39 @@ export function Blog() {
   );
 }
 
+const icon = { className: "h-5 w-5 shrink-0", viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
+
 export async function Support() {
   const c = await getContact();
+  const action = "flex items-center justify-center gap-3 rounded-2xl bg-white/15 px-5 py-4 text-base font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/25";
   return (
     <section className="px-5 pb-14 pt-6 lg:px-8 lg:pb-20" id="iletisim">
-      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-[2rem] bg-gradient-to-br from-turquoise to-[#0b6f95] p-8 text-white md:flex-row md:items-center lg:p-14">
-        <div>
-          <h2 className="font-display text-3xl font-medium lg:text-4xl">Rotanızı birlikte planlayalım.</h2>
-          <p className="mt-2 max-w-xl text-white/90">Bir tekne seçip rezervasyon talebi gönderin, size uygun seçenekleri önerelim.</p>
-          <ContactLines c={c} />
+      <div className="mx-auto max-w-7xl overflow-hidden rounded-[2rem] bg-gradient-to-br from-turquoise to-[#0b6f95] p-7 text-white lg:p-14">
+        <div className="max-w-2xl">
+          <h2 className="font-display text-[1.7rem] font-medium leading-tight lg:text-4xl">Rotanızı birlikte planlayalım.</h2>
+          <p className="mt-3 text-white/90">Bir tekne seçip rezervasyon talebi gönderin ya da bize doğrudan ulaşın.</p>
         </div>
-        <div className="flex flex-wrap gap-3">
-          <Link href="/tekneler" className="rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-navy transition hover:bg-mist">Tekneleri İncele</Link>
+        <div className="mt-7 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+          <Link href="/tekneler" className="flex items-center justify-center rounded-2xl bg-white px-5 py-4 text-base font-semibold text-navy transition hover:bg-mist">Tekneleri İncele</Link>
           {c.whatsapp && (
-            <a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener" className="rounded-full border border-white/70 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">WhatsApp</a>
+            <a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener" className={action}>
+              <svg {...icon}><path d="M3 21l1.6-4.6A8.5 8.5 0 1 1 8 19.5z" /></svg>WhatsApp
+            </a>
+          )}
+          {c.phone && (
+            <a href={`tel:+${c.phone}`} className={action}>
+              <svg {...icon}><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2z" /></svg>{formatPhone(c.phone)}
+            </a>
+          )}
+          {c.email && (
+            <a href={`mailto:${c.email}`} className={`${action} min-w-0`}>
+              <svg {...icon}><path d="M3 6h18v12H3zM3 7l9 7 9-7" /></svg><span className="truncate">E-posta gönder</span>
+            </a>
           )}
         </div>
+        {c.email && <p className="mt-4 break-all text-sm text-white/80">{c.email}</p>}
       </div>
     </section>
-  );
-}
-
-function ContactLines({ c }: { c: Contact }) {
-  if (!c.phone && !c.email) return null;
-  return (
-    <p className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm font-medium">
-      {c.phone && <a href={`tel:+${c.phone.replace(/\D/g, "")}`} className="underline underline-offset-4">+{c.phone.replace(/\D/g, "")}</a>}
-      {c.email && <a href={`mailto:${c.email}`} className="underline underline-offset-4">{c.email}</a>}
-    </p>
   );
 }
 
@@ -265,8 +271,8 @@ export async function Footer() {
           <p className="mt-2 max-w-xs">Türkiye’de yat ve tekne kiralama platformu.</p>
           {(c.phone || c.email) && (
             <p className="mt-3 flex flex-col gap-1">
-              {c.phone && <a href={`tel:+${c.phone.replace(/\D/g, "")}`} className="hover:text-white">+{c.phone.replace(/\D/g, "")}</a>}
-              {c.email && <a href={`mailto:${c.email}`} className="hover:text-white">{c.email}</a>}
+              {c.phone && <a href={`tel:+${c.phone}`} className="hover:text-white">{formatPhone(c.phone)}</a>}
+              {c.email && <a href={`mailto:${c.email}`} className="break-all hover:text-white">{c.email}</a>}
             </p>
           )}
         </div>

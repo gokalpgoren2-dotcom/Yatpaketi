@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
+import { formatPhone, normalizePhone } from "@/lib/phone";
 import { saveContact } from "./actions";
 
 export const dynamic = "force-dynamic";
@@ -22,12 +23,12 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <h2 className="font-semibold">İletişim bilgileri</h2>
         <div>
           <label htmlFor="phone" className={lab}>Telefon</label>
-          <input id="phone" name="phone" type="tel" inputMode="tel" defaultValue={v.phone ? "+" + v.phone : ""} placeholder="+90 555 123 45 67" className={input} />
+          <input id="phone" name="phone" type="tel" inputMode="tel" defaultValue={formatPhone(normalizePhone(v.phone ?? ""))} placeholder="0541 681 23 14" className={input} />
         </div>
         <div>
           <label htmlFor="whatsapp" className={lab}>WhatsApp numarası</label>
-          <input id="whatsapp" name="whatsapp" type="tel" inputMode="tel" defaultValue={v.whatsapp ? "+" + v.whatsapp : ""} placeholder="+90 555 123 45 67" className={input} />
-          <p className="mt-1 text-xs text-navy/50">Doluysa tekne sayfalarında ve ana sayfada WhatsApp düğmesi görünür. Ülke koduyla yazın.</p>
+          <input id="whatsapp" name="whatsapp" type="tel" inputMode="tel" defaultValue={formatPhone(normalizePhone(v.whatsapp ?? ""))} placeholder="0541 681 23 14" className={input} />
+          <p className="mt-1 text-xs text-navy/50">Doluysa tekne sayfalarında ve ana sayfada WhatsApp düğmesi görünür. Başında 0 ile veya ülke koduyla yazabilirsiniz.</p>
         </div>
         <div>
           <label htmlFor="email" className={lab}>E-posta</label>
