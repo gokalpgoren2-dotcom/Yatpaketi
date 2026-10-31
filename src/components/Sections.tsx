@@ -4,9 +4,11 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
-import { posts, routes, type Boat, type Destination } from "@/lib/data";
+import { routes, type Boat, type Destination } from "@/lib/data";
 import { getContact } from "@/lib/content";
 import { formatPhone } from "@/lib/phone";
+import { getNavInfo, type Post } from "@/lib/posts";
+import { PostCard, postHref } from "./PostCard";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -205,21 +207,14 @@ export function WhyUs() {
   );
 }
 
-export function Blog() {
+export function Blog({ items }: { items: Post[] }) {
+  if (items.length === 0) return null;
   return (
     <section className="py-14 lg:py-20" id="blog">
       <div className={wrap}>
-        <Heading eyebrow="Blog" title="Seyahat rehberi" />
+        <Heading eyebrow="Yatpaketi Rehberi" title="Okuyun, planlayın" action={{ href: "/rehber", label: "Tüm yazılar" }} />
         <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
-          {posts.map((p, i) => (
-            <article key={p.title} className="overflow-hidden rounded-3xl ring-1 ring-navy/10">
-              <Placeholder hue={185 + i * 12} className="aspect-[16/10]" label={false} />
-              <div className="p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-turquoise-dark">{p.tag}</p>
-                <h3 className="mt-2 font-semibold text-navy">{p.title}</h3>
-              </div>
-            </article>
-          ))}
+          {items.map((p, i) => <PostCard key={p.slug} p={p} i={i} />)}
         </div>
       </div>
     </section>
@@ -227,7 +222,14 @@ export function Blog() {
 }
 
 export async function Footer() {
-  const c = await getContact();
+  const [c, nav] = await Promise.all([getContact(), getNavInfo()]);
+  const links = [
+    { href: "/tekneler", label: "Kiralık Tekneler" },
+    { href: "/destinasyonlar", label: "Destinasyonlar" },
+    ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
+    ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
+    ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),
+  ];
   return (
     <footer id="iletisim" className="scroll-mt-20 bg-navy py-12 text-sm text-white/70">
       <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
@@ -242,8 +244,11 @@ export async function Footer() {
             </p>
           )}
         </div>
-        <p>© {new Date().getFullYear()} yatpaketi. Tüm hakları saklıdır.</p>
+        <ul className="flex flex-col gap-2 md:items-end">
+          {links.map((l) => <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}
+        </ul>
       </div>
+      <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. Tüm hakları saklıdır.</p>
     </footer>
   );
 }

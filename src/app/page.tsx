@@ -4,12 +4,13 @@ import {
   Blog, Categories, Destinations, FeaturedBoats, Footer, HowItWorks, RentalModes, Routes, WhyUs,
 } from "@/components/Sections";
 import { getBoats, getCategoryNames, getDestinations, getHome } from "@/lib/content";
+import { getPosts } from "@/lib/posts";
 
 // Panelden yapılan değişiklikler en geç bir dakika içinde görünür.
 export const revalidate = 60;
 
 export default async function Home() {
-  const [home, dests, cats, { boats, sample }] = await Promise.all([getHome(), getDestinations(), getCategoryNames(), getBoats()]);
+  const [home, dests, cats, { boats, sample }, posts] = await Promise.all([getHome(), getDestinations(), getCategoryNames(), getBoats(), getPosts(["guide", "blog"], 3)]);
   const featured = boats.filter((b) => b.featured);
   const shown = (featured.length > 0 ? featured : boats).slice(0, 6);
   return (
@@ -24,7 +25,7 @@ export default async function Home() {
         <RentalModes />
         <Routes />
         <WhyUs />
-        <Blog />
+        <Blog items={posts} />
       </main>
       <Footer />
     </>
