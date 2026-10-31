@@ -20,7 +20,7 @@ const lines = (fd: FormData, k: string) =>
 
 function fail(id: string | null, msg: string): never {
   const base = id ? `/admin/tekneler/${id}` : "/admin/tekneler/yeni";
-  redirect(`${base}?error=${encodeURIComponent(msg)}`);
+  redirect(`${base}?error=${encodeURIComponent(msg)}&t=${Date.now()}`);
 }
 
 export async function saveBoat(formData: FormData) {
@@ -105,7 +105,7 @@ export async function saveBoat(formData: FormData) {
   revalidatePath("/");
   revalidatePath("/tekneler");
   revalidatePath("/admin/tekneler");
-  redirect(`/admin/tekneler/${boatId}?saved=1`);
+  redirect(`/admin/tekneler/${boatId}?saved=1&t=${Date.now()}`);
 }
 
 export async function setPublished(formData: FormData) {

@@ -3,13 +3,14 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
 import { BoatForm } from "@/components/admin/BoatForm";
 import { PhotoManager } from "@/components/admin/PhotoManager";
+import { Notice } from "@/components/admin/FormBits";
 import { deleteBoat } from "../actions";
 
 export const dynamic = "force-dynamic";
 
-export default async function EditBoat({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; saved?: string }> }) {
+export default async function EditBoat({ params, searchParams }: { params: Promise<{ id: string }>; searchParams: Promise<{ error?: string; saved?: string; t?: string }> }) {
   const { id } = await params;
-  const { error, saved } = await searchParams;
+  const { error, saved, t } = await searchParams;
   const { supabase } = await requireAdmin();
   const [boat, cats, dests, links, imgs] = await Promise.all([
     supabase.from("boats").select("*").eq("id", id).maybeSingle(),
@@ -24,8 +25,8 @@ export default async function EditBoat({ params, searchParams }: { params: Promi
     <>
       <p className="text-sm"><Link href="/admin/tekneler" className="text-turquoise-dark">← Tekneler</Link></p>
       <h1 className="font-display mt-2 text-3xl">{boat.data.name}</h1>
-      {saved && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">Kaydedildi.</p>}
-      {error && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">{error}</p>}
+      {saved && <Notice key={"s"+t} kind="ok" text="Kaydedildi." />}
+      {error && <Notice key={"e"+t} kind="error" text={error} />}
 
       <section className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Fotoğraflar</h2>

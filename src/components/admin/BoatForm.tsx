@@ -1,4 +1,5 @@
 import { saveBoat } from "@/app/admin/(panel)/tekneler/actions";
+import { SubmitButton } from "./FormBits";
 
 type Row = Record<string, any>;
 type Opt = { id: string; label: string };
@@ -121,7 +122,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
         <Field id="seo_description" title="SEO açıklaması"><textarea id="seo_description" name="seo_description" rows={2} defaultValue={boat?.seo_description ?? ""} className={input} /></Field>
       </section>
 
-      <button className="w-full rounded-xl bg-turquoise px-6 py-4 text-base font-semibold text-white hover:bg-turquoise-dark sm:w-auto">Kaydet</button>
+      <SubmitButton />
     </form>
   );
 }
