@@ -59,27 +59,39 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
   }
 
   async function save() {
-    setBusy(true); setMsg(null);
+    setBusy(true);
+    setMsg(null);
     const n = name.trim();
-    if (!n) return fail("Ad zorunlu.");
+    if (!n) { fail("Ad zorunlu."); return; }
     const s = row ? row.slug : slugify(slug.trim() || n);
-    if (!s) return fail("Adres oluşturulamadı.");
+    if (!s) { fail("Adres oluşturulamadı."); return; }
     const order = Number(sort.replace(",", "."));
-    if (!Number.isFinite(order)) return fail("Sıra bir sayı olmalı.");
+    if (!Number.isFinite(order)) { fail("Sıra bir sayı olmalı."); return; }
 
-    const common = { slug: s, name_tr: n, intro_tr: intro.trim() || null, cover_path: cover || null, seo_title: seoTitle.trim() || null, seo_description: seoDesc.trim() || null, sort_order: order };
-    const data = dest
-      ? { ...common, blurb_tr: blurb.trim() || null, is_published: on, is_featured: featured }
-      : { ...common, is_active: on };
-    const res = row
-      ? await supabase.from(tbl).update(data).eq("id", row.id).select("id").single()
-      : await supabase.from(tbl).insert(data).select("id").single();
-    if (res.error || !res.data) {
-      const m = res.error?.message ?? "";
-      return fail(res.error?.code === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + m + (m.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
+    const data: Record<string, unknown> = {
+      slug: s, name_tr: n, intro_tr: intro.trim() || null, cover_path: cover || null,
+      seo_title: seoTitle.trim() || null, seo_description: seoDesc.trim() || null, sort_order: order,
+    };
+    if (dest) { data.blurb_tr = blurb.trim() || null; data.is_published = on; data.is_featured = featured; }
+    else { data.is_active = on; }
+
+    let newId: string | null = null;
+    let errMsg = "";
+    let errCode = "";
+    if (row) {
+      const r = await supabase.from(tbl).update(data).eq("id", row.id);
+      if (r.error) { errMsg = r.error.message; errCode = r.error.code ?? ""; }
+    } else {
+      const r = await supabase.from(tbl).insert(data).select("id").single();
+      if (r.error || !r.data) { errMsg = r.error ? r.error.message : "Kayıt oluşturulamadı"; errCode = r.error?.code ?? ""; }
+      else newId = String((r.data as { id: string }).id);
+    }
+    if (errMsg) {
+      fail(errCode === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + errMsg + (errMsg.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
+      return;
     }
     await refreshSite();
-    if (!row) { router.push(`${back}/${res.data.id}`); return; }
+    if (newId) { router.push(back + "/" + newId); return; }
     setMsg({ ok: true, text: "Kaydedildi." });
     window.scrollTo({ top: 0, behavior: "smooth" });
     router.refresh();
