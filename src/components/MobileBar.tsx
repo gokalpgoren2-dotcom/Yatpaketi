@@ -13,7 +13,7 @@ const items = [
 // Telefonda altta sabit menü.
 export function MobileBar() {
   const path = usePathname();
-  if (path.startsWith("/admin")) return null;
+  if (path.startsWith("/admin") || path.startsWith("/musteri")) return null;
   return (
     <nav aria-label="Hızlı menü" className="fixed inset-x-0 bottom-0 z-40 border-t border-navy/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
       <ul className="grid grid-cols-4">
