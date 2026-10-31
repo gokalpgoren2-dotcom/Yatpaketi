@@ -50,3 +50,20 @@ export async function reopenRequest(formData: FormData) {
   revalidatePath("/admin");
   redirect("/admin/iptal-edilenler?saved=1&t=" + Date.now());
 }
+
+// Arşivdeki iptal kaydını ve yüklenmiş kanıt dosyalarını kalıcı olarak siler. Yalnızca iptal edilmiş kayıtlar silinebilir.
+export async function deleteCancelledRequest(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const fail = (m: string) => redirect("/admin/iptal-edilenler?error=" + encodeURIComponent(m) + `&t=${Date.now()}`);
+  if (!id) fail("Kayıt bulunamadı.");
+  const { data } = await supabase.from("reservation_requests").select("status,cancel_files").eq("id", id).maybeSingle();
+  if (!data || data.status !== "cancelled") fail("Yalnızca iptal edilmiş kayıtlar buradan silinebilir.");
+  const files = ((data?.cancel_files ?? []) as string[]).filter(Boolean);
+  if (files.length) await supabase.storage.from("contracts").remove(files);
+  const { error } = await supabase.from("reservation_requests").delete().eq("id", id);
+  if (error) fail("Silinemedi: " + error.message);
+  revalidatePath("/admin/iptal-edilenler");
+  revalidatePath("/admin");
+  redirect("/admin/iptal-edilenler?saved=1&t=" + Date.now());
+}

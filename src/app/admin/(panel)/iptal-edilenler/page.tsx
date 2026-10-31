@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice } from "@/components/admin/FormBits";
-import { reopenRequest } from "../rezervasyonlar/actions";
+import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
+import { reopenRequest, deleteCancelledRequest } from "../rezervasyonlar/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -13,7 +14,7 @@ type Req = {
 const fmt = (d: string | null) => (d ? new Date(d + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "—");
 const fmtTime = (d: string | null) => (d ? new Date(d).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" }) : "—");
 
-// İptal edilen rezervasyon talepleri: kayıt amaçlı arşiv. Silme düğmesi bilerek yok.
+// İptal edilen rezervasyon talepleri: kayıt amaçlı arşiv. Silme iki adımlı onay ister.
 export default async function Cancelled({ searchParams }: { searchParams: Promise<{ error?: string; saved?: string; t?: string }> }) {
   const { error, saved, t } = await searchParams;
   const { supabase } = await requireAdmin();
@@ -32,8 +33,8 @@ export default async function Cancelled({ searchParams }: { searchParams: Promis
   return (
     <>
       <h1 className="font-display text-3xl">İptal edilen rezervasyonlar</h1>
-      <p className="mt-1 text-sm text-navy/60">Kayıt ve olası hukuki ihtiyaçlar için saklanır. Bu sayfadan silinemez.</p>
-      {saved && <Notice key={"s" + t} kind="ok" text="Talep yeniden aktif listeye alındı." />}
+      <p className="mt-1 text-sm text-navy/60">Kayıt ve olası hukuki ihtiyaçlar için saklanır. Yer kaplamasın diye ihtiyaç kalmayanları tek tek silebilirsiniz.</p>
+      {saved && <Notice key={"s" + t} kind="ok" text="İşlem tamamlandı." />}
       {(error || readError) && <Notice key={"e" + t} kind="error" text={error ?? "Okunamadı: " + readError?.message} />}
       {rows.length === 0 && !readError && <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60 shadow-sm">İptal edilen rezervasyon yok.</p>}
       <ul className="mt-5 space-y-3">
@@ -67,6 +68,7 @@ export default async function Cancelled({ searchParams }: { searchParams: Promis
                   <input type="hidden" name="id" value={r.id} />
                   <button type="submit" className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold">Yeniden aktif talebe al</button>
                 </form>
+                <ConfirmDelete action={deleteCancelledRequest} id={r.id} label="Kaydı kalıcı sil" warning="Kayıt ve yüklenen kanıt dosyaları kalıcı olarak silinir, geri getirilemez." />
               </div>
             </details>
           </li>
