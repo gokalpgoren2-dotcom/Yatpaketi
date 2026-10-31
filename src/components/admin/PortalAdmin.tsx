@@ -112,7 +112,7 @@ export function PortalAdmin({ portal, items }: { portal: PortalRow; items: Check
             : <button type="button" className={`${btn} text-red-700`} disabled={busy} onClick={() => setStatus("revoked")}>Paneli iptal et</button>}
         </div>
         <p className="mt-2 text-xs text-navy/50">Yeni kod üretince eski kod ve açık oturumlar geçersiz olur.</p>
-        {code && <div className="mt-4"><CodeBox code={code} email={portal.email} boat={portal.boat_name} /></div>}
+        {code && <div className="mt-4"><CodeBox code={code} email={portal.email} boat={portal.boat_name} portalId={portal.id} /></div>}
       </section>
 
       <section className={card}>

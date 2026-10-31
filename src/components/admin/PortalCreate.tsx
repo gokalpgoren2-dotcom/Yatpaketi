@@ -1,14 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { sendPortalEmail } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-export function CodeBox({ code, email, boat }: { code: string; email?: string; boat?: string }) {
+export function CodeBox({ code, email, boat, portalId, autoSend = false }: { code: string; email?: string; boat?: string; portalId?: string; autoSend?: boolean }) {
   const [copied, setCopied] = useState(false);
+  const [mail, setMail] = useState<{ ok: boolean; text: string } | null>(null);
+  const [sending, setSending] = useState(false);
+  const sent = useRef(false);
+  async function send() {
+    if (!portalId) return;
+    setSending(true);
+    setMail(null);
+    const r = await sendPortalEmail(portalId, code);
+    setMail({ ok: r.ok, text: r.message });
+    setSending(false);
+  }
+  useEffect(() => {
+    if (autoSend && portalId && !sent.current) { sent.current = true; void send(); }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   const text = `Merhaba, ${boat ?? "turunuz"} için müşteri paneli giriş bilgileriniz:\nAdres: https://yatpaketi.vercel.app/musteri\nE-posta: ${email ?? ""}\nKod: ${code}\nKod tur bitiş tarihinden sonra geçersiz olur.`;
   async function copy() {
     try { await navigator.clipboard.writeText(text); setCopied(true); } catch { setCopied(false); }
@@ -18,8 +34,13 @@ export function CodeBox({ code, email, boat }: { code: string; email?: string; b
       <p className="text-sm font-medium text-green-900">Giriş kodu (bir daha gösterilmez, kaybolursa yenisi üretilir):</p>
       <p className="mt-2 font-mono text-3xl font-bold tracking-widest text-green-900">{code}</p>
       <pre className="mt-3 whitespace-pre-wrap rounded-xl bg-white p-3 text-xs text-navy/80">{text}</pre>
-      <button type="button" onClick={copy} className="mt-3 rounded-xl bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">{copied ? "Kopyalandı" : "Mesajı kopyala"}</button>
-      <p className="mt-2 text-xs text-navy/60">Mesajı müşteriye WhatsApp veya e-posta ile siz iletin. Otomatik e-posta, alan adı bağlanınca eklenecek.</p>
+      {mail && <p role={mail.ok ? "status" : "alert"} className={`mt-3 rounded-xl p-3 text-sm font-medium ${mail.ok ? "bg-white text-green-800" : "bg-red-50 text-red-700"}`}>{sending ? "Gönderiliyor…" : mail.text}</p>}
+      {sending && !mail && <p className="mt-3 text-sm text-navy/70">E-posta gönderiliyor…</p>}
+      <div className="mt-3 flex flex-wrap gap-2">
+        {portalId && <button type="button" onClick={send} disabled={sending} className="rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">{mail?.ok ? "Tekrar gönder" : "E-postayla gönder"}</button>}
+        <button type="button" onClick={copy} className="rounded-xl bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">{copied ? "Kopyalandı" : "Mesajı kopyala"}</button>
+      </div>
+      <p className="mt-2 text-xs text-navy/60">E-posta gitmezse mesajı kopyalayıp WhatsApp'tan iletebilirsiniz.</p>
     </div>
   );
 }
@@ -46,7 +67,7 @@ export function PortalCreate() {
   if (done) {
     return (
       <div className="space-y-4">
-        <CodeBox code={done.code} email={f.email} boat={f.boat} />
+        <CodeBox code={done.code} email={f.email.trim().toLowerCase()} boat={f.boat} portalId={done.id} autoSend />
         <Link href={`/admin/musteri-panelleri/${done.id}`} className="inline-block rounded-xl bg-navy px-5 py-3 text-sm font-semibold text-white">Paneli yönet</Link>
       </div>
     );
