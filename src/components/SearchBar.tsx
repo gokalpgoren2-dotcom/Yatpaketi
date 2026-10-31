@@ -30,8 +30,7 @@ export function SearchBar() {
     if (to) q.set("cikis", to);
     if (guests) q.set("misafir", guests);
     if (type) q.set("tip", type);
-    // Aşama 2'de /tekneler sayfası eklenecek; şimdilik tekne bölümüne kaydırır.
-    router.push(`/?${q.toString()}#tekneler`);
+    router.push(`/tekneler?${q.toString()}`);
   }
 
   return (

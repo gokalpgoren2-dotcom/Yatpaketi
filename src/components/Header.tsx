@@ -6,12 +6,12 @@ import { Logo } from "./Logo";
 
 const links = [
   { href: "/", label: "Ana Sayfa" },
-  { href: "#tekneler", label: "Kiralık Tekneler" },
-  { href: "#destinasyonlar", label: "Destinasyonlar" },
-  { href: "#mavi-yolculuk", label: "Mavi Yolculuk" },
-  { href: "#hakkimizda", label: "Hakkımızda" },
-  { href: "#blog", label: "Blog" },
-  { href: "#iletisim", label: "İletişim" },
+  { href: "/tekneler", label: "Kiralık Tekneler" },
+  { href: "/destinasyonlar", label: "Destinasyonlar" },
+  { href: "/#mavi-yolculuk", label: "Mavi Yolculuk" },
+  { href: "/#hakkimizda", label: "Hakkımızda" },
+  { href: "/#blog", label: "Blog" },
+  { href: "/#iletisim", label: "İletişim" },
 ];
 
 export function Header() {

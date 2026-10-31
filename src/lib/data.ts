@@ -1,18 +1,33 @@
-// GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak; fiyatlar ve tekneler gerçek değildir.
+// GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Tekneler, fiyatlar ve açıklamalar gerçek değildir.
 
 export type Boat = {
   slug: string;
   name: string;
   type: string;
+  brand: string;
+  model: string;
+  year: number;
+  refit: number | null;
   port: string;
+  destinations: string[]; // destinasyon slug'ları
   guests: number;
   cabins: number;
+  crew: number;
   length: number;
-  priceFrom: number | null; // null => "Fiyat sorunuz"
+  width: number;
+  captained: boolean; // kaptan dahil
+  priceDaily: number | null;
+  priceWeekly: number | null;
+  showPrice: boolean; // false => "Fiyat sorunuz"
   currency: "EUR" | "TRY" | "USD";
-  unit: "gün" | "hafta";
+  equipment: string[];
+  waterSports: string[];
+  description: string;
   hue: number; // yer tutucu görsel rengi
+  addedAt: string;
 };
+
+export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string };
 
 export const categories = [
   "Gulet",
@@ -24,21 +39,26 @@ export const categories = [
   "Günlük Tekneler",
 ];
 
-export const destinations = [
-  { slug: "gocek", name: "Göcek", blurb: "12 Ada ve sakin koylar", hue: 190 },
-  { slug: "bodrum", name: "Bodrum", blurb: "Gece hayatı ve Ege esintisi", hue: 205 },
-  { slug: "fethiye", name: "Fethiye", blurb: "Ölüdeniz ve Kelebekler Vadisi", hue: 180 },
-  { slug: "marmaris", name: "Marmaris", blurb: "Orhaniye ve Hisarönü koyları", hue: 215 },
-  { slug: "antalya", name: "Antalya", blurb: "Kekova ve Akdeniz'in turkuazı", hue: 175 },
+export const destinations: Destination[] = [
+  { slug: "gocek", name: "Göcek", blurb: "12 Ada ve sakin koylar", hue: 190, intro: "Göcek, korunaklı koyları ve 12 Ada rotasıyla mavi yolculuğun en bilinen çıkış noktalarından biridir." },
+  { slug: "bodrum", name: "Bodrum", blurb: "Gece hayatı ve Ege esintisi", hue: 205, intro: "Bodrum çıkışlı rotalar Datça, Gökova ve Yunan adalarına uzanır." },
+  { slug: "fethiye", name: "Fethiye", blurb: "Ölüdeniz ve Kelebekler Vadisi", hue: 180, intro: "Fethiye, Ölüdeniz ve çevresindeki koylarla hem günlük hem haftalık rotalara uygundur." },
+  { slug: "marmaris", name: "Marmaris", blurb: "Orhaniye ve Hisarönü koyları", hue: 215, intro: "Marmaris, Orhaniye ve Hisarönü koyları ile Datça Yarımadası rotalarının çıkış noktasıdır." },
+  { slug: "antalya", name: "Antalya", blurb: "Kekova ve Akdeniz'in turkuazı", hue: 175, intro: "Antalya çıkışlı rotalar Kekova ve Akdeniz kıyısının berrak sularını kapsar." },
 ];
 
+const eq = ["Klima", "Jeneratör", "Güneşlenme alanı", "Tender bot", "Wi-Fi"];
+const ws = ["Deniz kanosu", "Paddle board", "Şnorkel takımı"];
+
 export const boats: Boat[] = [
-  { slug: "ornek-gulet-1", name: "Örnek Gulet 1", type: "Gulet", port: "Göcek", guests: 12, cabins: 6, length: 28, priceFrom: 4500, currency: "EUR", unit: "hafta", hue: 195 },
-  { slug: "ornek-motoryat-1", name: "Örnek Motoryat 1", type: "Motoryat", port: "Bodrum", guests: 8, cabins: 4, length: 22, priceFrom: null, currency: "EUR", unit: "gün", hue: 210 },
-  { slug: "ornek-katamaran-1", name: "Örnek Katamaran 1", type: "Katamaran", port: "Fethiye", guests: 10, cabins: 5, length: 14, priceFrom: 3200, currency: "EUR", unit: "hafta", hue: 185 },
-  { slug: "ornek-yelkenli-1", name: "Örnek Yelkenli 1", type: "Yelkenli", port: "Marmaris", guests: 6, cabins: 3, length: 13, priceFrom: 2100, currency: "EUR", unit: "hafta", hue: 200 },
-  { slug: "ornek-luks-yat-1", name: "Örnek Lüks Yat 1", type: "Lüks Yat", port: "Bodrum", guests: 10, cabins: 5, length: 35, priceFrom: null, currency: "EUR", unit: "hafta", hue: 220 },
-  { slug: "ornek-gunluk-1", name: "Örnek Günlük Tekne 1", type: "Günlük", port: "Göcek", guests: 14, cabins: 0, length: 16, priceFrom: 450, currency: "EUR", unit: "gün", hue: 178 },
+  { slug: "ornek-gulet-1", name: "Örnek Gulet 1", type: "Gulet", brand: "Örnek Tersane", model: "Aegean 28", year: 2018, refit: 2023, port: "Göcek", destinations: ["gocek", "fethiye"], guests: 12, cabins: 6, crew: 4, length: 28, width: 7, captained: true, priceDaily: null, priceWeekly: 4500, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Geniş güverteli, altı kabinli klasik gulet.", hue: 195, addedAt: "2026-09-01" },
+  { slug: "ornek-motoryat-1", name: "Örnek Motoryat 1", type: "Motoryat", brand: "Örnek Marin", model: "MY 22", year: 2020, refit: null, port: "Bodrum", destinations: ["bodrum"], guests: 8, cabins: 4, crew: 2, length: 22, width: 5.5, captained: true, priceDaily: 1800, priceWeekly: null, showPrice: false, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Hızlı ve konforlu motoryat.", hue: 210, addedAt: "2026-09-10" },
+  { slug: "ornek-katamaran-1", name: "Örnek Katamaran 1", type: "Katamaran", brand: "Örnek Cat", model: "Cat 45", year: 2021, refit: null, port: "Fethiye", destinations: ["fethiye", "gocek"], guests: 10, cabins: 5, crew: 2, length: 14, width: 7.5, captained: true, priceDaily: null, priceWeekly: 3200, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Geniş salonlu, stabil katamaran.", hue: 185, addedAt: "2026-09-18" },
+  { slug: "ornek-yelkenli-1", name: "Örnek Yelkenli 1", type: "Yelkenli", brand: "Örnek Sail", model: "Sloop 13", year: 2016, refit: 2022, port: "Marmaris", destinations: ["marmaris"], guests: 6, cabins: 3, crew: 0, length: 13, width: 4.2, captained: false, priceDaily: null, priceWeekly: 2100, showPrice: true, currency: "EUR", equipment: ["Jeneratör", "Tender bot", "GPS"], waterSports: ["Şnorkel takımı"], description: "Örnek içerik: Kaptansız kiralanabilen yelkenli.", hue: 200, addedAt: "2026-09-25" },
+  { slug: "ornek-luks-yat-1", name: "Örnek Lüks Yat 1", type: "Lüks Yat", brand: "Örnek Yachts", model: "Superyacht 35", year: 2022, refit: null, port: "Bodrum", destinations: ["bodrum", "marmaris"], guests: 10, cabins: 5, crew: 6, length: 35, width: 8, captained: true, priceDaily: null, priceWeekly: 18000, showPrice: false, currency: "EUR", equipment: [...eq, "Jakuzi", "Şef"], waterSports: [...ws, "Jet ski"], description: "Örnek içerik: Tam mürettebatlı lüks yat.", hue: 220, addedAt: "2026-10-02" },
+  { slug: "ornek-gunluk-1", name: "Örnek Günlük Tekne 1", type: "Günlük Tekneler", brand: "Örnek Tur", model: "Gulet 16", year: 2019, refit: null, port: "Göcek", destinations: ["gocek"], guests: 14, cabins: 0, crew: 2, length: 16, width: 4.8, captained: true, priceDaily: 450, priceWeekly: null, showPrice: true, currency: "EUR", equipment: ["Güneşlenme alanı", "Müzik sistemi", "Yemek servisi"], waterSports: ["Şnorkel takımı", "Deniz kanosu"], description: "Örnek içerik: Günübirlik koy turu teknesi.", hue: 178, addedAt: "2026-10-08" },
+  { slug: "ornek-trawler-1", name: "Örnek Trawler 1", type: "Trawler", brand: "Örnek Trawler", model: "Trawler 18", year: 2017, refit: 2021, port: "Antalya", destinations: ["antalya"], guests: 6, cabins: 3, crew: 2, length: 18, width: 5, captained: true, priceDaily: 900, priceWeekly: 5400, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Ekonomik yakıt tüketimli trawler.", hue: 170, addedAt: "2026-10-15" },
+  { slug: "ornek-gulet-2", name: "Örnek Gulet 2", type: "Gulet", brand: "Örnek Tersane", model: "Bodrum 24", year: 2014, refit: 2020, port: "Bodrum", destinations: ["bodrum", "marmaris"], guests: 10, cabins: 5, crew: 3, length: 24, width: 6.5, captained: true, priceDaily: null, priceWeekly: 3800, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Geleneksel hatlı, beş kabinli gulet.", hue: 192, addedAt: "2026-10-20" },
 ];
 
 export const routes = [
@@ -52,3 +72,70 @@ export const posts = [
   { title: "Göcek'te Mutlaka Görülmesi Gereken 5 Koy", tag: "Destinasyon" },
   { title: "Gulet mi Katamaran mı? Hangisi Size Uygun?", tag: "İpuçları" },
 ];
+
+export function getBoat(slug: string) {
+  return boats.find((b) => b.slug === slug);
+}
+export function getDestination(slug: string) {
+  return destinations.find((d) => d.slug === slug);
+}
+export function boatsFor(destSlug: string) {
+  return boats.filter((b) => b.destinations.includes(destSlug));
+}
+
+// Fiyat gösterimi: showPrice false ise null döner ("Fiyat sorunuz").
+export function priceLabel(b: Boat): string | null {
+  if (!b.showPrice) return null;
+  const n = (v: number) => v.toLocaleString("tr-TR");
+  if (b.priceWeekly) return `${n(b.priceWeekly)} ${b.currency} / hafta’dan`;
+  if (b.priceDaily) return `${n(b.priceDaily)} ${b.currency} / gün’den`;
+  return null;
+}
+
+// ---- Filtreleme ----
+export type Filters = {
+  destinasyon?: string; tip?: string; misafir?: number; kabin?: number; uzunluk?: number; yil?: number;
+  min?: number; max?: number; kiralama?: "gunluk" | "haftalik"; kaptan?: "kaptanli" | "kaptansiz";
+  murettebat?: "var" | "yok"; sirala?: string;
+};
+
+// Fiyat karşılaştırması: seçilen kiralama türüne göre; seçilmediyse haftalık fiyat (yoksa günlük x 7).
+// Fiyatı gizli ("Fiyat sorunuz") tekneler fiyat filtresi açıkken listeden çıkar.
+function comparablePrice(b: Boat, mode?: Filters["kiralama"]): number | null {
+  if (!b.showPrice) return null;
+  if (mode === "gunluk") return b.priceDaily;
+  if (mode === "haftalik") return b.priceWeekly;
+  return b.priceWeekly ?? (b.priceDaily ? b.priceDaily * 7 : null);
+}
+
+export function filterBoats(f: Filters): Boat[] {
+  let list = boats.filter((b) => {
+    if (f.destinasyon && !b.destinations.includes(f.destinasyon)) return false;
+    if (f.tip && b.type !== f.tip) return false;
+    if (f.misafir && b.guests < f.misafir) return false;
+    if (f.kabin && b.cabins < f.kabin) return false;
+    if (f.uzunluk && b.length < f.uzunluk) return false;
+    if (f.yil && b.year < f.yil) return false;
+    if (f.kaptan === "kaptanli" && !b.captained) return false;
+    if (f.kaptan === "kaptansiz" && b.captained) return false;
+    if (f.murettebat === "var" && b.crew === 0) return false;
+    if (f.murettebat === "yok" && b.crew > 0) return false;
+    if (f.kiralama === "gunluk" && !b.priceDaily) return false;
+    if (f.kiralama === "haftalik" && !b.priceWeekly) return false;
+    if (f.min !== undefined || f.max !== undefined) {
+      const p = comparablePrice(b, f.kiralama);
+      if (p === null) return false;
+      if (f.min !== undefined && p < f.min) return false;
+      if (f.max !== undefined && p > f.max) return false;
+    }
+    return true;
+  });
+  const price = (b: Boat) => comparablePrice(b, f.kiralama) ?? Number.POSITIVE_INFINITY;
+  switch (f.sirala) {
+    case "fiyat-artan": list = [...list].sort((a, b) => price(a) - price(b)); break;
+    case "fiyat-azalan": list = [...list].sort((a, b) => (price(b) === Infinity ? -1 : price(b)) - (price(a) === Infinity ? -1 : price(a))); break;
+    case "yeni": list = [...list].sort((a, b) => b.addedAt.localeCompare(a.addedAt)); break;
+    case "uzunluk": list = [...list].sort((a, b) => b.length - a.length); break;
+  }
+  return list;
+}

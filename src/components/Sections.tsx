@@ -1,5 +1,8 @@
+import Link from "next/link";
 import { Logo } from "./Logo";
-import { boats, categories, destinations, posts, routes, type Boat } from "@/lib/data";
+import { BoatCard } from "./BoatCard";
+import { Placeholder } from "./Placeholder";
+import { boats, categories, destinations, posts, routes } from "@/lib/data";
 
 function Heading({ eyebrow, title, id }: { eyebrow: string; title: string; id?: string }) {
   return (
@@ -7,34 +10,6 @@ function Heading({ eyebrow, title, id }: { eyebrow: string; title: string; id?: 
       <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{eyebrow}</p>
       <h2 className="font-display text-3xl font-medium text-navy lg:text-4xl">{title}</h2>
     </div>
-  );
-}
-
-function Placeholder({ hue, className = "" }: { hue: number; className?: string }) {
-  return (
-    <div
-      className={`relative overflow-hidden ${className}`}
-      style={{ background: `linear-gradient(135deg, hsl(${hue} 70% 55%), hsl(${hue + 20} 80% 22%))` }}
-      aria-hidden
-    />
-  );
-}
-
-function BoatCard({ b }: { b: Boat }) {
-  return (
-    <article className="group overflow-hidden rounded-2xl border border-navy/10 bg-white transition hover:-translate-y-1 hover:shadow-xl">
-      <Placeholder hue={b.hue} className="aspect-[4/3]" />
-      <div className="p-5">
-        <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{b.type} · {b.port}</p>
-        <h3 className="mt-1 text-lg font-semibold text-navy">{b.name}</h3>
-        <p className="mt-2 text-sm text-navy/60">
-          {b.guests} misafir · {b.cabins > 0 ? `${b.cabins} kabin · ` : ""}{b.length} m
-        </p>
-        <p className="mt-4 text-sm font-semibold text-navy">
-          {b.priceFrom ? `${b.priceFrom.toLocaleString("tr-TR")} ${b.currency} / ${b.unit}'den` : "Fiyat sorunuz"}
-        </p>
-      </div>
-    </article>
   );
 }
 
@@ -47,14 +22,14 @@ export function Destinations() {
         <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler Rotalar ve Koylar" />
         <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-5 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
           {destinations.map((d) => (
-            <a key={d.slug} href="#tekneler" className="group relative min-w-[70%] snap-start overflow-hidden rounded-2xl sm:min-w-[40%] lg:min-w-0">
+            <Link key={d.slug} href={`/destinasyonlar/${d.slug}`} className="group relative min-w-[70%] snap-start overflow-hidden rounded-2xl sm:min-w-[40%] lg:min-w-0">
               <Placeholder hue={d.hue} className="aspect-[3/4] transition duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent" />
               <div className="absolute bottom-0 p-5 text-white">
                 <h3 className="font-display text-2xl">{d.name}</h3>
                 <p className="text-sm text-white/80">{d.blurb}</p>
               </div>
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -69,7 +44,10 @@ export function FeaturedBoats() {
         <Heading id="tekneler" eyebrow="Öne Çıkan Tekneler" title="Sizin İçin Seçtiklerimiz" />
         <p className="-mt-6 mb-8 text-sm text-navy/50">Örnek içerik: Gerçek tekneler admin panelinden eklenecek.</p>
         <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {boats.map((b) => <BoatCard key={b.slug} b={b} />)}
+          {boats.slice(0, 6).map((b) => <BoatCard key={b.slug} b={b} />)}
+        </div>
+        <div className="mt-10 text-center">
+          <Link href="/tekneler" className="inline-block rounded-full bg-turquoise px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-turquoise-dark">Tüm Tekneleri Gör</Link>
         </div>
       </div>
     </section>
@@ -83,9 +61,9 @@ export function Categories() {
         <Heading eyebrow="Kategoriler" title="Size Uygun Tekne Tipini Seçin" />
         <div className="flex flex-wrap gap-3">
           {categories.map((c) => (
-            <a key={c} href="#tekneler" className="rounded-full border border-navy/15 px-6 py-3 text-sm font-medium text-navy transition hover:border-turquoise hover:bg-turquoise hover:text-white">
+            <Link key={c} href={`/tekneler?tip=${encodeURIComponent(c)}`} className="rounded-full border border-navy/15 px-6 py-3 text-sm font-medium text-navy transition hover:border-turquoise hover:bg-turquoise hover:text-white">
               {c}
-            </a>
+            </Link>
           ))}
         </div>
       </div>
@@ -197,7 +175,7 @@ export function Support() {
         </div>
         <div className="flex flex-wrap gap-3">
           {/* Rezervasyon formu Aşama 2'de, telefon ve WhatsApp admin Ayarlar bölümünden gelecek. */}
-          <a href="#tekneler" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy">Tekneleri İncele</a>
+          <Link href="/tekneler" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy">Tekneleri İncele</Link>
         </div>
       </div>
     </section>
