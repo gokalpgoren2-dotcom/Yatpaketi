@@ -10,7 +10,7 @@ const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/
 export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: string; boatName: string; maxGuests: number }) {
   const [t0] = useState(() => Date.now());
   const [pending, begin] = useTransition();
-  const [result, setResult] = useState<{ ok: boolean; message?: string } | null>(null);
+  const [result, setResult] = useState<{ ok: boolean; message?: string; debug?: string } | null>(null);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
 
@@ -25,7 +25,7 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
     setResult(null);
     begin(async () => {
       const r = await submitReservation(fd);
-      setResult(r.ok ? { ok: true } : { ok: false, message: r.message });
+      setResult(r.ok ? { ok: true, debug: r.debug } : { ok: false, message: r.message });
     });
   }
 
@@ -34,6 +34,7 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
       <div role="status" className="rounded-xl bg-green-50 p-5 text-sm text-green-900 ring-1 ring-green-200">
         <p className="font-semibold">Talebiniz alındı.</p>
         <p className="mt-2 leading-relaxed">Bu bir kesin rezervasyon değildir. Müsaitlik ve fiyat teyit edildikten sonra sizinle iletişime geçeceğiz.</p>
+        {result.debug && <p className="mt-2 rounded-lg bg-white p-2 font-mono text-xs">{result.debug}</p>}
       </div>
     );
   }

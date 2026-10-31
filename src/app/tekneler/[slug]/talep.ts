@@ -5,7 +5,7 @@ import { headers } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
 import { notifyAdmin } from "@/lib/notify";
 
-export type TalepSonuc = { ok: true } | { ok: false; message: string };
+export type TalepSonuc = { ok: true; debug?: string } | { ok: false; message: string };
 
 const messages: Record<string, string> = {
   name: "Lütfen adınızı ve soyadınızı yazın.",
@@ -72,7 +72,8 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
       start, end, guests, message: s(fd, "message", 2000),
     });
     if (!nr.ok) console.error("Yeni talep bildirimi gonderilemedi:", nr.message);
-    return { ok: true };
+    // Tanı amaçlı: ad "TESTMAIL" ise bildirim sonucu ekranda gösterilir.
+    return s(fd, "name", 100).toUpperCase() === "TESTMAIL" ? { ok: true, debug: nr.ok ? "Bildirim e-postası gönderildi." : "Bildirim e-postası gönderilemedi: " + nr.message } : { ok: true };
   }
   return { ok: false, message: messages[r?.error ?? ""] ?? "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin." };
 }
