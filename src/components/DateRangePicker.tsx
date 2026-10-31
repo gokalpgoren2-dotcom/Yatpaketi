@@ -21,10 +21,12 @@ type Props = {
   label?: string;
   // true dönen günler seçilemez (isteğe bağlı).
   blocked?: (isoDate: string) => boolean;
+  // Yönetici için geçmiş günler de seçilebilsin (sürmekte olan turlar).
+  allowPast?: boolean;
 };
 
 // Tek takvimde giriş ve çıkış seçimi: önce girişe, sonra çıkışa dokunulur. Aradaki günler renklenir.
-export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked }: Props) {
+export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked, allowPast = false }: Props) {
   const today = todayIso();
   const base = start || today;
   const [open, setOpen] = useState(false);
@@ -33,7 +35,7 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
   const first = (new Date(view.y, view.m, 1).getDay() + 6) % 7; // hafta Pazartesi başlar
   const days = new Date(view.y, view.m + 1, 0).getDate();
   const cells: (number | null)[] = [...Array(first).fill(null), ...Array.from({ length: days }, (_, i) => i + 1)];
-  const canPrev = view.y > Number(today.slice(0, 4)) || view.m > Number(today.slice(5, 7)) - 1;
+  const canPrev = allowPast || view.y > Number(today.slice(0, 4)) || view.m > Number(today.slice(5, 7)) - 1;
 
   function shift(delta: number) {
     const d = new Date(view.y, view.m + delta, 1);
@@ -82,7 +84,7 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
             {cells.map((d, i) => {
               if (d === null) return <span key={"e" + i} />;
               const day = iso(view.y, view.m, d);
-              const off = day < today || Boolean(blocked?.(day));
+              const off = (!allowPast && day < today) || Boolean(blocked?.(day));
               const isStart = day === start;
               const isEnd = day === end;
               const inRange = Boolean(start && end && day > start && day < end);

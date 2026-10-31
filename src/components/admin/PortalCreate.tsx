@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/client";
+import { DateRangePicker } from "@/components/DateRangePicker";
 import { sendPortalEmail } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
@@ -48,9 +49,9 @@ export function CodeBox({ code, email, boat, portalId, autoSend = false }: { cod
   );
 }
 
-export function PortalCreate() {
+export function PortalCreate({ initial }: { initial?: { email?: string; name?: string; boat?: string; start?: string; end?: string } }) {
   const supabase = createClient();
-  const [f, setF] = useState({ email: "", name: "", boat: "", start: "", end: "" });
+  const [f, setF] = useState({ email: initial?.email ?? "", name: initial?.name ?? "", boat: initial?.boat ?? "", start: initial?.start ?? "", end: initial?.end ?? "" });
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [done, setDone] = useState<{ id: string; code: string } | null>(null);
@@ -58,7 +59,7 @@ export function PortalCreate() {
 
   async function create() {
     setErr("");
-    if (!f.email.trim() || !f.boat.trim() || !f.start || !f.end) { setErr("E-posta, tekne ve iki tarih zorunlu."); return; }
+    if (!f.email.trim() || !f.boat.trim() || !f.start || !f.end) { setErr("E-posta, tekne ve tur tarihleri (giriş ve çıkış) zorunlu."); return; }
     if (f.end < f.start) { setErr("Bitiş tarihi başlangıçtan önce olamaz."); return; }
     setBusy(true);
     const { data, error } = await supabase.rpc("admin_create_portal", { p_email: f.email, p_name: f.name, p_boat: f.boat, p_start: f.start, p_end: f.end });
@@ -82,10 +83,7 @@ export function PortalCreate() {
       <div><label htmlFor="pe" className={lab}>Müşteri e-postası *</label><input id="pe" type="email" value={f.email} onChange={set("email")} className={input} /></div>
       <div><label htmlFor="pn" className={lab}>Müşteri adı</label><input id="pn" value={f.name} onChange={set("name")} className={input} /></div>
       <div><label htmlFor="pb" className={lab}>Tekne *</label><input id="pb" value={f.boat} onChange={set("boat")} className={input} /></div>
-      <div className="grid gap-4 sm:grid-cols-2">
-        <div><label htmlFor="ps" className={lab}>Tur başlangıcı *</label><input id="ps" type="date" value={f.start} onChange={set("start")} className={input} /></div>
-        <div><label htmlFor="pd" className={lab}>Tur bitişi *</label><input id="pd" type="date" value={f.end} onChange={set("end")} className={input} /></div>
-      </div>
+      <DateRangePicker label="Tur tarihleri *" start={f.start} end={f.end} allowPast onChange={(a, b) => setF({ ...f, start: a, end: b })} />
       <button type="button" onClick={create} disabled={busy} className="w-full rounded-xl bg-turquoise px-6 py-3.5 text-base font-semibold text-white disabled:opacity-60 sm:w-auto">{busy ? "Oluşturuluyor…" : "Panel aç ve kod üret"}</button>
     </div>
   );

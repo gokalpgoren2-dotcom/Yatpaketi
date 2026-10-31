@@ -60,6 +60,14 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     <div><dt className="text-navy/50">Gönderilme</dt><dd>{new Date(r.created_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" })}</dd></div>
                   </dl>
                   {r.message && <p className="whitespace-pre-line rounded-xl bg-mist p-3">{r.message}</p>}
+                  {r.email && (
+                    <a
+                      href={`/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email, ad: r.customer_name, tekne: r.boat_name ?? "", bas: r.start_date ?? "", bit: r.end_date ?? "" }).toString()}`}
+                      className="inline-block rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white"
+                    >
+                      Bu talep için müşteri paneli aç
+                    </a>
+                  )}
                   <form action={updateRequest} className="space-y-3">
                     <input type="hidden" name="id" value={r.id} />
                     <div>
