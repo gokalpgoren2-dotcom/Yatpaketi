@@ -15,9 +15,12 @@ export default async function PortalHome() {
   if (!p) redirect("/musteri");
 
   let contractUrl: string | null = null;
+  let downloadUrl: string | null = null;
   if (p.contract_path) {
-    const { data } = await portalDb().storage.from("contracts").createSignedUrl(p.contract_path, 300);
-    contractUrl = data?.signedUrl ?? null;
+    const store = portalDb().storage.from("contracts");
+    const [view, dl] = await Promise.all([store.createSignedUrl(p.contract_path, 600), store.createSignedUrl(p.contract_path, 600, { download: "sozlesme" })]);
+    contractUrl = view.data?.signedUrl ?? null;
+    downloadUrl = dl.data?.signedUrl ?? null;
   }
 
   const days = Math.round((new Date(p.tour_start + "T00:00:00Z").getTime() - new Date(istanbulToday() + "T00:00:00Z").getTime()) / 86400000);
@@ -42,7 +45,10 @@ export default async function PortalHome() {
       <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
         <h2 className="font-display text-xl text-navy">Sözleşme</h2>
         {contractUrl ? (
-          <p className="mt-3"><a href={contractUrl} target="_blank" rel="noopener" className="inline-block rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Sözleşmeyi görüntüle / indir</a></p>
+          <p className="mt-3 flex flex-wrap gap-2">
+            <a href={contractUrl} target="_blank" rel="noopener" className="inline-block rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Görüntüle</a>
+            {downloadUrl && <a href={downloadUrl} className="inline-block rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">İndir</a>}
+          </p>
         ) : (
           <p className="mt-3 text-sm text-navy/65">Sözleşmeniz hazırlandığında burada görünecek.</p>
         )}
