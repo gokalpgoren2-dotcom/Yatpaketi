@@ -28,6 +28,7 @@ export async function sendPortalEmail(portalId: string, code: string): Promise<{
     return { ok: true, message: `E-posta gönderildi: ${data.email}` };
   } catch (e) {
     const m = e instanceof Error ? e.message : "bilinmeyen hata";
-    return { ok: false, message: "E-posta gönderilemedi (" + m + "). Kodu elle iletin." };
+    const info = m.includes("535") ? ` [Kullanılan adres: ${user}, şifre uzunluğu: ${pass.length} karakter, 16 olmalı]` : "";
+    return { ok: false, message: "E-posta gönderilemedi (" + m + ")." + info + " Kodu elle iletin." };
   }
 }
