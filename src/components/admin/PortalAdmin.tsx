@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { CodeBox } from "./PortalCreate";
 import { LocationPicker } from "./LocationPicker";
-import { emailContractToCustomer } from "@/app/admin/(panel)/musteri-panelleri/actions";
+import { emailContractToCustomer, notifyChecklistDone } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
@@ -27,6 +27,7 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [code, setCode] = useState<string | null>(null);
   const [confirmDel, setConfirmDel] = useState(false);
+  const [notify, setNotify] = useState(true);
 
   const say = (ok: boolean, text: string) => { setMsg({ ok, text }); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
@@ -34,7 +35,11 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     const done = !it.done;
     setList(list.map((x) => (x.id === it.id ? { ...x, done } : x)));
     const { error } = await supabase.from("portal_checklist").update({ done, updated_at: new Date().toISOString() }).eq("id", it.id);
-    if (error) { setList(list); say(false, "Kaydedilemedi: " + error.message); }
+    if (error) { setList(list); say(false, "Kaydedilemedi: " + error.message); return; }
+    if (done && notify) {
+      const r = await notifyChecklistDone(portal.id, it.id).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası)." }));
+      say(r.ok, r.ok ? "İşaretlendi. " + r.message : "İşaretlendi ama " + r.message);
+    }
   }
 
   async function addItem() {
@@ -140,6 +145,10 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
 
       <section className={card}>
         <h2 className="font-semibold">Hazırlık listesi</h2>
+        <label className="mt-2 flex items-center gap-3 rounded-xl bg-mist p-3 text-sm">
+          <input type="checkbox" checked={notify} onChange={(e) => setNotify(e.target.checked)} className="h-5 w-5 shrink-0" />
+          <span>Bir madde işaretlenince müşteriye e-posta gönder<span className="block text-xs text-navy/55">Aynı madde için e-posta bir kez gider. Toplu işaretlerken kapatabilirsiniz.</span></span>
+        </label>
         <ul className="mt-3 divide-y divide-navy/10">
           {list.map((it) => (
             <li key={it.id} className="flex items-center gap-3 py-3">

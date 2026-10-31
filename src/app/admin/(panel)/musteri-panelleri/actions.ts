@@ -58,3 +58,41 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
   await supabase.from("customer_portals").update({ contract_emailed_at: new Date().toISOString() }).eq("id", portalId);
   return { ok: true, message: `Sözleşme ${p.email} adresine e-postayla gönderildi. Bilgilendirme e-postası sizin adresinize de düştü.` };
 }
+
+const SENTENCES: Record<string, { short: string; line: string }> = {
+  "Sözleşme imzalandı": { short: "Sözleşmeniz imzalandı", line: "Sözleşmeniz imzalı olarak kaydedildi." },
+  "Tekne temizliği tamamlandı": { short: "Tekne temizliği tamamlandı", line: "Teknenizin temizliği tamamlandı." },
+  "Alışveriş / ikmal yapıldı": { short: "Alışveriş ve ikmal yapıldı", line: "Turunuz için alışveriş ve ikmal yapıldı." },
+  "Yakıt ve su dolumu yapıldı": { short: "Yakıt ve su dolumu yapıldı", line: "Teknenin yakıt ve su dolumu yapıldı." },
+  "Teknik kontrol yapıldı": { short: "Teknik kontrol yapıldı", line: "Teknenin teknik kontrolü yapıldı." },
+  "Kaptan ve mürettebat hazır": { short: "Kaptan ve mürettebat hazır", line: "Kaptanınız ve mürettebatınız hazır." },
+};
+
+// Hazırlık listesinde bir madde işaretlenince müşteriye bilgilendirme e-postası gönderir (aynı madde için bir kez).
+export async function notifyChecklistDone(portalId: string, itemId: string): Promise<{ ok: boolean; message: string }> {
+  const { supabase } = await requireAdmin();
+  const { data: p } = await supabase.from("customer_portals").select("email,customer_name,boat_name,tour_start,tour_end,status").eq("id", portalId).maybeSingle();
+  if (!p) return { ok: false, message: "Panel bulunamadı." };
+  if (p.status !== "active") return { ok: false, message: "Panel iptal edilmiş, e-posta gönderilmedi." };
+  const { data: items } = await supabase.from("portal_checklist").select("id,label,done,sort_order").eq("portal_id", portalId).order("sort_order");
+  const list = (items ?? []) as { id: string; label: string; done: boolean }[];
+  const item = list.find((i) => i.id === itemId);
+  if (!item || !item.done) return { ok: false, message: "Madde işaretli değil." };
+
+  // Daha önce bildirildiyse tekrar gönderme (sütun henüz yoksa sorgu hata verir; o durumda gönderilir).
+  const prev = await supabase.from("portal_checklist").select("notified_at").eq("id", itemId).maybeSingle();
+  if (!prev.error && prev.data?.notified_at) return { ok: true, message: "Bu madde için müşteriye daha önce e-posta gönderilmişti, tekrar gönderilmedi." };
+
+  const sent = SENTENCES[item.label] ?? { short: item.label, line: `Hazırlık listenizde bir madde tamamlandı: ${item.label}.` };
+  const done = list.filter((i) => i.done).length;
+  const left = list.filter((i) => !i.done).map((i) => i.label);
+  const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
+  const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
+  const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+  const text = `${hello}\n\n${p.boat_name} teknesi için ${range} tarihli turunuzun hazırlığıyla ilgili bir güncelleme:\n\n${sent.line}\n\nHazırlık durumu: ${list.length} maddeden ${done} tanesi tamamlandı.${left.length ? "\nKalan: " + left.join(", ") + "." : "\nTüm hazırlıklar tamamlandı."}\n\nDetaylar için müşteri panelinize girebilirsiniz: ${base}/musteri\n\nYatpaketi`;
+  const html = wrap(`<p>${esc(hello)}</p><p><b>${esc(String(p.boat_name))}</b> teknesi için <b>${esc(range)}</b> tarihli turunuzun hazırlığıyla ilgili bir güncelleme:</p><p style="font-size:17px"><b>✓ ${esc(sent.line)}</b></p><p>Hazırlık durumu: ${list.length} maddeden <b>${done}</b> tanesi tamamlandı.${left.length ? "<br>Kalan: " + esc(left.join(", ")) + "." : "<br><b>Tüm hazırlıklar tamamlandı.</b>"}</p><p>Detaylar için <a href="${base}/musteri">müşteri panelinize</a> girebilirsiniz.</p>`);
+  const r = await sendMail({ to: String(p.email), subject: `Tur hazırlığınız: ${sent.short} – ${p.boat_name} (${range})`, text, html });
+  if (!r.ok) return { ok: false, message: "Müşteriye e-posta gönderilemedi (" + r.message + ")." };
+  await supabase.from("portal_checklist").update({ notified_at: new Date().toISOString() }).eq("id", itemId);
+  return { ok: true, message: `Müşteriye e-posta gönderildi: ${sent.short}.` };
+}
