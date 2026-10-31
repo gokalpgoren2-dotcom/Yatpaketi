@@ -1,5 +1,7 @@
 "use server";
 
+import { sendMail, adminMail, wrap } from "@/lib/mailer";
+
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
@@ -23,4 +25,18 @@ export async function saveContact(formData: FormData) {
   if (error) back("error", "Kaydedilemedi: " + error.message);
   revalidatePath("/", "layout");
   back("saved");
+}
+
+
+// Bildirim e-postasını dener ve gerçek sonucu (hata dahil) ekranda gösterir.
+export async function testNotifyMail() {
+  await requireAdmin();
+  const to = adminMail();
+  let msg = "";
+  if (!to) msg = "Vercel'de GMAIL_USER tanımlı değil.";
+  else {
+    const r = await sendMail({ to, subject: "Yatpaketi test e-postası", text: "Bu bir test e-postasıdır. Yeni talep bildirimleri bu adrese gelir.", html: wrap("<p>Bu bir test e-postasıdır. Yeni talep bildirimleri bu adrese gelir.</p>") });
+    msg = r.ok ? `Test e-postası ${to} adresine gönderildi. Gelen kutusu ve Spam klasörüne bakın.` : `Gönderilemedi: ${r.message}`;
+  }
+  redirect("/admin/ayarlar?mail=" + encodeURIComponent(msg) + `&t=${Date.now()}`);
 }

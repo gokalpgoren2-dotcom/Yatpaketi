@@ -1,15 +1,16 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
 import { formatPhone, normalizePhone } from "@/lib/phone";
-import { saveContact } from "./actions";
+import { saveContact, testNotifyMail } from "./actions";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-export default async function Settings({ searchParams }: { searchParams: Promise<{ error?: string; saved?: string; t?: string }> }) {
-  const { error, saved, t } = await searchParams;
+export default async function Settings({ searchParams }: { searchParams: Promise<{ error?: string; saved?: string; t?: string; mail?: string }> }) {
+  const { error, saved, t, mail } = await searchParams;
   const { supabase } = await requireAdmin();
   const { data } = await supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle();
   const v = (data?.value ?? {}) as { phone?: string; whatsapp?: string; email?: string };
@@ -36,6 +37,12 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         </div>
         <SubmitButton>Kaydet</SubmitButton>
       </form>
+      <div className="mt-6 rounded-2xl bg-white p-5 shadow-sm">
+        <h2 className="font-semibold">Bildirim e-postası</h2>
+        <p className="mt-1 text-sm text-navy/60">Yeni talep bildirimleri bu sistemle gelir. Çalışıp çalışmadığını buradan deneyin, hata varsa nedenini gösterir.</p>
+        {mail && <p role="status" className="mt-3 rounded-xl bg-mist p-3 text-sm">{mail}</p>}
+        <form action={testNotifyMail} className="mt-3"><SubmitButton>Test e-postası gönder</SubmitButton></form>
+      </div>
     </>
   );
 }
