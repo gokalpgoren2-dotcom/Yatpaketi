@@ -11,7 +11,7 @@ export async function Header() {
     {
       href: "/tekneler",
       label: "Kiralık Tekneler",
-      children: [{ href: "/tekneler", label: "Tüm tekneler" }, ...cats.map((c) => ({ href: `/tekne-tipleri/${c.slug}`, label: c.name }))],
+      children: [{ href: "/tekneler", label: "Tüm tekneler", icon: "all" }, ...cats.map((c) => ({ href: `/tekne-tipleri/${c.slug}`, label: c.name, icon: c.slug }))],
     },
     { href: "/destinasyonlar", label: "Destinasyonlar" },
     ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : [{ href: "/#mavi-yolculuk", label: "Mavi Yolculuk" }]),

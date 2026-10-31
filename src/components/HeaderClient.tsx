@@ -3,8 +3,9 @@
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Logo } from "./Logo";
+import { BoatIcon } from "./BoatIcon";
 
-export type NavLink = { href: string; label: string; children?: { href: string; label: string }[] };
+export type NavLink = { href: string; label: string; children?: { href: string; label: string; icon?: string }[] };
 
 export function HeaderClient({ links }: { links: NavLink[] }) {
   const [open, setOpen] = useState(false);
@@ -48,7 +49,7 @@ export function HeaderClient({ links }: { links: NavLink[] }) {
                     <ul className="min-w-52 rounded-2xl bg-white p-2 shadow-xl ring-1 ring-navy/10">
                       {l.children.map((c) => (
                         <li key={c.href}>
-                          <Link href={c.href} onClick={() => setSub(null)} className="block rounded-xl px-4 py-2.5 text-sm font-medium text-navy hover:bg-mist hover:text-turquoise-dark">{c.label}</Link>
+                          <Link href={c.href} onClick={() => setSub(null)} className="group flex items-center gap-3 rounded-xl px-4 py-2.5 text-sm font-medium text-navy hover:bg-mist hover:text-turquoise-dark"><BoatIcon name={c.icon} className="shrink-0 text-turquoise" />{c.label}</Link>
                         </li>
                       ))}
                     </ul>
@@ -113,7 +114,7 @@ export function HeaderClient({ links }: { links: NavLink[] }) {
                   <ul className="pb-3 pl-3">
                     {l.children.map((c) => (
                       <li key={c.href}>
-                        <Link href={c.href} onClick={() => { setOpen(false); setSub(null); }} className="block py-2.5 text-base text-navy/80">{c.label}</Link>
+                        <Link href={c.href} onClick={() => { setOpen(false); setSub(null); }} className="flex items-center gap-3 py-2.5 text-base text-navy/80"><BoatIcon name={c.icon} className="shrink-0 text-turquoise" />{c.label}</Link>
                       </li>
                     ))}
                   </ul>
