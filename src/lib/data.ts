@@ -28,7 +28,7 @@ export type Boat = {
   image?: string | null; // kapak fotoğrafı adresi (Supabase Storage); yoksa yer tutucu
 };
 
-export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string };
+export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string; image?: string | null };
 
 export const categories = [
   "Gulet",

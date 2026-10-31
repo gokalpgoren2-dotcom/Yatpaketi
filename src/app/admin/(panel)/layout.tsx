@@ -5,8 +5,9 @@ import { signOut } from "../login/actions";
 const active = [
   { href: "/admin", label: "Genel Bakış" },
   { href: "/admin/tekneler", label: "Tekneler" },
+  { href: "/admin/icerik", label: "Site İçeriği" },
 ];
-const soon = ["Rezervasyonlar", "Takvim", "Destinasyonlar", "Blog", "İçerik", "Ayarlar"];
+const soon = ["Rezervasyonlar", "Takvim", "Destinasyonlar", "Blog", "Ayarlar"];
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAdmin();

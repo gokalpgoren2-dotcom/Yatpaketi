@@ -1,8 +1,9 @@
+import Image from "next/image";
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
-import { boats, categories, destinations, posts, routes } from "@/lib/data";
+import { boats, categories, posts, routes, type Destination } from "@/lib/data";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -87,23 +88,28 @@ export function HowItWorks() {
   );
 }
 
-export function Destinations() {
+export function Destinations({ items }: { items: Destination[] }) {
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler rotalar ve koylar" action={{ href: "/destinasyonlar", label: "Tüm destinasyonlar" }} />
-        <div className="grid auto-rows-[11rem] grid-cols-2 gap-3 sm:gap-4 lg:auto-rows-[14rem] lg:grid-cols-4">
-          {destinations.map((d, i) => (
+        <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler tekne kiralama destinasyonları" action={{ href: "/destinasyonlar", label: "Hepsini gör" }} />
+        <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
+          {items.map((d) => (
             <Link
               key={d.slug}
               href={`/destinasyonlar/${d.slug}`}
-              className={`group relative overflow-hidden rounded-3xl ${i === 0 ? "col-span-2 row-span-2" : ""}`}
+              className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
             >
-              <Placeholder hue={d.hue} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent" />
-              <div className="absolute bottom-0 p-4 text-white sm:p-6">
-                <h3 className={`font-display ${i === 0 ? "text-3xl lg:text-4xl" : "text-xl lg:text-2xl"}`}>{d.name}</h3>
-                <p className="mt-0.5 text-xs text-white/85 sm:text-sm">{d.blurb}</p>
+              {d.image ? (
+                <Image src={d.image} alt={d.name} fill sizes="(min-width:1024px) 24vw, (min-width:640px) 42vw, 76vw" className="object-cover transition duration-500 group-hover:scale-105" />
+              ) : (
+                <Placeholder hue={d.hue} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
+              )}
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-transparent to-transparent" />
+              <div className="absolute bottom-0 p-5 text-white">
+                <p className="text-sm text-white/85">Türkiye</p>
+                <h3 className="font-display text-3xl">{d.name}</h3>
+                <p className="mt-1 text-sm text-white/85">{d.blurb}</p>
               </div>
             </Link>
           ))}
