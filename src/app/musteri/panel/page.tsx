@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
-import { PortalUpload } from "@/components/PortalUpload";
+import { ContractSection } from "@/components/ContractSection";
 import { loadPortal, portalDb } from "@/lib/portal";
 import { portalLogout } from "../actions";
 
@@ -44,24 +44,7 @@ export default async function PortalHome() {
 
       <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
         <h2 className="font-display text-xl text-navy">Sözleşme</h2>
-        {contractUrl ? (
-          <p className="mt-3 flex flex-wrap gap-2">
-            <a href={contractUrl} target="_blank" rel="noopener" className="inline-block rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Görüntüle</a>
-            {downloadUrl && <a href={downloadUrl} className="inline-block rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">İndir</a>}
-          </p>
-        ) : (
-          <p className="mt-3 text-sm text-navy/65">Sözleşmeniz hazırlandığında burada görünecek.</p>
-        )}
-        {contractUrl && (
-          <div className="mt-5">
-            {p.signed_at ? (
-              <p className="mb-3 rounded-xl bg-green-50 p-3 text-sm font-medium text-green-800">İmzalı sözleşmeniz alındı ({new Date(p.signed_at).toLocaleDateString("tr-TR")}).</p>
-            ) : (
-              <p className="mb-3 text-sm text-navy/70">Sözleşmeyi indirip imzalayın, sonra imzalı hâlini (PDF veya fotoğraf) buradan yükleyin.</p>
-            )}
-            <PortalUpload replace={Boolean(p.signed_at)} />
-          </div>
-        )}
+        <ContractSection viewUrl={contractUrl} downloadUrl={downloadUrl} signedAt={p.signed_at} />
       </section>
 
       <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
