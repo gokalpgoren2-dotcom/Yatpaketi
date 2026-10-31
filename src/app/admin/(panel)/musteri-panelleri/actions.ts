@@ -23,7 +23,7 @@ export async function sendPortalEmail(portalId: string, code: string): Promise<{
   const html = `<div style="font-family:Arial,sans-serif;font-size:15px;color:#0b2a4a;line-height:1.6"><p>${esc(hello)}</p><p><b>${esc(data.boat_name)}</b> turunuz için müşteri paneli giriş bilgileriniz:</p><p>Adres: <a href="${url}">${url}</a><br>E-posta: ${esc(data.email)}<br>Giriş kodu: <b style="font-size:20px;letter-spacing:2px">${esc(code)}</b></p><p>Panelden sözleşmenizi görebilir, imzalı hâlini yükleyebilir ve tur hazırlığını takip edebilirsiniz. Kod ${esc(String(data.tour_end))} tarihinden sonra geçersiz olur. Kodu kimseyle paylaşmayın.</p><p>Yatpaketi</p></div>`;
 
   try {
-    const transport = nodemailer.createTransport({ service: "gmail", auth: { user, pass } });
+    const transport = nodemailer.createTransport({ host: "smtp.gmail.com", port: 465, secure: true, auth: { user, pass }, connectionTimeout: 8000, greetingTimeout: 8000, socketTimeout: 12000 });
     await transport.sendMail({ from: `"Yatpaketi" <${user}>`, to: data.email, subject: "Yatpaketi müşteri paneli giriş bilgileriniz", text, html });
     return { ok: true, message: `E-posta gönderildi: ${data.email}` };
   } catch (e) {

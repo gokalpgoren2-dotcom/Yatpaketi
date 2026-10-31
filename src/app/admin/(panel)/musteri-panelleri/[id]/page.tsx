@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin";
 import { PortalAdmin, type PortalRow, type CheckItem } from "@/components/admin/PortalAdmin";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 export default async function PortalDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

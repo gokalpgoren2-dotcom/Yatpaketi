@@ -3,6 +3,7 @@ import { requireAdmin } from "@/lib/admin";
 import { PortalCreate } from "@/components/admin/PortalCreate";
 
 export const dynamic = "force-dynamic";
+export const maxDuration = 30;
 
 export default async function NewPortal() {
   await requireAdmin();

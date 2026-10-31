@@ -17,7 +17,10 @@ export function CodeBox({ code, email, boat, portalId, autoSend = false }: { cod
     if (!portalId) return;
     setSending(true);
     setMail(null);
-    const r = await sendPortalEmail(portalId, code);
+    const r = await Promise.race([
+      sendPortalEmail(portalId, code).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası). Kodu elle iletin." })),
+      new Promise<{ ok: boolean; message: string }>((res) => setTimeout(() => res({ ok: false, message: "E-posta zaman aşımına uğradı. Gelen kutunuzu kontrol edin, gelmediyse kodu elle iletin." }), 25000)),
+    ]);
     setMail({ ok: r.ok, text: r.message });
     setSending(false);
   }
