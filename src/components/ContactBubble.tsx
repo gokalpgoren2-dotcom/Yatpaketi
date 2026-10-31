@@ -57,19 +57,30 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
           )}
         </div>
       )}
-      <button
-        type="button"
-        onClick={() => setOpen((v) => !v)}
-        aria-expanded={open}
-        aria-label={open ? "İletişim menüsünü kapat" : "İletişim menüsünü aç"}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-turquoise text-white shadow-xl shadow-navy/30 transition hover:bg-turquoise-dark active:scale-95"
-      >
-        {open ? (
-          <svg {...ic} width={24} height={24}><path d="M6 6l12 12M18 6L6 18" /></svg>
-        ) : (
-          <svg {...ic} width={26} height={26}><path d="M4 5h16v11H9l-5 4z" /></svg>
-        )}
-      </button>
+      {!open && (
+        <span className="bubble-label pointer-events-none absolute right-[4.5rem] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-lg ring-1 ring-navy/10" aria-hidden>
+          Bize yazın
+        </span>
+      )}
+      <span className="relative block h-14 w-14">
+        {!open && <span className="bubble-ring absolute inset-0 rounded-full bg-turquoise" aria-hidden />}
+        <button
+          type="button"
+          onClick={() => setOpen((v) => !v)}
+          aria-expanded={open}
+          aria-label={open ? "İletişim menüsünü kapat" : "İletişim menüsünü aç"}
+          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#2ad0e0] via-turquoise to-[#0b6f95] text-white shadow-xl shadow-navy/35 ring-2 ring-white/70 transition active:scale-95"
+        >
+          {open ? (
+            <svg {...ic} width={24} height={24}><path d="M6 6l12 12M18 6L6 18" /></svg>
+          ) : (
+            <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
+              <path fill="currentColor" d="M12 2.5c-5.2 0-9.5 3.6-9.5 8.3 0 2.3 1.1 4.4 2.9 5.9L4.6 21l4.5-2.2c.9.2 1.9.4 2.9.4 5.2 0 9.5-3.6 9.5-8.3S17.2 2.5 12 2.5z" />
+              <circle cx="8" cy="10.9" r="1.2" fill="#0b6f95" /><circle cx="12" cy="10.9" r="1.2" fill="#0b6f95" /><circle cx="16" cy="10.9" r="1.2" fill="#0b6f95" />
+            </svg>
+          )}
+        </button>
+      </span>
     </div>
   );
 }
