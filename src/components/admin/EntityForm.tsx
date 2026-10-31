@@ -86,50 +86,5 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
     setBusy(false);
   }
 
-  return (
-    <div className="space-y-6" aria-live="polite">
-      {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
-
-      <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
-        <div><label htmlFor="name" className={lab}>{dest ? "Destinasyon adı *" : "Tekne tipi adı *"}</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} /></div>
-        <div>
-          <label htmlFor="slug" className={lab}>Adres (slug)</label>
-          <input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} disabled={Boolean(row)} className={`${input} disabled:bg-mist disabled:text-navy/60`} />
-          <p className="mt-1 text-xs text-navy/50">{row ? "Adres, mevcut bağlantıların bozulmaması için değiştirilemez." : "Boş bırakırsanız addan oluşur."}</p>
-        </div>
-        {dest && <div><label htmlFor="blurb" className={lab}>Kısa açıklama (kartlarda görünür)</label><input id="blurb" value={blurb} onChange={(e) => setBlurb(e.target.value)} maxLength={80} className={input} /></div>}
-        <div>
-          <label htmlFor="intro" className={lab}>Tanıtım metni</label>
-          <textarea id="intro" rows={9} value={intro} onChange={(e) => setIntro(e.target.value)} className={`${input} text-sm leading-relaxed`} />
-          <p className="mt-1 text-xs text-navy/55">Paragraflar arasında boş satır bırakın. Başlık: <code>## </code>, liste: <code>- </code>, kalın: <code>**kalın**</code>.</p>
-        </div>
-      </section>
-
-      <section className="rounded-2xl bg-white p-5 shadow-sm">
-        <h2 className="font-semibold">Fotoğraf</h2>
-        <div className="mt-3 overflow-hidden rounded-xl bg-mist">
-          {cover ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={BASE + cover} alt="" className="aspect-[16/9] w-full object-cover" />
-          ) : <p className="p-8 text-center text-sm text-navy/50">Fotoğraf yok. Renkli bir çizim görünür.</p>}
-        </div>
-        <input ref={file} type="file" accept="image/*" hidden onChange={(e) => pickCover(e.target.files)} />
-        <div className="mt-3 flex gap-2">
-          <button type="button" disabled={busy} onClick={() => file.current?.click()} className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold disabled:opacity-50">{cover ? "Fotoğrafı değiştir" : "Fotoğraf seç"}</button>
-          {cover && <button type="button" disabled={busy} onClick={() => setCover("")} className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-red-700">Kaldır</button>}
-        </div>
-      </section>
-
-      <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
-        <h2 className="font-semibold">Yayın ve Google</h2>
-        <label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={on} onChange={(e) => setOn(e.target.checked)} className="h-5 w-5" /> {dest ? "Sitede yayınla" : "Sitede göster"}</label>
-        {dest && <label className="flex items-center gap-3 text-sm"><input type="checkbox" checked={featured} onChange={(e) => setFeatured(e.target.checked)} className="h-5 w-5" /> Öne çıkan</label>}
-        <div><label htmlFor="sort" className={lab}>Sıra (küçük sayı önce gelir)</label><input id="sort" value={sort} onChange={(e) => setSort(e.target.value)} inputMode="numeric" className={input} /></div>
-        <div><label htmlFor="seot" className={lab}>Google başlığı</label><input id="seot" value={seoTitle} onChange={(e) => setSeoTitle(e.target.value)} maxLength={70} className={input} /></div>
-        <div><label htmlFor="seod" className={lab}>Google açıklaması</label><textarea id="seod" rows={2} value={seoDesc} onChange={(e) => setSeoDesc(e.target.value)} maxLength={170} className={input} /></div>
-      </section>
-
-      <button type="button" onClick={save} disabled={busy} className="w-full rounded-xl bg-turquoise px-6 py-4 text-base font-semibold text-white disabled:opacity-60 sm:w-auto">{busy ? "Bekleyin…" : "Kaydet"}</button>
-    </div>
-  );
+  return null;
 }
