@@ -1,2 +1,3 @@
--- Rezervasyon taleplerine iptal sebebi alanı. Supabase > SQL Editor'de bir kez çalıştırın.
+-- Rezervasyon taleplerine iptal sebebi ve iptal tarihi. Supabase > SQL Editor'de çalıştırın (tekrar çalıştırmak zararsızdır).
 alter table public.reservation_requests add column if not exists cancel_reason text;
+alter table public.reservation_requests add column if not exists cancelled_at timestamptz;

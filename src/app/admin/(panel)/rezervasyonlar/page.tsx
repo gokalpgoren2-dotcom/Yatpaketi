@@ -22,8 +22,8 @@ export default async function Requests({ searchParams }: { searchParams: Promise
   const { error, saved, t, durum } = await searchParams;
   const { supabase } = await requireAdmin();
   let q = supabase.from("reservation_requests").select("*").order("created_at", { ascending: false }).limit(200);
-  if (durum && labels[durum]) q = q.eq("status", durum);
-  else q = q.neq("status", "cancelled"); // iptal edilenler listeyi kalabalıklaştırmasın; "İptal" filtresinde görünür
+  if (durum && labels[durum] && durum !== "cancelled") q = q.eq("status", durum);
+  else q = q.neq("status", "cancelled"); // iptal edilenler ayrı sayfada ("İptal Edilenler") saklanır
   const { data } = await q;
   const rows = (data ?? []) as Req[];
 
@@ -34,14 +34,16 @@ export default async function Requests({ searchParams }: { searchParams: Promise
       {saved && <Notice key={"s" + t} kind="ok" text="Kaydedildi." />}
       {error && <Notice key={"e" + t} kind="error" text={error} />}
 
+      <p className="mt-2 text-sm"><a href="/admin/iptal-edilenler" className="font-medium text-turquoise-dark">İptal edilen rezervasyonlar (arşiv) →</a></p>
+
       <nav aria-label="Duruma göre filtre" className="mt-5 flex gap-2 overflow-x-auto pb-1">
-        {[["", "Aktif talepler"], ...Object.entries(labels)].map(([k, v]) => (
+        {[["", "Aktif talepler"], ...Object.entries(labels).filter(([k]) => k !== "cancelled")].map(([k, v]) => (
           <a key={k} href={k ? `?durum=${k}` : "?"} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium ${(durum ?? "") === k ? "bg-navy text-white" : "bg-white text-navy ring-1 ring-navy/15"}`}>{v}</a>
         ))}
       </nav>
 
       {rows.length === 0 ? (
-        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60">Bu görünümde talep yok. İptal edilenler "İptal" filtresinde durur.</p>
+        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60">Bu görünümde talep yok.</p>
       ) : (
         <ul className="mt-5 space-y-3">
           {rows.map((r) => (
