@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
-import { boats, categories, posts, routes, type Destination } from "@/lib/data";
+import { posts, routes, type Boat, type Destination } from "@/lib/data";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -23,13 +23,13 @@ function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: strin
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
-export function Categories() {
+export function Categories({ items }: { items: string[] }) {
   return (
     <section className="pb-4 pt-14 lg:pt-20">
       <div className={wrap}>
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">Tekne tipine göre keşfedin</p>
         <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
-          {categories.map((c) => (
+          {items.map((c) => (
             <Link
               key={c}
               href={`/tekneler?tip=${encodeURIComponent(c)}`}
@@ -44,19 +44,23 @@ export function Categories() {
   );
 }
 
-export function FeaturedBoats() {
+export function FeaturedBoats({ items, sample }: { items: Boat[]; sample: boolean }) {
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
         <Heading id="tekneler" eyebrow="Öne çıkan tekneler" title="Sizin için seçtiklerimiz" action={{ href: "/tekneler", label: "Tüm tekneler" }} />
-        <p className="-mt-4 mb-6 text-sm text-navy/50">Örnek içerik: Gerçek tekneler admin panelinden eklenecek.</p>
-        <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
-          {boats.slice(0, 6).map((b) => (
-            <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
-              <BoatCard b={b} />
-            </div>
-          ))}
-        </div>
+        {sample && <p className="-mt-4 mb-6 text-sm text-navy/50">Örnek içerik: Veritabanı bağlı olmadığı için örnek tekneler gösteriliyor.</p>}
+        {items.length === 0 ? (
+          <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">Henüz yayında tekne yok. Çok yakında burada olacak.</p>
+        ) : (
+          <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
+            {items.map((b) => (
+              <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
+                <BoatCard b={b} />
+              </div>
+            ))}
+          </div>
+        )}
       </div>
     </section>
   );

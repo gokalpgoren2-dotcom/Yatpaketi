@@ -3,9 +3,10 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { BoatCard } from "@/components/BoatCard";
-import { categories, destinations, filterBoats, type Filters } from "@/lib/data";
+import { filterBoats, type Filters } from "@/lib/data";
+import { getBoats, getCategoryNames, getDestinations } from "@/lib/content";
 
-// Örnek veri bulunduğu sürece arama motorlarına kapalı. Gerçek tekneler eklenince kaldırılacak.
+// Rezervasyon talep formu hazır olana kadar arama motorlarına kapalı.
 export const metadata: Metadata = {
   title: "Kiralık Tekneler",
   description: "Gulet, motoryat, katamaran ve yelkenli seçeneklerini filtreleyin.",
@@ -24,6 +25,8 @@ const num = (v: string | string[] | undefined) => {
 const input = "w-full rounded-xl border border-navy/10 bg-white px-3 py-2.5 text-sm text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
+export const revalidate = 60;
+
 export default async function BoatsPage({ searchParams }: { searchParams: Promise<SP> }) {
   const sp = await searchParams;
   const f: Filters = {
@@ -40,7 +43,8 @@ export default async function BoatsPage({ searchParams }: { searchParams: Promis
     murettebat: (["var", "yok"] as const).find((x) => x === one(sp.murettebat)),
     sirala: one(sp.sirala),
   };
-  const list = filterBoats(f);
+  const [{ boats: all, sample }, destinations, categories] = await Promise.all([getBoats(), getDestinations(), getCategoryNames()]);
+  const list = filterBoats(all, f);
   const hasDates = Boolean(one(sp.giris) || one(sp.cikis));
 
   return (
@@ -49,7 +53,7 @@ export default async function BoatsPage({ searchParams }: { searchParams: Promis
       <main className="mx-auto max-w-7xl px-5 pb-20 pt-24 lg:px-8 lg:pt-32">
         <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">Kiralık Tekneler</p>
         <h1 className="font-display text-3xl font-medium text-navy lg:text-5xl">Size Uygun Tekneyi Bulun</h1>
-        <p className="mt-3 text-sm text-navy/50">Örnek içerik: Gerçek tekneler admin panelinden eklenecek.</p>
+        {sample && <p className="mt-3 text-sm text-navy/50">Örnek içerik: Veritabanı bağlı olmadığı için örnek tekneler gösteriliyor.</p>}
 
         {hasDates && (
           <p className="mt-4 rounded-xl bg-mist px-4 py-3 text-sm text-navy/70">
@@ -114,7 +118,7 @@ export default async function BoatsPage({ searchParams }: { searchParams: Promis
           </div>
         ) : (
           <div className="mt-4 rounded-2xl bg-mist p-8 text-center text-navy/70">
-            Bu filtrelere uygun tekne bulunamadı. Filtreleri gevşetmeyi deneyin.
+            {all.length === 0 ? "Henüz yayında tekne yok." : "Bu filtrelere uygun tekne bulunamadı. Filtreleri gevşetmeyi deneyin."}
           </div>
         )}
       </main>

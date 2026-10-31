@@ -6,7 +6,7 @@ export type Boat = {
   type: string;
   brand: string;
   model: string;
-  year: number;
+  year: number | null;
   refit: number | null;
   port: string;
   destinations: string[]; // destinasyon slug'ları
@@ -26,6 +26,8 @@ export type Boat = {
   hue: number; // yer tutucu görsel rengi
   addedAt: string;
   image?: string | null; // kapak fotoğrafı adresi (Supabase Storage); yoksa yer tutucu
+  images?: string[]; // tüm fotoğraflar (kapak ilk sırada)
+  featured?: boolean;
 };
 
 export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string; image?: string | null };
@@ -74,14 +76,8 @@ export const posts = [
   { title: "Gulet mi Katamaran mı? Hangisi Size Uygun?", tag: "İpuçları" },
 ];
 
-export function getBoat(slug: string) {
-  return boats.find((b) => b.slug === slug);
-}
-export function getDestination(slug: string) {
-  return destinations.find((d) => d.slug === slug);
-}
-export function boatsFor(destSlug: string) {
-  return boats.filter((b) => b.destinations.includes(destSlug));
+export function boatsFor(list: Boat[], destSlug: string) {
+  return list.filter((b) => b.destinations.includes(destSlug));
 }
 
 // Fiyat gösterimi: showPrice false ise null döner ("Fiyat sorunuz").
@@ -109,14 +105,14 @@ function comparablePrice(b: Boat, mode?: Filters["kiralama"]): number | null {
   return b.priceWeekly ?? (b.priceDaily ? b.priceDaily * 7 : null);
 }
 
-export function filterBoats(f: Filters): Boat[] {
-  let list = boats.filter((b) => {
+export function filterBoats(all: Boat[], f: Filters): Boat[] {
+  let list = all.filter((b) => {
     if (f.destinasyon && !b.destinations.includes(f.destinasyon)) return false;
     if (f.tip && b.type !== f.tip) return false;
     if (f.misafir && b.guests < f.misafir) return false;
     if (f.kabin && b.cabins < f.kabin) return false;
     if (f.uzunluk && b.length < f.uzunluk) return false;
-    if (f.yil && b.year < f.yil) return false;
+    if (f.yil && (b.year ?? 0) < f.yil) return false;
     if (f.kaptan === "kaptanli" && !b.captained) return false;
     if (f.kaptan === "kaptansiz" && b.captained) return false;
     if (f.murettebat === "var" && b.crew === 0) return false;

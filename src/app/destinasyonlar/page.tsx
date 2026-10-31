@@ -3,7 +3,9 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { Placeholder } from "@/components/Placeholder";
-import { boatsFor, destinations } from "@/lib/data";
+import Image from "next/image";
+import { boatsFor } from "@/lib/data";
+import { getBoats, getDestinations } from "@/lib/content";
 
 export const metadata: Metadata = {
   title: "Destinasyonlar",
@@ -11,7 +13,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/destinasyonlar" },
 };
 
-export default function DestinationsPage() {
+export const revalidate = 60;
+
+export default async function DestinationsPage() {
+  const [destinations, { boats }] = await Promise.all([getDestinations(), getBoats()]);
   return (
     <>
       <Header />
@@ -21,11 +26,15 @@ export default function DestinationsPage() {
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map((d) => (
             <Link key={d.slug} href={`/destinasyonlar/${d.slug}`} className="group overflow-hidden rounded-2xl border border-navy/10 transition hover:-translate-y-1 hover:shadow-xl">
-              <Placeholder hue={d.hue} className="aspect-[16/10]" />
+              {d.image ? (
+                <div className="relative aspect-[16/10]"><Image src={d.image} alt={d.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" /></div>
+              ) : (
+                <Placeholder hue={d.hue} className="aspect-[16/10]" />
+              )}
               <div className="p-5">
                 <h2 className="font-display text-2xl text-navy">{d.name}</h2>
                 <p className="mt-1 text-sm text-navy/60">{d.blurb}</p>
-                <p className="mt-3 text-sm font-medium text-turquoise-dark">{boatsFor(d.slug).length} tekne</p>
+                <p className="mt-3 text-sm font-medium text-turquoise-dark">{boatsFor(boats, d.slug).length} tekne</p>
               </div>
             </Link>
           ))}

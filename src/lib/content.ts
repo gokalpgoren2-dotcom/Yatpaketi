@@ -1,5 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
-import { destinations as sampleDestinations, type Destination } from "./data";
+import { boats as sampleBoats, categories as sampleCategories, destinations as sampleDestinations, type Boat, type Destination } from "./data";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 
 // Herkese açık okuma: oturum/çerez gerektirmez, yalnızca RLS'in izin verdiği (yayınlanmış) içerik gelir.
@@ -52,5 +52,86 @@ export async function getDestinations(): Promise<Destination[]> {
     }));
   } catch {
     return sampleDestinations;
+  }
+}
+
+// ---- Tekneler ----
+
+type Row = Record<string, any>;
+
+function hueFor(slug: string) {
+  let h = 0;
+  for (const c of slug) h = (h * 31 + c.charCodeAt(0)) % 360;
+  return 170 + (h % 60);
+}
+
+function mapBoat(r: Row): Boat {
+  const imgs = ((r.boat_images ?? []) as { path: string; is_cover: boolean; sort_order: number }[])
+    .slice()
+    .sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order)
+    .map((i) => publicImageUrl(i.path)!)
+    .filter(Boolean);
+  const dests = ((r.boat_destinations ?? []) as { destinations: { slug: string } | null }[])
+    .map((x) => x.destinations?.slug)
+    .filter((x): x is string => Boolean(x));
+  return {
+    slug: r.slug,
+    name: r.name,
+    type: r.categories?.name_tr ?? "",
+    brand: r.brand ?? "",
+    model: r.model ?? "",
+    year: r.year ?? null,
+    refit: r.refit_year ?? null,
+    port: r.home_port ?? "",
+    destinations: dests,
+    guests: r.guests ?? 1,
+    cabins: r.cabins ?? 0,
+    crew: r.crew ?? 0,
+    length: Number(r.length_m ?? 0),
+    width: Number(r.width_m ?? 0),
+    captained: Boolean(r.captain_included),
+    priceDaily: r.price_daily == null ? null : Number(r.price_daily),
+    priceWeekly: r.price_weekly == null ? null : Number(r.price_weekly),
+    showPrice: r.price_mode !== "ask",
+    currency: r.currency ?? "EUR",
+    equipment: r.equipment ?? [],
+    waterSports: r.water_sports ?? [],
+    description: r.description_tr ?? "",
+    hue: hueFor(r.slug),
+    addedAt: r.created_at ?? "",
+    image: imgs[0] ?? null,
+    images: imgs,
+    featured: Boolean(r.is_featured),
+  };
+}
+
+const BOAT_SELECT =
+  "*, categories(name_tr), boat_destinations(destinations(slug)), boat_images(path,is_cover,sort_order)";
+
+// Yayındaki tekneler. Supabase tanımlı değilse örnek tekneler (sample: true) döner.
+export async function getBoats(): Promise<{ boats: Boat[]; sample: boolean }> {
+  if (!supabaseConfigured()) return { boats: sampleBoats, sample: true };
+  try {
+    const { data, error } = await db().from("boats").select(BOAT_SELECT).eq("is_published", true).order("sort_order").order("created_at", { ascending: false });
+    if (error) throw error;
+    return { boats: (data ?? []).map(mapBoat), sample: false };
+  } catch {
+    return { boats: [], sample: false };
+  }
+}
+
+export async function getBoatBySlug(slug: string): Promise<{ boat: Boat | null; all: Boat[]; sample: boolean }> {
+  const { boats, sample } = await getBoats();
+  return { boat: boats.find((b) => b.slug === slug) ?? null, all: boats, sample };
+}
+
+export async function getCategoryNames(): Promise<string[]> {
+  if (!supabaseConfigured()) return sampleCategories;
+  try {
+    const { data, error } = await db().from("categories").select("name_tr").eq("is_active", true).order("sort_order");
+    if (error || !data || data.length === 0) return sampleCategories;
+    return data.map((c) => c.name_tr as string);
+  } catch {
+    return sampleCategories;
   }
 }
