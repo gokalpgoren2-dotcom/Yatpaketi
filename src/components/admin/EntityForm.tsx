@@ -41,50 +41,8 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
 
   const fail = (text: string) => { setMsg({ ok: false, text }); window.scrollTo({ top: 0, behavior: "smooth" }); setBusy(false); };
 
-  async function pickCover(files: FileList | null) {
-    const f = files?.[0];
-    if (!f) return;
-    setBusy(true); setMsg(null);
-    try {
-      const path = `site/${crypto.randomUUID()}.jpg`;
-      const up = await supabase.storage.from("media").upload(path, await shrink(f), { contentType: "image/jpeg", cacheControl: "31536000" });
-      if (up.error) throw new Error(up.error.message);
-      setCover(path);
-      setMsg({ ok: true, text: "Fotoğraf yüklendi. Kaydet'e basınca eklenir." });
-    } catch (e) {
-      setMsg({ ok: false, text: "Fotoğraf yüklenemedi: " + (e instanceof Error ? e.message : "bilinmeyen hata") });
-    }
-    setBusy(false);
-    if (file.current) file.current.value = "";
-  }
-
-  async function save() {
-    setBusy(true); setMsg(null);
-    const n = name.trim();
-    if (!n) return fail("Ad zorunlu.");
-    const s = row ? row.slug : slugify(slug.trim() || n);
-    if (!s) return fail("Adres oluşturulamadı.");
-    const order = Number(sort.replace(",", "."));
-    if (!Number.isFinite(order)) return fail("Sıra bir sayı olmalı.");
-
-    const common = { slug: s, name_tr: n, intro_tr: intro.trim() || null, cover_path: cover || null, seo_title: seoTitle.trim() || null, seo_description: seoDesc.trim() || null, sort_order: order };
-    const data = dest
-      ? { ...common, blurb_tr: blurb.trim() || null, is_published: on, is_featured: featured }
-      : { ...common, is_active: on };
-    const res = row
-      ? await supabase.from(tbl).update(data).eq("id", row.id).select("id").single()
-      : await supabase.from(tbl).insert(data).select("id").single();
-    if (res.error || !res.data) {
-      const m = res.error?.message ?? "";
-      return fail(res.error?.code === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + m + (m.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
-    }
-    await refreshSite();
-    if (!row) { router.push(`${back}/${res.data.id}`); return; }
-    setMsg({ ok: true, text: "Kaydedildi." });
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    router.refresh();
-    setBusy(false);
-  }
+  const pickCover = (f: FileList | null) => { void f; };
+  const save = () => {};
 
   return (
     <div className="space-y-6" aria-live="polite">
