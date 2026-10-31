@@ -6,7 +6,7 @@ import { submitReservation } from "@/app/tekneler/[slug]/talep";
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-export function ReservationForm({ boatSlug, boatName, maxGuests, whatsapp }: { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string }) {
+export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: string; boatName: string; maxGuests: number }) {
   const [t0] = useState(() => Date.now());
   const [pending, start] = useTransition();
   const [result, setResult] = useState<{ ok: boolean; message?: string } | null>(null);
@@ -65,12 +65,6 @@ export function ReservationForm({ boatSlug, boatName, maxGuests, whatsapp }: { b
         {pending ? "Gönderiliyor…" : "Rezervasyon Talebi Gönder"}
       </button>
       <p className="text-xs leading-relaxed text-navy/50">Talebiniz kesin rezervasyon oluşturmaz. Müsaitlik ve fiyat teyit edildikten sonra rezervasyon kesinleşir.</p>
-      {whatsapp && (
-        <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(`Merhaba, "${boatName}" teknesi hakkında bilgi almak istiyorum.`)}`} target="_blank" rel="noopener"
-           className="block rounded-xl border border-navy/15 px-6 py-3.5 text-center text-sm font-semibold text-navy">
-          WhatsApp ile yazın
-        </a>
-      )}
     </form>
   );
 }

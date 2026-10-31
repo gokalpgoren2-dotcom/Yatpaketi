@@ -8,7 +8,7 @@ import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
-import { ReservationForm } from "@/components/ReservationForm";
+import { RequestPanel } from "@/components/RequestPanel";
 
 export const revalidate = 60;
 
@@ -52,6 +52,10 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
         <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{[b.type, b.port].filter(Boolean).join(" · ")}</p>
         <h1 className="font-display mt-1 text-3xl font-medium text-navy lg:text-5xl">{b.name}</h1>
         {sample && <p className="mt-2 text-sm text-navy/50">Örnek içerik: Veritabanı bağlı olmadığı için örnek tekne gösteriliyor.</p>}
+        <div className="mt-4 flex flex-wrap items-center gap-3 lg:hidden">
+          <span className={`rounded-full px-4 py-2 text-sm font-semibold ${price ? "bg-navy text-white" : "bg-mist text-turquoise-dark"}`}>{price ?? "Fiyat sorunuz"}</span>
+          <a href="#talep" className="rounded-full bg-turquoise px-5 py-2 text-sm font-semibold text-white">Talep gönder</a>
+        </div>
 
         {gallery.length > 0 ? (
           <div className="mt-8 space-y-3">
@@ -125,15 +129,15 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
             <p className="mt-3 rounded-2xl bg-mist p-5 text-sm text-navy/70">Müsaitlik takvimi sonraki aşamada eklenecek. Şimdilik tarihler için bizimle iletişime geçmeniz gerekir.</p>
           </div>
 
-          <aside className="h-fit rounded-2xl border border-navy/10 p-6 lg:sticky lg:top-28">
+          <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
             <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">Fiyat</p>
             <p className={`mt-1 text-2xl font-semibold ${price ? "text-navy" : "text-turquoise-dark"}`}>{price ?? "Fiyat sorunuz"}</p>
             {b.showPrice && b.priceDaily && b.priceWeekly && (
               <p className="mt-1 text-sm text-navy/60">Günlük: {b.priceDaily.toLocaleString("tr-TR")} {b.currency}</p>
             )}
             <div className="mt-6 border-t border-navy/10 pt-6">
-              <h2 className="mb-4 text-lg font-semibold text-navy">Rezervasyon talebi</h2>
-              <ReservationForm boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} />
+              <h2 className="mb-4 text-lg font-semibold text-navy">Rezervasyon talebi gönderin</h2>
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} />
             </div>
           </aside>
         </div>
