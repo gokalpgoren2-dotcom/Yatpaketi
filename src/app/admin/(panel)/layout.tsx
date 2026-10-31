@@ -14,6 +14,7 @@ const active = [
   { href: "/admin/destinasyonlar", label: "Destinasyonlar" },
   { href: "/admin/yazilar", label: "Yazılar" },
   { href: "/admin/icerik", label: "Site İçeriği" },
+  { href: "/admin/yedek", label: "Yedek" },
   { href: "/admin/ayarlar", label: "Ayarlar" },
 ];
 const soon: string[] = [];
