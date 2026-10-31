@@ -20,6 +20,7 @@ const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/
 // Destinasyon ve tekne tipi (kategori) düzenleme formu. Kayıtlar tarayıcıdan, yönetici yetkisiyle yapılır (RLS korur).
 export function EntityForm({ table, row }: { table: Table; row: EntityRow | null }) {
   const supabase = createClient();
+  const tbl = table as "destinations";
   const router = useRouter();
   const file = useRef<HTMLInputElement>(null);
   const dest = table === "destinations";
@@ -71,8 +72,8 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
       ? { ...common, blurb_tr: blurb.trim() || null, is_published: on, is_featured: featured }
       : { ...common, is_active: on };
     const res = row
-      ? await supabase.from(table).update(data).eq("id", row.id).select("id").single()
-      : await supabase.from(table).insert(data).select("id").single();
+      ? await supabase.from(tbl).update(data).eq("id", row.id).select("id").single()
+      : await supabase.from(tbl).insert(data).select("id").single();
     if (res.error || !res.data) {
       const m = res.error?.message ?? "";
       return fail(res.error?.code === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + m + (m.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
