@@ -58,8 +58,17 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
   if (error) return { ok: false, message: "Talebiniz şu an gönderilemedi. Lütfen daha sonra tekrar deneyin." };
   const r = data as { ok?: boolean; error?: string } | null;
   if (r?.ok) {
+    let boatName = s(fd, "boat", 200);
+    try {
+      if (boatName) {
+        const { data: b } = await supabase.from("boats").select("name").eq("slug", boatName).maybeSingle();
+        if (b && typeof b.name === "string") boatName = b.name;
+      }
+    } catch {
+      // ad bulunamazsa kod gösterilir
+    }
     await notifyAdmin({
-      name: s(fd, "name", 100), phone: s(fd, "phone", 40), email: s(fd, "email", 200), boat: s(fd, "boat", 200),
+      name: s(fd, "name", 100), phone: s(fd, "phone", 40), email: s(fd, "email", 200), boat: boatName,
       start, end, guests, message: s(fd, "message", 2000),
     });
     return { ok: true };
