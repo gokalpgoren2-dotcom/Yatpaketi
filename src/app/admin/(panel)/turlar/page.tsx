@@ -2,7 +2,8 @@ import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { CancelPanel } from "@/components/admin/CancelPanel";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
-import { deleteRequest, unconfirmRequest } from "../rezervasyonlar/actions";
+import { deleteRequest, unconfirmRequest, editRequestInfo } from "../rezervasyonlar/actions";
+import { SubmitButton } from "@/components/admin/FormBits";
 
 export const dynamic = "force-dynamic";
 
@@ -60,10 +61,22 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
   const groups = new Map<string, Req[]>();
   for (const r of past ? rows : upcoming) groups.set(r.start_date, [...(groups.get(r.start_date) ?? []), r]);
 
-  const Manage = ({ id }: { id: string }) => (
+  const Manage = ({ id, r }: { id: string; r: RawReq }) => (
     <details className="mt-3 border-t border-navy/10 pt-3">
       <summary className="cursor-pointer text-sm font-semibold text-navy/70">Yönet (iptal / geri al / sil)</summary>
       <div className="mt-3 space-y-3">
+        <details className="rounded-xl border border-navy/10">
+          <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-navy">Müşteri bilgilerini düzenle</summary>
+          <form action={editRequestInfo} className="space-y-3 border-t border-navy/10 p-4">
+            <input type="hidden" name="id" value={id} />
+            <input type="hidden" name="next" value="/admin/turlar" />
+            {([["customer_name", "Ad soyad", "text", r.customer_name], ["phone", "Telefon", "tel", r.phone ?? ""], ["email", "E-posta", "email", r.email ?? ""], ["start_date", "Giriş", "date", r.start_date ?? ""], ["end_date", "Çıkış", "date", r.end_date ?? ""], ["guests", "Misafir sayısı", "number", r.guests ? String(r.guests) : ""]] as const).map(([name, label, type, val]) => (
+              <div key={name}><label htmlFor={`${name}-${id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">{label}</label>
+                <input id={`${name}-${id}`} name={name} type={type} defaultValue={val} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+            ))}
+            <SubmitButton>Bilgileri kaydet</SubmitButton>
+          </form>
+        </details>
         <CancelPanel id={id} />
         <form action={unconfirmRequest}>
           <input type="hidden" name="id" value={id} />
@@ -102,7 +115,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
           ) : <span className="rounded-full bg-navy/10 px-3 py-1 text-navy/70">E-posta yok, panel açılamaz</span>}
           {r.phone && <a href={`tel:${r.phone}`} className="rounded-full border border-navy/15 px-3 py-1 font-semibold text-turquoise-dark">{r.phone}</a>}
         </div>
-        <Manage id={r.id} />
+        <Manage id={r.id} r={r} />
       </li>
     );
   };
@@ -153,7 +166,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
               <p className="font-semibold">{r.customer_name}</p>
               <p className="text-sm text-navy/70">{r.boat_name ?? "Tekne belirtilmedi"}</p>
               {r.phone && <a href={`tel:${r.phone}`} className="mt-2 inline-block rounded-full border border-navy/15 px-3 py-1 text-xs font-semibold text-turquoise-dark">{r.phone}</a>}
-              <Manage id={r.id} />
+              <Manage id={r.id} r={r} />
             </li>
           ))}</ul>
         </section>

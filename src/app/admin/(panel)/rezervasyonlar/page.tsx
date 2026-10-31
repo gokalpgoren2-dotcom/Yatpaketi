@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
 import { CancelPanel } from "@/components/admin/CancelPanel";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
-import { updateRequest, deleteRequest, confirmRequest } from "./actions";
+import { updateRequest, deleteRequest, confirmRequest, editRequestInfo } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -66,6 +66,27 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     <div><dt className="text-navy/50">Gönderilme</dt><dd>{new Date(r.created_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" })}</dd></div>
                   </dl>
                   {r.message && <p className="whitespace-pre-line rounded-xl bg-mist p-3">{r.message}</p>}
+                  <details className="rounded-xl border border-navy/10">
+                    <summary className="cursor-pointer px-4 py-3 text-sm font-semibold text-navy">Müşteri bilgilerini düzenle (ad, telefon, tarih…)</summary>
+                    <form action={editRequestInfo} className="space-y-3 border-t border-navy/10 p-4">
+                      <input type="hidden" name="id" value={r.id} />
+                      <div><label htmlFor={`en-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Ad soyad</label>
+                        <input id={`en-${r.id}`} name="customer_name" required minLength={2} maxLength={100} defaultValue={r.source === "whatsapp" && r.customer_name.startsWith("WhatsApp talebi") ? "" : r.customer_name} placeholder="Müşterinin adı" className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                      <div><label htmlFor={`ep-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Telefon</label>
+                        <input id={`ep-${r.id}`} name="phone" type="tel" inputMode="tel" maxLength={40} defaultValue={r.phone ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                      <div><label htmlFor={`ee-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">E-posta</label>
+                        <input id={`ee-${r.id}`} name="email" type="email" maxLength={200} defaultValue={r.email ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                      <div className="grid grid-cols-2 gap-3">
+                        <div><label htmlFor={`es-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Giriş</label>
+                          <input id={`es-${r.id}`} name="start_date" type="date" defaultValue={r.start_date ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                        <div><label htmlFor={`ex-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Çıkış</label>
+                          <input id={`ex-${r.id}`} name="end_date" type="date" defaultValue={r.end_date ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                      </div>
+                      <div><label htmlFor={`eg-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Misafir sayısı</label>
+                        <input id={`eg-${r.id}`} name="guests" type="number" min={1} max={100} inputMode="numeric" defaultValue={r.guests ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" /></div>
+                      <SubmitButton>Bilgileri kaydet</SubmitButton>
+                    </form>
+                  </details>
                   {r.email && (
                     <a
                       href={`/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email, ad: r.customer_name, tekne: r.boat_name ?? "", bas: r.start_date ?? "", bit: r.end_date ?? "" }).toString()}`}

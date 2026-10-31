@@ -40,6 +40,49 @@ export async function updateRequest(formData: FormData) {
   redirect(status === "confirmed" ? `/admin/turlar?saved=1&t=${Date.now()}` : `/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
 }
 
+// Talebin müşteri bilgilerini (ad, telefon, e-posta, tarih, misafir sayısı) sonradan düzeltir.
+export async function editRequestInfo(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const back = String(formData.get("next") ?? "") === "/admin/turlar" ? "/admin/turlar" : "/admin/rezervasyonlar";
+  const fail = (m: string) => redirect(back + "?error=" + encodeURIComponent(m) + `&t=${Date.now()}`);
+  if (!id) fail("Talep bulunamadı.");
+  const name = String(formData.get("customer_name") ?? "").trim();
+  const phone = String(formData.get("phone") ?? "").trim();
+  const email = String(formData.get("email") ?? "").trim().toLowerCase();
+  const start = String(formData.get("start_date") ?? "").trim();
+  const end = String(formData.get("end_date") ?? "").trim();
+  const guestsRaw = String(formData.get("guests") ?? "").trim();
+  if (name.length < 2 || name.length > 100) fail("Ad en az 2, en çok 100 karakter olmalı.");
+  const digits = phone.replace(/\D/g, "");
+  if (phone && (digits.length < 7 || digits.length > 15)) fail("Telefon numarası geçersiz görünüyor.");
+  if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) fail("E-posta adresi geçersiz görünüyor.");
+  const dateOk = (v: string) => v === "" || (/^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v)));
+  if (!dateOk(start) || !dateOk(end)) fail("Tarih geçersiz.");
+  if ((start === "") !== (end === "")) fail("Giriş ve çıkış tarihini birlikte girin (ya da ikisini de boş bırakın).");
+  if (start && end < start) fail("Çıkış tarihi giriş tarihinden önce olamaz.");
+  let guests: number | null = null;
+  if (guestsRaw) { guests = Number(guestsRaw); if (!Number.isInteger(guests) || guests < 1 || guests > 100) fail("Misafir sayısı geçersiz."); }
+  // Onaylı turun tarihi değişirse aynı teknede çakışma olmasın.
+  const { data: cur } = await supabase.from("reservation_requests").select("status,boat_id").eq("id", id).maybeSingle();
+  if (cur?.status === "confirmed" && cur.boat_id && start && end) {
+    const [{ data: other }, { data: closed }] = await Promise.all([
+      supabase.from("reservation_requests").select("customer_name,start_date,end_date").eq("boat_id", cur.boat_id).eq("status", "confirmed").neq("id", id).lte("start_date", end).gte("end_date", start).limit(1),
+      supabase.from("availability_blocks").select("start_date,end_date").eq("boat_id", cur.boat_id).lte("start_date", end).gte("end_date", start).limit(1),
+    ]);
+    if (other?.[0]) fail(`Kaydedilemedi: bu tarihlerde ${other[0].customer_name} adlı onaylı rezervasyon var (${other[0].start_date} – ${other[0].end_date}).`);
+    if (closed?.[0]) fail(`Kaydedilemedi: bu tarihler takvimde kapatılmış (${closed[0].start_date} – ${closed[0].end_date}).`);
+  }
+  const { error } = await supabase.from("reservation_requests").update({
+    customer_name: name, phone: phone || null, email: email || null, start_date: start || null, end_date: end || null, guests,
+  }).eq("id", id);
+  if (error) fail("Kaydedilemedi: " + error.message);
+  revalidatePath("/admin/rezervasyonlar");
+  revalidatePath("/admin/turlar");
+  revalidatePath("/admin");
+  redirect(back + `?saved=1&t=${Date.now()}`);
+}
+
 // "Turu onayla" düğmesi: durumu Onaylandı yapar ve Turlar sayfasına götürür.
 export async function confirmRequest(formData: FormData) {
   formData.set("confirm", "1");
