@@ -4,6 +4,7 @@ import { requireAdmin } from "@/lib/admin";
 export const dynamic = "force-dynamic";
 
 type Req = { id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null; guests: number | null; start_date: string; end_date: string };
+type RawReq = { id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null; guests: number | null; start_date: string | null; end_date: string | null };
 type Portal = { id: string; email: string; boat_name: string; tour_start: string; status: string; signed_at: string | null };
 type Item = { portal_id: string; done: boolean };
 
@@ -23,11 +24,12 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
     .from("reservation_requests")
     .select("id,boat_name,customer_name,phone,email,guests,start_date,end_date")
     .eq("status", "confirmed")
-    .not("start_date", "is", null)
-    .not("end_date", "is", null)
     .order("start_date", { ascending: !past })
     .limit(500);
-  const all = (data ?? []) as Req[];
+  const raw = (data ?? []) as RawReq[];
+  const nodate = raw.filter((r) => !r.start_date || !r.end_date);
+  const all = raw.filter((r) => r.start_date && r.end_date) as Req[];
+  const pastCount = all.filter((r) => r.end_date < today).length;
   const rows = past ? all.filter((r) => r.end_date < today) : all.filter((r) => r.end_date >= today);
 
   // Müşteri paneli, sözleşme ve hazırlık durumu: e-posta + tekne + başlangıç tarihiyle eşleştirilir.
@@ -107,7 +109,23 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
         </section>
       )}
 
-      {rows.length === 0 && <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60 shadow-sm">{past ? "Geçmiş tur yok." : "Onaylanmış gelecek tur yok. Rezervasyonlar bölümünde bir talebi Onaylandı yapınca burada görünür."}</p>}
+      {!past && pastCount > 0 && <p className="mt-4 text-sm text-navy/60">{pastCount} geçmiş tur var. <a href="?goster=gecmis" className="font-semibold text-turquoise-dark underline">Geçmiş turlara bak</a></p>}
+
+      {!past && nodate.length > 0 && (
+        <section className="mt-6">
+          <h2 className="font-semibold">Tarihi girilmemiş onaylı talepler <span className="ml-1 rounded-full bg-amber-100 px-2 py-0.5 text-xs font-semibold text-amber-900">{nodate.length}</span></h2>
+          <p className="mt-1 text-xs text-navy/60">Tarih yok, bu yüzden sıralanamadı. Rezervasyonlar bölümünden tarihleri kontrol edin.</p>
+          <ul className="mt-2 space-y-3">{nodate.map((r) => (
+            <li key={r.id} className="rounded-2xl bg-white p-4 shadow-sm">
+              <p className="font-semibold">{r.customer_name}</p>
+              <p className="text-sm text-navy/70">{r.boat_name ?? "Tekne belirtilmedi"}</p>
+              {r.phone && <a href={`tel:${r.phone}`} className="mt-2 inline-block rounded-full border border-navy/15 px-3 py-1 text-xs font-semibold text-turquoise-dark">{r.phone}</a>}
+            </li>
+          ))}</ul>
+        </section>
+      )}
+
+      {rows.length === 0 && nodate.length === 0 && <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60 shadow-sm">{past ? "Geçmiş tur yok." : "Onaylanmış gelecek tur yok. Rezervasyonlar bölümünde bir talebi Onaylandı yapınca burada görünür."}</p>}
 
       {[...groups.entries()].map(([date, list]) => (
         <section key={date} className="mt-6">
