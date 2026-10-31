@@ -1,7 +1,7 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
 import { formatPhone, normalizePhone } from "@/lib/phone";
-import { saveContact, testNotifyMail } from "./actions";
+import { saveContact, testNotifyMail, testRequestMail } from "./actions";
 
 export const dynamic = "force-dynamic";
 export const maxDuration = 30;
@@ -42,6 +42,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <p className="mt-1 text-sm text-navy/60">Yeni talep bildirimleri bu sistemle gelir. Çalışıp çalışmadığını buradan deneyin, hata varsa nedenini gösterir.</p>
         {mail && <p role="status" className="mt-3 rounded-xl bg-mist p-3 text-sm">{mail}</p>}
         <form action={testNotifyMail} className="mt-3"><SubmitButton>Test e-postası gönder</SubmitButton></form>
+        <form action={testRequestMail} className="mt-3"><SubmitButton>Örnek talep e-postası gönder</SubmitButton></form>
       </div>
     </>
   );

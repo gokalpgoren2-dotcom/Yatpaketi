@@ -1,6 +1,7 @@
 "use server";
 
 import { sendMail, adminMail, wrap } from "@/lib/mailer";
+import { notifyAdmin } from "@/lib/notify";
 
 import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
@@ -39,4 +40,11 @@ export async function testNotifyMail() {
     msg = r.ok ? `Test e-postası ${to} adresine gönderildi. Gelen kutusu ve Spam klasörüne bakın.` : `Gönderilemedi: ${r.message}`;
   }
   redirect("/admin/ayarlar?mail=" + encodeURIComponent(msg) + `&t=${Date.now()}`);
+}
+
+// Gerçek talep e-postasının aynısını örnek verilerle gönderir; hatayı ekranda gösterir.
+export async function testRequestMail() {
+  await requireAdmin();
+  const r = await notifyAdmin({ name: "Test Müşteri", phone: "0500 000 00 00", email: "test@example.com", boat: "Örnek Tekne", start: "2027-06-01", end: "2027-06-08", guests: 4, message: "Bu bir örnek taleptir." });
+  redirect("/admin/ayarlar?mail=" + encodeURIComponent(r.ok ? "Örnek talep e-postası gönderildi. Gelen kutusuna bakın." : "Talep e-postası gönderilemedi: " + r.message) + `&t=${Date.now()}`);
 }

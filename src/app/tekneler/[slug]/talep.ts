@@ -3,7 +3,7 @@
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
 import { createClient } from "@supabase/supabase-js";
-import { adminMail, sendMail, wrap, esc, fmtDate } from "@/lib/mailer";
+import { notifyAdmin } from "@/lib/notify";
 
 export type TalepSonuc = { ok: true } | { ok: false; message: string };
 
@@ -67,28 +67,12 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     } catch {
       // ad bulunamazsa kod gösterilir
     }
-    await notifyAdmin({
+    const nr = await notifyAdmin({
       name: s(fd, "name", 100), phone: s(fd, "phone", 40), email: s(fd, "email", 200), boat: boatName,
       start, end, guests, message: s(fd, "message", 2000),
     });
+    if (!nr.ok) console.error("Yeni talep bildirimi gonderilemedi:", nr.message);
     return { ok: true };
   }
   return { ok: false, message: messages[r?.error ?? ""] ?? "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin." };
-}
-
-// Yeni talep gelince yöneticiye e-posta atar. Hata olursa müşteri etkilenmez; gönderim bitene kadar beklenir (en çok ~25 sn).
-async function notifyAdmin(d: { name: string; phone: string; email: string; boat: string; start: string; end: string; guests: number; message: string }) {
-  try {
-    const to = adminMail();
-    if (!to) return;
-    const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
-    const boat = d.boat || "Tekne belirtilmedi";
-    const text = `Yeni rezervasyon talebi\n\nAd: ${d.name}\nTekne: ${boat}\nTarih: ${fmtDate(d.start)} - ${fmtDate(d.end)}\nMisafir: ${d.guests}\nTelefon: ${d.phone || "-"}\nE-posta: ${d.email || "-"}\n${d.message ? "Mesaj: " + d.message + "\n" : ""}\nPanel: ${base}/admin/rezervasyonlar`;
-    const row = (k: string, v: string) => `<tr><td style="padding:4px 12px 4px 0;color:#6b7c93">${k}</td><td style="padding:4px 0"><b>${esc(v)}</b></td></tr>`;
-    const html = wrap(`<h2 style="margin:0 0 8px">Yeni rezervasyon talebi</h2><table>${row("Ad", d.name)}${row("Tekne", boat)}${row("Tarih", fmtDate(d.start) + " – " + fmtDate(d.end))}${row("Misafir", String(d.guests))}${row("Telefon", d.phone || "-")}${row("E-posta", d.email || "-")}</table>${d.message ? `<p style="background:#f2f6fa;padding:10px;border-radius:8px;white-space:pre-line">${esc(d.message)}</p>` : ""}<p><a href="${base}/admin/rezervasyonlar">Rezervasyonlar sayfasını aç</a></p>`);
-    const res = await sendMail({ to, subject: `Yeni talep: ${d.name} – ${boat}`, text, html });
-    if (!res.ok) console.error("Yeni talep bildirimi gonderilemedi:", res.message);
-  } catch {
-    // bildirim başarısız olsa da talep kaydedildi
-  }
 }
