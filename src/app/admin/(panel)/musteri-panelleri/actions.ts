@@ -8,8 +8,8 @@ const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&
 // Müşteriye giriş kodunu e-posta ile gönderir. Yalnızca yönetici çağırabilir; alıcı veritabanındaki e-postadır.
 export async function sendPortalEmail(portalId: string, code: string): Promise<{ ok: boolean; message: string }> {
   const { supabase } = await requireAdmin();
-  const user = process.env.GMAIL_USER;
-  const pass = process.env.GMAIL_APP_PASSWORD;
+  const user = process.env.GMAIL_USER?.trim();
+  const pass = process.env.GMAIL_APP_PASSWORD?.replace(/\s+/g, "");
   if (!user || !pass) return { ok: false, message: "E-posta ayarı yapılmamış (Vercel'de GMAIL_USER ve GMAIL_APP_PASSWORD yok). Kodu elle iletin." };
 
   const { data } = await supabase.from("customer_portals").select("email,customer_name,boat_name,tour_start,tour_end").eq("id", portalId).maybeSingle();
