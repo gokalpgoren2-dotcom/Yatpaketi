@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PORTAL_COOKIE, getPortalToken, loadPortal, portalDb } from "@/lib/portal";
-import { sendMail, adminMail, esc, wrap, fmtDate } from "@/lib/mailer";
+import { sendMail, adminMail, esc, wrap, fmtDate, mailFacts } from "@/lib/mailer";
 
 export async function portalLogin(form: FormData) {
   const email = String(form.get("email") ?? "").trim();
@@ -53,14 +53,14 @@ export async function finishUpload(path: string): Promise<{ ok: boolean; mailed?
         to: portal.email,
         subject: `İmzalı kiralama sözleşmeniz alındı – ${portal.boat_name} (${range})`,
         text: `Merhaba,\n\n${portal.boat_name} teknesi için ${range} tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.\n\nYatpaketi`,
-        html: wrap(`<p>Merhaba,</p><p><b>${esc(portal.boat_name)}</b> teknesi için <b>${esc(range)}</b> tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.</p>`),
+        html: wrap(`<p style="margin:0 0 12px">Merhaba,</p><p style="margin:0 0 12px">İmzalı kiralama sözleşmenizi aldık. Bir kopyası ekte yer almaktadır; saklamanızı öneririz.</p>` + mailFacts([["Tekne", portal.boat_name], ["Tarih", range]]), { title: "İmzalı sözleşmeniz alındı", preheader: `${portal.boat_name} – ${range}` }),
         attachments,
       });
       mailed = toCustomer.ok;
       const admin = adminMail();
       if (admin) {
         const note = `${who} (${portal.email}), ${portal.boat_name} teknesinin ${range} tarihli kiralama sözleşmesini imzalayıp yükledi. İmzalı sözleşme ekte.`;
-        await sendMail({ to: admin, subject: `Sözleşme imzalandı – ${portal.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p>${esc(note)}</p>`), attachments });
+        await sendMail({ to: admin, subject: `Sözleşme imzalandı – ${portal.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p style="margin:0 0 12px">${esc(note)}</p>`, { title: "Sözleşme imzalandı" }), attachments });
       }
     }
   } catch {

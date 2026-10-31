@@ -25,4 +25,8 @@ export async function sendMail(o: { to: string; subject: string; text: string; h
   }
 }
 
-export const wrap = (inner: string) => `<div style="font-family:Arial,sans-serif;font-size:15px;color:#0b2a4a;line-height:1.6">${inner}<p style="color:#6b7c93;font-size:13px">Yatpaketi</p></div>`;
+import { brandedMail } from "./emailTemplate";
+export { mailButton, mailCode, mailFacts } from "./emailTemplate";
+
+// Tüm e-postalar markalı şablonla (logo, başlık, alt bilgi) sarılır.
+export const wrap = (inner: string, opts: { title?: string; preheader?: string } = {}) => brandedMail(inner, opts);
