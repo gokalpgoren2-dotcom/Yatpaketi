@@ -2,6 +2,7 @@
 
 import { useState, useTransition } from "react";
 import { submitReservation } from "@/app/tekneler/[slug]/talep";
+import { DateRangePicker } from "./DateRangePicker";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
@@ -10,10 +11,15 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
   const [t0] = useState(() => Date.now());
   const [pending, start] = useTransition();
   const [result, setResult] = useState<{ ok: boolean; message?: string } | null>(null);
-  const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
+  const [start, setStart] = useState("");
+  const [end, setEnd] = useState("");
 
   function onSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    if (!start || !end) {
+      setResult({ ok: false, message: "Lütfen giriş ve çıkış tarihini seçin." });
+      return;
+    }
     const fd = new FormData(e.currentTarget);
     fd.set("elapsed", String(Date.now() - t0));
     setResult(null);
@@ -46,12 +52,9 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
       <div><label className={lab} htmlFor="r-email">E-posta</label>
         <input id="r-email" name="email" type="email" maxLength={200} autoComplete="email" className={input} /></div>
       <p className="text-xs text-navy/50">Telefon veya e-postadan en az birini yazın.</p>
-      <div className="grid grid-cols-2 gap-3">
-        <div><label className={lab} htmlFor="r-start">Giriş *</label>
-          <input id="r-start" name="start" type="date" required min={today} className={input} /></div>
-        <div><label className={lab} htmlFor="r-end">Çıkış *</label>
-          <input id="r-end" name="end" type="date" required min={today} className={input} /></div>
-      </div>
+      <DateRangePicker start={start} end={end} onChange={(a, b) => { setStart(a); setEnd(b); }} />
+      <input type="hidden" name="start" value={start} />
+      <input type="hidden" name="end" value={end} />
       <div><label className={lab} htmlFor="r-guests">Misafir sayısı *</label>
         <input id="r-guests" name="guests" type="number" required min={1} max={maxGuests} defaultValue={Math.min(2, maxGuests)} inputMode="numeric" className={input} /></div>
       <div><label className={lab} htmlFor="r-msg">Mesaj</label>

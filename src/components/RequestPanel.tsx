@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { ReservationForm } from "./ReservationForm";
+import { DateRangePicker } from "./DateRangePicker";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
@@ -12,7 +13,6 @@ type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: 
 
 // Tekne sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
 export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props) {
-  const today = new Date(Date.now() - new Date().getTimezoneOffset() * 60000).toISOString().slice(0, 10);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [guests, setGuests] = useState(Math.min(2, maxGuests));
@@ -50,12 +50,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props)
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-3">
-        <div><label className={lab} htmlFor="q-start">Giriş</label>
-          <input id="q-start" type="date" min={today} value={start} onChange={(e) => { setStart(e.target.value); if (end && e.target.value > end) setEnd(e.target.value); }} className={input} /></div>
-        <div><label className={lab} htmlFor="q-end">Çıkış</label>
-          <input id="q-end" type="date" min={start || today} value={end} onChange={(e) => setEnd(e.target.value)} className={input} /></div>
-      </div>
+      <DateRangePicker start={start} end={end} onChange={(a, b) => { setStart(a); setEnd(b); setError(""); }} />
 
       <div className="flex items-center justify-between rounded-xl border border-navy/15 px-4 py-2.5">
         <span className="text-sm font-medium text-navy">Misafir sayısı</span>
