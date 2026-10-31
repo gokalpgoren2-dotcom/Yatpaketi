@@ -4,11 +4,12 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { CodeBox } from "./PortalCreate";
+import { LocationPicker } from "./LocationPicker";
 import { emailContractToCustomer } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
-  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
+  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; lat?: number | null; lng?: number | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
 };
 export type CheckItem = { id: string; label: string; done: boolean; sort_order: number };
 
@@ -21,7 +22,6 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
   const router = useRouter();
   const file = useRef<HTMLInputElement>(null);
   const [list, setList] = useState(items);
-  const [loc, setLoc] = useState(portal.location_text ?? "");
   const [newItem, setNewItem] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -51,13 +51,6 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     const { error } = await supabase.from("portal_checklist").delete().eq("id", it.id);
     if (error) { say(false, "Silinemedi: " + error.message); return; }
     setList(list.filter((x) => x.id !== it.id));
-  }
-
-  async function saveLoc() {
-    setBusy(true);
-    const { error } = await supabase.from("customer_portals").update({ location_text: loc.trim() || null, location_updated_at: new Date().toISOString() }).eq("id", portal.id);
-    setBusy(false);
-    if (error) say(false, "Kaydedilemedi: " + error.message); else { say(true, "Konum güncellendi."); router.refresh(); }
   }
 
   async function uploadContract(files: FileList | null) {
@@ -163,10 +156,10 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
       </section>
 
       <section className={card}>
-        <h2 className="font-semibold">Tekne şu an nerede?</h2>
-        <input value={loc} onChange={(e) => setLoc(e.target.value)} placeholder="Örn. Bodrum Yalıkavak Marina'da, tura hazır" className={`${input} mt-3`} />
-        <p className="mt-1 text-xs text-navy/50">Müşteri bu yazıyı ve son güncelleme saatini görür.{portal.location_updated_at ? ` Son güncelleme: ${new Date(portal.location_updated_at).toLocaleString("tr-TR")}` : ""}</p>
-        <button type="button" onClick={saveLoc} disabled={busy} className="mt-3 rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white disabled:opacity-60">Konumu kaydet</button>
+        <h2 className="font-semibold">Tekne konumu (harita)</h2>
+        <div className="mt-3">
+          <LocationPicker portalId={portal.id} lat={portal.lat ?? null} lng={portal.lng ?? null} text={portal.location_text} updatedAt={portal.location_updated_at} opensAt={new Date(new Date(portal.tour_start + "T00:00:00+03:00").getTime() - 12 * 3600 * 1000).toISOString()} />
+        </div>
       </section>
 
       <section className={card}>

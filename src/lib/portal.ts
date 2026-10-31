@@ -16,6 +16,10 @@ export type PortalData = {
   boat_name: string;
   tour_start: string;
   tour_end: string;
+  location_open?: boolean;
+  location_opens_at?: string;
+  lat?: number | null;
+  lng?: number | null;
   location_text: string | null;
   location_updated_at: string | null;
   contract_path: string | null;

@@ -63,14 +63,26 @@ export default async function PortalHome() {
       </section>
 
       <section className="mt-6 rounded-3xl bg-white p-6 shadow-sm ring-1 ring-navy/10">
-        <h2 className="font-display text-xl text-navy">Tekne şu an nerede?</h2>
-        {p.location_text ? (
+        <h2 className="font-display text-xl text-navy">Teknenin konumu</h2>
+        {p.lat != null && p.lng != null ? (
           <>
-            <p className="mt-3 text-base text-navy">{p.location_text}</p>
-            {p.location_updated_at && <p className="mt-1 text-xs text-navy/50">Son güncelleme: {new Date(p.location_updated_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", dateStyle: "medium", timeStyle: "short" })}. Bu bilgi ekibimiz tarafından elle girilir, canlı harita değildir.</p>}
+            <iframe
+              title="Teknenin konumu"
+              loading="lazy"
+              className="mt-4 h-72 w-full rounded-2xl border-0"
+              src={`https://www.openstreetmap.org/export/embed.html?bbox=${p.lng - 0.03}%2C${p.lat - 0.02}%2C${p.lng + 0.03}%2C${p.lat + 0.02}&layer=mapnik&marker=${p.lat}%2C${p.lng}`}
+            />
+            {p.location_text && <p className="mt-3 text-base text-navy">{p.location_text}</p>}
+            <p className="mt-3 flex flex-wrap gap-2">
+              <a href={`https://maps.apple.com/?daddr=${p.lat},${p.lng}`} target="_blank" rel="noopener" className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Apple Haritalar'da aç</a>
+              <a href={`https://www.google.com/maps/dir/?api=1&destination=${p.lat},${p.lng}`} target="_blank" rel="noopener" className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Google Haritalar'da aç</a>
+            </p>
+            {p.location_updated_at && <p className="mt-3 text-xs text-navy/50">Son güncelleme: {new Date(p.location_updated_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", dateStyle: "medium", timeStyle: "short" })}. Konum ekibimiz tarafından işaretlenir, canlı takip değildir.</p>}
           </>
+        ) : p.location_open ? (
+          <p className="mt-3 text-sm text-navy/65">Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek.</p>
         ) : (
-          <p className="mt-3 text-sm text-navy/65">Konum bilgisi henüz girilmedi. Ekibimiz güncelledikçe burada görünecek.</p>
+          <p className="mt-3 text-sm text-navy/65">Teknenin konumu turunuzdan yaklaşık 12 saat önce burada görünecek.</p>
         )}
       </section>
 
