@@ -6,6 +6,7 @@ const active = [
   { href: "/admin", label: "Genel Bakış" },
   { href: "/admin/tekneler", label: "Tekneler" },
   { href: "/admin/rezervasyonlar", label: "Rezervasyonlar" },
+  { href: "/admin/takvim", label: "Takvim" },
   { href: "/admin/iptal-edilenler", label: "İptal Edilenler" },
   { href: "/admin/musteri-panelleri", label: "Müşteri Panelleri" },
   { href: "/admin/kategoriler", label: "Tekne Tipleri" },

@@ -14,6 +14,18 @@ export async function updateRequest(formData: FormData) {
   if (!id || !STATUSES.includes(status)) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Geçersiz durum.") + `&t=${Date.now()}`);
   const reason = String(formData.get("cancel_reason") ?? "").trim().slice(0, 1000);
   if (status === "cancelled" && !reason) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("İptal için iptal sebebini yazın.") + `&t=${Date.now()}`);
+  // Onaylarken aynı teknede çakışan onaylı rezervasyon ya da kapalı tarih varsa uyarır (çift rezervasyonu önler).
+  if (status === "confirmed") {
+    const { data: me } = await supabase.from("reservation_requests").select("boat_id,start_date,end_date").eq("id", id).maybeSingle();
+    if (me?.boat_id && me.start_date && me.end_date) {
+      const [{ data: other }, { data: closed }] = await Promise.all([
+        supabase.from("reservation_requests").select("customer_name,start_date,end_date").eq("boat_id", me.boat_id).eq("status", "confirmed").neq("id", id).lte("start_date", me.end_date).gte("end_date", me.start_date).limit(1),
+        supabase.from("availability_blocks").select("start_date,end_date,note").eq("boat_id", me.boat_id).lte("start_date", me.end_date).gte("end_date", me.start_date).limit(1),
+      ]);
+      const hit = other?.[0] ? `${other[0].customer_name} adlı onaylı rezervasyon (${other[0].start_date} – ${other[0].end_date})` : closed?.[0] ? `kapatılmış tarihler (${closed[0].start_date} – ${closed[0].end_date}${closed[0].note ? ", " + closed[0].note : ""})` : "";
+      if (hit) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Onaylanamadı: bu tekne bu tarihlerde dolu, çakışan kayıt: " + hit + ". Takvim bölümünden kontrol edin.") + `&t=${Date.now()}`);
+    }
+  }
   const fields: Record<string, unknown> = { status, admin_notes: notes || null };
   if (status === "cancelled") {
     fields.cancel_reason = reason;
