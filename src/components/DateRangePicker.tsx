@@ -19,7 +19,7 @@ type Props = {
   end: string;
   onChange: (start: string, end: string) => void;
   label?: string;
-  // Sonradan müsaitlik takvimi için: true dönen günler seçilemez.
+  // true dönen günler seçilemez (isteğe bağlı).
   blocked?: (isoDate: string) => boolean;
 };
 

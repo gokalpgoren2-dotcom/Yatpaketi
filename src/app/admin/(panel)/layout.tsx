@@ -9,7 +9,7 @@ const active = [
   { href: "/admin/icerik", label: "Site İçeriği" },
   { href: "/admin/ayarlar", label: "Ayarlar" },
 ];
-const soon = ["Takvim", "Destinasyonlar", "Blog"];
+const soon = ["Destinasyonlar", "Blog"];
 
 export default async function PanelLayout({ children }: { children: React.ReactNode }) {
   const { user } = await requireAdmin();

@@ -57,7 +57,7 @@ export default async function BoatsPage({ searchParams }: { searchParams: Promis
 
         {hasDates && (
           <p className="mt-4 rounded-xl bg-mist px-4 py-3 text-sm text-navy/70">
-            Tarih bazlı müsaitlik henüz kullanılamıyor, sonuçlar tarihe göre filtrelenmedi. Müsaitlik takvimi sonraki aşamada eklenecek.
+            Sonuçlar tarihe göre filtrelenmez. Müsaitlik, talebiniz sonrasında teyit edilir.
           </p>
         )}
 

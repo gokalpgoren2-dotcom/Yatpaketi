@@ -126,7 +126,7 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
             )}
 
             <h2 className="font-display mt-10 text-2xl text-navy">Müsaitlik</h2>
-            <p className="mt-3 rounded-2xl bg-mist p-5 text-sm text-navy/70">Müsaitlik takvimi sonraki aşamada eklenecek. Şimdilik tarihler için bizimle iletişime geçmeniz gerekir.</p>
+            <p className="mt-3 rounded-2xl bg-mist p-5 text-sm text-navy/70">Müsaitlik ve kesin fiyat, rezervasyon talebiniz sonrasında teyit edilir. Tarihlerinizi talep kartından iletebilirsiniz.</p>
           </div>
 
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">

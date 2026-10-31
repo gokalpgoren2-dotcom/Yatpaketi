@@ -110,7 +110,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
           <Num name="price_daily" title="Günlük fiyat" boat={boat} step="0.01" />
           <Num name="price_weekly" title="Haftalık fiyat" boat={boat} step="0.01" />
         </div>
-        <p className="text-xs text-navy/50">Sezonluk fiyatlar ve müsaitlik takvimi sonraki aşamada eklenecek.</p>
+        <p className="text-xs text-navy/50">Sezonluk fiyatlar sonraki aşamada eklenecek.</p>
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
