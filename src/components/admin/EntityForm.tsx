@@ -71,7 +71,7 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
     const data = dest
       ? { ...common, blurb_tr: blurb.trim() || null, is_published: on, is_featured: featured }
       : { ...common, is_active: on };
-    const res = row
+    const res: { data: { id: string } | null; error: { message: string; code?: string } | null } = row
       ? await supabase.from(tbl).update(data).eq("id", row.id).select("id").single()
       : await supabase.from(tbl).insert(data).select("id").single();
     if (res.error || !res.data) {
