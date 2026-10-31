@@ -15,7 +15,7 @@ const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-b
 const card = "rounded-2xl bg-white p-5 shadow-sm";
 const btn = "rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold disabled:opacity-50";
 
-export function PortalAdmin({ portal, items }: { portal: PortalRow; items: CheckItem[] }) {
+export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal: PortalRow; items: CheckItem[]; contractUrl: string | null; signedUrl: string | null }) {
   const supabase = createClient();
   const router = useRouter();
   const file = useRef<HTMLInputElement>(null);
@@ -72,13 +72,6 @@ export function PortalAdmin({ portal, items }: { portal: PortalRow; items: Check
     setBusy(false);
     if (error) say(false, "Kaydedilemedi: " + error.message); else { say(true, "Sözleşme yüklendi. Müşteri artık görebilir."); router.refresh(); }
     if (file.current) file.current.value = "";
-  }
-
-  async function openFile(path: string | null) {
-    if (!path) return;
-    const { data, error } = await supabase.storage.from("contracts").createSignedUrl(path, 300);
-    if (error || !data) { say(false, "Dosya açılamadı: " + (error?.message ?? "")); return; }
-    window.open(data.signedUrl, "_blank", "noopener");
   }
 
   async function setStatus(status: "active" | "revoked") {
@@ -144,11 +137,11 @@ export function PortalAdmin({ portal, items }: { portal: PortalRow; items: Check
         <input ref={file} type="file" accept="application/pdf,image/jpeg,image/png" hidden onChange={(e) => uploadContract(e.target.files)} />
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" className={btn} disabled={busy} onClick={() => file.current?.click()}>{portal.contract_path ? "Sözleşmeyi değiştir" : "Sözleşme yükle (PDF)"}</button>
-          {portal.contract_path && <button type="button" className={btn} onClick={() => openFile(portal.contract_path)}>Gönderilen sözleşmeyi aç</button>}
+          {contractUrl && <a href={contractUrl} target="_blank" rel="noopener" className={`${btn} inline-block`}>Gönderilen sözleşmeyi aç</a>}
         </div>
         <div className="mt-4 text-sm">
           {portal.signed_path
-            ? <><p className="font-medium text-green-800">İmzalı sözleşme yüklendi ({portal.signed_at ? new Date(portal.signed_at).toLocaleString("tr-TR") : ""}).</p><button type="button" className={`${btn} mt-2`} onClick={() => openFile(portal.signed_path)}>İmzalı sözleşmeyi aç</button></>
+            ? <><p className="font-medium text-green-800">İmzalı sözleşme yüklendi ({portal.signed_at ? new Date(portal.signed_at).toLocaleString("tr-TR") : ""}).</p>{signedUrl ? <a href={signedUrl} target="_blank" rel="noopener" className={`${btn} mt-2 inline-block`}>İmzalı sözleşmeyi aç</a> : <p className="mt-2 text-red-700">Dosya bağlantısı oluşturulamadı. Sayfayı yenileyin.</p>}</>
             : <p className="text-navy/60">Müşteri henüz imzalı sözleşme yüklemedi.</p>}
         </div>
       </section>
