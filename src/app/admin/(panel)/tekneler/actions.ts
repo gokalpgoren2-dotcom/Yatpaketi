@@ -72,7 +72,7 @@ export async function saveBoat(formData: FormData) {
     description_tr: str(formData, "description_tr"),
     description_en: str(formData, "description_en"),
     equipment: lines(formData, "equipment"),
-    water_sports: lines(formData, "water_sports"),
+    water_sports: Array.from(new Set([...formData.getAll("water_sports").map(String).filter(Boolean), ...lines(formData, "water_sports_other")])),
     price_mode: priceMode,
     currency,
     price_daily: pd,

@@ -3,6 +3,11 @@ import { saveBoat } from "@/app/admin/(panel)/tekneler/actions";
 type Row = Record<string, any>;
 type Opt = { id: string; label: string };
 
+const WATER_SPORTS = [
+  "Deniz kanosu", "Paddle board", "Şnorkel takımı", "Jet ski", "Wakeboard", "Su kayağı",
+  "Şişme deniz oyuncakları", "Dalış ekipmanı", "Olta takımı", "Seabob", "Yüzme platformu",
+];
+
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const label = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
@@ -71,7 +76,21 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
         <Field id="description_tr" title="Açıklama (Türkçe)"><textarea id="description_tr" name="description_tr" rows={5} defaultValue={boat?.description_tr ?? ""} className={input} /></Field>
         <Field id="description_en" title="Açıklama (İngilizce)"><textarea id="description_en" name="description_en" rows={5} defaultValue={boat?.description_en ?? ""} className={input} /></Field>
         <Field id="equipment" title="Donanımlar" hint="Her satıra bir donanım yazın."><textarea id="equipment" name="equipment" rows={4} defaultValue={(boat?.equipment ?? []).join("\n")} className={input} /></Field>
-        <Field id="water_sports" title="Su sporları ekipmanları" hint="Her satıra bir ekipman yazın."><textarea id="water_sports" name="water_sports" rows={3} defaultValue={(boat?.water_sports ?? []).join("\n")} className={input} /></Field>
+        <fieldset>
+          <legend className={label}>Su sporları ekipmanları</legend>
+          <div className="flex flex-wrap gap-3">
+            {WATER_SPORTS.map((w) => (
+              <label key={w} className="flex items-center gap-2 rounded-full border border-navy/15 px-4 py-2 text-sm">
+                <input type="checkbox" name="water_sports" value={w} defaultChecked={(boat?.water_sports ?? []).includes(w)} className="h-4 w-4" /> {w}
+              </label>
+            ))}
+          </div>
+          <div className="mt-3">
+            <label htmlFor="water_sports_other" className={label}>Listede olmayan ekipmanlar</label>
+            <textarea id="water_sports_other" name="water_sports_other" rows={2} defaultValue={((boat?.water_sports ?? []) as string[]).filter((w) => !WATER_SPORTS.includes(w)).join("\n")} className={input} />
+            <p className="mt-1 text-xs text-navy/50">Her satıra bir ekipman yazın.</p>
+          </div>
+        </fieldset>
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
