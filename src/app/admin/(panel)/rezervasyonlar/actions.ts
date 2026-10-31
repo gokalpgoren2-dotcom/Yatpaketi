@@ -9,7 +9,7 @@ const STATUSES = ["new", "contacted", "offered", "confirmed", "cancelled"];
 export async function updateRequest(formData: FormData) {
   const { supabase } = await requireAdmin();
   const id = String(formData.get("id") ?? "");
-  const status = String(formData.get("status") ?? "");
+  const status = formData.get("confirm") ? "confirmed" : String(formData.get("status") ?? "");
   const notes = String(formData.get("admin_notes") ?? "").trim().slice(0, 2000);
   if (!id || !STATUSES.includes(status)) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Geçersiz durum.") + `&t=${Date.now()}`);
   const reason = String(formData.get("cancel_reason") ?? "").trim().slice(0, 1000);
@@ -35,19 +35,36 @@ export async function updateRequest(formData: FormData) {
   const { error } = await supabase.from("reservation_requests").update(fields).eq("id", id);
   if (error) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Kaydedilemedi: " + error.message + (error.message.includes("cancel") ? " (Supabase'e iptal sebebi SQL kodunu yapıştırdınız mı?)" : "")) + `&t=${Date.now()}`);
   revalidatePath("/admin/rezervasyonlar");
+  revalidatePath("/admin/turlar");
   revalidatePath("/admin");
-  redirect(`/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
+  redirect(status === "confirmed" ? `/admin/turlar?saved=1&t=${Date.now()}` : `/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
+}
+
+// Onaylanmış turu tekrar "Teklif verildi" talebine geri alır (Turlar'dan kalkar, Rezervasyonlar'a döner).
+export async function unconfirmRequest(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (!id) redirect("/admin/turlar");
+  const { error } = await supabase.from("reservation_requests").update({ status: "offered" }).eq("id", id);
+  if (error) redirect("/admin/turlar?error=" + encodeURIComponent("Geri alınamadı: " + error.message) + `&t=${Date.now()}`);
+  revalidatePath("/admin/rezervasyonlar");
+  revalidatePath("/admin/turlar");
+  revalidatePath("/admin");
+  redirect(`/admin/turlar?saved=1&t=${Date.now()}`);
 }
 
 export async function deleteRequest(formData: FormData) {
   const { supabase } = await requireAdmin();
   const id = String(formData.get("id") ?? "");
   if (!id) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Talep bulunamadı.") + `&t=${Date.now()}`);
+  const nx = String(formData.get("next") ?? "");
+  const back = nx === "/admin/turlar" ? "/admin/turlar" : "/admin/rezervasyonlar";
   const { error } = await supabase.from("reservation_requests").delete().eq("id", id);
-  if (error) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Silinemedi: " + error.message) + `&t=${Date.now()}`);
+  if (error) redirect(back + "?error=" + encodeURIComponent("Silinemedi: " + error.message) + `&t=${Date.now()}`);
   revalidatePath("/admin/rezervasyonlar");
+  revalidatePath("/admin/turlar");
   revalidatePath("/admin");
-  redirect(`/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
+  redirect(back + `?saved=1&t=${Date.now()}`);
 }
 
 // İptal edilen kaydı yeniden aktif talebe çevirir (iptal sebebi ve tarihi kayıtta kalır).

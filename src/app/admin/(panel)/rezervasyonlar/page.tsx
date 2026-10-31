@@ -23,22 +23,22 @@ export default async function Requests({ searchParams }: { searchParams: Promise
   const { error, saved, t, durum } = await searchParams;
   const { supabase } = await requireAdmin();
   let q = supabase.from("reservation_requests").select("*").order("created_at", { ascending: false }).limit(200);
-  if (durum && labels[durum] && durum !== "cancelled") q = q.eq("status", durum);
-  else q = q.neq("status", "cancelled"); // iptal edilenler ayrı sayfada ("İptal Edilenler") saklanır
+  if (durum && labels[durum] && durum !== "cancelled" && durum !== "confirmed") q = q.eq("status", durum);
+  else q = q.neq("status", "cancelled").neq("status", "confirmed"); // iptaller "İptal Edilenler"de, onaylılar "Turlar"da
   const { data } = await q;
   const rows = (data ?? []) as Req[];
 
   return (
     <>
       <h1 className="font-display text-3xl">Rezervasyon talepleri</h1>
-      <p className="mt-1 text-sm text-navy/60">Bunlar kesin rezervasyon değil, ziyaretçilerin gönderdiği taleplerdir. Müsaitliği ve fiyatı teyit ettikten sonra durumu güncelleyin.</p>
+      <p className="mt-1 text-sm text-navy/60">Bunlar kesin rezervasyon değil, ziyaretçilerin gönderdiği taleplerdir. Müsaitliği ve fiyatı teyit ettikten sonra "Turu onayla" düğmesine basın, rezervasyon Turlar sayfasına taşınır.</p>
       {saved && <Notice key={"s" + t} kind="ok" text="Kaydedildi." />}
       {error && <Notice key={"e" + t} kind="error" text={error} />}
 
-      <p className="mt-2 text-sm"><a href="/admin/iptal-edilenler" className="font-medium text-turquoise-dark">İptal edilen rezervasyonlar (arşiv) →</a></p>
+      <p className="mt-2 text-sm"><a href="/admin/turlar" className="font-medium text-turquoise-dark">Onaylanan turlar →</a> · <a href="/admin/iptal-edilenler" className="font-medium text-turquoise-dark">İptal edilen rezervasyonlar (arşiv) →</a></p>
 
       <nav aria-label="Duruma göre filtre" className="mt-5 flex gap-2 overflow-x-auto pb-1">
-        {[["", "Aktif talepler"], ...Object.entries(labels).filter(([k]) => k !== "cancelled")].map(([k, v]) => (
+        {[["", "Aktif talepler"], ...Object.entries(labels).filter(([k]) => k !== "cancelled" && k !== "confirmed")].map(([k, v]) => (
           <a key={k} href={k ? `?durum=${k}` : "?"} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium ${(durum ?? "") === k ? "bg-navy text-white" : "bg-white text-navy ring-1 ring-navy/15"}`}>{v}</a>
         ))}
       </nav>
@@ -79,14 +79,17 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     <div>
                       <label htmlFor={`st-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Durum</label>
                       <select id={`st-${r.id}`} name="status" defaultValue={r.status} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base">
-                        {Object.entries(labels).filter(([k]) => k !== "cancelled").map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                        {Object.entries(labels).filter(([k]) => k !== "cancelled" && k !== "confirmed").map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
                     </div>
                     <div>
                       <label htmlFor={`nt-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Not (yalnızca siz görürsünüz)</label>
                       <textarea id={`nt-${r.id}`} name="admin_notes" rows={2} maxLength={2000} defaultValue={r.admin_notes ?? ""} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" />
                     </div>
-                    <SubmitButton>Kaydet</SubmitButton>
+                    <div className="flex flex-wrap gap-2">
+                      <SubmitButton>Kaydet</SubmitButton>
+                      <button type="submit" name="confirm" value="1" className="rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white">Turu onayla</button>
+                    </div>
                   </form>
                   <CancelPanel id={r.id} />
                   <ConfirmDelete action={deleteRequest} id={r.id} label="Talebi sil" warning="Bu talep kalıcı olarak silinir, geri getirilemez." />

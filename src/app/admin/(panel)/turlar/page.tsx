@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
+import { CancelPanel } from "@/components/admin/CancelPanel";
+import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
+import { deleteRequest, unconfirmRequest } from "../rezervasyonlar/actions";
 
 export const dynamic = "force-dynamic";
 
@@ -14,8 +17,8 @@ const toMs = (d: string) => new Date(d + "T00:00:00Z").getTime();
 const short = (d: string) => new Date(d + "T12:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long" });
 const long = (d: string) => `${short(d)} ${d.slice(0, 4)} ${WD[new Date(d + "T12:00:00Z").getUTCDay()]}`;
 
-export default async function Tours({ searchParams }: { searchParams: Promise<{ goster?: string }> }) {
-  const { goster } = await searchParams;
+export default async function Tours({ searchParams }: { searchParams: Promise<{ goster?: string; saved?: string; error?: string }> }) {
+  const { goster, saved, error: err } = await searchParams;
   const past = goster === "gecmis";
   const { supabase } = await requireAdmin();
   const today = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
@@ -51,6 +54,20 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
   const groups = new Map<string, Req[]>();
   for (const r of past ? rows : upcoming) groups.set(r.start_date, [...(groups.get(r.start_date) ?? []), r]);
 
+  const Manage = ({ id }: { id: string }) => (
+    <details className="mt-3 border-t border-navy/10 pt-3">
+      <summary className="cursor-pointer text-sm font-semibold text-navy/70">Yönet (iptal / geri al / sil)</summary>
+      <div className="mt-3 space-y-3">
+        <CancelPanel id={id} />
+        <form action={unconfirmRequest}>
+          <input type="hidden" name="id" value={id} />
+          <button type="submit" className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold">Onayı geri al (talebe döndür)</button>
+        </form>
+        <ConfirmDelete action={deleteRequest} id={id} next="/admin/turlar" label="Turu sil" warning="Bu rezervasyon kalıcı olarak silinir, geri getirilemez." />
+      </div>
+    </details>
+  );
+
   const Card = ({ r }: { r: Req }) => {
     const p = portalOf(r);
     const nights = Math.round((toMs(r.end_date) - toMs(r.start_date)) / dayMs);
@@ -79,6 +96,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
           ) : <span className="rounded-full bg-navy/10 px-3 py-1 text-navy/70">E-posta yok, panel açılamaz</span>}
           {r.phone && <a href={`tel:${r.phone}`} className="rounded-full border border-navy/15 px-3 py-1 font-semibold text-turquoise-dark">{r.phone}</a>}
         </div>
+        <Manage id={r.id} />
       </li>
     );
   };
@@ -87,6 +105,8 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
     <>
       <h1 className="font-display text-3xl">Turlar</h1>
       <p className="mt-1 text-sm text-navy/60">Onaylanan rezervasyonlar, yakından uzağa. Giriş tarihine göre gruplanır.</p>
+      {saved && <p role="status" className="mt-4 rounded-xl bg-green-50 p-4 text-sm text-green-800">Kaydedildi.</p>}
+      {err && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">{err}</p>}
       {error && <p role="alert" className="mt-4 rounded-xl bg-red-50 p-4 text-sm text-red-700">Okunamadı: {error.message}</p>}
 
       <nav aria-label="Görünüm" className="mt-5 flex gap-2">
@@ -120,6 +140,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
               <p className="font-semibold">{r.customer_name}</p>
               <p className="text-sm text-navy/70">{r.boat_name ?? "Tekne belirtilmedi"}</p>
               {r.phone && <a href={`tel:${r.phone}`} className="mt-2 inline-block rounded-full border border-navy/15 px-3 py-1 text-xs font-semibold text-turquoise-dark">{r.phone}</a>}
+              <Manage id={r.id} />
             </li>
           ))}</ul>
         </section>
