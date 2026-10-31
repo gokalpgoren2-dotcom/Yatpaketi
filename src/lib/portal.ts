@@ -11,6 +11,7 @@ export function portalDb() {
 }
 
 export type PortalData = {
+  email: string;
   customer_name: string | null;
   boat_name: string;
   tour_start: string;

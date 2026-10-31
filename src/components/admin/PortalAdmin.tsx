@@ -4,10 +4,11 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { CodeBox } from "./PortalCreate";
+import { emailContractToCustomer } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
-  location_text: string | null; location_updated_at: string | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
+  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
 };
 export type CheckItem = { id: string; label: string; done: boolean; sort_order: number };
 
@@ -71,8 +72,21 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     if (up.error) { setBusy(false); say(false, "Yüklenemedi: " + up.error.message); return; }
     const { error } = await supabase.from("customer_portals").update({ contract_path: path }).eq("id", portal.id);
     setBusy(false);
-    if (error) say(false, "Kaydedilemedi: " + error.message); else { say(true, "Sözleşme yüklendi. Müşteri artık görebilir."); router.refresh(); }
+    if (error) { say(false, "Kaydedilemedi: " + error.message); if (file.current) file.current.value = ""; return; }
+    setBusy(true);
+    const mail = await emailContractToCustomer(portal.id).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası)." }));
+    setBusy(false);
+    say(mail.ok, mail.ok ? "Sözleşme yüklendi. " + mail.message : "Sözleşme yüklendi ama müşteriye e-posta gitmedi: " + mail.message + " Aşağıdaki düğmeyle tekrar deneyebilirsiniz.");
+    router.refresh();
     if (file.current) file.current.value = "";
+  }
+
+  async function resendContract() {
+    setBusy(true);
+    const mail = await emailContractToCustomer(portal.id).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası)." }));
+    setBusy(false);
+    say(mail.ok, mail.message);
+    router.refresh();
   }
 
   async function setStatus(status: "active" | "revoked") {
@@ -160,8 +174,10 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
         <input ref={file} type="file" accept="application/pdf,image/jpeg,image/png" hidden onChange={(e) => uploadContract(e.target.files)} />
         <div className="mt-3 flex flex-wrap gap-2">
           <button type="button" className={btn} disabled={busy} onClick={() => file.current?.click()}>{portal.contract_path ? "Sözleşmeyi değiştir" : "Sözleşme yükle (PDF)"}</button>
+          {portal.contract_path && <button type="button" className={btn} disabled={busy} onClick={resendContract}>Müşteriye e-postayla gönder</button>}
           {contractUrl && <a href={contractUrl} target="_blank" rel="noopener" className={`${btn} inline-block`}>Gönderilen sözleşmeyi aç</a>}
         </div>
+        {portal.contract_emailed_at && <p className="mt-2 text-xs text-navy/55">Müşteriye son e-posta gönderimi: {new Date(portal.contract_emailed_at).toLocaleString("tr-TR")}</p>}
         <div className="mt-4 text-sm">
           {portal.signed_path
             ? <><p className="font-medium text-green-800">İmzalı sözleşme yüklendi ({portal.signed_at ? new Date(portal.signed_at).toLocaleString("tr-TR") : ""}).</p>{signedUrl ? <a href={signedUrl} target="_blank" rel="noopener" className={`${btn} mt-2 inline-block`}>İmzalı sözleşmeyi aç</a> : <p className="mt-2 text-red-700">Dosya bağlantısı oluşturulamadı. Sayfayı yenileyin.</p>}</>

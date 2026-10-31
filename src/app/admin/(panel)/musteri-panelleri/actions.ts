@@ -2,6 +2,7 @@
 
 import nodemailer from "nodemailer";
 import { requireAdmin } from "@/lib/admin";
+import { sendMail, adminMail, esc, wrap } from "@/lib/mailer";
 
 const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
@@ -31,4 +32,26 @@ export async function sendPortalEmail(portalId: string, code: string): Promise<{
     const info = m.includes("535") ? ` [Kullanılan adres: ${user}, şifre uzunluğu: ${pass.length} karakter, 16 olmalı]` : "";
     return { ok: false, message: "E-posta gönderilemedi (" + m + ")." + info + " Kodu elle iletin." };
   }
+}
+
+// Yönetici panelden yüklediği sözleşmeyi müşterinin e-postasına (PDF ekte) gönderir; kopya yöneticiye de gider.
+export async function emailContractToCustomer(portalId: string): Promise<{ ok: boolean; message: string }> {
+  const { supabase } = await requireAdmin();
+  const { data: p } = await supabase.from("customer_portals").select("email,customer_name,boat_name,tour_start,tour_end,contract_path").eq("id", portalId).maybeSingle();
+  if (!p || !p.contract_path) return { ok: false, message: "Önce sözleşme yükleyin." };
+  const dl = await supabase.storage.from("contracts").download(p.contract_path as string);
+  if (dl.error || !dl.data) return { ok: false, message: "Sözleşme dosyası okunamadı." };
+  const buf = Buffer.from(await dl.data.arrayBuffer());
+  const ext = (p.contract_path as string).split(".").pop() ?? "pdf";
+  const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
+  const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+  const text = `${hello}\n\n${p.boat_name} turunuz (${p.tour_start} – ${p.tour_end}) için sözleşme ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
+  const html = wrap(`<p>${esc(hello)}</p><p><b>${esc(String(p.boat_name))}</b> turunuz (${esc(String(p.tour_start))} – ${esc(String(p.tour_end))}) için sözleşme ekte yer almaktadır.</p><p>Lütfen inceleyip imzalayın ve <a href="${base}/musteri">müşteri panelinizden</a> imzalı hâlini yükleyin.</p>`);
+  const attachments = [{ filename: `sozlesme.${ext}`, content: buf }];
+  const r = await sendMail({ to: String(p.email), subject: `Yatpaketi sözleşmeniz – ${p.boat_name}`, text, html, attachments });
+  if (!r.ok) return { ok: false, message: "Müşteriye e-posta gönderilemedi (" + r.message + ")." };
+  const copy = adminMail();
+  if (copy) await sendMail({ to: copy, subject: `[Kopya] Müşteriye gönderilen sözleşme – ${p.boat_name} – ${p.customer_name ?? p.email}`, text: `Aşağıdaki sözleşme ${p.email} adresine gönderildi.\n\n${text}`, html: wrap(`<p>Bu sözleşme <b>${esc(String(p.email))}</b> adresine gönderildi (kopya).</p>`), attachments });
+  await supabase.from("customer_portals").update({ contract_emailed_at: new Date().toISOString() }).eq("id", portalId);
+  return { ok: true, message: `Sözleşme ${p.email} adresine e-postayla gönderildi. Kopyası sizin e-postanıza da düştü.` };
 }

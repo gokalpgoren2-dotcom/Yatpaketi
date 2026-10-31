@@ -32,7 +32,7 @@ export function PortalUpload({ replace }: { replace: boolean }) {
       if (up.error) throw new Error("Dosya yüklenemedi. Lütfen tekrar deneyin.");
       const done = await finishUpload(slot.path);
       if (!done.ok) throw new Error("Yükleme tamamlanamadı. Lütfen tekrar deneyin.");
-      setMsg({ ok: true, text: "İmzalı sözleşmeniz yüklendi. Teşekkürler." });
+      setMsg({ ok: true, text: done.mailed ? "İmzalı sözleşmeniz yüklendi. Bir kopyası e-posta adresinize gönderildi. Teşekkürler." : "İmzalı sözleşmeniz yüklendi. Teşekkürler." });
       router.refresh();
     } catch (e) {
       setMsg({ ok: false, text: e instanceof Error ? e.message : "Bir sorun oluştu." });
