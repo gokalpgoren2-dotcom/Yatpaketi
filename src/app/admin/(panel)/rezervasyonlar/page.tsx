@@ -1,6 +1,6 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
-import { markBlocked, updateRequest } from "./actions";
+import { updateRequest } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -10,7 +10,7 @@ const tone: Record<string, string> = {
 };
 
 type Req = {
-  id: string; boat_id: string | null; boat_name: string | null; customer_name: string; phone: string | null; email: string | null;
+  id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null;
   start_date: string | null; end_date: string | null; guests: number | null; message: string | null;
   status: string; admin_notes: string | null; created_at: string;
 };
@@ -74,13 +74,6 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     </div>
                     <SubmitButton>Kaydet</SubmitButton>
                   </form>
-                  {r.boat_id && r.start_date && r.end_date && (
-                    <form action={markBlocked} className="border-t border-navy/10 pt-4">
-                      <input type="hidden" name="id" value={r.id} />
-                      <button className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy">Bu tarihleri takvimde dolu işaretle</button>
-                      <p className="mt-1 text-xs text-navy/50">Rezervasyon kesinleşince kullanın; günler sitede seçilemez olur.</p>
-                    </form>
-                  )}
                 </div>
               </details>
             </li>

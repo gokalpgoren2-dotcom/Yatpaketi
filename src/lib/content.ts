@@ -151,18 +151,3 @@ export async function getContact(): Promise<Contact> {
     return empty;
   }
 }
-
-// ---- Müsaitlik ----
-export type BlockedRange = { start: string; end: string };
-
-// Yalnızca dolu günlerin başlangıç/bitiş tarihleri gelir. Fonksiyon henüz kurulmadıysa boş liste döner.
-export async function getBlockedRanges(slug: string): Promise<BlockedRange[]> {
-  if (!supabaseConfigured()) return [];
-  try {
-    const { data, error } = await db().rpc("boat_blocked_ranges", { p_boat_slug: slug });
-    if (error || !data) return [];
-    return (data as { start_date: string; end_date: string }[]).map((r) => ({ start: r.start_date, end: r.end_date }));
-  } catch {
-    return [];
-  }
-}
