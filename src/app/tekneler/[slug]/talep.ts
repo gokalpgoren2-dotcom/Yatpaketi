@@ -2,7 +2,6 @@
 
 import { createHash } from "node:crypto";
 import { headers } from "next/headers";
-import { after } from "next/server";
 import { createClient } from "@supabase/supabase-js";
 import { adminMail, sendMail, wrap, esc, fmtDate } from "@/lib/mailer";
 
@@ -68,16 +67,16 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     } catch {
       // ad bulunamazsa kod gösterilir
     }
-    after(() => notifyAdmin({
+    await notifyAdmin({
       name: s(fd, "name", 100), phone: s(fd, "phone", 40), email: s(fd, "email", 200), boat: boatName,
       start, end, guests, message: s(fd, "message", 2000),
-    }));
+    });
     return { ok: true };
   }
   return { ok: false, message: messages[r?.error ?? ""] ?? "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin." };
 }
 
-// Yeni talep gelince yöneticiye e-posta atar. Hata olursa müşteri etkilenmez; müşteri beklemez, yanıttan sonra gönderilir.
+// Yeni talep gelince yöneticiye e-posta atar. Hata olursa müşteri etkilenmez; gönderim bitene kadar beklenir (en çok ~25 sn).
 async function notifyAdmin(d: { name: string; phone: string; email: string; boat: string; start: string; end: string; guests: number; message: string }) {
   try {
     const to = adminMail();
