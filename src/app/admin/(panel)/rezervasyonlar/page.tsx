@@ -2,7 +2,7 @@ import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
 import { CancelPanel } from "@/components/admin/CancelPanel";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
-import { updateRequest, deleteRequest } from "./actions";
+import { updateRequest, deleteRequest, confirmRequest } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -88,7 +88,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     </div>
                     <div className="flex flex-wrap gap-2">
                       <SubmitButton>Kaydet</SubmitButton>
-                      <button type="submit" name="confirm" value="1" className="rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white">Turu onayla</button>
+                      <button type="submit" formAction={confirmRequest} className="rounded-xl bg-green-600 px-4 py-2.5 text-sm font-semibold text-white">Turu onayla</button>
                     </div>
                   </form>
                   <CancelPanel id={r.id} />

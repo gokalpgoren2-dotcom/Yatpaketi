@@ -40,6 +40,12 @@ export async function updateRequest(formData: FormData) {
   redirect(status === "confirmed" ? `/admin/turlar?saved=1&t=${Date.now()}` : `/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
 }
 
+// "Turu onayla" düğmesi: durumu Onaylandı yapar ve Turlar sayfasına götürür.
+export async function confirmRequest(formData: FormData) {
+  formData.set("confirm", "1");
+  await updateRequest(formData);
+}
+
 // Onaylanmış turu tekrar "Teklif verildi" talebine geri alır (Turlar'dan kalkar, Rezervasyonlar'a döner).
 export async function unconfirmRequest(formData: FormData) {
   const { supabase } = await requireAdmin();
