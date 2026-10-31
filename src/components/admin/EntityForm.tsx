@@ -41,22 +41,7 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
 
   const fail = (text: string) => { setMsg({ ok: false, text }); window.scrollTo({ top: 0, behavior: "smooth" }); setBusy(false); };
 
-  async function pickCover(files: FileList | null) {
-    const f = files?.[0];
-    if (!f) return;
-    setBusy(true); setMsg(null);
-    try {
-      const path = `site/${crypto.randomUUID()}.jpg`;
-      const up = await supabase.storage.from("media").upload(path, await shrink(f), { contentType: "image/jpeg", cacheControl: "31536000" });
-      if (up.error) throw new Error(up.error.message);
-      setCover(path);
-      setMsg({ ok: true, text: "Fotoğraf yüklendi. Kaydet'e basınca eklenir." });
-    } catch (e) {
-      setMsg({ ok: false, text: "Fotoğraf yüklenemedi: " + (e instanceof Error ? e.message : "bilinmeyen hata") });
-    }
-    setBusy(false);
-    if (file.current) file.current.value = "";
-  }
+  const pickCover = (f: FileList | null) => { void f; };
 
   async function save() {
     setBusy(true); setMsg(null);
