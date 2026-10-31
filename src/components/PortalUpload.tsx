@@ -4,6 +4,7 @@ import { useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { createClient } from "@supabase/supabase-js";
 import { startUpload, finishUpload } from "@/app/musteri/actions";
+import { shrink } from "@/lib/shrink";
 
 // İmzalı sözleşmeyi yükler. Dosya doğrudan özel depoya gider; yol yalnızca bu müşteriye ve 15 dakikaya özeldir.
 export function PortalUpload({ replace }: { replace: boolean }) {
@@ -17,14 +18,17 @@ export function PortalUpload({ replace }: { replace: boolean }) {
     if (!f) return;
     setMsg(null);
     if (f.size > 10 * 1024 * 1024) { setMsg({ ok: false, text: "Dosya 10 MB'tan büyük olamaz." }); return; }
-    const ext = (f.name.split(".").pop() ?? "").toLowerCase();
+    let ext = (f.name.split(".").pop() ?? "").toLowerCase();
+    let body: Blob = f;
     setBusy(true);
     try {
+      // iPhone fotoğrafları (HEIC) ve diğer görseller JPEG'e çevrilir; PDF ve PNG olduğu gibi gider.
+      if (ext !== "pdf" && ext !== "png" && (f.type.startsWith("image/") || ["heic", "heif", "jpeg", "jpg"].includes(ext))) { body = await shrink(f); ext = "jpg"; }
       const slot = await startUpload(ext);
       if (!slot.path) throw new Error(slot.error ?? "Yükleme başlatılamadı.");
       const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false } });
       const type = ext === "pdf" ? "application/pdf" : ext === "png" ? "image/png" : "image/jpeg";
-      const up = await sb.storage.from("contracts").upload(slot.path, f, { contentType: type, upsert: false });
+      const up = await sb.storage.from("contracts").upload(slot.path, body, { contentType: type, upsert: false });
       if (up.error) throw new Error("Dosya yüklenemedi. Lütfen tekrar deneyin.");
       const done = await finishUpload(slot.path);
       if (!done.ok) throw new Error("Yükleme tamamlanamadı. Lütfen tekrar deneyin.");

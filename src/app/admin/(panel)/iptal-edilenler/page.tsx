@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 type Req = {
   id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null;
   start_date: string | null; end_date: string | null; guests: number | null; message: string | null;
-  admin_notes: string | null; cancel_reason: string | null; cancelled_at: string | null; created_at: string;
+  admin_notes: string | null; cancel_reason: string | null; cancelled_at: string | null; cancel_files: string[] | null; created_at: string;
 };
 
 const fmt = (d: string | null) => (d ? new Date(d + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "—");
@@ -19,6 +19,16 @@ export default async function Cancelled({ searchParams }: { searchParams: Promis
   const { supabase } = await requireAdmin();
   const { data, error: readError } = await supabase.from("reservation_requests").select("*").eq("status", "cancelled").order("created_at", { ascending: false }).limit(500);
   const rows = (data ?? []) as Req[];
+  const store = supabase.storage.from("contracts");
+  const links: Record<string, { name: string; url: string }[]> = {};
+  for (const r of rows) {
+    const out: { name: string; url: string }[] = [];
+    for (const [i, path] of (r.cancel_files ?? []).entries()) {
+      const { data: signed } = await store.createSignedUrl(path, 900);
+      if (signed?.signedUrl) out.push({ name: `Dosya ${i + 1}${path.endsWith(".pdf") ? " (PDF)" : " (fotoğraf)"}`, url: signed.signedUrl });
+    }
+    links[r.id] = out;
+  }
   return (
     <>
       <h1 className="font-display text-3xl">İptal edilen rezervasyonlar</h1>
@@ -45,6 +55,14 @@ export default async function Cancelled({ searchParams }: { searchParams: Promis
                 </dl>
                 {r.message && <div><p className="text-navy/50">Müşterinin mesajı</p><p className="mt-1 whitespace-pre-line rounded-xl bg-mist p-3">{r.message}</p></div>}
                 {r.admin_notes && <div><p className="text-navy/50">Notunuz</p><p className="mt-1 whitespace-pre-line rounded-xl bg-mist p-3">{r.admin_notes}</p></div>}
+                {links[r.id]?.length > 0 && (
+                  <div>
+                    <p className="text-navy/50">İptal kanıtı dosyaları</p>
+                    <p className="mt-1 flex flex-wrap gap-2">
+                      {links[r.id].map((l) => <a key={l.url} href={l.url} target="_blank" rel="noopener" className="rounded-xl border border-navy/15 px-3 py-2 text-sm font-semibold text-turquoise-dark">{l.name}</a>)}
+                    </p>
+                  </div>
+                )}
                 <form action={reopenRequest}>
                   <input type="hidden" name="id" value={r.id} />
                   <button type="submit" className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold">Yeniden aktif talebe al</button>

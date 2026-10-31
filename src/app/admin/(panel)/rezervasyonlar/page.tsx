@@ -1,5 +1,6 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
+import { CancelPanel } from "@/components/admin/CancelPanel";
 import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
 import { updateRequest, deleteRequest } from "./actions";
 
@@ -78,12 +79,8 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     <div>
                       <label htmlFor={`st-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Durum</label>
                       <select id={`st-${r.id}`} name="status" defaultValue={r.status} className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base">
-                        {Object.entries(labels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+                        {Object.entries(labels).filter(([k]) => k !== "cancelled").map(([k, v]) => <option key={k} value={k}>{v}</option>)}
                       </select>
-                    </div>
-                    <div>
-                      <label htmlFor={`cr-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">İptal sebebi (durum "İptal" ise zorunlu)</label>
-                      <textarea id={`cr-${r.id}`} name="cancel_reason" rows={2} maxLength={1000} defaultValue={r.cancel_reason ?? ""} placeholder="Örn. Müşteri tarih değiştirdi, tekne müsait değil, fiyatta anlaşılamadı" className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" />
                     </div>
                     <div>
                       <label htmlFor={`nt-${r.id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Not (yalnızca siz görürsünüz)</label>
@@ -91,6 +88,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     </div>
                     <SubmitButton>Kaydet</SubmitButton>
                   </form>
+                  <CancelPanel id={r.id} />
                   <ConfirmDelete action={deleteRequest} id={r.id} label="Talebi sil" warning="Bu talep kalıcı olarak silinir, geri getirilemez." />
                 </div>
               </details>
