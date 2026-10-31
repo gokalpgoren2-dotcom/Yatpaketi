@@ -7,7 +7,8 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { getBoatBySlug, getDestinations } from "@/lib/content";
+import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
+import { ReservationForm } from "@/components/ReservationForm";
 
 export const revalidate = 60;
 
@@ -34,7 +35,7 @@ function Spec({ k, v }: { k: string; v: string }) {
 
 export default async function BoatPage({ params }: { params: Promise<{ slug: string }> }) {
   const { slug } = await params;
-  const [{ boat: b, all: boats, sample }, destinations] = await Promise.all([getBoatBySlug(slug), getDestinations()]);
+  const [{ boat: b, all: boats, sample }, destinations, contact] = await Promise.all([getBoatBySlug(slug), getDestinations(), getContact()]);
   if (!b) notFound();
   const price = priceLabel(b);
   const regions = destinations.filter((d) => b.destinations.includes(d.slug));
@@ -130,8 +131,9 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
             {b.showPrice && b.priceDaily && b.priceWeekly && (
               <p className="mt-1 text-sm text-navy/60">Günlük: {b.priceDaily.toLocaleString("tr-TR")} {b.currency}</p>
             )}
-            <div className="mt-5 rounded-xl bg-mist p-4 text-sm text-navy/70">
-              Rezervasyon talep formu ve WhatsApp bağlantısı, iletişim bilgileri sisteme girildiğinde eklenecek. Talebiniz kesin rezervasyon oluşturmayacaktır.
+            <div className="mt-6 border-t border-navy/10 pt-6">
+              <h2 className="mb-4 text-lg font-semibold text-navy">Rezervasyon talebi</h2>
+              <ReservationForm boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} />
             </div>
           </aside>
         </div>

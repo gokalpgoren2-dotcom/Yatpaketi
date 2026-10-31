@@ -4,6 +4,7 @@ import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
 import { posts, routes, type Boat, type Destination } from "@/lib/data";
+import { getContact, type Contact } from "@/lib/content";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -223,30 +224,51 @@ export function Blog() {
   );
 }
 
-export function Support() {
+export async function Support() {
+  const c = await getContact();
   return (
     <section className="px-5 pb-14 pt-6 lg:px-8 lg:pb-20" id="iletisim">
       <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-[2rem] bg-gradient-to-br from-turquoise to-[#0b6f95] p-8 text-white md:flex-row md:items-center lg:p-14">
         <div>
           <h2 className="font-display text-3xl font-medium lg:text-4xl">Rotanızı birlikte planlayalım.</h2>
-          <p className="mt-2 max-w-xl text-white/90">Tarih ve kişi sayınızı iletin, size uygun tekneleri önerelim.</p>
+          <p className="mt-2 max-w-xl text-white/90">Bir tekne seçip rezervasyon talebi gönderin, size uygun seçenekleri önerelim.</p>
+          <ContactLines c={c} />
         </div>
         <div className="flex flex-wrap gap-3">
-          {/* Rezervasyon formu sonraki aşamada, telefon ve WhatsApp admin Ayarlar bölümünden gelecek. */}
           <Link href="/tekneler" className="rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-navy transition hover:bg-mist">Tekneleri İncele</Link>
+          {c.whatsapp && (
+            <a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener" className="rounded-full border border-white/70 px-7 py-3.5 text-sm font-semibold text-white transition hover:bg-white/10">WhatsApp</a>
+          )}
         </div>
       </div>
     </section>
   );
 }
 
-export function Footer() {
+function ContactLines({ c }: { c: Contact }) {
+  if (!c.phone && !c.email) return null;
+  return (
+    <p className="mt-4 flex flex-wrap gap-x-6 gap-y-1 text-sm font-medium">
+      {c.phone && <a href={`tel:+${c.phone.replace(/\D/g, "")}`} className="underline underline-offset-4">+{c.phone.replace(/\D/g, "")}</a>}
+      {c.email && <a href={`mailto:${c.email}`} className="underline underline-offset-4">{c.email}</a>}
+    </p>
+  );
+}
+
+export async function Footer() {
+  const c = await getContact();
   return (
     <footer className="bg-navy py-12 text-sm text-white/70">
       <div className={`${wrap} flex flex-col justify-between gap-6 md:flex-row`}>
         <div>
           <div className="inline-block rounded-xl bg-white px-4 py-2"><Logo height={32} /></div>
           <p className="mt-2 max-w-xs">Türkiye’de yat ve tekne kiralama platformu.</p>
+          {(c.phone || c.email) && (
+            <p className="mt-3 flex flex-col gap-1">
+              {c.phone && <a href={`tel:+${c.phone.replace(/\D/g, "")}`} className="hover:text-white">+{c.phone.replace(/\D/g, "")}</a>}
+              {c.email && <a href={`mailto:${c.email}`} className="hover:text-white">{c.email}</a>}
+            </p>
+          )}
         </div>
         <p>© {new Date().getFullYear()} yatpaketi. Tüm hakları saklıdır.</p>
       </div>

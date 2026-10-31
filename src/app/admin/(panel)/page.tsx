@@ -49,7 +49,8 @@ export default async function Dashboard() {
         )}
       </div>
       <p className="mt-6">
-        <Link href="/admin/tekneler" className="inline-block rounded-xl bg-turquoise px-6 py-3 text-sm font-semibold text-white">Tekneleri yönet</Link>
+        <Link href="/admin/tekneler" className="mr-3 inline-block rounded-xl bg-turquoise px-6 py-3 text-sm font-semibold text-white">Tekneleri yönet</Link>
+        <Link href="/admin/rezervasyonlar" className="inline-block rounded-xl border border-navy/15 bg-white px-6 py-3 text-sm font-semibold text-navy">Talepleri gör</Link>
       </p>
     </>
   );

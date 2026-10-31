@@ -135,3 +135,18 @@ export async function getCategoryNames(): Promise<string[]> {
     return sampleCategories;
   }
 }
+
+// ---- İletişim ayarları (Panel > Ayarlar) ----
+export type Contact = { phone: string; whatsapp: string; email: string };
+
+export async function getContact(): Promise<Contact> {
+  const empty = { phone: "", whatsapp: "", email: "" };
+  if (!supabaseConfigured()) return empty;
+  try {
+    const { data } = await db().from("site_settings").select("value").eq("key", "contact").maybeSingle();
+    const v = (data?.value ?? {}) as Partial<Contact>;
+    return { phone: v.phone ?? "", whatsapp: v.whatsapp ?? "", email: v.email ?? "" };
+  } catch {
+    return empty;
+  }
+}
