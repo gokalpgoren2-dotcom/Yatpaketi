@@ -4,6 +4,9 @@ export type Attach = { filename: string; content: Buffer };
 
 export const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
+// "2026-12-01" -> "1 Aralık 2026"
+export const fmtDate = (d: string) => new Date(d + "T12:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric", timeZone: "Europe/Istanbul" });
+
 export function adminMail(): string | null {
   return process.env.GMAIL_USER?.trim() || null;
 }

@@ -3,7 +3,7 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { PORTAL_COOKIE, getPortalToken, loadPortal, portalDb } from "@/lib/portal";
-import { sendMail, adminMail, esc, wrap } from "@/lib/mailer";
+import { sendMail, adminMail, esc, wrap, fmtDate } from "@/lib/mailer";
 
 export async function portalLogin(form: FormData) {
   const email = String(form.get("email") ?? "").trim();
@@ -48,23 +48,19 @@ export async function finishUpload(path: string): Promise<{ ok: boolean; mailed?
       const ext = path.split(".").pop() ?? "pdf";
       const attachments = [{ filename: `imzali-sozlesme.${ext}`, content: buf }];
       const who = portal.customer_name || portal.email;
+      const range = `${fmtDate(portal.tour_start)} – ${fmtDate(portal.tour_end)}`;
       const toCustomer = await sendMail({
         to: portal.email,
-        subject: `İmzalı sözleşmeniz alındı – ${portal.boat_name}`,
-        text: `Merhaba,\n\n${portal.boat_name} turu için imzalı sözleşmenizi aldık. Kopyası ekte yer almaktadır.\n\nYatpaketi`,
-        html: wrap(`<p>Merhaba,</p><p><b>${esc(portal.boat_name)}</b> turu için imzalı sözleşmenizi aldık. Kopyası ekte yer almaktadır.</p>`),
+        subject: `İmzalı kiralama sözleşmeniz alındı – ${portal.boat_name} (${range})`,
+        text: `Merhaba,\n\n${portal.boat_name} teknesi için ${range} tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.\n\nYatpaketi`,
+        html: wrap(`<p>Merhaba,</p><p><b>${esc(portal.boat_name)}</b> teknesi için <b>${esc(range)}</b> tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.</p>`),
         attachments,
       });
       mailed = toCustomer.ok;
       const admin = adminMail();
       if (admin) {
-        await sendMail({
-          to: admin,
-          subject: `İmzalı sözleşme yüklendi – ${portal.boat_name} – ${who}`,
-          text: `${who} (${portal.email}) ${portal.boat_name} (${portal.tour_start} – ${portal.tour_end}) için imzalı sözleşmeyi yükledi. Dosya ekte.`,
-          html: wrap(`<p><b>${esc(String(who))}</b> (${esc(portal.email)}) <b>${esc(portal.boat_name)}</b> (${esc(portal.tour_start)} – ${esc(portal.tour_end)}) için imzalı sözleşmeyi yükledi. Dosya ekte.</p>`),
-          attachments,
-        });
+        const note = `${who} (${portal.email}), ${portal.boat_name} teknesinin ${range} tarihli kiralama sözleşmesini imzalayıp yükledi. İmzalı sözleşme ekte.`;
+        await sendMail({ to: admin, subject: `Sözleşme imzalandı – ${portal.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p>${esc(note)}</p>`), attachments });
       }
     }
   } catch {

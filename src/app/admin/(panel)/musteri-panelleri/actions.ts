@@ -2,7 +2,7 @@
 
 import nodemailer from "nodemailer";
 import { requireAdmin } from "@/lib/admin";
-import { sendMail, adminMail, esc, wrap } from "@/lib/mailer";
+import { sendMail, adminMail, esc, wrap, fmtDate } from "@/lib/mailer";
 
 // Müşteriye giriş kodunu e-posta ile gönderir. Yalnızca yönetici çağırabilir; alıcı veritabanındaki e-postadır.
 export async function sendPortalEmail(portalId: string, code: string): Promise<{ ok: boolean; message: string }> {
@@ -43,13 +43,18 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
   const ext = (p.contract_path as string).split(".").pop() ?? "pdf";
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
   const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
-  const text = `${hello}\n\n${p.boat_name} turunuz (${p.tour_start} – ${p.tour_end}) için sözleşme ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
-  const html = wrap(`<p>${esc(hello)}</p><p><b>${esc(String(p.boat_name))}</b> turunuz (${esc(String(p.tour_start))} – ${esc(String(p.tour_end))}) için sözleşme ekte yer almaktadır.</p><p>Lütfen inceleyip imzalayın ve <a href="${base}/musteri">müşteri panelinizden</a> imzalı hâlini yükleyin.</p>`);
+  const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
+  const who = String(p.customer_name || p.email);
+  const text = `${hello}\n\n${p.boat_name} teknesi için ${range} tarihli kiralama sözleşmeniz ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
+  const html = wrap(`<p>${esc(hello)}</p><p><b>${esc(String(p.boat_name))}</b> teknesi için <b>${esc(range)}</b> tarihli kiralama sözleşmeniz ekte yer almaktadır.</p><p>Lütfen inceleyip imzalayın ve <a href="${base}/musteri">müşteri panelinizden</a> imzalı hâlini yükleyin.</p>`);
   const attachments = [{ filename: `sozlesme.${ext}`, content: buf }];
-  const r = await sendMail({ to: String(p.email), subject: `Yatpaketi sözleşmeniz – ${p.boat_name}`, text, html, attachments });
+  const r = await sendMail({ to: String(p.email), subject: `Kiralama sözleşmeniz – ${p.boat_name} (${range})`, text, html, attachments });
   if (!r.ok) return { ok: false, message: "Müşteriye e-posta gönderilemedi (" + r.message + ")." };
   const copy = adminMail();
-  if (copy) await sendMail({ to: copy, subject: `[Kopya] Müşteriye gönderilen sözleşme – ${p.boat_name} – ${p.customer_name ?? p.email}`, text: `Aşağıdaki sözleşme ${p.email} adresine gönderildi.\n\n${text}`, html: wrap(`<p>Bu sözleşme <b>${esc(String(p.email))}</b> adresine gönderildi (kopya).</p>`), attachments });
+  if (copy) {
+    const note = `${who} (${p.email}) için ${p.boat_name} teknesinin ${range} tarihli kiralama sözleşmesi hazırlandı ve müşteriye gönderildi. Sözleşme ekte.`;
+    await sendMail({ to: copy, subject: `Sözleşme gönderildi – ${p.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p>${esc(note)}</p>`), attachments });
+  }
   await supabase.from("customer_portals").update({ contract_emailed_at: new Date().toISOString() }).eq("id", portalId);
-  return { ok: true, message: `Sözleşme ${p.email} adresine e-postayla gönderildi. Kopyası sizin e-postanıza da düştü.` };
+  return { ok: true, message: `Sözleşme ${p.email} adresine e-postayla gönderildi. Bilgilendirme e-postası sizin adresinize de düştü.` };
 }
