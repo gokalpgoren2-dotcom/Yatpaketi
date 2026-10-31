@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import {
-  Blog, Categories, Destinations, FeaturedBoats, Footer, RentalModes, Routes, Support, WhyUs,
+  Blog, Categories, Destinations, FeaturedBoats, Footer, HowItWorks, RentalModes, Routes, Support, WhyUs,
 } from "@/components/Sections";
 
 export default function Home() {
@@ -10,9 +10,10 @@ export default function Home() {
       <Header />
       <main>
         <Hero />
-        <Destinations />
-        <FeaturedBoats />
         <Categories />
+        <FeaturedBoats />
+        <HowItWorks />
+        <Destinations />
         <RentalModes />
         <Routes />
         <WhyUs />

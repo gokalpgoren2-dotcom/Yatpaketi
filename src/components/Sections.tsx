@@ -4,31 +4,37 @@ import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
 import { boats, categories, destinations, posts, routes } from "@/lib/data";
 
-function Heading({ eyebrow, title, id }: { eyebrow: string; title: string; id?: string }) {
+function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
-    <div id={id} className="mb-10 max-w-2xl scroll-mt-24">
-      <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{eyebrow}</p>
-      <h2 className="font-display text-3xl font-medium text-navy lg:text-4xl">{title}</h2>
+    <div id={id} className="mb-8 flex scroll-mt-24 flex-wrap items-end justify-between gap-4 lg:mb-10">
+      <div className="max-w-2xl">
+        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">{eyebrow}</p>
+        <h2 className="font-display text-3xl font-medium text-navy lg:text-4xl">{title}</h2>
+      </div>
+      {action && (
+        <Link href={action.href} className="rounded-full border border-navy/15 px-5 py-2.5 text-sm font-semibold text-navy transition hover:border-turquoise hover:text-turquoise-dark">
+          {action.label} →
+        </Link>
+      )}
     </div>
   );
 }
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
-export function Destinations() {
+export function Categories() {
   return (
-    <section className="py-16 lg:py-24">
+    <section className="pb-4 pt-14 lg:pt-20">
       <div className={wrap}>
-        <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler Rotalar ve Koylar" />
-        <div className="no-scrollbar -mx-5 flex snap-x gap-4 overflow-x-auto px-5 lg:mx-0 lg:grid lg:grid-cols-5 lg:overflow-visible lg:px-0">
-          {destinations.map((d) => (
-            <Link key={d.slug} href={`/destinasyonlar/${d.slug}`} className="group relative min-w-[70%] snap-start overflow-hidden rounded-2xl sm:min-w-[40%] lg:min-w-0">
-              <Placeholder hue={d.hue} className="aspect-[3/4] transition duration-500 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 to-transparent" />
-              <div className="absolute bottom-0 p-5 text-white">
-                <h3 className="font-display text-2xl">{d.name}</h3>
-                <p className="text-sm text-white/80">{d.blurb}</p>
-              </div>
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">Tekne tipine göre keşfedin</p>
+        <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+          {categories.map((c) => (
+            <Link
+              key={c}
+              href={`/tekneler?tip=${encodeURIComponent(c)}`}
+              className="shrink-0 rounded-full bg-mist px-6 py-3 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:bg-turquoise hover:text-white hover:ring-turquoise"
+            >
+              {c}
             </Link>
           ))}
         </div>
@@ -39,30 +45,66 @@ export function Destinations() {
 
 export function FeaturedBoats() {
   return (
-    <section className="bg-mist py-16 lg:py-24">
+    <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="tekneler" eyebrow="Öne Çıkan Tekneler" title="Sizin İçin Seçtiklerimiz" />
-        <p className="-mt-6 mb-8 text-sm text-navy/50">Örnek içerik: Gerçek tekneler admin panelinden eklenecek.</p>
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-          {boats.slice(0, 6).map((b) => <BoatCard key={b.slug} b={b} />)}
-        </div>
-        <div className="mt-10 text-center">
-          <Link href="/tekneler" className="inline-block rounded-full bg-turquoise px-8 py-3.5 text-sm font-semibold text-white transition hover:bg-turquoise-dark">Tüm Tekneleri Gör</Link>
+        <Heading id="tekneler" eyebrow="Öne çıkan tekneler" title="Sizin için seçtiklerimiz" action={{ href: "/tekneler", label: "Tüm tekneler" }} />
+        <p className="-mt-4 mb-6 text-sm text-navy/50">Örnek içerik: Gerçek tekneler admin panelinden eklenecek.</p>
+        <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
+          {boats.slice(0, 6).map((b) => (
+            <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
+              <BoatCard b={b} />
+            </div>
+          ))}
         </div>
       </div>
     </section>
   );
 }
 
-export function Categories() {
+export function HowItWorks() {
+  const steps = [
+    ["1", "Tekneyi seçin", "Bölge, tarih, kişi sayısı ve bütçenize göre tekneleri filtreleyin."],
+    ["2", "Talebinizi iletin", "Tarih ve kişi sayınızla rezervasyon talebi oluşturun. Talep ücretsizdir."],
+    ["3", "Onayı bekleyin", "Müsaitlik ve fiyat teyit edilir. Rezervasyon, onaydan sonra kesinleşir."],
+  ];
   return (
-    <section className="py-16 lg:py-24">
+    <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading eyebrow="Kategoriler" title="Size Uygun Tekne Tipini Seçin" />
-        <div className="flex flex-wrap gap-3">
-          {categories.map((c) => (
-            <Link key={c} href={`/tekneler?tip=${encodeURIComponent(c)}`} className="rounded-full border border-navy/15 px-6 py-3 text-sm font-medium text-navy transition hover:border-turquoise hover:bg-turquoise hover:text-white">
-              {c}
+        <div className="rounded-[2rem] bg-mist p-6 sm:p-10 lg:p-14">
+          <Heading eyebrow="Nasıl çalışır?" title="Üç adımda talebinizi iletin" />
+          <ol className="grid gap-6 md:grid-cols-3">
+            {steps.map(([n, t, d]) => (
+              <li key={n} className="relative rounded-2xl bg-white p-6 shadow-sm">
+                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-turquoise text-lg font-semibold text-white">{n}</span>
+                <h3 className="mt-5 text-lg font-semibold text-navy">{t}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-navy/65">{d}</p>
+              </li>
+            ))}
+          </ol>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+export function Destinations() {
+  return (
+    <section className="py-14 lg:py-20">
+      <div className={wrap}>
+        <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler rotalar ve koylar" action={{ href: "/destinasyonlar", label: "Tüm destinasyonlar" }} />
+        <div className="grid auto-rows-[11rem] grid-cols-2 gap-3 sm:gap-4 lg:auto-rows-[14rem] lg:grid-cols-4">
+          {destinations.map((d, i) => (
+            <Link
+              key={d.slug}
+              href={`/destinasyonlar/${d.slug}`}
+              className={`group relative overflow-hidden rounded-3xl ${i === 0 ? "col-span-2 row-span-2" : ""}`}
+            >
+              <Placeholder hue={d.hue} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/80 via-navy/10 to-transparent" />
+              <div className="absolute bottom-0 p-4 text-white sm:p-6">
+                <h3 className={`font-display ${i === 0 ? "text-3xl lg:text-4xl" : "text-xl lg:text-2xl"}`}>{d.name}</h3>
+                <p className="mt-0.5 text-xs text-white/85 sm:text-sm">{d.blurb}</p>
+              </div>
             </Link>
           ))}
         </div>
@@ -73,26 +115,25 @@ export function Categories() {
 
 export function RentalModes() {
   const modes = [
-    { title: "Günlük Kiralama", text: "Bir günlük koy turları, doğum günü ve özel organizasyonlar için.", hue: 178 },
-    { title: "Haftalık Kiralama", text: "Kabinli mavi yolculuk: kaptan ve mürettebat dahil seçenekler.", hue: 200 },
-    { title: "Lüks Yat Koleksiyonu", text: "Üst segment yatlar, kişiye özel rota ve hizmet.", hue: 220 },
+    { title: "Günlük kiralama", text: "Koy turları, doğum günü ve özel organizasyonlar için.", hue: 178, href: "/tekneler?kiralama=gunluk" },
+    { title: "Haftalık kiralama", text: "Kabinli mavi yolculuk: kaptan ve mürettebat dahil seçenekler.", hue: 200, href: "/tekneler?kiralama=haftalik" },
+    { title: "Lüks yat koleksiyonu", text: "Üst segment yatlar, kişiye özel rota ve hizmet.", hue: 225, href: "/tekneler?tip=L%C3%BCks%20Yat" },
   ];
   return (
-    <section className="bg-navy py-16 text-white lg:py-24">
+    <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <div className="mb-10 max-w-2xl">
-          <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">Kiralama Seçenekleri</p>
-          <h2 className="font-display text-3xl font-medium lg:text-4xl">İhtiyacınıza Göre Planlayın</h2>
-        </div>
-        <div className="grid gap-6 md:grid-cols-3">
+        <Heading eyebrow="Kiralama seçenekleri" title="İhtiyacınıza göre planlayın" />
+        <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
           {modes.map((m) => (
-            <div key={m.title} className="overflow-hidden rounded-2xl bg-white/5 ring-1 ring-white/10">
-              <Placeholder hue={m.hue} className="aspect-[16/9]" />
-              <div className="p-6">
-                <h3 className="text-xl font-semibold">{m.title}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-white/70">{m.text}</p>
+            <Link key={m.title} href={m.href} className="group relative flex min-h-[15rem] items-end overflow-hidden rounded-3xl p-6 text-white lg:min-h-[19rem] lg:p-8">
+              <Placeholder hue={m.hue} className="absolute inset-0 transition duration-500 group-hover:scale-105" label={false} />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/20 to-transparent" />
+              <div className="relative">
+                <h3 className="font-display text-2xl">{m.title}</h3>
+                <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/85">{m.text}</p>
+                <span className="mt-4 inline-block rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy">Tekneleri gör →</span>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
@@ -102,17 +143,22 @@ export function RentalModes() {
 
 export function Routes() {
   return (
-    <section className="py-16 lg:py-24">
+    <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="mavi-yolculuk" eyebrow="Mavi Yolculuk" title="Klasik Rotalar" />
-        <div className="grid gap-6 md:grid-cols-3">
-          {routes.map((r) => (
-            <div key={r.name} className="rounded-2xl border border-navy/10 p-6">
-              <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{r.days}</p>
-              <h3 className="font-display mt-2 text-2xl text-navy">{r.name}</h3>
-              <p className="mt-3 text-sm text-navy/60">{r.stops}</p>
-            </div>
-          ))}
+        <div className="rounded-[2rem] bg-navy p-6 text-white sm:p-10 lg:p-14">
+          <div id="mavi-yolculuk" className="mb-8 scroll-mt-24 max-w-2xl lg:mb-10">
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">Mavi yolculuk</p>
+            <h2 className="font-display text-3xl font-medium lg:text-4xl">Klasik rotalar</h2>
+          </div>
+          <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
+            {routes.map((r) => (
+              <div key={r.name} className="rounded-2xl bg-white/[0.07] p-6 ring-1 ring-white/10">
+                <p className="inline-block rounded-full bg-turquoise px-3 py-1 text-xs font-semibold">{r.days}</p>
+                <h3 className="font-display mt-4 text-2xl">{r.name}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{r.stops}</p>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>
@@ -127,15 +173,17 @@ export function WhyUs() {
     ["Yakın destek", "Telefon ve WhatsApp ile hızlı iletişim."],
   ];
   return (
-    <section className="bg-mist py-16 lg:py-24" id="hakkimizda">
+    <section className="py-14 lg:py-20" id="hakkimizda">
       <div className={wrap}>
-        <Heading eyebrow="Neden yatpaketi?" title="Güvenle Seçin, Rahatça Yolculuk Yapın" />
-        <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        <Heading eyebrow="Neden yatpaketi?" title="Güvenle seçin, rahatça yolculuk yapın" />
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {items.map(([t, d]) => (
-            <div key={t} className="rounded-2xl bg-white p-6 shadow-sm">
-              <div className="mb-4 h-1.5 w-10 rounded-full bg-turquoise" />
+            <div key={t} className="rounded-3xl bg-white p-6 ring-1 ring-navy/10 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10">
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-turquoise/15">
+                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f95a4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+              </div>
               <h3 className="font-semibold text-navy">{t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-navy/60">{d}</p>
+              <p className="mt-2 text-sm leading-relaxed text-navy/65">{d}</p>
             </div>
           ))}
         </div>
@@ -146,15 +194,15 @@ export function WhyUs() {
 
 export function Blog() {
   return (
-    <section className="py-16 lg:py-24" id="blog">
+    <section className="py-14 lg:py-20" id="blog">
       <div className={wrap}>
-        <Heading eyebrow="Blog" title="Seyahat Rehberi" />
-        <div className="grid gap-6 md:grid-cols-3">
+        <Heading eyebrow="Blog" title="Seyahat rehberi" />
+        <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
           {posts.map((p, i) => (
-            <article key={p.title} className="overflow-hidden rounded-2xl border border-navy/10">
-              <Placeholder hue={185 + i * 12} className="aspect-[16/10]" />
+            <article key={p.title} className="overflow-hidden rounded-3xl ring-1 ring-navy/10">
+              <Placeholder hue={185 + i * 12} className="aspect-[16/10]" label={false} />
               <div className="p-5">
-                <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{p.tag}</p>
+                <p className="text-xs font-semibold uppercase tracking-wide text-turquoise-dark">{p.tag}</p>
                 <h3 className="mt-2 font-semibold text-navy">{p.title}</h3>
               </div>
             </article>
@@ -167,15 +215,15 @@ export function Blog() {
 
 export function Support() {
   return (
-    <section className="bg-turquoise py-14 text-white" id="iletisim">
-      <div className={`${wrap} flex flex-col items-start justify-between gap-6 md:flex-row md:items-center`}>
+    <section className="px-5 pb-14 pt-6 lg:px-8 lg:pb-20" id="iletisim">
+      <div className="mx-auto flex max-w-7xl flex-col items-start justify-between gap-6 overflow-hidden rounded-[2rem] bg-gradient-to-br from-turquoise to-[#0b6f95] p-8 text-white md:flex-row md:items-center lg:p-14">
         <div>
-          <h2 className="font-display text-3xl font-medium">Rotanızı birlikte planlayalım.</h2>
-          <p className="mt-2 text-white/90">Tarih ve kişi sayınızı iletin, size uygun tekneleri önerelim.</p>
+          <h2 className="font-display text-3xl font-medium lg:text-4xl">Rotanızı birlikte planlayalım.</h2>
+          <p className="mt-2 max-w-xl text-white/90">Tarih ve kişi sayınızı iletin, size uygun tekneleri önerelim.</p>
         </div>
         <div className="flex flex-wrap gap-3">
-          {/* Rezervasyon formu Aşama 2'de, telefon ve WhatsApp admin Ayarlar bölümünden gelecek. */}
-          <Link href="/tekneler" className="rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy">Tekneleri İncele</Link>
+          {/* Rezervasyon formu sonraki aşamada, telefon ve WhatsApp admin Ayarlar bölümünden gelecek. */}
+          <Link href="/tekneler" className="rounded-full bg-white px-7 py-3.5 text-sm font-semibold text-navy transition hover:bg-mist">Tekneleri İncele</Link>
         </div>
       </div>
     </section>

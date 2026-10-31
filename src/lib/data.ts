@@ -25,6 +25,7 @@ export type Boat = {
   description: string;
   hue: number; // yer tutucu görsel rengi
   addedAt: string;
+  image?: string | null; // kapak fotoğrafı adresi (Supabase Storage); yoksa yer tutucu
 };
 
 export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string };
