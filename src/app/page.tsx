@@ -1,7 +1,7 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import {
-  Blog, Categories, Destinations, FeaturedBoats, Footer, HowItWorks, RentalModes, Routes, Support, WhyUs,
+  Blog, Categories, Destinations, FeaturedBoats, Footer, HowItWorks, RentalModes, Routes, WhyUs,
 } from "@/components/Sections";
 import { getBoats, getCategoryNames, getDestinations, getHome } from "@/lib/content";
 
@@ -25,7 +25,6 @@ export default async function Home() {
         <Routes />
         <WhyUs />
         <Blog />
-        <Support />
       </main>
       <Footer />
     </>
