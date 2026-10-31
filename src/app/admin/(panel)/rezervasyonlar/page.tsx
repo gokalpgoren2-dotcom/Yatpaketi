@@ -1,6 +1,7 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
-import { updateRequest } from "./actions";
+import { ConfirmDelete } from "@/components/admin/ConfirmDelete";
+import { updateRequest, deleteRequest } from "./actions";
 
 export const dynamic = "force-dynamic";
 
@@ -22,6 +23,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
   const { supabase } = await requireAdmin();
   let q = supabase.from("reservation_requests").select("*").order("created_at", { ascending: false }).limit(200);
   if (durum && labels[durum]) q = q.eq("status", durum);
+  else q = q.neq("status", "cancelled"); // iptal edilenler listeyi kalabalıklaştırmasın; "İptal" filtresinde görünür
   const { data } = await q;
   const rows = (data ?? []) as Req[];
 
@@ -33,13 +35,13 @@ export default async function Requests({ searchParams }: { searchParams: Promise
       {error && <Notice key={"e" + t} kind="error" text={error} />}
 
       <nav aria-label="Duruma göre filtre" className="mt-5 flex gap-2 overflow-x-auto pb-1">
-        {[["", "Tümü"], ...Object.entries(labels)].map(([k, v]) => (
+        {[["", "Aktif talepler"], ...Object.entries(labels)].map(([k, v]) => (
           <a key={k} href={k ? `?durum=${k}` : "?"} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium ${(durum ?? "") === k ? "bg-navy text-white" : "bg-white text-navy ring-1 ring-navy/15"}`}>{v}</a>
         ))}
       </nav>
 
       {rows.length === 0 ? (
-        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60">Bu görünümde talep yok.</p>
+        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60">Bu görünümde talep yok. İptal edilenler "İptal" filtresinde durur.</p>
       ) : (
         <ul className="mt-5 space-y-3">
           {rows.map((r) => (
@@ -82,6 +84,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                     </div>
                     <SubmitButton>Kaydet</SubmitButton>
                   </form>
+                  <ConfirmDelete action={deleteRequest} id={r.id} label="Talebi sil" warning="Bu talep kalıcı olarak silinir, geri getirilemez." />
                 </div>
               </details>
             </li>

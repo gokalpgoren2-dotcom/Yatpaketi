@@ -18,3 +18,14 @@ export async function updateRequest(formData: FormData) {
   revalidatePath("/admin");
   redirect(`/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
 }
+
+export async function deleteRequest(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  if (!id) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Talep bulunamadı.") + `&t=${Date.now()}`);
+  const { error } = await supabase.from("reservation_requests").delete().eq("id", id);
+  if (error) redirect("/admin/rezervasyonlar?error=" + encodeURIComponent("Silinemedi: " + error.message) + `&t=${Date.now()}`);
+  revalidatePath("/admin/rezervasyonlar");
+  revalidatePath("/admin");
+  redirect(`/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
+}

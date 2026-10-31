@@ -25,6 +25,7 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [code, setCode] = useState<string | null>(null);
+  const [confirmDel, setConfirmDel] = useState(false);
 
   const say = (ok: boolean, text: string) => { setMsg({ ok, text }); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
@@ -81,6 +82,15 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     if (error) say(false, "Kaydedilemedi: " + error.message); else { say(true, status === "revoked" ? "Panel iptal edildi, kod artık çalışmaz." : "Panel yeniden açıldı."); router.refresh(); }
   }
 
+  async function deletePortal() {
+    setBusy(true);
+    const paths = [portal.contract_path, portal.signed_path].filter((x): x is string => Boolean(x));
+    if (paths.length) await supabase.storage.from("contracts").remove(paths);
+    const { error } = await supabase.from("customer_portals").delete().eq("id", portal.id);
+    if (error) { setBusy(false); say(false, "Silinemedi: " + error.message); return; }
+    router.push("/admin/musteri-panelleri");
+  }
+
   async function resetCode() {
     setBusy(true);
     const { data, error } = await supabase.rpc("admin_reset_code", { p_id: portal.id });
@@ -105,6 +115,19 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
             : <button type="button" className={`${btn} text-red-700`} disabled={busy} onClick={() => setStatus("revoked")}>Paneli iptal et</button>}
         </div>
         <p className="mt-2 text-xs text-navy/50">Yeni kod üretince eski kod ve açık oturumlar geçersiz olur.</p>
+        <div className="mt-4">
+          {confirmDel ? (
+            <div className="rounded-xl bg-red-50 p-3 ring-1 ring-red-200">
+              <p className="text-sm font-medium text-red-800">Panel, hazırlık listesi ve yüklenen sözleşmeler kalıcı olarak silinir. Emin misiniz?</p>
+              <div className="mt-2 flex gap-2">
+                <button type="button" disabled={busy} onClick={deletePortal} className="rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-60">Evet, sil</button>
+                <button type="button" onClick={() => setConfirmDel(false)} className="rounded-xl border border-navy/15 bg-white px-4 py-2.5 text-sm font-semibold">Vazgeç</button>
+              </div>
+            </div>
+          ) : (
+            <button type="button" onClick={() => setConfirmDel(true)} className="rounded-xl border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-700">Paneli tamamen sil</button>
+          )}
+        </div>
         {code && <div className="mt-4"><CodeBox code={code} email={portal.email} boat={portal.boat_name} portalId={portal.id} /></div>}
       </section>
 
