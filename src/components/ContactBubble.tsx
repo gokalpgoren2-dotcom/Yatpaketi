@@ -35,7 +35,7 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
   return (
     <div ref={ref} className="fixed right-4 z-50 bottom-[calc(5rem+env(safe-area-inset-bottom))] lg:bottom-6 lg:right-6">
       {open && (
-        <div role="dialog" aria-label="İletişim" className="absolute bottom-[4.5rem] right-0 w-64 rounded-2xl bg-white p-2 shadow-2xl shadow-navy/25 ring-1 ring-navy/10">
+        <div role="dialog" aria-label="İletişim" className="menu-rise absolute bottom-[5rem] right-0 w-64 rounded-2xl bg-white p-2 shadow-2xl shadow-navy/25 ring-1 ring-navy/10">
           <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-navy/50">Bize ulaşın</p>
           {whatsapp && (
             <a className={row} href={`https://wa.me/${whatsapp}`} target="_blank" rel="noopener">
@@ -58,26 +58,33 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
         </div>
       )}
       {!open && (
-        <span className="bubble-label pointer-events-none absolute right-[4.5rem] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-lg ring-1 ring-navy/10" aria-hidden>
+        <span className="bubble-label pointer-events-none absolute right-[5rem] top-1/2 -translate-y-1/2 whitespace-nowrap rounded-full bg-white px-4 py-2 text-sm font-semibold text-navy shadow-lg ring-1 ring-navy/10" aria-hidden>
           Bize yazın
         </span>
       )}
-      <span className="relative block h-14 w-14">
+      <span className="relative block h-16 w-16">
         {!open && <span className="bubble-ring absolute inset-0 rounded-full bg-turquoise" aria-hidden />}
         <button
           type="button"
           onClick={() => setOpen((v) => !v)}
           aria-expanded={open}
           aria-label={open ? "İletişim menüsünü kapat" : "İletişim menüsünü aç"}
-          className="relative flex h-14 w-14 items-center justify-center rounded-full bg-gradient-to-br from-[#2ad0e0] via-turquoise to-[#0b6f95] text-white shadow-xl shadow-navy/35 ring-2 ring-white/70 transition active:scale-95"
+          className="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-[#2ad0e0] via-turquoise to-[#0b6f95] text-white shadow-xl shadow-navy/35 ring-2 ring-white/70 transition active:scale-95"
         >
           {open ? (
             <svg {...ic} width={24} height={24}><path d="M6 6l12 12M18 6L6 18" /></svg>
           ) : (
-            <svg width="28" height="28" viewBox="0 0 24 24" aria-hidden>
-              <path fill="currentColor" d="M12 2.5c-5.2 0-9.5 3.6-9.5 8.3 0 2.3 1.1 4.4 2.9 5.9L4.6 21l4.5-2.2c.9.2 1.9.4 2.9.4 5.2 0 9.5-3.6 9.5-8.3S17.2 2.5 12 2.5z" />
-              <circle cx="8" cy="10.9" r="1.2" fill="#0b6f95" /><circle cx="12" cy="10.9" r="1.2" fill="#0b6f95" /><circle cx="16" cy="10.9" r="1.2" fill="#0b6f95" />
-            </svg>
+            <span className="sail-sway relative block">
+              <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden>
+                <path fill="currentColor" d="M15 4v18H5z" />
+                <path fill="currentColor" fillOpacity=".85" d="M17.5 8v14H26z" />
+                <path fill="currentColor" d="M3 24h28l-4 6H7z" />
+              </svg>
+              <svg className="absolute -right-2 -top-2" width="18" height="18" viewBox="0 0 18 18" aria-hidden>
+                <path fill="#fff" d="M9 1C4.6 1 1.5 3.7 1.5 7c0 1.7.8 3.2 2.1 4.3L3 15.5l3.5-1.7c.8.2 1.6.3 2.5.3 4.4 0 7.5-2.7 7.5-6.1S13.4 1 9 1z" />
+                <circle cx="5.8" cy="7.2" r="1" fill="#0b6f95" /><circle cx="9" cy="7.2" r="1" fill="#0b6f95" /><circle cx="12.2" cy="7.2" r="1" fill="#0b6f95" />
+              </svg>
+            </span>
           )}
         </button>
       </span>

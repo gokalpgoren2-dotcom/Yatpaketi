@@ -50,3 +50,15 @@ body {
 @keyframes label-pop { 0% { opacity: 0; transform: translateX(10px); } 8%, 82% { opacity: 1; transform: none; } 100% { opacity: 0; transform: translateX(10px); } }
 .bubble-ring { animation: bubble-ring 2.6s ease-out infinite; }
 .bubble-label { opacity: 0; animation: label-pop 7s ease 1.5s 1 both; }
+
+@media (min-width: 1024px) { .bubble-label { opacity: 1; animation: none; } }
+@keyframes sail-sway { 0%, 100% { transform: rotate(-4deg); } 50% { transform: rotate(4deg); } }
+@keyframes menu-rise { from { opacity: 0; transform: translateY(14px) scale(0.95); } to { opacity: 1; transform: none; } }
+.sail-sway { animation: sail-sway 4.5s ease-in-out infinite; transform-origin: 50% 85%; }
+.menu-rise { animation: menu-rise 0.22s ease-out both; transform-origin: bottom right; }
+
+/* Sayfa geçişi: dalga bandı alttan yukarı süpürür, tekne soldan sağa geçer. */
+@keyframes wipe-up { 0% { transform: translateY(105%); } 100% { transform: translateY(-115%); } }
+@keyframes boat-cross { 0% { transform: translateX(-30vw); } 100% { transform: translateX(130vw); } }
+.route-wipe { animation: wipe-up 0.75s cubic-bezier(0.65, 0, 0.35, 1) both; }
+.route-boat { animation: boat-cross 0.75s cubic-bezier(0.65, 0, 0.35, 1) both; }
