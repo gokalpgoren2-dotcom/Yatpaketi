@@ -13,7 +13,7 @@ export type EntityRow = {
   seo_title: string | null; seo_description: string | null; sort_order: number; is_published?: boolean; is_featured?: boolean; is_active?: boolean;
 };
 
-const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin; } catch { return ""; } })()}/storage/v1/object/public/media/`;
+const BASE = "/";
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
