@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { ReservationForm } from "./ReservationForm";
 import { DateRangePicker } from "./DateRangePicker";
+import { recordWhatsapp } from "@/app/tekneler/[slug]/talep";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
@@ -43,6 +44,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props)
       setError("Çıkış tarihi giriş tarihinden önce olamaz.");
     } else {
       setError("");
+      void recordWhatsapp({ boat: boatSlug, name, start, end, guests }).catch(() => {}); // panele kayıt; WhatsApp açılışını etkilemez
     }
   }
 

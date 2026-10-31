@@ -77,3 +77,31 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
   }
   return { ok: false, message: messages[r?.error ?? ""] ?? "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin." };
 }
+
+// WhatsApp düğmesine basılınca talebi sessizce panele kaydeder (telefon/e-posta yoktur). Hata olursa WhatsApp yolu etkilenmez.
+export async function recordWhatsapp(input: { boat: string; name: string; start: string; end: string; guests: number }): Promise<void> {
+  try {
+    const dateOk = (v: string) => /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v));
+    if (!dateOk(input.start) || !dateOk(input.end) || !Number.isInteger(input.guests)) return;
+    const h = await headers();
+    const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "";
+    const ipHash = ip ? createHash("sha256").update(`${process.env.RESERVATION_SALT ?? "yatpaketi"}:${ip}`).digest("hex").slice(0, 32) : null;
+    const supabase = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, {
+      auth: { persistSession: false, autoRefreshToken: false },
+    });
+    const { data, error } = await supabase.rpc("submit_whatsapp_request", {
+      p_boat_slug: input.boat.slice(0, 200), p_name: input.name.trim().slice(0, 100), p_start: input.start, p_end: input.end, p_guests: input.guests, p_ip_hash: ipHash,
+    });
+    if (error) { console.error("WhatsApp talebi kaydedilemedi:", error.message); return; }
+    const r = data as { ok?: boolean; duplicate?: boolean } | null;
+    if (!r?.ok || r.duplicate) return;
+    let boatName = input.boat;
+    try {
+      const { data: b } = await supabase.from("boats").select("name").eq("slug", input.boat).maybeSingle();
+      if (b && typeof b.name === "string") boatName = b.name;
+    } catch { /* kod gösterilir */ }
+    await notifyAdmin({ name: input.name.trim().slice(0, 100) || "WhatsApp talebi (isim yok)", phone: "", email: "", boat: boatName, start: input.start, end: input.end, guests: input.guests, message: "WhatsApp düğmesine basıldı. Müşterinin mesajı ve telefonu WhatsApp'tan gelecek; mesaj gönderilmemiş olabilir." });
+  } catch (e) {
+    console.error("WhatsApp talebi hatasi:", e instanceof Error ? e.message : e);
+  }
+}

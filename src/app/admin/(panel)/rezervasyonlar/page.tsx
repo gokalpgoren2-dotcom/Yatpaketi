@@ -14,7 +14,7 @@ const tone: Record<string, string> = {
 type Req = {
   id: string; boat_name: string | null; customer_name: string; phone: string | null; email: string | null;
   start_date: string | null; end_date: string | null; guests: number | null; message: string | null;
-  status: string; admin_notes: string | null; cancel_reason?: string | null; created_at: string;
+  status: string; source?: string | null; admin_notes: string | null; cancel_reason?: string | null; created_at: string;
 };
 
 const fmt = (d: string | null) => (d ? new Date(d + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" }) : "—");
@@ -52,7 +52,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
               <details>
                 <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 p-4">
                   <span className="min-w-0">
-                    <span className="block font-semibold">{r.customer_name}</span>
+                    <span className="block font-semibold">{r.customer_name}{r.source === "whatsapp" && <span className="ml-2 rounded-full bg-[#25D366]/15 px-2 py-0.5 align-middle text-xs font-semibold text-[#128C7E]">WhatsApp</span>}</span>
                     <span className="block text-sm text-navy/60">{r.boat_name ?? "Tekne belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
                     {r.status === "cancelled" && r.cancel_reason && <span className="mt-1 block text-sm text-red-700">İptal sebebi: {r.cancel_reason}</span>}
                   </span>
