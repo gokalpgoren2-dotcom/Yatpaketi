@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
-import Image from "next/image";
+import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
 import { getBoatBySlug, getDestinations } from "@/lib/content";
 
@@ -55,14 +55,14 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
         {gallery.length > 0 ? (
           <div className="mt-8 space-y-3">
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-mist lg:aspect-[16/8]">
-              <Image src={gallery[0]} alt={b.name} fill priority sizes="(min-width:1280px) 1200px, 100vw" className="object-cover" />
+              <Photo src={gallery[0]} alt={b.name} priority sizes="(min-width:1280px) 1200px, 100vw" className="object-cover" />
             </div>
             {gallery.length > 1 && (
               <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
                 {gallery.slice(1).map((src, i) => (
                   <li key={src}>
                     <a href={src} target="_blank" rel="noopener" className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-mist">
-                      <Image src={src} alt={`${b.name} fotoğraf ${i + 2}`} fill sizes="(min-width:1024px) 16vw, 33vw" className="object-cover transition hover:scale-105" />
+                      <Photo src={src} alt={`${b.name} fotoğraf ${i + 2}`} sizes="(min-width:1024px) 16vw, 33vw" className="object-cover transition hover:scale-105" />
                     </a>
                   </li>
                 ))}

@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Photo } from "./Photo";
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
@@ -105,7 +105,7 @@ export function Destinations({ items }: { items: Destination[] }) {
               className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
             >
               {d.image ? (
-                <Image src={d.image} alt={d.name} fill sizes="(min-width:1024px) 24vw, (min-width:640px) 42vw, 76vw" className="object-cover transition duration-500 group-hover:scale-105" />
+                <Photo src={d.image} alt={d.name} sizes="(min-width:1024px) 24vw, (min-width:640px) 42vw, 76vw" className="object-cover transition duration-500 group-hover:scale-105" />
               ) : (
                 <Placeholder hue={d.hue} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
               )}

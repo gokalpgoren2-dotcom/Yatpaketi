@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Photo } from "./Photo";
 import Link from "next/link";
 import { type Boat, priceLabel } from "@/lib/data";
 import { Placeholder } from "./Placeholder";
@@ -12,7 +12,7 @@ export function BoatCard({ b }: { b: Boat }) {
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {b.image ? (
-          <Image src={b.image} alt={b.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 85vw" className="object-cover transition duration-500 group-hover:scale-105" />
+          <Photo src={b.image} alt={b.name} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 85vw" className="object-cover transition duration-500 group-hover:scale-105" />
         ) : (
           <Placeholder hue={b.hue} className="h-full w-full transition duration-500 group-hover:scale-105" />
         )}

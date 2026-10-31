@@ -5,7 +5,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
-import Image from "next/image";
+import { Photo } from "@/components/Photo";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
 
@@ -38,7 +38,7 @@ export default async function DestinationPage({ params }: { params: Promise<{ sl
       <main className="pb-20 pt-16 lg:pt-20">
         <section className="relative">
           {d.image ? (
-            <div className="relative h-64 lg:h-80"><Image src={d.image} alt={d.name} fill priority sizes="100vw" className="object-cover" /></div>
+            <div className="relative h-64 lg:h-80"><Photo src={d.image} alt={d.name} priority sizes="100vw" className="object-cover" /></div>
           ) : (
             <Placeholder hue={d.hue} className="h-64 lg:h-80" label={false} />
           )}

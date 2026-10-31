@@ -6,7 +6,7 @@ import { createClient } from "@/lib/supabase/client";
 
 type Img = { id: string; path: string; is_cover: boolean; sort_order: number };
 
-const BASE = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/`;
+const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin; } catch { return ""; } })()}/storage/v1/object/public/media/`;
 
 // Yüklemeden önce görseli küçültür (en uzun kenar 2400 px, JPEG %85). iPhone fotoğrafları çok büyüktür.
 async function shrink(file: File): Promise<Blob> {

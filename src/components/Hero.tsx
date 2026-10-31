@@ -1,4 +1,4 @@
-import Image from "next/image";
+import { Photo } from "./Photo";
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import type { Destination } from "@/lib/data";
@@ -12,7 +12,7 @@ export function Hero({ home, destinations }: { home: HomeContent; destinations: 
     <section className="relative isolate flex min-h-[34rem] items-center justify-center overflow-hidden bg-navy pt-20 text-center lg:min-h-[40rem]">
       {home.heroImage ? (
         <>
-          <Image src={home.heroImage} alt="" fill priority sizes="100vw" className="-z-20 object-cover" />
+          <div className="absolute inset-0 -z-20"><Photo src={home.heroImage} alt="" priority sizes="100vw" className="object-cover" /></div>
           <div className="absolute inset-0 -z-10 bg-gradient-to-b from-navy/55 via-navy/25 to-navy/70" />
         </>
       ) : (

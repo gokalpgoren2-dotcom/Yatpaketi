@@ -3,7 +3,7 @@ import Link from "next/link";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { Placeholder } from "@/components/Placeholder";
-import Image from "next/image";
+import { Photo } from "@/components/Photo";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
 
@@ -27,7 +27,7 @@ export default async function DestinationsPage() {
           {destinations.map((d) => (
             <Link key={d.slug} href={`/destinasyonlar/${d.slug}`} className="group overflow-hidden rounded-2xl border border-navy/10 transition hover:-translate-y-1 hover:shadow-xl">
               {d.image ? (
-                <div className="relative aspect-[16/10]"><Image src={d.image} alt={d.name} fill sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" /></div>
+                <div className="relative aspect-[16/10]"><Photo src={d.image} alt={d.name} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" /></div>
               ) : (
                 <Placeholder hue={d.hue} className="aspect-[16/10]" />
               )}

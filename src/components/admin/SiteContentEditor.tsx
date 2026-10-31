@@ -5,7 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import { shrink } from "@/lib/shrink";
 import { refreshSite } from "@/app/admin/(panel)/icerik/actions";
 
-const BASE = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/media/`;
+const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin; } catch { return ""; } })()}/storage/v1/object/public/media/`;
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 const btn = "rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-navy disabled:opacity-50";
