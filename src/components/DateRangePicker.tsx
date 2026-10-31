@@ -28,6 +28,7 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
   const today = todayIso();
   const base = start || today;
   const [open, setOpen] = useState(false);
+  const [note, setNote] = useState("");
   const [view, setView] = useState({ y: Number(base.slice(0, 4)), m: Number(base.slice(5, 7)) - 1 });
 
   const first = (new Date(view.y, view.m, 1).getDay() + 6) % 7; // hafta Pazartesi başlar
@@ -40,10 +41,22 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
     setView({ y: d.getFullYear(), m: d.getMonth() });
   }
 
+  function anyBlocked(a: string, b: string) {
+    if (!blocked) return false;
+    const d = new Date(a + "T00:00:00");
+    const e = new Date(b + "T00:00:00");
+    for (; d <= e; d.setDate(d.getDate() + 1)) {
+      if (blocked(iso(d.getFullYear(), d.getMonth(), d.getDate()))) return true;
+    }
+    return false;
+  }
+
   function pick(day: string) {
-    if (!start || end) {
+    setNote("");
+    if (!start || end || day < start) {
       onChange(day, "");
-    } else if (day < start) {
+    } else if (anyBlocked(start, day)) {
+      setNote("Bu aralıkta dolu günler var. Lütfen başka bir aralık seçin.");
       onChange(day, "");
     } else {
       onChange(start, day);
@@ -111,9 +124,10 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
               );
             })}
           </div>
+          {note && <p role="alert" className="mt-2 rounded-lg bg-amber-50 px-3 py-2 text-xs font-medium text-amber-900">{note}</p>}
           <div className="mt-2 flex items-center justify-between px-1 text-xs text-navy/60">
             <span>{start && !end ? "Şimdi çıkış tarihine dokunun." : "Önce giriş, sonra çıkış tarihine dokunun."}</span>
-            {start && <button type="button" onClick={() => onChange("", "")} className="font-semibold text-turquoise-dark">Temizle</button>}
+            {start && <button type="button" onClick={() => { setNote(""); onChange("", ""); }} className="font-semibold text-turquoise-dark">Temizle</button>}
           </div>
         </div>
       )}

@@ -9,17 +9,18 @@ const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/
 
 const fmt = (d: string) => new Date(d + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "long", year: "numeric" });
 
-type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string };
+type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string; blocked?: { start: string; end: string }[] };
 
 // Tekne sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
-export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props) {
+export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, blocked = [] }: Props) {
+  const isBlocked = (d: string) => blocked.some((r) => d >= r.start && d <= r.end);
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");
   const [guests, setGuests] = useState(Math.min(2, maxGuests));
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
-  if (!whatsapp) return <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} />;
+  if (!whatsapp) return <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} blocked={isBlocked} />;
 
   function message() {
     const url = `${window.location.origin}/tekneler/${boatSlug}`;
@@ -50,7 +51,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props)
 
   return (
     <div className="space-y-4">
-      <DateRangePicker start={start} end={end} onChange={(a, b) => { setStart(a); setEnd(b); setError(""); }} />
+      <DateRangePicker start={start} end={end} blocked={isBlocked} onChange={(a, b) => { setStart(a); setEnd(b); setError(""); }} />
 
       <div className="flex items-center justify-between rounded-xl border border-navy/15 px-4 py-2.5">
         <span className="text-sm font-medium text-navy">Misafir sayısı</span>
@@ -79,7 +80,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp }: Props)
           <span aria-hidden className="text-navy/50 transition group-open:rotate-180">⌄</span>
         </summary>
         <div className="border-t border-navy/10 p-4">
-          <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} />
+          <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} blocked={isBlocked} />
         </div>
       </details>
     </div>

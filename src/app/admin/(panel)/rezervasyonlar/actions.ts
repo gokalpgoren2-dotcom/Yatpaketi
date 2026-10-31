@@ -18,3 +18,20 @@ export async function updateRequest(formData: FormData) {
   revalidatePath("/admin");
   redirect(`/admin/rezervasyonlar?saved=1&t=${Date.now()}`);
 }
+
+// Talebin tarihlerini ilgili teknenin takviminde dolu olarak işaretler.
+export async function markBlocked(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const id = String(formData.get("id") ?? "");
+  const go = (kind: "saved" | "error", msg = ""): never =>
+    redirect(`/admin/rezervasyonlar?${kind === "saved" ? "saved=1" : "error=" + encodeURIComponent(msg)}&t=${Date.now()}`);
+
+  const { data: r } = await supabase.from("reservation_requests").select("boat_id,customer_name,start_date,end_date").eq("id", id).maybeSingle();
+  if (!r || !r.boat_id || !r.start_date || !r.end_date) return go("error", "Bu talepte tekne veya tarih bilgisi eksik.");
+  const { data: clash } = await supabase.from("availability_blocks").select("id").eq("boat_id", r.boat_id).lte("start_date", r.end_date).gte("end_date", r.start_date).limit(1);
+  if (clash && clash.length > 0) return go("error", "Bu tarihlerde takvimde zaten bir kayıt var.");
+  const { error } = await supabase.from("availability_blocks").insert({ boat_id: r.boat_id, start_date: r.start_date, end_date: r.end_date, kind: "booked", note: `Talep: ${r.customer_name}` });
+  if (error) return go("error", "Kaydedilemedi: " + error.message);
+  revalidatePath("/tekneler");
+  return go("saved");
+}

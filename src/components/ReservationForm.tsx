@@ -7,7 +7,7 @@ import { DateRangePicker } from "./DateRangePicker";
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: string; boatName: string; maxGuests: number }) {
+export function ReservationForm({ boatSlug, boatName, maxGuests, blocked }: { boatSlug: string; boatName: string; maxGuests: number; blocked?: (d: string) => boolean }) {
   const [t0] = useState(() => Date.now());
   const [pending, begin] = useTransition();
   const [result, setResult] = useState<{ ok: boolean; message?: string } | null>(null);
@@ -52,7 +52,7 @@ export function ReservationForm({ boatSlug, boatName, maxGuests }: { boatSlug: s
       <div><label className={lab} htmlFor="r-email">E-posta</label>
         <input id="r-email" name="email" type="email" maxLength={200} autoComplete="email" className={input} /></div>
       <p className="text-xs text-navy/50">Telefon veya e-postadan en az birini yazın.</p>
-      <DateRangePicker start={start} end={end} onChange={(a, b) => { setStart(a); setEnd(b); }} />
+      <DateRangePicker start={start} end={end} blocked={blocked} onChange={(a, b) => { setStart(a); setEnd(b); }} />
       <input type="hidden" name="start" value={start} />
       <input type="hidden" name="end" value={end} />
       <div><label className={lab} htmlFor="r-guests">Misafir sayısı *</label>

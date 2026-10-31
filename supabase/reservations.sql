@@ -30,6 +30,9 @@ begin
     select id, name, guests into v_boat from public.boats where slug = p_boat_slug and is_published;
     if not found then return jsonb_build_object('ok', false, 'error', 'boat'); end if;
     if p_guests > v_boat.guests then return jsonb_build_object('ok', false, 'error', 'capacity'); end if;
+    if exists (select 1 from public.availability_blocks a where a.boat_id = v_boat.id and p_start <= a.end_date and p_end >= a.start_date) then
+      return jsonb_build_object('ok', false, 'error', 'unavailable');
+    end if;
   end if;
 
   -- Hız sınırları: aynı ağdan saatte 5, tüm site için saatte 60, aynı telefon/e-posta için günde 3 talep.

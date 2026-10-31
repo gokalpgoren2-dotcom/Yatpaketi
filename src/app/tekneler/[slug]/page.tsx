@@ -7,7 +7,8 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
+import { getBlockedRanges, getBoatBySlug, getContact, getDestinations } from "@/lib/content";
+import { AvailabilityCalendar } from "@/components/AvailabilityCalendar";
 import { RequestPanel } from "@/components/RequestPanel";
 
 export const revalidate = 60;
@@ -37,6 +38,7 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
   const { slug } = await params;
   const [{ boat: b, all: boats, sample }, destinations, contact] = await Promise.all([getBoatBySlug(slug), getDestinations(), getContact()]);
   if (!b) notFound();
+  const blocked = await getBlockedRanges(b.slug);
   const price = priceLabel(b);
   const regions = destinations.filter((d) => b.destinations.includes(d.slug));
   const gallery = b.images ?? [];
@@ -126,7 +128,8 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
             )}
 
             <h2 className="font-display mt-10 text-2xl text-navy">Müsaitlik</h2>
-            <p className="mt-3 rounded-2xl bg-mist p-5 text-sm text-navy/70">Müsaitlik takvimi sonraki aşamada eklenecek. Şimdilik tarihler için bizimle iletişime geçmeniz gerekir.</p>
+            <div className="mt-3"><AvailabilityCalendar ranges={blocked} /></div>
+            <p className="mt-3 text-sm text-navy/60">Takvim bilgilendirme amaçlıdır. Müsait görünen tarihler de talebiniz sonrası teyit edilir.</p>
           </div>
 
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
@@ -137,7 +140,7 @@ export default async function BoatPage({ params }: { params: Promise<{ slug: str
             )}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">Rezervasyon talebi gönderin</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} blocked={blocked} />
             </div>
           </aside>
         </div>

@@ -16,6 +16,7 @@ const messages: Record<string, string> = {
   capacity: "Misafir sayısı bu teknenin kapasitesini aşıyor.",
   message: "Mesajınız çok uzun (en fazla 2000 karakter).",
   boat: "Bu tekne artık yayında değil.",
+  unavailable: "Seçtiğiniz tarihlerde bu tekne dolu görünüyor. Lütfen başka tarih seçin.",
   rate: "Çok fazla talep gönderildi. Lütfen daha sonra tekrar deneyin.",
 };
 
