@@ -4,8 +4,6 @@ import nodemailer from "nodemailer";
 import { requireAdmin } from "@/lib/admin";
 import { sendMail, adminMail, esc, wrap } from "@/lib/mailer";
 
-const esc = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
-
 // Müşteriye giriş kodunu e-posta ile gönderir. Yalnızca yönetici çağırabilir; alıcı veritabanındaki e-postadır.
 export async function sendPortalEmail(portalId: string, code: string): Promise<{ ok: boolean; message: string }> {
   const { supabase } = await requireAdmin();
