@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { href, langFromPath, t } from "@/lib/i18n";
-import { useFavorites } from "@/lib/favorites";
+import { useFavHint, useFavorites } from "@/lib/favorites";
 
 const items = [
   { href: "/", key: "mbHome" as const, d: "M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z" },
@@ -19,10 +19,17 @@ export function MobileBar() {
   const lang = langFromPath(path);
   const L = t(lang);
   const favs = useFavorites().length;
+  const [hint, hideHint] = useFavHint();
   const bare = lang === "en" ? (path === "/en" ? "/" : path.slice(3)) : path;
   if (path.startsWith("/admin") || path.startsWith("/musteri")) return null;
   return (
     <nav aria-label={L.quickMenu} className="fixed inset-x-0 bottom-0 z-40 border-t border-navy/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
+      {hint && favs > 0 && (
+        <Link href={href(lang, "/favorilerim")} onClick={hideHint} role="status" className="absolute bottom-full left-[70%] mb-3 w-max max-w-[80vw] -translate-x-1/2 rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
+          {lang === "en" ? "Compare your saved yachts →" : "Favori tekneleri karşılaştırın →"}
+          <span aria-hidden className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-navy" />
+        </Link>
+      )}
       <ul className="grid grid-cols-5">
         {items.map((i) => {
           const on = i.href === "/" ? bare === "/" : i.href.startsWith("/#") ? false : bare.startsWith(i.href);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useSyncExternalStore } from "react";
+import { useEffect, useState, useSyncExternalStore } from "react";
 
 // Favori tekneler yalnızca ziyaretçinin kendi tarayıcısında saklanır (hesap gerekmez).
 const KEY = "yp_favs";
@@ -39,7 +39,22 @@ export function useFavorites(): string[] {
 }
 export function toggleFavorite(slug: string) {
   const cur = read();
-  write(cur.includes(slug) ? cur.filter((s) => s !== slug) : [slug, ...cur]);
+  const adding = !cur.includes(slug);
+  write(adding ? [slug, ...cur] : cur.filter((s) => s !== slug));
+  if (adding) window.dispatchEvent(new Event(ADDED));
+}
+
+// Bir tekne favoriye eklenince birkaç saniye true olur: kalbin yanında küçük bir yönlendirme balonu göstermek için.
+const ADDED = "yp-fav-added";
+export function useFavHint(ms = 6000): [boolean, () => void] {
+  const [on, setOn] = useState(false);
+  useEffect(() => {
+    let t: ReturnType<typeof setTimeout> | undefined;
+    const show = () => { setOn(true); if (t) clearTimeout(t); t = setTimeout(() => setOn(false), ms); };
+    window.addEventListener(ADDED, show);
+    return () => { window.removeEventListener(ADDED, show); if (t) clearTimeout(t); };
+  }, [ms]);
+  return [on, () => setOn(false)];
 }
 export function removeFavorite(slug: string) { write(read().filter((s) => s !== slug)); }
 export function clearFavorites() { write([]); }
