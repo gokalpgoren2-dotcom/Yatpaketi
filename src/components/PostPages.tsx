@@ -59,13 +59,13 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
         {back && <p className="mb-4 text-sm"><Link href={back.href} className="text-turquoise-dark">← {back.label}</Link></p>}
         <h1 className="font-display text-3xl font-medium leading-tight text-navy lg:text-5xl">{p.title}</h1>
         {p.excerpt && <p className="mt-4 text-lg text-navy/70">{p.excerpt}</p>}
-        {!p.cover && map && (
+        {map && (
           <div className="mt-8 overflow-hidden rounded-3xl bg-[#05204a] shadow-lg shadow-navy/10">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <img src={map} alt={p.title} className="block h-auto w-full" />
           </div>
         )}
-        {p.cover && (
+        {!map && p.cover && (
           <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl bg-mist">
             <Photo src={p.cover} alt={p.title} priority sizes="(min-width:768px) 768px, 100vw" className="object-cover" />
           </div>

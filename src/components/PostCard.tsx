@@ -9,14 +9,15 @@ const base: Record<PostKind, string> = { guide: "/rehber", blog: "/blog", page: 
 export const postHref = (p: Pick<Post, "kind" | "slug">, lang: Lang = "tr") => href(lang, p.kind === "process" ? base.process : `${base[p.kind]}/${p.slug}`);
 
 export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?: Lang }) {
+  const map = regionMapFor(p.kind, p.slug); // bölge haritası varsa kapak odur
   return (
     <Link href={postHref(p, lang)} className="group block overflow-hidden rounded-3xl bg-white ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-navy/15">
-      <div className="relative aspect-[16/10] overflow-hidden">
-        {p.cover ? (
-          <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
-        ) : regionMapFor(p.kind, p.slug) ? (
+      <div className={`relative overflow-hidden ${map ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
+        {map ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={regionMapFor(p.kind, p.slug)!} alt="" loading="lazy" className="h-full w-full bg-[#05204a] object-contain transition duration-500 group-hover:scale-105" />
+          <img src={map} alt={p.title} loading="lazy" className="h-full w-full bg-[#05204a] object-cover transition duration-500 group-hover:scale-105" />
+        ) : p.cover ? (
+          <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
         ) : (
           <Placeholder hue={185 + (i % 5) * 12} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
         )}
