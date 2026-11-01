@@ -92,7 +92,7 @@ export async function AboutView({ lang }: { lang: Lang }) {
             <h2 className={h2}>{A.ctaTitle}</h2>
             <p className="mt-5 leading-relaxed text-navy/70">{A.ctaText}</p>
             <div className="mt-8 flex flex-wrap justify-center gap-3">
-              <Link href={href(lang, "/#iletisim")} className="rounded-full bg-turquoise px-7 py-3.5 font-semibold text-navy transition hover:brightness-110">{A.ctaBtn1}</Link>
+              <Link href={href(lang, "/iletisim")} className="rounded-full bg-turquoise px-7 py-3.5 font-semibold text-navy transition hover:brightness-110">{A.ctaBtn1}</Link>
               <Link href={href(lang, "/destinasyonlar")} className="rounded-full px-7 py-3.5 font-semibold text-navy ring-1 ring-navy/15 transition hover:ring-turquoise">{A.ctaBtn2} →</Link>
             </div>
           </div>
