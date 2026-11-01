@@ -35,7 +35,7 @@ const tr = {
   // mobil çubuk
   quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Tekneler", mbDest: "Destinasyonlar", mbContact: "İletişim",
   // arama
-  searchAria: "Tekne arama", location: "Lokasyon", all: "Tümü", date: "Tarih", searchBoats: "Tekneleri ara",
+  searchAria: "Tekne arama", location: "Lokasyon", boatType: "Tekne tipi", all: "Tümü", date: "Tarih", searchBoats: "Tekneleri ara",
   popular: "Popüler:", country: "Türkiye",
   // ana sayfa
   heroTitle: "Hayalinizdeki mavi yolculuğu kiralayın",
@@ -128,7 +128,7 @@ const en: typeof tr = {
   navGuide: "Yatpaketi Guide", navBlueVoyage: "Blue Voyage", navBlog: "Blog", navAbout: "About us", navContact: "Contact",
   langGroup: "Language", mainMenu: "Main menu", mobileMenu: "Mobile menu", menuOpen: "Open menu", menuClose: "Close menu", homeAria: "yatpaketi home",
   quickMenu: "Quick menu", mbHome: "Home", mbBoats: "Boats", mbDest: "Destinations", mbContact: "Contact",
-  searchAria: "Boat search", location: "Location", all: "All", date: "Date", searchBoats: "Search boats",
+  searchAria: "Boat search", location: "Location", boatType: "Boat type", all: "All", date: "Date", searchBoats: "Search boats",
   popular: "Popular:", country: "Türkiye",
   heroTitle: "Charter your dream blue voyage",
   heroSubtitle: "Discover gulets, motor yachts, catamarans and sailing yachts, and send your reservation request.",

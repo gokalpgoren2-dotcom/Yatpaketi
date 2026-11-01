@@ -2,13 +2,13 @@ import { Photo } from "./Photo";
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import type { Destination } from "@/lib/data";
-import type { HomeContent } from "@/lib/content";
+import type { HomeContent, Category } from "@/lib/content";
 import { href, t, type Lang } from "@/lib/i18n";
 
 const wave = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
 const delay = (s: number) => ({ animationDelay: `${s}s` });
 
-export function Hero({ home, destinations, lang = "tr" }: { home: HomeContent; destinations: Destination[]; lang?: Lang }) {
+export function Hero({ home, destinations, categories = [], lang = "tr" }: { home: HomeContent; destinations: Destination[]; categories?: Category[]; lang?: Lang }) {
   const L = t(lang);
   return (
     <section className="relative isolate flex min-h-[34rem] items-center justify-center overflow-hidden bg-navy pt-20 text-center lg:min-h-[40rem]">
@@ -20,8 +20,12 @@ export function Hero({ home, destinations, lang = "tr" }: { home: HomeContent; d
       ) : (
         <>
           {/* Fotoğraf yüklenene kadar çizim. Panel > Site İçeriği'nden fotoğraf eklenir. */}
-          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #06264b 0%, #0b4a7d 50%, #1bb4c4 100%)" }} />
-          <div className="sun-pulse absolute -right-24 top-16 -z-10 h-[24rem] w-[24rem] rounded-full bg-[radial-gradient(circle,rgba(255,226,160,0.9)_0%,rgba(255,190,120,0.4)_35%,rgba(255,190,120,0)_68%)]" aria-hidden />
+          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #041a38 0%, #0a3a6b 38%, #0f6f9c 66%, #2bb7c4 88%, #7fdcd6 100%)" }} />
+          {/* Ufuktaki gün batımı ışıltısı ve ışık huzmeleri */}
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_70%_100%,rgba(255,196,128,0.55)_0%,rgba(255,150,110,0.18)_40%,rgba(255,150,110,0)_70%)]" aria-hidden />
+          <div className="absolute inset-0 -z-10 opacity-60 [background:radial-gradient(circle_at_18%_22%,rgba(255,255,255,0.10)_0,rgba(255,255,255,0)_32%),radial-gradient(circle_at_85%_12%,rgba(127,220,214,0.18)_0,rgba(127,220,214,0)_36%)]" aria-hidden />
+          {/* Uzaktaki yelkenli silüeti */}
+          <svg className="absolute bottom-[4.5rem] right-[12%] -z-10 hidden h-24 w-24 text-white/25 sm:block" viewBox="0 0 64 64" fill="currentColor" aria-hidden><path d="M31 6v38H10zM34 14v30h20zM8 48h48l-6 8H14z" /></svg>
           <div className="absolute inset-x-0 bottom-0 -z-10 h-32 overflow-hidden" aria-hidden>
             <svg className="wave-a absolute bottom-0 left-0 h-32 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(150)} fill="rgba(255,255,255,0.14)" /></svg>
             <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(220)} fill="rgba(255,255,255,0.2)" /></svg>
@@ -38,7 +42,7 @@ export function Hero({ home, destinations, lang = "tr" }: { home: HomeContent; d
           {home.subtitle}
         </p>
         <div className="fade-up mt-9" style={delay(0.25)}>
-          <SearchBar destinations={destinations} lang={lang} />
+          <SearchBar destinations={destinations} categories={categories} lang={lang} />
         </div>
         <p className="fade-up mt-6 text-sm text-white/90" style={delay(0.35)}>
           <span className="font-semibold">{L.popular}</span>{" "}
