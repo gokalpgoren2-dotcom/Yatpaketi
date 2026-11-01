@@ -8,7 +8,7 @@ const items = [
   { href: "/", key: "mbHome" as const, d: "M3 11l9-8 9 8v9a1 1 0 01-1 1h-5v-6H9v6H4a1 1 0 01-1-1z" },
   { href: "/tekneler", key: "mbBoats" as const, d: "M3 17l2 3h14l2-3zM12 3v10M12 5l6 8h-6" },
   { href: "/limanlar", key: "mbDest" as const, d: "M12 21s7-6.2 7-11.5A7 7 0 005 9.5C5 14.8 12 21 12 21zM12 12a2.5 2.5 0 100-5 2.5 2.5 0 000 5z" },
-  { href: "/#iletisim", key: "mbContact" as const, d: "M4 5h16v11H8l-4 4z" },
+  { href: "/iletisim", key: "mbContact" as const, d: "M4 5h16v11H8l-4 4z" },
 ];
 
 // Telefonda altta sabit menü.

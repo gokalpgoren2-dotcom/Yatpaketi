@@ -38,7 +38,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     },
     ...(guide.length > 0 ? [{ href: href(lang, "/rehber"), label: L.navGuide, children: guide }] : [{ href: href(lang, "/#mavi-yolculuk"), label: L.navBlueVoyage }]),
     ...(aboutInGuide ? [] : [{ href: about ? href(lang, "/hakkimizda") : href(lang, "/#hakkimizda"), label: L.navAbout }]),
-    { href: href(lang, "/#iletisim"), label: L.navContact },
+    { href: href(lang, "/iletisim"), label: L.navContact },
   ];
   return <HeaderClient links={links} lang={lang} />;
 }
