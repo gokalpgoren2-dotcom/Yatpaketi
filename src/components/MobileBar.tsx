@@ -23,13 +23,14 @@ export function MobileBar() {
   const bare = lang === "en" ? (path === "/en" ? "/" : path.slice(3)) : path;
   if (path.startsWith("/admin") || path.startsWith("/musteri")) return null;
   return (
+    <>
+    {hint && favs > 0 && (
+      <Link href={href(lang, "/favorilerim")} onClick={hideHint} role="status" className="fixed left-[70%] z-[60] w-44 -translate-x-1/2 rounded-xl bg-navy px-4 py-2.5 text-center text-sm font-semibold leading-snug text-white shadow-lg lg:hidden" style={{ bottom: "calc(4.9rem + env(safe-area-inset-bottom))" }}>
+        {lang === "en" ? "Compare your saved yachts →" : "Favori tekneleri karşılaştırın →"}
+        <span aria-hidden className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-navy" />
+      </Link>
+    )}
     <nav aria-label={L.quickMenu} className="fixed inset-x-0 bottom-0 z-40 border-t border-navy/10 bg-white/95 pb-[env(safe-area-inset-bottom)] backdrop-blur lg:hidden">
-      {hint && favs > 0 && (
-        <Link href={href(lang, "/favorilerim")} onClick={hideHint} role="status" className="absolute bottom-full left-[70%] mb-3 w-max max-w-[80vw] -translate-x-1/2 rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
-          {lang === "en" ? "Compare your saved yachts →" : "Favori tekneleri karşılaştırın →"}
-          <span aria-hidden className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-navy" />
-        </Link>
-      )}
       <ul className="grid grid-cols-5">
         {items.map((i) => {
           const on = i.href === "/" ? bare === "/" : i.href.startsWith("/#") ? false : bare.startsWith(i.href);
@@ -44,5 +45,6 @@ export function MobileBar() {
         })}
       </ul>
     </nav>
+    </>
   );
 }
