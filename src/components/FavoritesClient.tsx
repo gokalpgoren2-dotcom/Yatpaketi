@@ -101,6 +101,13 @@ export function FavoritesClient({ boats, whatsapp, email, lang }: { boats: Boat[
         </table>
       </div>
 
+      {list.length >= 2 && (
+        <Link href={`${href(lang, "/tekne-karsilastir")}?a=${list[0].slug}&b=${list[1].slug}`} className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-turquoise/10 p-4 text-navy ring-1 ring-turquoise/30">
+          <span><b className="block">{lang === "en" ? "Get our detailed comparison" : "Yorumlu detaylı karşılaştırma"}</b><span className="text-sm text-navy/70">{list[0].name} {lang === "en" ? "vs" : "karşı"} {list[1].name}</span></span>
+          <span aria-hidden>→</span>
+        </Link>
+      )}
+
       <div className="mt-8 rounded-3xl bg-navy p-6 text-white lg:p-8">
         <h2 className="font-display text-2xl font-bold">{L.ask}</h2>
         <p className="mt-2 max-w-xl text-white/75">{L.askNote}</p>

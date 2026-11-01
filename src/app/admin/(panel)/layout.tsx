@@ -46,6 +46,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         { href: "/admin/kategoriler", label: "Tekne Tipleri", icon: I.tag },
         { href: "/admin/destinasyonlar", label: "Limanlar", icon: I.pin },
         { href: "/admin/yazilar", label: "Yazılar", icon: I.doc },
+        { href: "/admin/karsilastirmalar", label: "Karşılaştırmalar", icon: I.tag },
         { href: "/admin/yorumlar", label: "Yorumlar", icon: I.star, badge: pendingReviews || undefined },
         { href: "/admin/kampanyalar", label: "Kampanyalar", icon: I.tag },
         { href: "/admin/sayfa-metinleri", label: "Sayfa Metinleri", icon: I.doc },

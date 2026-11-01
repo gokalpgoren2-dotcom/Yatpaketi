@@ -13,7 +13,7 @@ export function langFromPath(path: string): Lang {
 }
 
 // Bulunulan sayfanın diğer dildeki karşılığı.
-const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri", "/rehber", "/destinasyonlar", "/rotalar", "/tur-paketleri", "/kiralama-sureci", "/sss", "/yat-ve-yatcilik-kulturu", "/hakkimizda", "/iletisim", "/favorilerim"];
+const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri", "/rehber", "/destinasyonlar", "/rotalar", "/tur-paketleri", "/kiralama-sureci", "/sss", "/yat-ve-yatcilik-kulturu", "/hakkimizda", "/iletisim", "/favorilerim", "/tekne-karsilastir"];
 export function switchPath(path: string, to: Lang): string {
   const bare = path === "/en" ? "/" : path.startsWith("/en/") ? path.slice(3) : path;
   if (to === "en") {

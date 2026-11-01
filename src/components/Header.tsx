@@ -29,7 +29,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     {
       href: href(lang, "/tekneler"),
       label: L.navBoats,
-      children: [{ href: href(lang, "/tekneler"), label: L.navAllBoats, icon: "all" }, ...cats.map((c) => ({ href: href(lang, `/tekne-tipleri/${c.slug}`), label: c.name, icon: c.slug }))],
+      children: [{ href: href(lang, "/tekneler"), label: L.navAllBoats, icon: "all" }, ...cats.map((c) => ({ href: href(lang, `/tekne-tipleri/${c.slug}`), label: c.name, icon: c.slug })), { href: href(lang, "/tekne-karsilastir"), label: lang === "en" ? "Compare yachts" : "Tekneleri karşılaştır", icon: "all" }],
     },
     {
       href: href(lang, "/limanlar"),
