@@ -35,7 +35,7 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
 
   const row = "flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-semibold text-navy transition hover:bg-mist";
   return (
-    <div ref={ref} className="fixed right-4 z-50 bottom-[calc(5rem+env(safe-area-inset-bottom))] lg:bottom-6 lg:right-6">
+    <div ref={ref} className="fixed right-4 z-50 bottom-[calc(4.75rem+env(safe-area-inset-bottom))] scale-90 origin-bottom-right lg:scale-100 lg:bottom-6 lg:right-6">
       {open && (
         <div role="dialog" aria-label={L.contactAria} className="menu-rise absolute bottom-[5rem] right-0 w-64 rounded-2xl bg-white p-2 shadow-2xl shadow-navy/25 ring-1 ring-navy/10">
           <p className="px-4 pb-1 pt-2 text-xs font-semibold uppercase tracking-wide text-navy/50">{L.reachUs}</p>

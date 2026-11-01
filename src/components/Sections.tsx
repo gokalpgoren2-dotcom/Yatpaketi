@@ -3,6 +3,7 @@ import { ContactBubble } from "./ContactBubble";
 import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
+import { BoatIcon } from "./BoatIcon";
 import { Placeholder } from "./Placeholder";
 import { type Boat, type Destination } from "@/lib/data";
 import type { Category } from "@/lib/content";
@@ -37,14 +38,15 @@ export function Categories({ items, lang = "tr" }: { items: Category[]; lang?: L
     <section className="pb-4 pt-14 lg:pt-20">
       <div className={wrap}>
         <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">{L.byType}</p>
-        <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
+        <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:flex lg:flex-wrap">
           {items.map((c) => (
             <Link
               key={c.slug}
               href={href(lang, `/tekne-tipleri/${c.slug}`)}
-              className="shrink-0 rounded-full bg-mist px-6 py-3 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:bg-turquoise hover:text-white hover:ring-turquoise"
+              className="group flex items-center gap-3 rounded-2xl bg-white px-4 py-3.5 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:shadow-lg hover:shadow-navy/10 hover:ring-turquoise lg:pr-7"
             >
-              {c.name}
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-turquoise/10 text-turquoise-dark transition group-hover:bg-turquoise group-hover:text-white"><BoatIcon name={c.slug} /></span>
+              <span className="min-w-0 truncate">{c.name}</span>
             </Link>
           ))}
         </div>
@@ -146,8 +148,8 @@ export function RentalModes({ lang = "tr" }: { lang?: Lang }) {
           {modes.map((m) => (
             <Link key={m.title} href={href(lang, m.href)} className="group relative flex min-h-[15rem] items-end overflow-hidden rounded-3xl p-6 text-white lg:min-h-[19rem] lg:p-8">
               <Placeholder hue={m.hue} className="absolute inset-0 transition duration-500 group-hover:scale-105" label={false} />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/20 to-transparent" />
-              <div className="relative">
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/95 via-navy/65 to-navy/25" />
+              <div className="relative [text-shadow:0_1px_8px_rgb(0_0_0/0.35)]">
                 <h3 className="font-display text-2xl">{m.title}</h3>
                 <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/85">{m.text}</p>
                 <span className="mt-4 inline-block rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy">{L.seeBoats}</span>
