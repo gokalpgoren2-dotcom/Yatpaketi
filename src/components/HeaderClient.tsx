@@ -11,6 +11,7 @@ export type NavLink = { href: string; label: string; children?: { href: string; 
 
 export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: Lang }) {
   const L = t(lang);
+  const track = lang === "en" ? "Booking Tracker" : "Rezervasyon Takibi";
   const path = usePathname() || "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -67,7 +68,16 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
           )}
         </nav>
 
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2 sm:gap-3">
+          <Link
+            href="/musteri"
+            aria-label={track}
+            title={track}
+            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-turquoise hover:text-turquoise-dark lg:h-auto lg:w-auto lg:gap-2 lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
+          >
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M9 4h6a1 1 0 0 1 1 1v1H8V5a1 1 0 0 1 1-1z" /><path d="M8 6H6a1 1 0 0 0-1 1v13a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V7a1 1 0 0 0-1-1h-2" /><path d="M9 14l2 2 4-4" /></svg>
+            <span className="hidden lg:inline">{track}</span>
+          </Link>
           <div
             role="group"
             aria-label={L.langGroup}
@@ -129,6 +139,7 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
               </a>
             ),
           )}
+          <Link href="/musteri" onClick={() => setOpen(false)} className="block border-b border-navy/5 py-4 text-base font-medium text-turquoise-dark">{track}</Link>
         </nav>
       )}
     </header>
