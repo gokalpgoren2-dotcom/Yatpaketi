@@ -137,3 +137,18 @@ export async function deleteBoat(formData: FormData) {
   revalidatePath("/tekneler");
   redirect("/admin/tekneler?deleted=1");
 }
+
+export async function bulkSetPublished(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const ids = formData.getAll("ids").map(String).filter(Boolean).slice(0, 200);
+  const value = String(formData.get("value")) === "true";
+  const back = String(formData.get("back") ?? "/admin/tekneler");
+  const safeBack = back.startsWith("/admin/tekneler") ? back : "/admin/tekneler";
+  const sep = safeBack.includes("?") ? "&" : "?";
+  if (ids.length === 0) redirect(`${safeBack}${sep}bulk=none`);
+  const { error } = await supabase.from("boats").update({ is_published: value }).in("id", ids);
+  revalidatePath("/admin/tekneler");
+  revalidatePath("/tekneler");
+  if (error) redirect(`${safeBack}${sep}bulk=err`);
+  redirect(`${safeBack}${sep}bulk=${value ? "pub" : "unpub"}&n=${ids.length}`);
+}
