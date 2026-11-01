@@ -227,27 +227,18 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
 export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
   const L = t(lang);
   const [c, nav] = await Promise.all([getContact(), getNavInfo(lang)]);
-  const links =
-    lang === "en"
-      ? [
-          { href: href(lang, "/tekneler"), label: L.navBoats },
-          { href: href(lang, "/limanlar"), label: L.navDest },
-          ...(nav.hasGuides || nav.hasDestinations || nav.hasRoutes || nav.hasPackages || nav.hasProcess ? [{ href: href(lang, "/rehber"), label: L.navGuide }] : []),
-          ...(nav.hasRoutes ? [{ href: href(lang, "/rotalar"), label: gt(lang).routes }] : []),
-          ...(nav.hasPackages ? [{ href: href(lang, "/tur-paketleri"), label: gt(lang).packages }] : []),
-          ...(nav.hasProcess ? [{ href: href(lang, "/kiralama-sureci"), label: gt(lang).process }] : []),
-          ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }, lang), label: p.title })),
-        ]
-      : [
-          { href: "/tekneler", label: "Kiralık Tekneler" },
-          { href: "/limanlar", label: "Limanlar" },
-          ...(nav.hasGuides || nav.hasDestinations || nav.hasRoutes || nav.hasPackages || nav.hasProcess ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
-          ...(nav.hasRoutes ? [{ href: "/rotalar", label: "Klasik Rotalar" }] : []),
-          ...(nav.hasPackages ? [{ href: "/tur-paketleri", label: "Tur Paketleri" }] : []),
-          ...(nav.hasProcess ? [{ href: "/kiralama-sureci", label: "Kiralama Süreci" }] : []),
-          ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
-          ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),
-        ];
+  const hasGuide = nav.hasGuides || nav.hasDestinations || nav.hasRoutes || nav.hasPackages || nav.hasProcess;
+  const explore = [
+    { href: href(lang, "/tekneler"), label: L.navBoats },
+    { href: href(lang, "/limanlar"), label: L.navDest },
+    { href: href(lang, "/hizmetlerimiz"), label: L.navServices },
+    ...(hasGuide ? [{ href: href(lang, "/rehber"), label: L.navGuide }] : []),
+  ];
+  const company = [
+    { href: href(lang, "/hakkimizda"), label: L.navAbout },
+    { href: href(lang, "/iletisim"), label: L.navContact },
+    { href: "/musteri", label: L.customerLogin },
+  ];
   return (
     <footer id="iletisim" className="scroll-mt-20 bg-navy py-12 text-sm text-white/70">
       <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
@@ -263,10 +254,13 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
             </p>
           )}
         </div>
-        <ul className="flex flex-col gap-2 md:items-end">
-          {links.map((l) => <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}
-          <li><Link href="/musteri" className="hover:text-white">{L.customerLogin}</Link></li>
-        </ul>
+        <div className="grid grid-cols-2 gap-x-12 gap-y-2 md:gap-x-16">
+          {[explore, company].map((col, k) => (
+            <ul key={k} className="flex flex-col gap-2.5">
+              {col.map((l) => <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}
+            </ul>
+          ))}
+        </div>
       </div>
       <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. {L.rights}</p>
     </footer>
