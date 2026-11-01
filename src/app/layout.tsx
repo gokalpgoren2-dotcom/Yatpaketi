@@ -1,9 +1,11 @@
 import type { Metadata, Viewport } from "next";
-import { Fraunces, Inter } from "next/font/google";
+import { Fraunces, Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import { MobileBar } from "@/components/MobileBar";
 
 const display = Fraunces({ subsets: ["latin", "latin-ext"], variable: "--font-fraunces" });
+// Ana sayfa başlığı için Gilroy Bold'a en yakın ücretsiz font.
+const headline = Urbanist({ subsets: ["latin", "latin-ext"], weight: ["700", "800"], variable: "--font-urbanist" });
 const sans = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yatpaketi.com";
@@ -21,7 +23,7 @@ export const viewport: Viewport = { themeColor: "#06264b", width: "device-width"
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className={`${display.variable} ${sans.variable}`}>
+    <html lang="tr" className={`${display.variable} ${sans.variable} ${headline.variable}`}>
       <body className="pb-16 lg:pb-0">
         {children}
         <MobileBar />
