@@ -74,7 +74,7 @@ const tr = {
   blogEyebrow: "Yatpaketi Rehberi", blogTitle: "Okuyun, planlayın", allPosts: "Tüm yazılar",
   footTag: "Türkiye’de yat ve tekne kiralama platformu.", customerLogin: "Müşteri Girişi", rights: "Tüm hakları saklıdır.",
   // tekne kartı
-  captained: "Kaptanlı", askPrice: "Fiyat sorunuz", guestsN: (n: number) => `${n} misafir`, cabinsN: (n: number) => `${n} kabin`,
+  captained: "Mürettebatlı", askPrice: "Fiyat sorunuz", guestsN: (n: number) => `${n} misafir`, cabinsN: (n: number) => `${n} kabin`,
   perWeek: "/ hafta’dan", perDay: "/ gün’den",
   // liste sayfası
   listEyebrow: "Kiralık Tekneler", listTitle: "Size Uygun Tekneyi Bulun",
@@ -165,7 +165,7 @@ const en: typeof tr = {
   ],
   blogEyebrow: "Yatpaketi Guide", blogTitle: "Read, then plan", allPosts: "All articles",
   footTag: "Yacht and boat charter platform in Türkiye.", customerLogin: "Customer Login", rights: "All rights reserved.",
-  captained: "With captain", askPrice: "Ask for price", guestsN: (n) => `${n} guests`, cabinsN: (n) => `${n} cabins`,
+  captained: "Crewed", askPrice: "Ask for price", guestsN: (n) => `${n} guests`, cabinsN: (n) => `${n} cabins`,
   perWeek: "/ week from", perDay: "/ day from",
   listEyebrow: "Boats for Charter", listTitle: "Find the Right Boat for You",
   datesNote: "Results are not filtered by date. Availability is confirmed after your request.",
