@@ -50,11 +50,18 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
     if (lang === "en") redirect(back ? back.href : "/en");
     notFound();
   }
+  const map = regionMapFor(kind, slug);
   const more = kind === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
   return (
     <>
       <Header lang={lang} />
-      <main className="mx-auto max-w-3xl px-5 pb-20 pt-24 lg:pt-32">
+      {map && (
+        <section className="bg-[#05204a] pt-16 lg:pt-20">
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={map} alt={p.title} className="mx-auto block h-auto w-full max-w-5xl" />
+        </section>
+      )}
+      <main className={`mx-auto max-w-3xl px-5 pb-20 ${map ? "pt-10" : "pt-24 lg:pt-32"}`}>
         {back && <p className="mb-4 text-sm"><Link href={back.href} className="text-turquoise-dark">← {back.label}</Link></p>}
         <h1 className="font-display text-3xl font-medium leading-tight text-navy lg:text-5xl">{p.title}</h1>
         {p.excerpt && <p className="mt-4 text-lg text-navy/70">{p.excerpt}</p>}
@@ -63,17 +70,6 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
             <Photo src={p.cover} alt={p.title} priority sizes="(min-width:768px) 768px, 100vw" className="object-cover" />
           </div>
         )}
-        {(() => {
-          const map = regionMapFor(kind, slug);
-          if (!map) return null;
-          return (
-            <figure className="mt-8 overflow-hidden rounded-3xl bg-[#05204a] ring-1 ring-navy/10">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={map} alt={p.title} loading="lazy" className="h-auto w-full" />
-              <figcaption className="px-5 py-3 text-xs text-white/70">{lang === "en" ? "Promotional map. Coastlines are generalised; not for navigation." : "Tanıtım haritası. Kıyı çizgileri genelleştirilmiştir; seyir amacıyla kullanılmaz."}</figcaption>
-            </figure>
-          );
-        })()}
         <div className="mt-8"><RichText text={p.content} /></div>
         {kind !== "page" && (
           <div className="mt-12 rounded-3xl bg-mist p-6 text-center">
