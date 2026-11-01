@@ -3,6 +3,7 @@ import { boats as sampleBoats, categories as sampleCategories, destinations as s
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import { normalizePhone } from "./phone";
 import { slugify } from "./slug";
+import { getOffers } from "./campaigns";
 import { t, type Lang } from "./i18n";
 
 // Herkese açık okuma: oturum/çerez gerektirmez, yalnızca RLS'in izin verdiği (yayınlanmış) içerik gelir.
@@ -120,7 +121,8 @@ export async function getBoats(lang: Lang = "tr"): Promise<{ boats: Boat[]; samp
   try {
     const { data, error } = await db().from("boats").select(BOAT_SELECT).eq("is_published", true).order("sort_order").order("created_at", { ascending: false });
     if (error) throw error;
-    return { boats: (data ?? []).map((r) => mapBoat(r, lang)), sample: false };
+    const offers = await getOffers();
+    return { boats: (data ?? []).map((r) => { const b = mapBoat(r, lang); return { ...b, offer: offers[b.slug] ?? null }; }), sample: false };
   } catch {
     return { boats: [], sample: false };
   }

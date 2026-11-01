@@ -1,12 +1,10 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
-import { shrink } from "@/lib/shrink";
 import { refreshSite } from "@/app/admin/(panel)/icerik/actions";
 import { emptyCampaign, isLive, KINDS, PERCENTS, type Campaign } from "@/lib/campaigns";
 
-const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_URL ?? "").origin; } catch { return ""; } })()}/storage/v1/object/public/media/`;
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 const btn = "rounded-xl border border-navy/15 px-3 py-2 text-sm font-semibold disabled:opacity-40";
@@ -15,8 +13,6 @@ export type BoatOpt = { slug: string; name: string };
 
 export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats: BoatOpt[] }) {
   const supabase = createClient();
-  const fileRef = useRef<HTMLInputElement>(null);
-  const [pickFor, setPickFor] = useState<number | null>(null);
   const [items, setItems] = useState<Campaign[]>(initial);
   const toggleBoat = (i: number, slug: string) => setItems((l) => l.map((x, k) => (k === i ? { ...x, boats: x.boats.includes(slug) ? x.boats.filter((b) => b !== slug) : [...x.boats, slug] } : x)));
   const [busy, setBusy] = useState(false);
@@ -32,25 +28,6 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
   };
   const [q, setQ] = useState<Record<string, string>>({});
 
-  async function upload(files: FileList | null) {
-    const f = files?.[0];
-    const i = pickFor;
-    if (!f || i === null) return;
-    setBusy(true); setMsg(null);
-    try {
-      const blob = await shrink(f);
-      const path = `site/${crypto.randomUUID()}.jpg`;
-      const up = await supabase.storage.from("media").upload(path, blob, { contentType: "image/jpeg", cacheControl: "31536000" });
-      if (up.error) throw new Error(up.error.message);
-      set(i, { image: path });
-      setMsg({ ok: true, text: "Fotoğraf eklendi. Kalıcı olması için en alttaki Kaydet düğmesine basın." });
-    } catch (e) {
-      setMsg({ ok: false, text: "Fotoğraf yüklenemedi: " + (e instanceof Error ? e.message : "bilinmeyen hata") });
-    }
-    setBusy(false);
-    if (fileRef.current) fileRef.current.value = "";
-  }
-
   async function save(list: Campaign[] = items, okText = "Kaydedildi. Ana sayfa bir iki dakika içinde güncellenir.") {
     setBusy(true); setMsg(null);
     const { error } = await supabase.from("site_texts").upsert({ key: "campaigns", data: { items: list }, updated_at: new Date().toISOString() });
@@ -64,11 +41,10 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
     <div className="space-y-5" aria-live="polite">
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
       <div className="rounded-2xl bg-white p-5 shadow-sm">
-        <p className="text-sm text-navy/65">Türü, yüzdeyi ve tekneleri seçin; kartın başlığı ve yazısı otomatik oluşur. Türkçe ve İngilizce sitede ayrı ayrı çıkar. Bitiş günü geçince kart kendiliğinden kalkar.</p>
+        <p className="text-sm text-navy/65">Türü, yüzdeyi ve tekneleri seçin. Seçilen teknelerin fotoğrafının sağ üstünde (Mürettebatlı etiketinin altında) ve tekne sayfasında indirim etiketi görünür. Bitiş günü geçince etiket kendiliğinden kalkar.</p>
       </div>
 
-      <input ref={fileRef} type="file" accept="image/*" hidden onChange={(e) => upload(e.target.files)} />
-      <ul className="space-y-3">
+            <ul className="space-y-3">
         {items.map((c, i) => {
           const kind = KINDS.find((k) => k.key === c.kind)?.tr ?? "";
           const label = c.title || `${kind} %${c.percent}`;
@@ -140,26 +116,6 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
                     <label className={lab}>4. Son geçerlilik günü (boşsa süresiz)</label>
                     <input type="date" value={c.until} onChange={(e) => set(i, { until: e.target.value })} className={`${input} sm:max-w-xs`} />
                   </div>
-
-                  <div>
-                    <label className={lab}>5. Arka plan fotoğrafı (isteğe bağlı)</label>
-                    {c.image && /* eslint-disable-next-line @next/next/no-img-element */ <img src={BASE + c.image} alt="" className="mb-3 aspect-[16/9] w-full max-w-sm rounded-xl object-cover" />}
-                    <div className="flex gap-2">
-                      <button type="button" className={btn} disabled={busy} onClick={() => { setPickFor(i); setTimeout(() => fileRef.current?.click(), 0); }}>{c.image ? "Fotoğrafı değiştir" : "Fotoğraf seç"}</button>
-                      {c.image && <button type="button" className={`${btn} text-red-700`} onClick={() => set(i, { image: "" })}>Fotoğrafı kaldır</button>}
-                    </div>
-                  </div>
-
-                  <details className="rounded-xl border border-navy/10 p-4">
-                    <summary className="cursor-pointer font-semibold">Kendi yazınızı yazın (isteğe bağlı)</summary>
-                    <p className="mt-2 text-xs text-navy/55">Boş bırakırsanız başlık ve açıklama otomatik yazılır.</p>
-                    <div className="mt-4 space-y-4">
-                      <div><label className={lab}>Başlık (Türkçe)</label><input value={c.title} onChange={(e) => set(i, { title: e.target.value })} maxLength={90} placeholder={`Erken rezervasyonda %${c.percent} indirim`} className={input} /></div>
-                      <div><label className={lab}>Açıklama (Türkçe)</label><textarea rows={2} value={c.text} onChange={(e) => set(i, { text: e.target.value })} maxLength={160} className={input} /></div>
-                      <div><label className={lab}>Title (English)</label><input value={c.titleEn} onChange={(e) => set(i, { titleEn: e.target.value })} maxLength={90} className={input} /></div>
-                      <div><label className={lab}>Text (English)</label><textarea rows={2} value={c.textEn} onChange={(e) => set(i, { textEn: e.target.value })} maxLength={160} className={input} /></div>
-                    </div>
-                  </details>
 
                   <div className="flex flex-wrap gap-2 border-t border-navy/10 pt-4">
                     <button type="button" className={btn} disabled={i === 0} onClick={() => move(i, -1)}>↑ Yukarı</button>

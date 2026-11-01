@@ -1,6 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { supabaseConfigured } from "./supabase/config";
 import type { Lang } from "./i18n";
+import type { Offer } from "./data";
 
 // Kampanya kartları: Admin > Kampanyalar'dan yönetilir, site_texts tablosunda "campaigns" anahtarıyla saklanır.
 export type CampaignKind = "early" | "discount";
@@ -39,47 +40,39 @@ export function isLive(c: Campaign, now = new Date()): boolean {
   return !e || e.getTime() >= now.getTime();
 }
 
-export type CampaignView = { id: string; badge: string; discount: string; title: string; text: string; link: string; cta: string; until: string; image: string };
-
-export function buildView(c: Campaign, lang: Lang, names: Record<string, string>): CampaignView | null {
-  const en = lang === "en";
-  const picked = c.boats.filter((s) => names[s]);
-  if (c.boats.length > 0 && picked.length === 0) return null; // seçilen tekneler artık yayında değil
-  const p = c.percent;
-  const early = c.kind === "early";
-  const auto = en
-    ? { badge: early ? "Early Booking" : "Offer", title: early ? `${p}% off when you book early` : `${p}% off`, }
-    : { badge: early ? "Erken Rezervasyon" : "İndirim", title: early ? `Erken rezervasyonda %${p} indirim` : `%${p} indirim fırsatı` };
-  const list = picked.map((s) => names[s]);
-  const shown = list.slice(0, 3).join(", ") + (list.length > 3 ? (en ? ` +${list.length - 3} more` : ` +${list.length - 3} tekne`) : "");
-  const autoText = list.length === 0
-    ? (en ? "Valid on all yachts." : "Tüm teknelerde geçerli.")
-    : (en ? `Valid on: ${shown}.` : `Geçerli tekneler: ${shown}.`);
-  const link = picked.length === 1 ? `/tekneler/${picked[0]}` : "/tekneler";
-  const cta = picked.length === 1 ? (en ? "View the yacht" : "Tekneyi incele") : (en ? "Browse yachts" : "Tekneleri incele");
-  return {
-    id: c.id,
-    badge: auto.badge,
-    discount: en ? `${p}%` : `%${p}`,
-    title: (en ? c.titleEn.trim() : c.title.trim()) || auto.title,
-    text: (en ? c.textEn.trim() : c.text.trim()) || autoText,
-    link, cta, until: c.until, image: c.image,
-  };
-}
-
-export async function getCampaigns(lang: Lang = "tr"): Promise<CampaignView[]> {
-  if (!supabaseConfigured()) return [];
+// Tekne kartlarında ve tekne sayfasında gösterilecek kampanya: tekne başına en yüksek yüzdeli geçerli kampanya.
+export async function getOffers(): Promise<Record<string, Offer>> {
+  if (!supabaseConfigured()) return {};
   try {
     const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });
     const { data } = await db.from("site_texts").select("data").eq("key", "campaigns").maybeSingle();
     const items: Campaign[] = Array.isArray(data?.data?.items) ? data!.data.items : [];
     const live = items.filter((c) => c && c.kind && c.percent && isLive(c));
-    if (live.length === 0) return [];
-    const { data: boats } = await db.from("boats").select("slug,name").eq("is_published", true);
-    const names: Record<string, string> = {};
-    for (const b of boats ?? []) names[b.slug as string] = b.name as string;
-    return live.map((c) => buildView(c, lang, names)).filter((v): v is CampaignView => v !== null);
+    if (live.length === 0) return {};
+    const { data: boats } = await db.from("boats").select("slug").eq("is_published", true);
+    const out: Record<string, Offer> = {};
+    for (const b of boats ?? []) {
+      const slug = b.slug as string;
+      for (const c of live) {
+        if (c.boats.length > 0 && !c.boats.includes(slug)) continue;
+        if (!out[slug] || c.percent > out[slug].percent) out[slug] = { kind: c.kind, percent: c.percent, until: c.until };
+      }
+    }
+    return out;
   } catch {
-    return [];
+    return {};
   }
+}
+
+export function offerLabel(o: Offer, lang: Lang): string {
+  const en = lang === "en";
+  if (o.kind === "early") return en ? `Early booking ${o.percent}% off` : `Erken rezervasyon %${o.percent}`;
+  return en ? `${o.percent}% off` : `%${o.percent} indirim`;
+}
+
+export function offerUntil(o: Offer, lang: Lang): string {
+  const e = endsAt(o.until);
+  if (!e) return "";
+  const date = e.toLocaleDateString(lang === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" });
+  return lang === "en" ? `Valid until ${date}` : `${date} tarihine kadar geçerli`;
 }

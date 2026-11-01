@@ -1,6 +1,9 @@
 // GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Tekneler, fiyatlar ve açıklamalar gerçek değildir.
 
+export type Offer = { kind: "early" | "discount"; percent: number; until: string };
+
 export type Boat = {
+  offer?: Offer | null; // geçerli kampanya (Admin > Kampanyalar)
   slug: string;
   name: string;
   type: string;

@@ -6,6 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
+import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
 import { href, t, type Lang } from "@/lib/i18n";
@@ -48,6 +49,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           <div className="mt-8 space-y-3">
             <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-mist lg:aspect-[16/8]">
               <Photo src={gallery[0]} alt={b.name} priority sizes="(min-width:1280px) 1200px, 100vw" className="object-cover" />
+              {b.offer && <span className="absolute right-3 top-3 rounded-full bg-[#e8453c] px-4 py-1.5 text-sm font-bold text-white shadow">{offerLabel(b.offer, lang)}</span>}
             </div>
             {gallery.length > 1 && (
               <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
@@ -119,6 +121,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
             <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{L.price}</p>
             <p className={`mt-1 text-2xl font-semibold ${price ? "text-navy" : "text-turquoise-dark"}`}>{price ?? L.askPrice}</p>
+            {b.offer && <p className="mt-2 inline-block rounded-xl bg-[#e8453c]/10 px-3 py-2 text-sm font-semibold text-[#c0332b]">{offerLabel(b.offer, lang)}{offerUntil(b.offer, lang) && <span className="block text-xs font-medium opacity-80">{offerUntil(b.offer, lang)}</span>}</p>}
             {b.showPrice && b.priceDaily && b.priceWeekly && (
               <p className="mt-1 text-sm text-navy/60">{L.dailyPrice}: {b.priceDaily.toLocaleString(L.locale)} {b.currency}</p>
             )}
