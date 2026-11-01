@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 
 // Yana kaydırmalı liste: kenarlarda okla yön gösterir, uçlara gelince ilgili ok kaybolur.
-export function Scroller({ children, className = "" }: { children: React.ReactNode; className?: string }) {
+export function Scroller({ children, className = "", center = false }: { children: React.ReactNode; className?: string; center?: boolean }) {
   const ref = useRef<HTMLDivElement>(null);
   const [pos, setPos] = useState({ left: false, right: false });
   const update = useCallback(() => {
@@ -17,7 +17,7 @@ export function Scroller({ children, className = "" }: { children: React.ReactNo
     return () => window.removeEventListener("resize", update);
   }, [update]);
   const go = (d: 1 | -1) => ref.current?.scrollBy({ left: d * ref.current.clientWidth * 0.8, behavior: "smooth" });
-  const btn = "absolute top-[38%] z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-navy shadow-lg ring-1 ring-navy/10 transition hover:bg-turquoise hover:text-white";
+  const btn = `absolute ${center ? "top-[46%]" : "top-[38%]"} z-10 flex h-11 w-11 -translate-y-1/2 items-center justify-center rounded-full bg-white text-navy shadow-lg ring-1 ring-navy/10 transition hover:bg-turquoise hover:text-white`;
   return (
     <div className="relative">
       <div ref={ref} onScroll={update} className={className}>{children}</div>

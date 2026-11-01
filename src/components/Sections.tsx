@@ -109,7 +109,7 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
     <section className="py-14 lg:py-20">
       <div className={wrap}>
         <Heading id="limanlar" eyebrow={L.destEyebrow} title={L.destTitle} action={{ href: href(lang, "/limanlar"), label: L.seeAll }} />
-        <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
+        <Scroller center className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
           {items.map((d) => (
             <Link
               key={d.slug}
@@ -125,7 +125,7 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
               </div>
             </Link>
           ))}
-        </div>
+        </Scroller>
       </div>
     </section>
   );
