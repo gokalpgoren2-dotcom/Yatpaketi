@@ -2,7 +2,7 @@ import { sceneFor } from "./PortScenes";
 
 // Hazır çizim görselleri (public/limanlar). Adres parçalarından eşleşir; yoksa kodla çizilen sahneye düşer.
 const IMAGES: [string[], string][] = [
-  [["bodrum", "gumusluk"], "bodrum"], [["kas", "kekova"], "kas"], [["marmaris", "icmeler", "turunc"], "marmaris"], [["selimiye"], "selimiye"], [["datca", "knidos"], "datca"],
+  [["gocek"], "gocek"], [["fethiye", "oludeniz"], "fethiye"], [["bodrum", "gumusluk"], "bodrum"], [["kas", "kekova"], "kas"], [["marmaris", "icmeler", "turunc"], "marmaris"], [["selimiye"], "selimiye"], [["datca", "knidos"], "datca"],
   [["bozburun", "sogut", "ekincik", "dalyan", "gokova"], "koy"],
 ];
 function imageFor(slug: string) {
