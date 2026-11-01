@@ -327,3 +327,9 @@ Jet skis and similar gear are used only when the boat offers them and local rule
 ## General rule
 On safety matters the captain's instructions come first.$en$)
 on conflict (slug) do nothing;
+
+-- Bu 10 yazi yayinda olsun (daha once taslak eklendiyse duzeltir)
+update public.blog_posts set status='published' where kind='guide' and slug in ('gulet-kiralamadan-once','motoryat-tatilinin-butcesi','hangi-tekne-nasil-bir-yolculuk','bavul-hazirligi','tatilin-temposu','arkadas-grubuyla-tatil','teknede-yemek-plani','tekne-tatilinde-fotograflar','gunubirlik-mi-konaklamali-mi','teknede-muzik-yuzme-kurallar');
+
+-- Eski ornek rehber yazilari (Mavi Yolculuk Nedir? vb.) sayfadan kalksin: silinmez, taslaga alinir
+update public.blog_posts set status='draft' where kind='guide' and slug not in ('gulet-kiralamadan-once','motoryat-tatilinin-butcesi','hangi-tekne-nasil-bir-yolculuk','bavul-hazirligi','tatilin-temposu','arkadas-grubuyla-tatil','teknede-yemek-plani','tekne-tatilinde-fotograflar','gunubirlik-mi-konaklamali-mi','teknede-muzik-yuzme-kurallar');
