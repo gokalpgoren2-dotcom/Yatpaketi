@@ -9,14 +9,14 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const [nav, cats, dests] = await Promise.all([getNavInfo(), getCategories(lang), getDestinations(lang)]);
   const en = lang === "en";
   // İngilizce yazılar (rehber, blog, sayfalar) henüz yok; o bağlantılar yalnızca Türkçe menüde görünür.
-  const about = !en && nav.pages.some((p) => p.slug === "hakkimizda");
+  const about = nav.pages.some((p) => p.slug === "hakkimizda");
   // Yatpaketi Rehberi açılır menüsü: yalnızca içeriği olan bölümler görünür (Türkçe menüde).
-  const guide: { href: string; label: string; icon?: string }[] = en ? [] : [
-    ...(nav.hasDestinations ? [{ href: "/destinasyonlar", label: "Destinasyonlar", icon: "pin" }] : []),
-    ...(nav.hasRoutes ? [{ href: "/rotalar", label: "Klasik Rotalar", icon: "route" }] : []),
-    ...(nav.hasPackages ? [{ href: "/tur-paketleri", label: "Tur Paketleri", icon: "package" }] : []),
-    ...(nav.hasProcess ? [{ href: "/kiralama-sureci", label: "Kiralama Süreci", icon: "process" }] : []),
-    ...(nav.hasGuides ? [{ href: "/rehber#yazilar", label: "Rehber Yazıları", icon: "book" }] : []),
+  const guide: { href: string; label: string; icon?: string }[] = [
+    ...(nav.hasDestinations ? [{ href: "/destinasyonlar", label: en ? "Destinations (Turkish)" : "Destinasyonlar", icon: "pin" }] : []),
+    ...(nav.hasRoutes ? [{ href: "/rotalar", label: en ? "Classic Routes (Turkish)" : "Klasik Rotalar", icon: "route" }] : []),
+    ...(nav.hasPackages ? [{ href: "/tur-paketleri", label: en ? "Tour Packages (Turkish)" : "Tur Paketleri", icon: "package" }] : []),
+    ...(nav.hasProcess ? [{ href: "/kiralama-sureci", label: en ? "Charter Process (Turkish)" : "Kiralama Süreci", icon: "process" }] : []),
+    ...(nav.hasGuides ? [{ href: "/rehber#yazilar", label: en ? "Guide Articles (Turkish)" : "Rehber Yazıları", icon: "book" }] : []),
     ...(about ? [{ href: "/hakkimizda", label: L.navAbout, icon: "about" }] : []),
   ];
   const aboutInGuide = guide.length > 0 && about;
