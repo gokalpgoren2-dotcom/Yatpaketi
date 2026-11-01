@@ -1,21 +1,15 @@
 import type { Metadata } from "next";
 import { ListPage } from "@/components/PostPages";
+import { gt } from "@/lib/guide-text";
 
 export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Klasik Rotalar",
-  description: "Göcek, Fethiye, Bodrum, Datça ve Marmaris çıkışlı klasik mavi yolculuk rotaları ve gün gün tanıtımları.",
-  alternates: { canonical: "/rotalar" },
+  description: gt("tr").metaRoutes,
+  alternates: { canonical: "/rotalar", languages: { tr: "/rotalar", en: "/en/rotalar" } },
 };
 
 export default function Page() {
-  return (
-    <ListPage
-      kind="route"
-      eyebrow="Yatpaketi Rehberi"
-      title="Klasik Rotalar"
-      intro="Mavi yolculuğun denenmiş klasik rotaları: kaç gece, hangi koylar, nerede yüzülür, nerede akşam yemeği yenir."
-      empty="Rota tanıtımları çok yakında burada olacak."
-    />
-  );
+  const T = gt("tr");
+  return <ListPage lang="tr" kind="route" eyebrow={T.guide} title={T.routesTitle} intro={T.routesIntro} empty={T.routesEmpty} />;
 }

@@ -9,7 +9,7 @@ export default async function EditPost({ params, searchParams }: { params: Promi
   const { id } = await params;
   const { saved } = await searchParams;
   const { supabase } = await requireAdmin();
-  const { data } = await supabase.from("blog_posts").select("id,kind,slug,title_tr,excerpt_tr,content_tr,cover_path,seo_title,seo_description,status,sort_order,published_at").eq("id", id).maybeSingle();
+  const { data } = await supabase.from("blog_posts").select("id,kind,slug,title_tr,excerpt_tr,content_tr,title_en,excerpt_en,content_en,cover_path,seo_title,seo_description,status,sort_order,published_at").eq("id", id).maybeSingle();
   if (!data) notFound();
   return (
     <>

@@ -9,6 +9,7 @@ import type { Category } from "@/lib/content";
 import { getContact } from "@/lib/content";
 import { formatPhone } from "@/lib/phone";
 import { getNavInfo, type Post } from "@/lib/posts";
+import { gt } from "@/lib/guide-text";
 import { PostCard, postHref } from "./PostCard";
 import { href, t, type Lang } from "@/lib/i18n";
 
@@ -225,12 +226,17 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
 
 export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
   const L = t(lang);
-  const [c, nav] = await Promise.all([getContact(), getNavInfo()]);
+  const [c, nav] = await Promise.all([getContact(), getNavInfo(lang)]);
   const links =
     lang === "en"
       ? [
           { href: href(lang, "/tekneler"), label: L.navBoats },
           { href: href(lang, "/limanlar"), label: L.navDest },
+          ...(nav.hasGuides || nav.hasDestinations || nav.hasRoutes || nav.hasPackages || nav.hasProcess ? [{ href: href(lang, "/rehber"), label: L.navGuide }] : []),
+          ...(nav.hasRoutes ? [{ href: href(lang, "/rotalar"), label: gt(lang).routes }] : []),
+          ...(nav.hasPackages ? [{ href: href(lang, "/tur-paketleri"), label: gt(lang).packages }] : []),
+          ...(nav.hasProcess ? [{ href: href(lang, "/kiralama-sureci"), label: gt(lang).process }] : []),
+          ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }, lang), label: p.title })),
         ]
       : [
           { href: "/tekneler", label: "Kiralık Tekneler" },

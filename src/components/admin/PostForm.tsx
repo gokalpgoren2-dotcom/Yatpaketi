@@ -9,6 +9,7 @@ import { refreshSite } from "@/app/admin/(panel)/icerik/actions";
 
 export type PostRow = {
   id: string; kind: string; slug: string; title_tr: string; excerpt_tr: string | null; content_tr: string | null;
+  title_en?: string | null; excerpt_en?: string | null; content_en?: string | null;
   cover_path: string | null; seo_title: string | null; seo_description: string | null; status: string; sort_order: number; published_at: string | null;
 };
 
@@ -27,6 +28,9 @@ export function PostForm({ post }: { post: PostRow | null }) {
   const [slug, setSlug] = useState(post?.slug ?? "");
   const [excerpt, setExcerpt] = useState(post?.excerpt_tr ?? "");
   const [content, setContent] = useState(post?.content_tr ?? "");
+  const [titleEn, setTitleEn] = useState(post?.title_en ?? "");
+  const [excerptEn, setExcerptEn] = useState(post?.excerpt_en ?? "");
+  const [contentEn, setContentEn] = useState(post?.content_en ?? "");
   const [cover, setCover] = useState(post?.cover_path ?? "");
   const [seoTitle, setSeoTitle] = useState(post?.seo_title ?? "");
   const [seoDesc, setSeoDesc] = useState(post?.seo_description ?? "");
@@ -67,6 +71,7 @@ export function PostForm({ post }: { post: PostRow | null }) {
 
     const row = {
       kind, slug: s, title_tr: t, excerpt_tr: excerpt.trim() || null, content_tr: content.trim() || null,
+      title_en: titleEn.trim() || null, excerpt_en: excerptEn.trim() || null, content_en: contentEn.trim() || null,
       cover_path: cover || null, seo_title: seoTitle.trim() || null, seo_description: seoDesc.trim() || null,
       status: published ? "published" : "draft", sort_order: n,
       published_at: published ? post?.published_at ?? new Date().toISOString() : null,
@@ -126,6 +131,14 @@ export function PostForm({ post }: { post: PostRow | null }) {
           Paragraflar arasında bir boş satır bırakın. Başlık için satırın başına <code>## </code>, alt başlık için <code>### </code> yazın. Liste için her satırın başına <code>- </code> koyun.
           Kalın yazı: <code>**kalın**</code>. Bağlantı: <code>[yazı](/tekneler)</code>.
         </p>
+      </section>
+
+      <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
+        <h2 className="font-semibold">İngilizce (English)</h2>
+        <p className="text-xs text-navy/55">İngilizce başlık boşsa bu yazı İngilizce sitede görünmez. Metinde iç bağlantı verirseniz başına /en ekleyin, örnek: [boats](/en/tekneler).</p>
+        <div><label htmlFor="titleen" className={lab}>Title</label><input id="titleen" value={titleEn} onChange={(e) => setTitleEn(e.target.value)} className={input} /></div>
+        <div><label htmlFor="excerpten" className={lab}>Short summary</label><textarea id="excerpten" rows={2} value={excerptEn} onChange={(e) => setExcerptEn(e.target.value)} maxLength={300} className={input} /></div>
+        <div><label htmlFor="contenten" className={lab}>Text</label><textarea id="contenten" rows={14} value={contentEn} onChange={(e) => setContentEn(e.target.value)} className={`${input} font-mono text-sm leading-relaxed`} /></div>
       </section>
 
       <section className="rounded-2xl bg-white p-5 shadow-sm">
