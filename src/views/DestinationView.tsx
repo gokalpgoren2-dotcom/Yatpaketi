@@ -23,9 +23,9 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
       <main className="pb-20 pt-16 lg:pt-20">
         <section className="relative">
           {d.image ? (
-            <div className="relative h-64 lg:h-80"><Photo src={d.image} alt={d.name} priority sizes="100vw" className="object-cover" /></div>
+            <div className="relative h-72 lg:h-[26rem]"><Photo src={d.image} alt={d.name} priority quality={95} sizes="100vw" className="object-cover" /></div>
           ) : (
-            <Placeholder hue={d.hue} className="h-64 lg:h-80" label={false} />
+            <Placeholder hue={d.hue} className="h-72 lg:h-[26rem]" label={false} />
           )}
           <div className="absolute inset-0 bg-gradient-to-t from-navy/70 to-transparent" />
           <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-5 pb-8 text-white lg:px-8">
