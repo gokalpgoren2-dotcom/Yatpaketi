@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Destination } from "@/lib/data";
 import { href, type Lang } from "@/lib/i18n";
 
-// Bodrum – Antalya kıyısının sadeleştirilmiş, çizgi film tarzı haritası. Ölçekli değildir; kıyı şekli gerçeğe benzer.
+// Bodrum – Kekova kıyısının sadeleştirilmiş, çizgi film tarzı haritası. Ölçekli değildir; kıyı şekli gerçeğe benzer.
 type Pt = [number, number]; // [boylam, enlem]
 
 const COAST: Pt[] = [
@@ -33,11 +33,11 @@ const ISLANDS: Pt[][] = [
 const PLACES: Record<string, Pt> = {
   bodrum: [27.43, 37.03], datca: [27.68, 36.73], marmaris: [28.27, 36.85], dalyan: [28.65, 36.78], gocek: [28.93, 36.74],
   fethiye: [29.12, 36.62], oludeniz: [29.15, 36.56], kalkan: [29.41, 36.25], kas: [29.64, 36.2], bozburun: [28.0, 36.64], turgutreis: [27.26, 37.0], yalikavak: [27.29, 37.1], gokova: [28.3, 37.05],
-  akyaka: [28.32, 37.05], kaskekova: [29.76, 36.19], kekova: [29.9, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
+  akyaka: [28.32, 37.05], datcahisaronukorfezi: [27.78, 36.72], kaskekova: [29.76, 36.19], kekova: [29.9, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
   orhaniye: [28.18, 36.72], hisaronu: [28.12, 36.65], sarigerme: [28.7, 36.7], ekincik: [28.55, 36.83],
 };
 // Bilgisayarda tabela yönü (yoksa yakın komşuya göre otomatik seçilir).
-const SIDE: Record<string, "up" | "down"> = { bodrum: "up", datca: "up", bozburun: "down", marmaris: "up", gocek: "up", fethiye: "down", kaskekova: "up", kas: "up", kekova: "down" };
+const SIDE: Record<string, "up" | "down"> = { bodrum: "up", datca: "up", bozburun: "down", marmaris: "up", gocek: "up", fethiye: "down", kaskekova: "up", datcahisaronukorfezi: "up", kas: "up", kekova: "down" };
 // Kaş ve Kekova haritada tek pindir.
 const ALIAS: Record<string, string> = { kas: "kaskekova", kekova: "kaskekova" };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
@@ -130,7 +130,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
     const prev = found.get(key);
     // Aynı yer için birden fazla kayıt varsa tek pin kalır; "kas-kekova" kaydı varsa o tercih edilir.
     if (prev && !(merged && norm(d.slug) === "kaskekova")) continue;
-    found.set(key, { d, key, pos: px(PLACES[key]), label: merged ? "Kaş - Kekova" : d.name });
+    found.set(key, { d, key, pos: px(PLACES[key]), label: merged ? "Kaş - Kekova" : key === "datcahisaronukorfezi" ? "Datça - Hisarönü" : d.name });
   }
   const pins = [...found.values()].sort((a, b) => a.pos[0] - b.pos[0]);
 
@@ -139,7 +139,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
   let prevX = -999;
   const s = L.w > 600 ? 1 : 0.8;
   return (
-    <svg viewBox={`0 0 ${L.w} ${L.h}`} preserveAspectRatio="xMidYMax slice" className={className} role="img" aria-label={en ? "Map of the Bodrum – Antalya coast" : "Bodrum – Antalya kıyısı haritası"}>
+    <svg viewBox={`0 0 ${L.w} ${L.h}`} preserveAspectRatio="xMidYMax slice" className={className} role="img" aria-label={en ? "Map of the Bodrum – Kekova coast" : "Bodrum – Kekova kıyısı haritası"}>
       {waves.map((w, i) => <path key={i} d={`M${w[0].toFixed(0)} ${w[1].toFixed(0)} q6 -5 12 0 q6 5 12 0`} stroke="#fff" strokeOpacity="0.22" strokeWidth="1.6" fill="none" strokeLinecap="round" />)}
       {/* Kıyıdan açılan sığ su */}
       <path d={shore} fill="none" stroke="#7fdcea" strokeOpacity="0.28" strokeWidth={L.w > 600 ? 46 : 22} strokeLinejoin="round" strokeLinecap="round" />

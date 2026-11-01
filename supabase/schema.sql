@@ -220,6 +220,5 @@ insert into public.destinations (slug, name_tr, name_en, blurb_tr, intro_tr, sor
   ('gocek','Göcek','Gocek','12 Ada ve sakin koylar','Göcek, korunaklı koyları ve 12 Ada rotasıyla mavi yolculuğun en bilinen çıkış noktalarından biridir.',1,true),
   ('bodrum','Bodrum','Bodrum','Gece hayatı ve Ege esintisi','Bodrum çıkışlı rotalar Datça, Gökova ve Yunan adalarına uzanır.',2,true),
   ('fethiye','Fethiye','Fethiye','Ölüdeniz ve Kelebekler Vadisi','Fethiye, Ölüdeniz ve çevresindeki koylarla hem günlük hem haftalık rotalara uygundur.',3,true),
-  ('marmaris','Marmaris','Marmaris','Orhaniye ve Hisarönü koyları','Marmaris, Orhaniye ve Hisarönü koyları ile Datça Yarımadası rotalarının çıkış noktasıdır.',4,true),
-  ('antalya','Antalya','Antalya','Kekova ve Akdeniz''in turkuazı','Antalya çıkışlı rotalar Kekova ve Akdeniz kıyısının berrak sularını kapsar.',5,true)
+  ('marmaris','Marmaris','Marmaris','Orhaniye ve Hisarönü koyları','Marmaris, Orhaniye ve Hisarönü koyları ile Datça Yarımadası rotalarının çıkış noktasıdır.',4,true)
 on conflict (slug) do nothing;

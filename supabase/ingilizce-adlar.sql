@@ -14,7 +14,6 @@ from (values
   ('gocek', '12 Islands and calm coves', 'Göcek is one of the best-known departure points for the blue voyage, with sheltered bays and the 12 Islands route.'),
   ('bodrum', 'Nightlife and the Aegean breeze', 'Routes from Bodrum reach Datça, Gökova and the Greek islands.'),
   ('fethiye', 'Ölüdeniz and Butterfly Valley', 'Fethiye suits both day and weekly routes, with Ölüdeniz and the surrounding bays.'),
-  ('marmaris', 'Orhaniye and Hisarönü bays', 'Marmaris is the starting point for Orhaniye, Hisarönü bays and the Datça Peninsula routes.'),
-  ('antalya', 'Kekova and the turquoise Mediterranean', 'Routes from Antalya cover Kekova and the clear waters of the Mediterranean coast.')
+  ('marmaris', 'Orhaniye and Hisarönü bays', 'Marmaris is the starting point for Orhaniye, Hisarönü bays and the Datça Peninsula routes.')
 ) as v(slug, blurb, intro)
 where d.slug = v.slug;
