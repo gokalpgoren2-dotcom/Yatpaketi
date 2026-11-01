@@ -21,9 +21,9 @@ export async function HomeView({ lang }: { lang: Lang }) {
         <Hero home={home} destinations={dests} categories={cats} lang={lang} />
         <Destinations items={dests} lang={lang} />
         <FeaturedBoats items={shown} sample={sample} lang={lang} />
+        <Blog items={posts} lang={lang} />
         <HowItWorks lang={lang} />
         <WhyUs lang={lang} />
-        <Blog items={posts} lang={lang} />
       </main>
       <Footer lang={lang} />
     </div>
