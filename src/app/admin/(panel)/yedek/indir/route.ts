@@ -6,7 +6,7 @@ export const maxDuration = 60;
 // Giriş kodu özetleri ve oturum belirteçleri yedeğe konmaz (güvenlik); diğer tüm iş verisi dahildir.
 const TABLES = [
   "boats", "boat_images", "boat_destinations", "categories", "destinations", "season_prices", "availability_blocks",
-  "reservation_requests", "customer_portals", "portal_checklist", "blog_posts", "site_settings",
+  "reservation_requests", "customer_portals", "portal_checklist", "blog_posts", "site_settings", "site_texts",
 ];
 
 type Row = Record<string, unknown>;
