@@ -5,6 +5,7 @@ import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { BoatIcon } from "./BoatIcon";
 import { Placeholder } from "./Placeholder";
+import { PortArt } from "./PortArt";
 import { type Boat, type Destination } from "@/lib/data";
 import type { Category } from "@/lib/content";
 import { getContact } from "@/lib/content";
@@ -114,11 +115,7 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
               href={href(lang, `/limanlar/${d.slug}`)}
               className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
             >
-              {d.image ? (
-                <Photo src={d.image} alt={d.name} sizes="(min-width:1024px) 24vw, (min-width:640px) 42vw, 76vw" className="object-cover transition duration-500 group-hover:scale-105" />
-              ) : (
-                <Placeholder hue={d.hue} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
-              )}
+              <PortArt slug={d.slug} className="absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105" />
               <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-transparent to-transparent" />
               <div className="absolute bottom-0 p-5 text-white">
                 <p className="text-sm text-white/85">{L.country}</p>
