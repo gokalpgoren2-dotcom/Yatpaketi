@@ -1,13 +1,10 @@
 import { saveBoat } from "@/app/admin/(panel)/tekneler/actions";
 import { SubmitButton } from "./FormBits";
+import { WATER_TOYS, EQUIPMENT, parseToy, parseEquipment } from "@/lib/boatOptions";
 
 type Row = Record<string, any>;
 type Opt = { id: string; label: string };
 
-const WATER_SPORTS = [
-  "Deniz kanosu", "Paddle board", "Şnorkel takımı", "Jet ski", "Wakeboard", "Su kayağı",
-  "Şişme deniz oyuncakları", "Dalış ekipmanı", "Olta takımı", "Seabob", "Yüzme platformu",
-];
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const label = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
@@ -76,22 +73,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
         <h2 className="font-semibold">Açıklama ve donanım</h2>
         <Field id="description_tr" title="Açıklama (Türkçe)"><textarea id="description_tr" name="description_tr" rows={5} defaultValue={boat?.description_tr ?? ""} className={input} /></Field>
         <Field id="description_en" title="Açıklama (İngilizce)"><textarea id="description_en" name="description_en" rows={5} defaultValue={boat?.description_en ?? ""} className={input} /></Field>
-        <Field id="equipment" title="Donanımlar" hint="Her satıra bir donanım yazın."><textarea id="equipment" name="equipment" rows={4} defaultValue={(boat?.equipment ?? []).join("\n")} className={input} /></Field>
-        <fieldset>
-          <legend className={label}>Su sporları ekipmanları</legend>
-          <div className="flex flex-wrap gap-3">
-            {WATER_SPORTS.map((w) => (
-              <label key={w} className="flex items-center gap-2 rounded-full border border-navy/15 px-4 py-2 text-sm">
-                <input type="checkbox" name="water_sports" value={w} defaultChecked={(boat?.water_sports ?? []).includes(w)} className="h-4 w-4" /> {w}
-              </label>
-            ))}
-          </div>
-          <div className="mt-3">
-            <label htmlFor="water_sports_other" className={label}>Listede olmayan ekipmanlar</label>
-            <textarea id="water_sports_other" name="water_sports_other" rows={2} defaultValue={((boat?.water_sports ?? []) as string[]).filter((w) => !WATER_SPORTS.includes(w)).join("\n")} className={input} />
-            <p className="mt-1 text-xs text-navy/50">Her satıra bir ekipman yazın.</p>
-          </div>
-        </fieldset>
+        <EquipmentAndToys boat={boat} />
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
@@ -124,5 +106,62 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
 
       <SubmitButton />
     </form>
+  );
+}
+
+function EquipmentAndToys({ boat }: { boat: Row | null }) {
+  const eq = ((boat?.equipment ?? []) as string[]).map(parseEquipment);
+  const toys = ((boat?.water_sports ?? []) as string[]).map(parseToy);
+  const stdEq = EQUIPMENT.map((e) => e.name);
+  const otherEq = eq.filter((e) => !stdEq.includes(e.name));
+  const otherToys = toys.filter((t) => !WATER_TOYS.includes(t.name));
+  return (
+    <>
+      <fieldset>
+        <legend className={label}>Donanımlar</legend>
+        <p className="mb-2 text-xs text-navy/50">Teknede olanları işaretleyin, istersen yanına ayrıntı yazın.</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {EQUIPMENT.map((e) => {
+            const cur = eq.find((x) => x.name === e.name);
+            return (
+              <div key={e.name} className="rounded-xl border border-navy/15 p-3">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <input type="checkbox" name="equipment_std" value={e.name} defaultChecked={!!cur} className="h-4 w-4" /> {e.name}
+                </label>
+                <input name={`ed:${e.name}`} defaultValue={cur?.detail ?? ""} placeholder={e.hint || "Ayrıntı (isteğe bağlı)"} aria-label={`${e.name} ayrıntısı`} className={`${input} mt-2 py-2 text-sm`} />
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3">
+          <label htmlFor="equipment" className={label}>Listede olmayan donanımlar</label>
+          <textarea id="equipment" name="equipment" rows={3} defaultValue={otherEq.map((e) => (e.detail ? `${e.name} — ${e.detail}` : e.name)).join("\n")} className={input} />
+          <p className="mt-1 text-xs text-navy/50">Her satıra bir donanım yazın.</p>
+        </div>
+      </fieldset>
+
+      <fieldset>
+        <legend className={label}>Su oyuncakları</legend>
+        <p className="mb-2 text-xs text-navy/50">Teknede olanları işaretleyin, kaç adet olduğunu yazın (boş bırakırsanız adet gösterilmez).</p>
+        <div className="grid gap-2 sm:grid-cols-2">
+          {WATER_TOYS.map((w) => {
+            const cur = toys.find((x) => x.name === w);
+            return (
+              <div key={w} className="flex items-center justify-between gap-3 rounded-xl border border-navy/15 p-3">
+                <label className="flex items-center gap-2 text-sm font-medium">
+                  <input type="checkbox" name="water_sports" value={w} defaultChecked={!!cur} className="h-4 w-4" /> {w}
+                </label>
+                <input name={`wq:${w}`} type="number" inputMode="numeric" min={1} max={99} defaultValue={cur?.qty ?? ""} placeholder="adet" aria-label={`${w} adedi`} className={`${input} w-20 py-2 text-center text-sm`} />
+              </div>
+            );
+          })}
+        </div>
+        <div className="mt-3">
+          <label htmlFor="water_sports_other" className={label}>Listede olmayan oyuncaklar</label>
+          <textarea id="water_sports_other" name="water_sports_other" rows={2} defaultValue={otherToys.map((t) => (t.qty ? `${t.name} ×${t.qty}` : t.name)).join("\n")} className={input} />
+          <p className="mt-1 text-xs text-navy/50">Her satıra bir oyuncak yazın.</p>
+        </div>
+      </fieldset>
+    </>
   );
 }

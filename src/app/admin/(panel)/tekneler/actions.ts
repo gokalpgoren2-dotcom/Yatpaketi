@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
 import { slugify } from "@/lib/slug";
+import { formatEquipment, formatToy } from "@/lib/boatOptions";
 
 const str = (fd: FormData, k: string) => {
   const v = String(fd.get(k) ?? "").trim();
@@ -71,8 +72,17 @@ export async function saveBoat(formData: FormData) {
     home_port: str(formData, "home_port"),
     description_tr: str(formData, "description_tr"),
     description_en: str(formData, "description_en"),
-    equipment: lines(formData, "equipment"),
-    water_sports: Array.from(new Set([...formData.getAll("water_sports").map(String).filter(Boolean), ...lines(formData, "water_sports_other")])),
+    equipment: Array.from(new Set([
+      ...formData.getAll("equipment_std").map(String).filter(Boolean).map((n) => formatEquipment(n, String(formData.get(`ed:${n}`) ?? "").slice(0, 80))),
+      ...lines(formData, "equipment"),
+    ])),
+    water_sports: Array.from(new Set([
+      ...formData.getAll("water_sports").map(String).filter(Boolean).map((n) => {
+        const q = Math.floor(Number(String(formData.get(`wq:${n}`) ?? "").replace(",", ".")));
+        return formatToy(n, Number.isFinite(q) && q > 0 ? Math.min(q, 99) : null);
+      }),
+      ...lines(formData, "water_sports_other"),
+    ])),
     price_mode: priceMode,
     currency,
     price_daily: pd,
