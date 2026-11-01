@@ -71,7 +71,7 @@ function Scene({ slug }: { slug: string }): { sky: keyof typeof SKY; el: ReactNo
       </g>
     </>,
   };
-  if (slug.includes("hangi-tekne")) return { sky: "day", el: <><Gulet x={-250} y={20} s={0.55} /><Motor x={-10} y={10} s={0.55} /><Cat x={240} y={20} s={0.55} /></> };
+  if (slug.includes("hangi-tekne")) return { sky: "day", el: <><Gulet x={-70} y={125} s={0.55} /><Motor x={176} y={122} s={0.55} /><Cat x={430} y={126} s={0.55} /></> };
   if (slug.includes("bavul")) return {
     sky: "warm",
     el: <>
@@ -82,8 +82,8 @@ function Scene({ slug }: { slug: string }): { sky: keyof typeof SKY; el: ReactNo
         <rect x="335" y="190" width="22" height="190" fill={NAVY} opacity="0.25" /><rect x="443" y="190" width="22" height="190" fill={NAVY} opacity="0.25" />
         <rect x="378" y="268" width="44" height="30" rx="6" fill={SAND} stroke={NAVY} strokeWidth="4" />
       </g>
-      <g transform="translate(600 300)"><ellipse cx="0" cy="40" rx="86" ry="18" fill={SAND} stroke="#c9ae7a" strokeWidth="4" /><path d="M-48 36 q0-62 48-62 q48 0 48 62z" fill={SAND} stroke="#c9ae7a" strokeWidth="4" /><rect x="-48" y="14" width="96" height="14" fill={CORAL} /></g>
-      <g transform="translate(150 360)" fill="none" stroke={NAVY} strokeWidth="7"><circle cx="0" cy="0" r="28" fill={NAVY} opacity="0.85" /><circle cx="86" cy="0" r="28" fill={NAVY} opacity="0.85" /><path d="M28 -4 q15 -14 30 0" /></g>
+      <g transform="translate(620 250)"><ellipse cx="0" cy="40" rx="86" ry="18" fill={SAND} stroke="#c9ae7a" strokeWidth="4" /><path d="M-48 36 q0-62 48-62 q48 0 48 62z" fill={SAND} stroke="#c9ae7a" strokeWidth="4" /><rect x="-48" y="14" width="96" height="14" fill={CORAL} /></g>
+      <g transform="translate(150 280)" fill="none" stroke={NAVY} strokeWidth="7"><circle cx="0" cy="0" r="28" fill={NAVY} opacity="0.85" /><circle cx="86" cy="0" r="28" fill={NAVY} opacity="0.85" /><path d="M28 -4 q15 -14 30 0" /></g>
     </>,
   };
   if (slug.includes("tempo")) return {
@@ -92,7 +92,7 @@ function Scene({ slug }: { slug: string }): { sky: keyof typeof SKY; el: ReactNo
       <circle cx="400" cy="318" r="120" fill={SUN} opacity="0.95" />
       <circle cx="400" cy="318" r="160" fill="none" stroke={SUN} strokeWidth="4" opacity="0.5" />
       <circle cx="400" cy="318" r="205" fill="none" stroke={SUN} strokeWidth="3" opacity="0.3" />
-      <Sail x={-10} y={8} s={0.5} />
+      <Sail x={200} y={150} s={0.5} />
     </>,
   };
   if (slug.includes("arkadas")) return {
@@ -136,7 +136,7 @@ function Scene({ slug }: { slug: string }): { sky: keyof typeof SKY; el: ReactNo
       {Array.from({ length: 10 }, (_, i) => <rect key={i} x="246" y="92" width="8" height="22" rx="4" fill={SUN} transform={`rotate(${i * 36} 250 200)`} />)}
       <circle cx="550" cy="200" r="74" fill="#eef3fa" /><circle cx="584" cy="178" r="64" fill="#2a6aa5" />
       <circle cx="610" cy="110" r="4" fill="#fff" /><circle cx="680" cy="160" r="3" fill="#fff" /><circle cx="470" cy="120" r="3" fill="#fff" />
-      <Sail x={-10} y={60} s={0.5} />
+      <Sail x={200} y={150} s={0.5} />
     </>,
   };
   if (slug.includes("muzik") || slug.includes("yuz")) return {
