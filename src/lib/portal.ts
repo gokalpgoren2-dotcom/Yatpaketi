@@ -24,6 +24,8 @@ export type PortalData = {
   location_updated_at: string | null;
   contract_path: string | null;
   signed_at: string | null;
+  review_open?: boolean;
+  review_done?: boolean;
   checklist: { label: string; done: boolean }[];
 };
 

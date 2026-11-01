@@ -139,3 +139,23 @@ export async function sendReviewRequest(portalId: string): Promise<{ ok: boolean
   if (!r.ok) return { ok: false, message: `E-posta gönderilemedi (${r.message}). Bağlantıyı elle iletebilirsiniz: ${url}` };
   return { ok: true, message: `Yorum bağlantısı ${p.email} adresine gönderildi.` };
 }
+
+// Tur yorumunu Turum sayfasında açar ya da kapatır. Açıkken giriş kodu tur bittikten sonra 45 gün yalnızca yorum için çalışır.
+export async function setReviewOpen(portalId: string, open: boolean, notify: boolean): Promise<{ ok: boolean; message: string }> {
+  const { supabase } = await requireAdmin();
+  const { data: p, error } = await supabase.from("customer_portals").update({ review_open: open }).eq("id", portalId).select("email,customer_name,boat_name,tour_end").maybeSingle();
+  if (error || !p) return { ok: false, message: "Güncellenemedi (" + (error?.message ?? "panel bulunamadı") + "). Supabase'e turum-yorum SQL kodunu yapıştırdınız mı?" };
+  if (!open || !notify) return { ok: true, message: open ? "Tur yorumu açıldı." : "Tur yorumu kapatıldı." };
+  const base = (process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app").replace(/\/+$/, "");
+  const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
+  const text = `${hello}\n\n${p.boat_name} yolculuğunuz nasıldı? Turum sayfanızdan deneyiminizi ve isterseniz bir fotoğrafınızı paylaşabilirsiniz: ${base}/musteri\n\nGiriş için e-posta adresiniz ve daha önce size gönderilen giriş kodunuz yeterli. Yorum alanı 45 gün açık kalır.\n\nYatpaketi`;
+  const html = wrap(
+    `<p style="margin:0 0 12px">${esc(hello)}</p><p style="margin:0 0 12px"><b>${esc(String(p.boat_name))}</b> yolculuğunuz nasıldı? Turum sayfanızdan deneyiminizi ve isterseniz bir fotoğrafınızı paylaşırsanız sonraki misafirlerimize çok yardımcı olur.</p>` +
+      mailButton(`${base}/musteri`, "Turum'a git ve yorum yaz") +
+      `<p style="margin:0 0 12px;font-size:14px;color:#6b7c93">Giriş için e-posta adresiniz ve daha önce size gönderilen giriş kodunuz yeterli. Yorum alanı 45 gün açık kalır. Yorumunuz ekibimiz inceledikten sonra sitede yayınlanır.</p>`,
+    { title: "Yolculuğunuz nasıldı?", preheader: `${p.boat_name} deneyiminizi paylaşır mısınız?` },
+  );
+  const r = await sendMail({ to: String(p.email), subject: `Yolculuğunuz nasıldı? – ${p.boat_name}`, text, html });
+  if (!r.ok) return { ok: true, message: `Tur yorumu açıldı ama e-posta gönderilemedi (${r.message}). Müşteriye elle haber verin.` };
+  return { ok: true, message: `Tur yorumu açıldı ve ${p.email} adresine haber verildi.` };
+}

@@ -68,3 +68,20 @@ export async function finishUpload(path: string): Promise<{ ok: boolean; mailed?
   }
   return { ok: true, mailed };
 }
+
+// Turum sayfasından tur yorumu (ekip yorumu açtıysa).
+export async function startPortalReviewPhoto(): Promise<{ path?: string; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const { data, error } = await portalDb().rpc("portal_review_slot", { p_token: token, p_ext: "jpg" });
+  if (error || !data) return { error: "Fotoğraf yüklemesi başlatılamadı." };
+  return { path: data as string };
+}
+
+export async function submitPortalReview(name: string, rating: number, body: string, photo: string | null): Promise<{ ok: boolean; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const { data, error } = await portalDb().rpc("portal_review_submit", { p_token: token, p_name: name, p_rating: rating, p_body: body, p_photo: photo ?? "" });
+  if (error || data !== true) return { ok: false, error: "Yorum gönderilemedi. Alanları kontrol edip tekrar deneyin." };
+  return { ok: true };
+}

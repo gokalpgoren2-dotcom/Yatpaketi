@@ -5,11 +5,11 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { CodeBox } from "./PortalCreate";
 import { LocationPicker } from "./LocationPicker";
-import { emailContractToCustomer, notifyChecklistDone, sendReviewRequest } from "@/app/admin/(panel)/musteri-panelleri/actions";
+import { emailContractToCustomer, notifyChecklistDone, setReviewOpen } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
-  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; lat?: number | null; lng?: number | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
+  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; review_open?: boolean; lat?: number | null; lng?: number | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
 };
 export type CheckItem = { id: string; label: string; done: boolean; sort_order: number };
 
@@ -28,6 +28,7 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
   const [code, setCode] = useState<string | null>(null);
   const [confirmDel, setConfirmDel] = useState(false);
   const [notify, setNotify] = useState(true);
+  const [notifyReview, setNotifyReview] = useState(true);
 
   const say = (ok: boolean, text: string) => { setMsg({ ok, text }); window.scrollTo({ top: 0, behavior: "smooth" }); };
 
@@ -79,12 +80,12 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     if (file.current) file.current.value = "";
   }
 
-  async function askReview() {
-    if (!confirm(`${portal.email} adresine yorum bağlantısı gönderilsin mi?`)) return;
+  async function toggleReview(open: boolean) {
     setBusy(true);
-    const r = await sendReviewRequest(portal.id).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası)." }));
+    const r = await setReviewOpen(portal.id, open, open && notifyReview).catch(() => ({ ok: false, message: "İşlem başarısız (sunucu hatası)." }));
     setBusy(false);
     say(r.ok, r.message);
+    if (r.ok) router.refresh();
   }
 
   async function resendContract() {
@@ -196,9 +197,19 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
       </section>
 
       <section className={card}>
-        <h2 className="font-semibold">Yorum iste</h2>
-        <p className="mt-1 text-sm text-navy/60">Tur bittikten sonra müşteriye, yorum ve fotoğraf bırakabileceği özel bir bağlantı e-postayla gider. Gelen yorum önce Yorumlar sayfasında bekler, siz onaylayınca yayınlanır.</p>
-        <button type="button" className={`${btn} mt-3`} disabled={busy} onClick={askReview}>Yorum bağlantısı gönder</button>
+        <h2 className="font-semibold">Tur yorumu</h2>
+        <p className="mt-1 text-sm text-navy/60">Müşteri Turum sayfasında bu bölümü her zaman görür; siz açana kadar kilitli durur. Tur bittiğinde açın: müşterinin giriş kodu tur bittikten sonra 45 gün yalnızca yorum için çalışır. Gelen yorum önce Yorumlar sayfasında bekler.</p>
+        <p className="mt-3 text-sm font-medium">Durum: {portal.review_open ? <span className="text-green-800">Açık</span> : <span className="text-navy/60">Kapalı</span>}</p>
+        <div className="mt-3 flex flex-wrap items-center gap-3">
+          {!portal.review_open ? (
+            <>
+              <button type="button" className={btn} disabled={busy} onClick={() => toggleReview(true)}>Tur yorumunu aç</button>
+              <label className="flex items-center gap-2 text-sm"><input type="checkbox" checked={notifyReview} onChange={(e) => setNotifyReview(e.target.checked)} className="h-4 w-4 accent-[#1bb4c4]" />Müşteriye e-postayla haber ver</label>
+            </>
+          ) : (
+            <button type="button" className={btn} disabled={busy} onClick={() => toggleReview(false)}>Tur yorumunu kapat</button>
+          )}
+        </div>
       </section>
     </div>
   );

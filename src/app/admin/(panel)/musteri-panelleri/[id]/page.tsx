@@ -11,7 +11,7 @@ export default async function PortalDetail({ params }: { params: Promise<{ id: s
   const { supabase } = await requireAdmin();
   const cols = "id,email,customer_name,boat_name,tour_start,tour_end,status,location_text,location_updated_at,contract_path,signed_path,signed_at";
   // contract_emailed_at, lat, lng sonradan eklenen sütunlar: SQL henüz çalıştırılmadıysa sayfa yine açılsın.
-  const withCol = await supabase.from("customer_portals").select(cols + ",contract_emailed_at,lat,lng").eq("id", id).maybeSingle();
+  const withCol = await supabase.from("customer_portals").select(cols + ",contract_emailed_at,lat,lng,review_open").eq("id", id).maybeSingle();
   const plain = withCol.error ? await supabase.from("customer_portals").select(cols).eq("id", id).maybeSingle() : null;
   const data = (withCol.error ? plain?.data : withCol.data) as Record<string, unknown> | null | undefined;
   if (!data) notFound();

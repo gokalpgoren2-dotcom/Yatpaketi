@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { ContractSection } from "@/components/ContractSection";
+import { ReviewForm } from "@/components/ReviewForm";
 import { loadPortal, portalDb } from "@/lib/portal";
 import { normalizePhone } from "@/lib/phone";
 import { portalLogout } from "../actions";
@@ -29,6 +30,7 @@ const ICON = {
   cal: "M5 5h14v15H5zM5 10h14M9 3v4M15 3v4",
   chat: "M4 5h16v11H8l-4 4z",
   lock: "M7 11V8a5 5 0 0110 0v3M6 11h12v9H6z",
+  star: "M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z",
 };
 
 export default async function PortalHome() {
@@ -115,8 +117,26 @@ export default async function PortalHome() {
           </div>
         </section>
 
+        {/* Tur yorumu */}
+        <section id="yorum" className={card}>
+          {head(ICON.star, "Tur yorumu", p.review_done ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Gönderildi</span> : !p.review_open ? <span className="rounded-full bg-navy/10 px-3 py-1 text-xs font-semibold text-navy/60">Kapalı</span> : undefined)}
+          {p.review_done ? (
+            <p className="mt-4 text-sm leading-relaxed text-navy/70">Yorumunuz için teşekkür ederiz. Ekibimiz inceledikten sonra sitede yayınlanacak.</p>
+          ) : p.review_open ? (
+            <div className="mt-4">
+              <p className="mb-5 text-sm leading-relaxed text-navy/70">Turunuz nasıldı? Deneyiminizi ve isterseniz bir fotoğrafınızı paylaşın, sonraki misafirlerimize yol gösterin.</p>
+              <ReviewForm token={null} lang="tr" defaultName={p.customer_name ?? ""} />
+            </div>
+          ) : (
+            <div className="mt-4 flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-navy/50 ring-1 ring-navy/10"><Ic d={ICON.lock} /></span>
+              <p className="text-sm leading-relaxed text-navy/70">Tur yorumu, turunuz bittikten sonra ekibimiz tarafından burada açılır. O zaman deneyiminizi ve isterseniz fotoğraflarınızı paylaşabilirsiniz.</p>
+            </div>
+          )}
+        </section>
+
         {/* Durum özeti */}
-        <nav aria-label="Adımlar" className="grid grid-cols-3 gap-2.5">
+        {!over && <nav aria-label="Adımlar" className="grid grid-cols-3 gap-2.5">
           {tiles.map((t) => (
             <a key={t.label} href={t.href} className="rounded-2xl bg-white p-3 text-center shadow-[0_1px_2px_rgba(6,38,75,0.06)] ring-1 ring-navy/5 active:scale-[0.98]">
               <span className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full ${t.ok ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}><Ic d={t.ok ? ICON.check : t.icon} size={18} /></span>
@@ -124,10 +144,10 @@ export default async function PortalHome() {
               <p className={`mt-0.5 text-[11px] leading-tight ${t.ok ? "text-emerald-700" : "text-navy/55"}`}>{t.value}</p>
             </a>
           ))}
-        </nav>
+        </nav>}
 
         {/* Sıradaki adım */}
-        {p.contract_path && !signed && (
+        {!over && p.contract_path && !signed && (
           <a href="#sozlesme" className="flex items-center gap-3 rounded-2xl bg-turquoise/12 p-4 ring-1 ring-turquoise/30">
             <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-turquoise text-white"><Ic d={ICON.doc} /></span>
             <span className="min-w-0 text-sm"><b className="block text-navy">Sıradaki adım</b><span className="text-navy/70">Sözleşmeyi indirip imzalayın ve buradan yükleyin.</span></span>
@@ -142,7 +162,7 @@ export default async function PortalHome() {
         </section>
 
         {/* Hazırlık */}
-        <section id="hazirlik" className={card}>
+        {!over && <section id="hazirlik" className={card}>
           {head(ICON.list, "Tur hazırlığı", <span className="text-sm font-semibold text-navy/60">{done}/{total}</span>)}
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-navy/8" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Hazırlık ilerlemesi">
             <div className="h-full rounded-full bg-gradient-to-r from-turquoise to-emerald-400 transition-all" style={{ width: `${pct}%` }} />
@@ -157,10 +177,10 @@ export default async function PortalHome() {
               </li>
             ))}
           </ul>
-        </section>
+        </section>}
 
         {/* Konum */}
-        <section id="konum" className={card}>
+        {!over && <section id="konum" className={card}>
           {head(ICON.pin, "Teknenin konumu")}
           {hasLoc ? (
             <>
@@ -185,7 +205,7 @@ export default async function PortalHome() {
               </p>
             </div>
           )}
-        </section>
+        </section>}
 
         {/* İletişim */}
         <section className="rounded-3xl bg-navy p-5 text-white sm:p-6">
@@ -193,8 +213,6 @@ export default async function PortalHome() {
           <p className="mt-2 text-sm text-white/75">Ekibimiz yardımcı olmaktan memnuniyet duyar.</p>
           {wa && <a href={wa} target="_blank" rel="noopener" className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3.5 text-base font-semibold text-white">WhatsApp'tan yazın</a>}
         </section>
-
-        <p className="px-2 pb-2 text-center text-xs leading-relaxed text-navy/50">Turunuz bittiğinde, deneyiminizi ve isterseniz bir fotoğrafınızı paylaşabilmeniz için e-posta adresinize bir yorum bağlantısı göndereceğiz.</p>
       </main>
     </div>
   );
