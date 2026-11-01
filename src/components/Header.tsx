@@ -13,17 +13,18 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const about = nav.pages.some((p) => p.slug === "hakkimizda");
   // Yatpaketi Rehberi açılır menüsü: yalnızca içeriği olan bölümler görünür.
   const G = gt(lang);
+  const pageLink = (slug: string) => nav.pages.find((p) => p.slug === slug)?.title;
   const guide: { href: string; label: string; icon?: string }[] = [
     ...(nav.hasDestinations ? [{ href: href(lang, "/destinasyonlar"), label: G.destinations, icon: "pin" }] : []),
     ...(nav.hasRoutes ? [{ href: href(lang, "/rotalar"), label: G.routes, icon: "route" }] : []),
-    ...(nav.hasPackages ? [{ href: href(lang, "/tur-paketleri"), label: G.packages, icon: "package" }] : []),
     ...(nav.hasProcess ? [{ href: href(lang, "/kiralama-sureci"), label: G.process, icon: "process" }] : []),
+    ...(pageLink("sss") ? [{ href: href(lang, "/sss"), label: pageLink("sss")!, icon: "book" }] : []),
+    ...(pageLink("yat-ve-yatcilik-kulturu") ? [{ href: href(lang, "/yat-ve-yatcilik-kulturu"), label: pageLink("yat-ve-yatcilik-kulturu")!, icon: "compass" }] : []),
     ...(nav.hasGuides ? [{ href: href(lang, "/rehber") + "#yazilar", label: G.articles, icon: "book" }] : []),
     ...(about ? [{ href: href(lang, "/hakkimizda"), label: L.navAbout, icon: "about" }] : []),
   ];
   const aboutInGuide = guide.length > 0 && about;
   const links: NavLink[] = [
-    { href: href(lang, "/"), label: L.navHome },
     {
       href: href(lang, "/tekneler"),
       label: L.navBoats,
@@ -35,7 +36,6 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
       children: [{ href: href(lang, "/limanlar"), label: L.navAllDest, icon: "compass" }, ...dests.map((d) => ({ href: href(lang, `/limanlar/${d.slug}`), label: d.name, icon: "pin" }))],
     },
     ...(guide.length > 0 ? [{ href: href(lang, "/rehber"), label: L.navGuide, children: guide }] : [{ href: href(lang, "/#mavi-yolculuk"), label: L.navBlueVoyage }]),
-    ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog }] : []),
     ...(aboutInGuide ? [] : [{ href: about ? href(lang, "/hakkimizda") : href(lang, "/#hakkimizda"), label: L.navAbout }]),
     { href: href(lang, "/#iletisim"), label: L.navContact },
   ];
