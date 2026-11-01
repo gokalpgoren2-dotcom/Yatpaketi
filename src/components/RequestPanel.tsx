@@ -4,7 +4,7 @@ import { useState } from "react";
 import { ReservationForm } from "./ReservationForm";
 import { DateRangePicker } from "./DateRangePicker";
 import { recordWhatsapp } from "@/app/tekneler/[slug]/talep";
-import { href, t, type Lang } from "@/lib/i18n";
+import { href as pathFor, t, type Lang } from "@/lib/i18n";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
@@ -24,7 +24,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
   if (!whatsapp) return <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} lang={lang} />;
 
   function message() {
-    const url = `${window.location.origin}${href(lang, `/tekneler/${boatSlug}`)}`;
+    const url = `${window.location.origin}${pathFor(lang, `/tekneler/${boatSlug}`)}`;
     const lines = [
       L.waGreeting(boatName),
       "",
