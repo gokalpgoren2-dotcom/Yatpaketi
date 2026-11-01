@@ -35,3 +35,11 @@ export async function getAbout(): Promise<AboutData> {
   if (!d) return ABOUT;
   return { tr: { ...ABOUT.tr, ...(d.tr ?? {}) }, en: { ...ABOUT.en, ...(d.en ?? {}) } };
 }
+
+import { SERVICES } from "./services";
+export type ServicesData = typeof SERVICES;
+export async function getServices(): Promise<ServicesData> {
+  const d = await read("services");
+  if (!d) return SERVICES;
+  return { tr: { ...SERVICES.tr, ...(d.tr ?? {}) }, en: { ...SERVICES.en, ...(d.en ?? {}) } };
+}

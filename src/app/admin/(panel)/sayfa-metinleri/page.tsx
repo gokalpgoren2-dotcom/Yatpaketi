@@ -8,6 +8,7 @@ export default async function PageTexts() {
   const cards = [
     { href: "/admin/sayfa-metinleri/sss", title: "Sıkça Sorulan Sorular", text: "Soruları ve cevapları ekleyin, değiştirin, silin. Türkçe ve İngilizce." },
     { href: "/admin/sayfa-metinleri/kultur", title: "Yat ve Yatçılık Kültürü", text: "Bölüm başlıkları, metinler, incelik kartları ve denizcilik sözlüğü. Türkçe ve İngilizce." },
+    { href: "/admin/sayfa-metinleri/hizmetlerimiz", title: "Hizmetlerimiz", text: "Yat kiralama, transfer, ikmal, alışveriş ve organizasyon hizmetlerinin metinleri. Türkçe ve İngilizce." },
     { href: "/admin/sayfa-metinleri/hakkimizda", title: "Hakkımızda", text: "Hikâyemiz, çalışma anlayışımız ve sorumluluk bölümleri. Türkçe ve İngilizce." },
   ];
   return (

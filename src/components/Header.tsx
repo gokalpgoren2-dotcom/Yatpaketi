@@ -22,6 +22,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     { href: href(lang, "/yat-ve-yatcilik-kulturu"), label: G.culture, icon: "compass" },
     ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog, icon: "book" }] : []),
     ...(nav.hasGuides ? [{ href: href(lang, "/rehber") + "#yazilar", label: G.articles, icon: "book" }] : []),
+    { href: href(lang, "/hizmetlerimiz"), label: L.navServices, icon: "all" },
     ...(about ? [{ href: href(lang, "/hakkimizda"), label: L.navAbout, icon: "about" }] : []),
   ];
   const aboutInGuide = guide.length > 0 && about;

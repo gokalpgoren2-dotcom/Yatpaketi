@@ -58,3 +58,22 @@ export const ABOUT_FIELDS: Field[] = [
   { key: "ctaBtn2", label: "İkinci düğme yazısı", kind: "line" },
   { key: "meta", label: "Google açıklaması", kind: "long" },
 ];
+
+export const SERVICES_FIELDS: Field[] = [
+  { key: "title", label: "Sayfa başlığı (iki cümle: ikincisi turkuaz görünür)", kind: "line" },
+  { key: "sub", label: "Başlığın yanındaki cümle", kind: "long" },
+  { key: "listEyebrow", label: "Hizmetler: küçük üst yazı", kind: "line" },
+  { key: "listTitle", label: "Hizmetler: başlık", kind: "line" },
+  { key: "listLead", label: "Hizmetler: açıklama", kind: "long" },
+  { key: "items", label: "Hizmet kartları (sıra sırayla numaralanır)", kind: "pairs", labels: ["Hizmet adı", "Açıklama"] },
+  { key: "allEyebrow", label: "Mavi blok: küçük üst yazı", kind: "line" },
+  { key: "allTitle", label: "Mavi blok: başlık", kind: "line" },
+  { key: "allLead", label: "Mavi blok: açıklama", kind: "long" },
+  { key: "all", label: "Mavi blok sütunları", kind: "pairs", labels: ["Sütun başlığı", "Sütun metni"] },
+  { key: "ctaEyebrow", label: "Alt çağrı: küçük üst yazı", kind: "line" },
+  { key: "ctaTitle", label: "Alt çağrı: başlık", kind: "line" },
+  { key: "ctaText", label: "Alt çağrı: metin", kind: "long" },
+  { key: "ctaBtn1", label: "Birinci düğme yazısı", kind: "line" },
+  { key: "ctaBtn2", label: "İkinci düğme yazısı", kind: "line" },
+  { key: "meta", label: "Google açıklaması", kind: "long" },
+];

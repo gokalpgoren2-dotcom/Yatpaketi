@@ -21,6 +21,8 @@ export async function refreshSite() {
   revalidatePath("/en/sss");
   revalidatePath("/yat-ve-yatcilik-kulturu");
   revalidatePath("/hakkimizda");
+  revalidatePath("/hizmetlerimiz");
+  revalidatePath("/en/hizmetlerimiz");
   revalidatePath("/en/hakkimizda");
   revalidatePath("/en/yat-ve-yatcilik-kulturu");
 }

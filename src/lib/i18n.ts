@@ -13,7 +13,7 @@ export function langFromPath(path: string): Lang {
 }
 
 // Bulunulan sayfanın diğer dildeki karşılığı.
-const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri", "/rehber", "/destinasyonlar", "/rotalar", "/tur-paketleri", "/kiralama-sureci", "/sss", "/yat-ve-yatcilik-kulturu", "/hakkimizda", "/iletisim", "/favorilerim", "/tekne-karsilastir"];
+const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri", "/rehber", "/destinasyonlar", "/rotalar", "/tur-paketleri", "/kiralama-sureci", "/sss", "/yat-ve-yatcilik-kulturu", "/hakkimizda", "/iletisim", "/favorilerim", "/tekne-karsilastir", "/hizmetlerimiz"];
 export function switchPath(path: string, to: Lang): string {
   const bare = path === "/en" ? "/" : path.startsWith("/en/") ? path.slice(3) : path;
   if (to === "en") {
@@ -30,7 +30,7 @@ const tr = {
   days: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
   // menü
   navHome: "Ana Sayfa", navBoats: "Kiralık Tekneler", navAllBoats: "Tüm tekneler", navDest: "Limanlar", navAllDest: "Tüm limanlar",
-  navGuide: "Yatpaketi Rehberi", navBlueVoyage: "Mavi Yolculuk", navBlog: "Blog", navAbout: "Hakkımızda", navContact: "İletişim",
+  navGuide: "Yatpaketi Rehberi", navBlueVoyage: "Mavi Yolculuk", navBlog: "Blog", navAbout: "Hakkımızda", navServices: "Hizmetlerimiz", navContact: "İletişim",
   langGroup: "Dil seçimi", mainMenu: "Ana menü", mobileMenu: "Mobil menü", menuOpen: "Menüyü aç", menuClose: "Menüyü kapat", homeAria: "yatpaketi ana sayfa",
   // mobil çubuk
   quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Tekneler", mbDest: "Limanlar", mbContact: "İletişim", mbFav: "Favoriler",
@@ -125,7 +125,7 @@ const en: typeof tr = {
   months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
   navHome: "Home", navBoats: "Boats for Charter", navAllBoats: "All boats", navDest: "Ports", navAllDest: "All ports",
-  navGuide: "Yatpaketi Guide", navBlueVoyage: "Blue Voyage", navBlog: "Blog", navAbout: "About us", navContact: "Contact",
+  navGuide: "Yatpaketi Guide", navBlueVoyage: "Blue Voyage", navBlog: "Blog", navAbout: "About us", navServices: "Our services", navContact: "Contact",
   langGroup: "Language", mainMenu: "Main menu", mobileMenu: "Mobile menu", menuOpen: "Open menu", menuClose: "Close menu", homeAria: "yatpaketi home",
   quickMenu: "Quick menu", mbHome: "Home", mbBoats: "Boats", mbDest: "Ports", mbContact: "Contact", mbFav: "Saved",
   searchAria: "Boat search", location: "Location", boatType: "Boat type", all: "All", date: "Date", searchBoats: "Search boats",
