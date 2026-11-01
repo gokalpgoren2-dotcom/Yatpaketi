@@ -1,6 +1,6 @@
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
-import { Blog, Destinations, FeaturedBoats, Footer, HowItWorks, Routes, WhyUs } from "@/components/Sections";
+import { Blog, Destinations, FeaturedBoats, Footer, HowItWorks, WhyUs } from "@/components/Sections";
 import { getBoats, getCategories, getDestinations, getHome } from "@/lib/content";
 import { getPosts } from "@/lib/posts";
 import { getFeaturedOrder } from "@/lib/site-texts";
@@ -22,7 +22,6 @@ export async function HomeView({ lang }: { lang: Lang }) {
         <Destinations items={dests} lang={lang} />
         <FeaturedBoats items={shown} sample={sample} lang={lang} />
         <HowItWorks lang={lang} />
-        <Routes lang={lang} />
         <WhyUs lang={lang} />
         <Blog items={posts} lang={lang} />
       </main>
