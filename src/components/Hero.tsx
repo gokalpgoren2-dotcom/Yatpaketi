@@ -1,6 +1,7 @@
 import { Photo } from "./Photo";
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
+import { HeroBoats } from "./HeroBoats";
 import type { Destination } from "@/lib/data";
 import type { HomeContent, Category } from "@/lib/content";
 import { href, t, type Lang } from "@/lib/i18n";
@@ -24,17 +25,16 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
           {/* Ufuktaki gün batımı ışıltısı ve ışık huzmeleri */}
           <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_70%_100%,rgba(255,196,128,0.55)_0%,rgba(255,150,110,0.18)_40%,rgba(255,150,110,0)_70%)]" aria-hidden />
           <div className="absolute inset-0 -z-10 opacity-60 [background:radial-gradient(circle_at_18%_22%,rgba(255,255,255,0.10)_0,rgba(255,255,255,0)_32%),radial-gradient(circle_at_85%_12%,rgba(127,220,214,0.18)_0,rgba(127,220,214,0)_36%)]" aria-hidden />
-          {/* Uzaktaki yelkenli silüeti */}
-          <svg className="absolute bottom-[4.5rem] right-[12%] -z-10 hidden h-24 w-24 text-white/25 sm:block" viewBox="0 0 64 64" fill="currentColor" aria-hidden><path d="M31 6v38H10zM34 14v30h20zM8 48h48l-6 8H14z" /></svg>
           <div className="absolute inset-x-0 bottom-0 -z-10 h-32 overflow-hidden" aria-hidden>
             <svg className="wave-a absolute bottom-0 left-0 h-32 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(150)} fill="rgba(255,255,255,0.14)" /></svg>
             <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(220)} fill="rgba(255,255,255,0.2)" /></svg>
             <svg className="wave-c absolute bottom-0 left-0 h-16 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(280)} fill="rgba(6,38,75,0.55)" /></svg>
           </div>
+          <HeroBoats />
         </>
       )}
 
-      <div className="mx-auto w-full max-w-4xl px-5 py-14 lg:py-20">
+      <div className={`mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-40 lg:pb-52"}`}>
         <h1 className="fade-up font-display text-[2.4rem] font-medium leading-[1.1] text-white [text-shadow:0_2px_24px_rgba(6,38,75,0.45)] sm:text-5xl lg:text-6xl" style={delay(0)}>
           {home.title}
         </h1>
