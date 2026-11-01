@@ -73,10 +73,10 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
             href="/musteri"
             aria-label={track}
             title={track}
-            className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-turquoise hover:text-turquoise-dark lg:h-auto lg:w-auto lg:gap-2 lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
+            className="hidden shrink-0 items-center gap-2 rounded-full border border-navy/20 px-4 py-2 text-sm font-semibold text-navy transition hover:border-turquoise hover:text-turquoise-dark lg:flex"
           >
             <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="7.5" y="2.5" width="9" height="12" rx="1.5" fill="#1bb4c4" stroke="#1bb4c4" /><path d="M7.5 6.2h9" stroke="#fff" /><path d="M10 1.4v2.4M14 1.4v2.4" /><path d="M10 9h.01M12 9h.01M14 9h.01M10 11.6h.01M12 11.6h.01" stroke="#fff" strokeWidth="2" /><path d="M4 13L1.8 9.6h4.6L7.2 13" fill="#fff" /><path d="M20 13l2.2-3.4h-4.6L16.8 13" fill="#fff" /><rect x="4" y="13" width="16" height="8.5" rx="1.4" fill="#fff" /><path d="M10 16.5h4" /></svg>
-            <span className="hidden lg:inline">{track}</span>
+            <span>{track}</span>
           </Link>
           <div
             role="group"
@@ -139,7 +139,7 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
               </a>
             ),
           )}
-          <Link href="/musteri" onClick={() => setOpen(false)} className="block border-b border-navy/5 py-4 text-base font-medium text-turquoise-dark">{track}</Link>
+          <Link href="/musteri" onClick={() => setOpen(false)} className="flex items-center gap-3 border-b border-navy/5 py-4 text-base font-semibold text-navy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="7.5" y="2.5" width="9" height="12" rx="1.5" fill="#1bb4c4" stroke="#1bb4c4" /><path d="M7.5 6.2h9" stroke="#fff" /><path d="M10 1.4v2.4M14 1.4v2.4" /><path d="M10 9h.01M12 9h.01M14 9h.01M10 11.6h.01M12 11.6h.01" stroke="#fff" strokeWidth="2" /><path d="M4 13L1.8 9.6h4.6L7.2 13" fill="#fff" /><path d="M20 13l2.2-3.4h-4.6L16.8 13" fill="#fff" /><rect x="4" y="13" width="16" height="8.5" rx="1.4" fill="#fff" /><path d="M10 16.5h4" /></svg>{track}</Link>
         </nav>
       )}
     </header>
