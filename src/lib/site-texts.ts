@@ -43,3 +43,8 @@ export async function getServices(): Promise<ServicesData> {
   if (!d) return SERVICES;
   return { tr: { ...SERVICES.tr, ...(d.tr ?? {}) }, en: { ...SERVICES.en, ...(d.en ?? {}) } };
 }
+
+export async function getFeaturedOrder(): Promise<string[]> {
+  const d = await read("featured");
+  return Array.isArray(d?.order) ? d.order : [];
+}

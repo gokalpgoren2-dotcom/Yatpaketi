@@ -66,9 +66,9 @@ export function FeaturedBoats({ items, sample, lang = "tr" }: { items: Boat[]; s
         {items.length === 0 ? (
           <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">{L.noBoatsHome}</p>
         ) : (
-          <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
+          <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 lg:gap-6 overflow-x-auto px-5 pb-4 lg:mx-0 lg:px-0">
             {items.map((b) => (
-              <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
+              <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[calc((100%-3rem)/3)]">
                 <BoatCard b={b} lang={lang} />
               </div>
             ))}

@@ -3,14 +3,17 @@ import { Hero } from "@/components/Hero";
 import { Blog, Categories, Destinations, FeaturedBoats, Footer, HowItWorks, RentalModes, Routes, WhyUs } from "@/components/Sections";
 import { getBoats, getCategories, getDestinations, getHome } from "@/lib/content";
 import { getPosts } from "@/lib/posts";
+import { getFeaturedOrder } from "@/lib/site-texts";
 import type { Lang } from "@/lib/i18n";
 
 export async function HomeView({ lang }: { lang: Lang }) {
   const [home, dests, cats, { boats, sample }, posts] = await Promise.all([
     getHome(lang), getDestinations(lang), getCategories(lang), getBoats(lang), lang === "tr" ? getPosts(["guide", "blog"], 3) : Promise.resolve([]),
   ]);
-  const featured = boats.filter((b) => b.featured);
-  const shown = (featured.length > 0 ? featured : boats).slice(0, 6);
+  const pref = await getFeaturedOrder();
+  const rank = (s: string) => { const i = pref.indexOf(s); return i < 0 ? 9999 : i; };
+  const featured = boats.filter((b) => b.featured).sort((a, b) => rank(a.slug) - rank(b.slug));
+  const shown = featured.length > 0 ? featured : boats.slice(0, 6);
   return (
     <div lang={lang}>
       <Header lang={lang} />
