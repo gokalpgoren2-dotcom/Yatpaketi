@@ -1,7 +1,7 @@
--- Rehber Yazilari: 10 yazi (TR + EN), taslak olarak eklenir.
+-- Rehber Yazilari: 10 yazi (TR + EN), yayinda olarak eklenir.
 -- Supabase > SQL Editor'de calistirin (ingilizce-rehber.sql'den SONRA). Tekrar calistirmak guvenlidir.
 insert into public.blog_posts (slug,kind,sort_order,status,published_at,title_tr,excerpt_tr,content_tr,title_en,excerpt_en,content_en) values
-('gulet-kiralamadan-once','guide',1,'draft',now(),
+('gulet-kiralamadan-once','guide',1,'published',now(),
 $tr$Gulet kiralamadan önce nelere bakmalısın?$tr$,
 $tr$Kabin düzeni, ortak yaşam alanları, mürettebat ve hizmet kapsamı: seçimini etkileyen ayrıntıları birlikte incele.$tr$,
 $tr$Gulet, geniş güvertesi ve konforlu kabinleriyle mavi yolculuğun en bilinen teknesidir. Doğru guleti seçmek için bakılacak birkaç ayrıntı var.
@@ -39,7 +39,7 @@ $en$The gulet is the best-known boat of the blue voyage, with a wide deck and co
 ## Questions
 See the [FAQ](/en/sss) for common questions and browse the boats under [Boats for charter](/en/tekneler).$en$),
 
-('motoryat-tatilinin-butcesi','guide',2,'draft',now(),
+('motoryat-tatilinin-butcesi','guide',2,'published',now(),
 $tr$Motoryat tatilinin bütçesi nasıl şekillenir?$tr$,
 $tr$Kiralama bedeli, seyir planı, yakıt ve diğer giderler arasındaki ilişkiyi anlayarak seçeneklerini daha doğru karşılaştır.$tr$,
 $tr$Motoryatlar hızlı ve konforludur; bütçeyi ise kiralama bedelinin yanında seyir planı da etkiler.
@@ -71,7 +71,7 @@ $en$Motor yachts are fast and comfortable, and the budget depends on your cruisi
 
 When requesting a quote, always ask which items are included in the price.$en$),
 
-('hangi-tekne-nasil-bir-yolculuk','guide',3,'draft',now(),
+('hangi-tekne-nasil-bir-yolculuk','guide',3,'published',now(),
 $tr$Hangi tekne, nasıl bir yolculuk?$tr$,
 $tr$Yaşam alanları, seyir beklentileri ve kaptanlı ya da kaptansız kiralama seçenekleri üzerinden sana uygun deneyimi değerlendir.$tr$,
 $tr$Yelkenli ve katamaran, denizi daha yakından yaşamak isteyenler için güzel bir seçimdir.
@@ -103,7 +103,7 @@ Two hulls give generous shared space and a calm ride; cabins are separate from o
 
 Contact us to decide which suits you best.$en$),
 
-('bavul-hazirligi','guide',4,'draft',now(),
+('bavul-hazirligi','guide',4,'published',now(),
 $tr$Tekne tatiline giderken bavula ne koymalı?$tr$,
 $tr$Daha fazla eşya yerine doğru parçaları seçmek, teknede günlük yaşamı kolaylaştırır.$tr$,
 $tr$Teknede yer sınırlıdır; az ama doğru eşya en iyisidir.
@@ -139,7 +139,7 @@ $en$Space on a boat is limited; a few well-chosen items are best.
 
 Cabin wardrobes are small, so keep clothing simple.$en$),
 
-('tatilin-temposu','guide',5,'draft',now(),
+('tatilin-temposu','guide',5,'published',now(),
 $tr$Az durak, uzun mola: daha sakin bir rota mümkün mü?$tr$,
 $tr$Güzel bir yolculuk, haritadaki bütün koyları aynı haftaya sığdırmak zorunda değil.$tr$,
 $tr$Mavi yolculuğun en güzel yanı acele etmemektir. Her gün yeni bir koy görmek zorunda değilsiniz.
@@ -167,7 +167,7 @@ There is time to swim, read and linger at the table, and less travel fatigue.
 
 For ideas, see [Classic Routes](/en/rotalar).$en$),
 
-('arkadas-grubuyla-tatil','guide',6,'draft',now(),
+('arkadas-grubuyla-tatil','guide',6,'published',now(),
 $tr$Arkadaş grubuyla tekne tatilini nasıl planlamalı?$tr$,
 $tr$Ortak bir tatilin en iyi başlangıcı, beklentileri rezervasyondan önce konuşmaktır.$tr$,
 $tr$Kalabalık bir grupla yolculukta herkesin beklentisi farklı olabilir. Önceden konuşmak işi kolaylaştırır.
@@ -197,7 +197,7 @@ $en$With a larger group everyone may expect something different. Talking beforeh
 
 Find boats that suit your group under [Boats for charter](/en/tekneler).$en$),
 
-('teknede-yemek-plani','guide',7,'draft',now(),
+('teknede-yemek-plani','guide',7,'published',now(),
 $tr$Teknede yemek planı: alışverişten sofraya$tr$,
 $tr$İyi düşünülmüş bir yemek düzeni, tatilin günlük akışını daha rahat hale getirir.$tr$,
 $tr$Teknede yemek, tatilin keyifli parçalarından biridir. Önceden yapılan küçük bir plan çok şey kolaylaştırır.
@@ -231,7 +231,7 @@ Breakfast in the morning, a light lunch in a cove, a longer dinner in the evenin
 
 See [Charter Process](/en/kiralama-sureci) for how it works.$en$),
 
-('tekne-tatilinde-fotograflar','guide',8,'draft',now(),
+('tekne-tatilinde-fotograflar','guide',8,'published',now(),
 $tr$Tekne tatilinde daha iyi fotoğraflar için küçük fikirler$tr$,
 $tr$Güzel bir kare bazen daha iyi bir kameradan önce, doğru ışığı beklemekle başlar.$tr$,
 $tr$Telefonla bile güzel kareler yakalamak mümkün.
@@ -263,7 +263,7 @@ $en$You can capture great shots even with a phone.
 - Use a waterproof case for your phone.
 - Keep your balance when holding a camera on deck.$en$),
 
-('gunubirlik-mi-konaklamali-mi','guide',9,'draft',now(),
+('gunubirlik-mi-konaklamali-mi','guide',9,'published',now(),
 $tr$Günübirlik tur mu, konaklamalı tekne tatili mi?$tr$,
 $tr$Denizde ayırdığın süre, yaşamak istediğin deneyimi de şekillendirir.$tr$,
 $tr$İki seçenek de güzel; hangisinin uygun olduğu zamanınıza ve beklentinize bağlı.
@@ -291,7 +291,7 @@ $en$Both are great; which fits depends on your time and expectations.
 
 You can start with a weekend getaway and decide on a longer voyage later. See [Tour Packages](/en/tur-paketleri).$en$),
 
-('teknede-muzik-yuzme-kurallar','guide',10,'draft',now(),
+('teknede-muzik-yuzme-kurallar','guide',10,'published',now(),
 $tr$Teknede müzik, yüzme ve su sporları: Tatilden önce bilmen gerekenler$tr$,
 $tr$Müzik saatleri, denize giriş, jet ski ve can yeleği kullanımı hangi kurallara bağlı? Kaptanın sözü esastır.$tr$,
 $tr$Teknede keyifli ve güvenli bir tatil için birkaç temel kural vardır.
