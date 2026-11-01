@@ -11,7 +11,7 @@ export type NavLink = { href: string; label: string; children?: { href: string; 
 
 export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: Lang }) {
   const L = t(lang);
-  const track = lang === "en" ? "Booking Tracker" : "Rezervasyon Takibi";
+  const track = lang === "en" ? "My Tour" : "Turum";
   const path = usePathname() || "/";
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
@@ -75,7 +75,7 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
             title={track}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-turquoise hover:text-turquoise-dark lg:h-auto lg:w-auto lg:gap-2 lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
           >
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="12" cy="5" r="3" /><path d="M12 22V8" /><path d="M5 12H2a10 10 0 0 0 20 0h-3" /></svg>
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 13V5.5A1.5 1.5 0 0 1 8.5 4h7A1.5 1.5 0 0 1 17 5.5V13" /><path d="M7 8h10M10 2.5V5M14 2.5V5" /><path d="M10 10.5h.01M14 10.5h.01" /><path d="M3 13h18v7.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20.5z" /><path d="M10 17h4" /></svg>
             <span className="hidden lg:inline">{track}</span>
           </Link>
           <div
