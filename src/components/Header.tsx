@@ -18,7 +18,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     ...(nav.hasDestinations ? [{ href: href(lang, "/destinasyonlar"), label: G.destinations, icon: "pin" }] : []),
     ...(nav.hasRoutes ? [{ href: href(lang, "/rotalar"), label: G.routes, icon: "route" }] : []),
     ...(nav.hasProcess ? [{ href: href(lang, "/kiralama-sureci"), label: G.process, icon: "process" }] : []),
-    ...(pageLink("sss") ? [{ href: href(lang, "/sss"), label: pageLink("sss")!, icon: "book" }] : []),
+    { href: href(lang, "/sss"), label: G.faq, icon: "book" },
     ...(pageLink("yat-ve-yatcilik-kulturu") ? [{ href: href(lang, "/yat-ve-yatcilik-kulturu"), label: pageLink("yat-ve-yatcilik-kulturu")!, icon: "compass" }] : []),
     ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog, icon: "book" }] : []),
     ...(nav.hasGuides ? [{ href: href(lang, "/rehber") + "#yazilar", label: G.articles, icon: "book" }] : []),
