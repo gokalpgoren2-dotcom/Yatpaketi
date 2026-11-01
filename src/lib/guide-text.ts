@@ -1,7 +1,7 @@
 import type { Lang } from "./i18n";
 
 const tr = {
-  guide: "Yatpaketi Rehberi", faq: "S.S.S",
+  guide: "Yatpaketi Rehberi", faq: "S.S.S", culture: "Yat ve Yatçılık Kültürü",
   destinations: "Destinasyonlar", routes: "Klasik Rotalar", packages: "Tur Paketleri", process: "Kiralama Süreci", articles: "Rehber Yazıları", about: "Hakkımızda",
   hubTitle: "Mavi yolculuğu planlamak için rehberiniz",
   hubIntro: "Nereye gidilir, hangi rota seçilir, rezervasyondan sonra neler olur? Hepsi burada.",
@@ -37,7 +37,7 @@ const tr = {
 };
 
 const en: typeof tr = {
-  guide: "Yatpaketi Guide", faq: "FAQ",
+  guide: "Yatpaketi Guide", faq: "FAQ", culture: "Yachts and Yachting Culture",
   destinations: "Destinations", routes: "Classic Routes", packages: "Tour Packages", process: "Charter Process", articles: "Guide Articles", about: "About us",
   hubTitle: "Your guide to planning a blue voyage",
   hubIntro: "Where to go, which route to choose, what happens after you book? It's all here.",
