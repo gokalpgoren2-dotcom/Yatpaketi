@@ -4,7 +4,7 @@ import { SeedPosts } from "@/components/admin/SeedPosts";
 
 export const dynamic = "force-dynamic";
 
-const kinds: Record<string, string> = { guide: "Rehber yazıları", blog: "Blog yazıları", page: "Sabit sayfalar" };
+const kinds: Record<string, string> = { destination: "Destinasyonlar (Rehber)", route: "Klasik rotalar (Rehber)", package: "Tur paketleri (Rehber)", process: "Kiralama süreci adımları (Rehber)", guide: "Rehber yazıları", blog: "Blog yazıları", page: "Sabit sayfalar" };
 
 type Row = { id: string; kind: string; slug: string; title_tr: string; status: string };
 

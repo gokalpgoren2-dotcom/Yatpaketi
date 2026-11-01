@@ -65,7 +65,7 @@ export async function ArticlePage({ kind, slug, back }: { kind: PostKind; slug: 
         )}
         {more.length > 0 && (
           <section className="mt-14">
-            <h2 className="font-display text-2xl text-navy">Diğer yazılar</h2>
+            <h2 className="font-display text-2xl text-navy">{kind === "destination" ? "Diğer destinasyonlar" : kind === "route" ? "Diğer rotalar" : kind === "package" ? "Diğer paketler" : "Diğer yazılar"}</h2>
             <div className="mt-5 grid gap-5 sm:grid-cols-2">{more.map((m, i) => <PostCard key={m.slug} p={m} i={i} />)}</div>
           </section>
         )}

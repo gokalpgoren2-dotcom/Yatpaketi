@@ -10,6 +10,16 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const en = lang === "en";
   // İngilizce yazılar (rehber, blog, sayfalar) henüz yok; o bağlantılar yalnızca Türkçe menüde görünür.
   const about = !en && nav.pages.some((p) => p.slug === "hakkimizda");
+  // Yatpaketi Rehberi açılır menüsü: yalnızca içeriği olan bölümler görünür (Türkçe menüde).
+  const guide: { href: string; label: string; icon?: string }[] = en ? [] : [
+    ...(nav.hasDestinations ? [{ href: "/destinasyonlar", label: "Destinasyonlar", icon: "pin" }] : []),
+    ...(nav.hasRoutes ? [{ href: "/rotalar", label: "Klasik Rotalar", icon: "route" }] : []),
+    ...(nav.hasPackages ? [{ href: "/tur-paketleri", label: "Tur Paketleri", icon: "package" }] : []),
+    ...(nav.hasProcess ? [{ href: "/kiralama-sureci", label: "Kiralama Süreci", icon: "process" }] : []),
+    ...(nav.hasGuides ? [{ href: "/rehber#yazilar", label: "Rehber Yazıları", icon: "book" }] : []),
+    ...(about ? [{ href: "/hakkimizda", label: L.navAbout, icon: "about" }] : []),
+  ];
+  const aboutInGuide = guide.length > 0 && about;
   const links: NavLink[] = [
     { href: href(lang, "/"), label: L.navHome },
     {
@@ -22,9 +32,9 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
       label: L.navDest,
       children: [{ href: href(lang, "/limanlar"), label: L.navAllDest, icon: "compass" }, ...dests.map((d) => ({ href: href(lang, `/limanlar/${d.slug}`), label: d.name, icon: "pin" }))],
     },
-    ...(!en && nav.hasGuides ? [{ href: "/rehber", label: L.navGuide }] : [{ href: href(lang, "/#mavi-yolculuk"), label: L.navBlueVoyage }]),
+    ...(guide.length > 0 ? [{ href: "/rehber", label: L.navGuide, children: guide }] : [{ href: href(lang, "/#mavi-yolculuk"), label: L.navBlueVoyage }]),
     ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog }] : []),
-    { href: about ? "/hakkimizda" : href(lang, "/#hakkimizda"), label: L.navAbout },
+    ...(aboutInGuide ? [] : [{ href: about ? "/hakkimizda" : href(lang, "/#hakkimizda"), label: L.navAbout }]),
     { href: href(lang, "/#iletisim"), label: L.navContact },
   ];
   return <HeaderClient links={links} lang={lang} />;

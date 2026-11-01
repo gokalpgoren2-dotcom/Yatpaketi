@@ -235,7 +235,10 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
       : [
           { href: "/tekneler", label: "Kiralık Tekneler" },
           { href: "/limanlar", label: "Limanlar" },
-          ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
+          ...(nav.hasGuides || nav.hasDestinations || nav.hasRoutes || nav.hasPackages || nav.hasProcess ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
+          ...(nav.hasRoutes ? [{ href: "/rotalar", label: "Klasik Rotalar" }] : []),
+          ...(nav.hasPackages ? [{ href: "/tur-paketleri", label: "Tur Paketleri" }] : []),
+          ...(nav.hasProcess ? [{ href: "/kiralama-sureci", label: "Kiralama Süreci" }] : []),
           ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
           ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),
         ];

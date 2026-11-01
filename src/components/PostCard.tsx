@@ -3,8 +3,8 @@ import { Photo } from "./Photo";
 import { Placeholder } from "./Placeholder";
 import type { Post, PostKind } from "@/lib/posts";
 
-const base: Record<PostKind, string> = { guide: "/rehber", blog: "/blog", page: "" };
-export const postHref = (p: Pick<Post, "kind" | "slug">) => `${base[p.kind]}/${p.slug}`;
+const base: Record<PostKind, string> = { guide: "/rehber", blog: "/blog", page: "", destination: "/destinasyonlar", route: "/rotalar", package: "/tur-paketleri", process: "/kiralama-sureci" };
+export const postHref = (p: Pick<Post, "kind" | "slug">) => (p.kind === "process" ? base.process : `${base[p.kind]}/${p.slug}`);
 
 export function PostCard({ p, i = 0 }: { p: Post; i?: number }) {
   return (

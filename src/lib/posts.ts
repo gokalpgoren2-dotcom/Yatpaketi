@@ -2,7 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { cache } from "react";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 
-export type PostKind = "blog" | "guide" | "page";
+export type PostKind = "blog" | "guide" | "page" | "destination" | "route" | "package" | "process";
 
 export type Post = {
   slug: string;
@@ -66,10 +66,17 @@ export async function getPost(kind: PostKind, slug: string): Promise<Post | null
 
 // Menü ve alt bilgi için: hangi bölümlerin dolu olduğu.
 export const getNavInfo = cache(async () => {
-  const [guides, blogs, pages] = await Promise.all([getPosts("guide", 1), getPosts("blog", 1), getPosts("page")]);
+  const [guides, blogs, pages, rest] = await Promise.all([
+    getPosts("guide", 1), getPosts("blog", 1), getPosts("page"), getPosts(["destination", "route", "package", "process"]),
+  ]);
+  const has = (k: PostKind) => rest.some((p) => p.kind === k);
   return {
     hasGuides: guides.length > 0,
     hasBlog: blogs.length > 0,
+    hasDestinations: has("destination"),
+    hasRoutes: has("route"),
+    hasPackages: has("package"),
+    hasProcess: has("process"),
     pages: pages.map((p) => ({ slug: p.slug, title: p.title })),
   };
 });

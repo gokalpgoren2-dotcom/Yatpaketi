@@ -16,7 +16,7 @@ const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_U
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 // Sabit sayfa adresleri, sitedeki gerçek bölümlerle çakışmasın.
-const RESERVED = ["admin", "tekneler", "destinasyonlar", "limanlar", "rehber", "blog", "api", "sitemap", "robots", "login"];
+const RESERVED = ["admin", "tekneler", "destinasyonlar", "limanlar", "rotalar", "tur-paketleri", "kiralama-sureci", "rehber", "blog", "api", "sitemap", "robots", "login"];
 
 export function PostForm({ post }: { post: PostRow | null }) {
   const supabase = createClient();
@@ -104,13 +104,17 @@ export function PostForm({ post }: { post: PostRow | null }) {
             <option value="guide">Rehber yazısı (Yatpaketi Rehberi)</option>
             <option value="blog">Blog yazısı</option>
             <option value="page">Sabit sayfa (Hakkımızda, SSS gibi)</option>
+            <option value="destination">Destinasyon tanıtımı (Yatpaketi Rehberi)</option>
+            <option value="route">Klasik rota (Yatpaketi Rehberi)</option>
+            <option value="package">Tur paketi (Yatpaketi Rehberi)</option>
+            <option value="process">Kiralama süreci adımı (Yatpaketi Rehberi)</option>
           </select>
         </div>
         <div><label htmlFor="title" className={lab}>Başlık *</label><input id="title" value={title} onChange={(e) => setTitle(e.target.value)} className={input} /></div>
         <div>
           <label htmlFor="slug" className={lab}>Adres (slug)</label>
           <input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} className={input} />
-          <p className="mt-1 text-xs text-navy/50">Boş bırakırsanız başlıktan otomatik oluşur. Örnek: mavi-yolculuk-nedir</p>
+          <p className="mt-1 text-xs text-navy/50">Boş bırakırsanız başlıktan otomatik oluşur. Örnek: mavi-yolculuk-nedir. Kiralama süreci adımları “Sıra” numarasına göre dizilir.</p>
         </div>
         <div><label htmlFor="excerpt" className={lab}>Kısa özet</label><textarea id="excerpt" rows={2} value={excerpt} onChange={(e) => setExcerpt(e.target.value)} maxLength={300} className={input} /></div>
       </section>
