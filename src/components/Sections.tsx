@@ -242,12 +242,12 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
     { href: "/musteri", label: L.customerLogin },
   ];
   return (
-    <footer id="iletisim" className="relative isolate scroll-mt-20 overflow-hidden bg-gradient-to-b from-[#0a3d63] to-navy pb-12 pt-20 text-sm text-white/80">
-      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_100%,rgba(27,180,196,0.35)_0%,rgba(27,180,196,0)_70%)]" aria-hidden />
-      <div className="absolute inset-x-0 top-0 -z-10 h-24 overflow-hidden" aria-hidden>
-        <svg className="wave-a absolute left-0 top-0 h-24 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(150)} fill="rgba(27,180,196,0.18)" /></svg>
-        <svg className="wave-b absolute left-0 top-0 h-16 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(220)} fill="rgba(255,255,255,0.12)" /></svg>
-        <svg className="wave-c absolute left-0 top-0 h-10 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(280)} fill="rgba(255,255,255,0.9)" /></svg>
+    <footer id="iletisim" className="relative isolate scroll-mt-20 overflow-hidden pb-24 pt-14 text-sm text-white/80" style={{ background: "linear-gradient(180deg, #05224a 0%, #0a3d73 45%, #0d5f94 78%, #1d8fb0 100%)" }}>
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_50%_100%,rgba(127,220,230,0.28)_0%,rgba(127,220,230,0)_70%)]" aria-hidden />
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-32 overflow-hidden" aria-hidden>
+        <svg className="wave-a absolute bottom-0 left-0 h-32 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(150)} fill="rgba(255,255,255,0.14)" /></svg>
+        <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(220)} fill="rgba(255,255,255,0.2)" /></svg>
+        <svg className="wave-c absolute bottom-0 left-0 h-16 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(280)} fill="rgba(6,38,75,0.55)" /></svg>
       </div>
       <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
       <div className={`${wrap} flex flex-col justify-between gap-6 md:flex-row`}>
@@ -270,7 +270,7 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
           ))}
         </div>
       </div>
-      <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. {L.rights}</p>
+      <p className={`${wrap} mt-8 border-t border-white/15 pt-6`}>© {new Date().getFullYear()} yatpaketi. {L.rights}</p>
     </footer>
   );
 }
