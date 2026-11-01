@@ -4,6 +4,7 @@ import { type Boat, priceLabel } from "@/lib/data";
 import { Placeholder } from "./Placeholder";
 import { href, t, type Lang } from "@/lib/i18n";
 import { offerLabel } from "@/lib/campaigns";
+import { RatingLine } from "./Reviews";
 
 const svg = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
 const IconGuests = () => <svg {...svg}><circle cx="9" cy="8" r="3.2" /><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" /><circle cx="17" cy="9" r="2.4" /><path d="M17 14.2c2.3.2 4 2 4 4.8" /></svg>;
@@ -43,6 +44,7 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
       <article className="p-5">
         <h3 className="text-lg font-bold text-navy">{b.name}</h3>
         {b.port && <p className="mt-0.5 text-sm text-navy/55">{b.port}</p>}
+        {b.rating && <RatingLine rating={b.rating} lang={lang} className="mt-1.5" />}
         <ul className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-navy/75">
           <li className={chip}><IconGuests /><span className="text-navy/80">{L.guestsN(b.guests)}</span></li>
           {b.cabins > 0 && <li className={chip}><IconCabins /><span className="text-navy/80">{L.cabinsN(b.cabins)}</span></li>}

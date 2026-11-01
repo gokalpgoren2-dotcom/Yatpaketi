@@ -16,6 +16,7 @@ const I = {
   doc: "M7 3h7l5 5v13H7zM14 3v5h5M10 13h6M10 17h6",
   edit: "M4 20h4L19 9l-4-4L4 16zM13 7l4 4",
   save: "M12 3v12M7 10l5 5 5-5M5 21h14",
+  star: "M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z",
   gear: "M12 15a3 3 0 100-6 3 3 0 000 6zM19 12a7 7 0 00-.1-1.2l2-1.5-2-3.4-2.4 1a7 7 0 00-2-1.2L14 3h-4l-.5 2.7a7 7 0 00-2 1.2l-2.4-1-2 3.4 2 1.5A7 7 0 005 12c0 .4 0 .8.1 1.2l-2 1.5 2 3.4 2.4-1a7 7 0 002 1.2L10 21h4l.5-2.7a7 7 0 002-1.2l2.4 1 2-3.4-2-1.5c.1-.4.1-.8.1-1.2z",
 };
 
@@ -24,6 +25,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
   // Rezervasyonlar menüsünde yanıt bekleyen yeni talep sayısı görünür.
   const { count } = await supabase.from("reservation_requests").select("id", { count: "exact", head: true }).eq("status", "new");
   const fresh = count ?? 0;
+  const { count: pendingReviews } = await supabase.from("reviews").select("id", { count: "exact", head: true }).eq("status", "pending");
 
   const groups = [
     {
@@ -44,6 +46,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         { href: "/admin/kategoriler", label: "Tekne Tipleri", icon: I.tag },
         { href: "/admin/destinasyonlar", label: "Limanlar", icon: I.pin },
         { href: "/admin/yazilar", label: "Yazılar", icon: I.doc },
+        { href: "/admin/yorumlar", label: "Yorumlar", icon: I.star, badge: pendingReviews || undefined },
         { href: "/admin/kampanyalar", label: "Kampanyalar", icon: I.tag },
         { href: "/admin/sayfa-metinleri", label: "Sayfa Metinleri", icon: I.doc },
         { href: "/admin/icerik", label: "Site İçeriği", icon: I.edit },

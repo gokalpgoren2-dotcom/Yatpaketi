@@ -3,6 +3,7 @@
 export type Offer = { kind: "early" | "discount"; percent: number; until: string };
 
 export type Boat = {
+  rating?: { avg: number; count: number } | null; // onaylı yorumların ortalaması
   offer?: Offer | null; // geçerli kampanya (Admin > Kampanyalar)
   slug: string;
   name: string;

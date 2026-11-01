@@ -114,3 +114,28 @@ export async function notifyChecklistDone(portalId: string, itemId: string): Pro
   await supabase.from("portal_checklist").update({ notified_at: new Date().toISOString() }).eq("id", itemId);
   return { ok: true, message: `Müşteriye e-posta gönderildi: ${sent.short}.` };
 }
+
+// Tur bitince müşteriye yorum bağlantısı gönderir. Bağlantı tek kullanımlık ve 45 gün geçerlidir.
+export async function sendReviewRequest(portalId: string): Promise<{ ok: boolean; message: string }> {
+  const { supabase } = await requireAdmin();
+  const { data: p } = await supabase.from("customer_portals").select("email,customer_name,boat_name,tour_end").eq("id", portalId).maybeSingle();
+  if (!p) return { ok: false, message: "Panel bulunamadı." };
+  const { data: boat } = await supabase.from("boats").select("slug").eq("name", p.boat_name as string).maybeSingle();
+  const { data: token, error } = await supabase.rpc("admin_create_review_request", {
+    p_email: p.email, p_name: p.customer_name ?? "", p_boat_slug: boat?.slug ?? "", p_boat_name: p.boat_name, p_tour_end: p.tour_end, p_portal_id: portalId,
+  });
+  if (error || !token) return { ok: false, message: "Bağlantı oluşturulamadı (" + (error?.message ?? "bilinmeyen hata") + "). Supabase'e yorumlar SQL kodunu yapıştırdınız mı?" };
+  const base = (process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app").replace(/\/+$/, "");
+  const url = `${base}/yorum/${token}`;
+  const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
+  const text = `${hello}\n\n${p.boat_name} yolculuğunuz nasıldı? Deneyiminizi ve isterseniz bir fotoğrafınızı paylaşırsanız, sonraki misafirlerimize çok yardımcı olur.\n\nYorum bağlantınız (45 gün geçerli): ${url}\n\nYatpaketi`;
+  const html = wrap(
+    `<p style="margin:0 0 12px">${esc(hello)}</p><p style="margin:0 0 12px"><b>${esc(String(p.boat_name))}</b> yolculuğunuz nasıldı? Birkaç cümleyle deneyiminizi, isterseniz bir fotoğrafınızı paylaşırsanız sonraki misafirlerimize çok yardımcı olur.</p>` +
+      mailButton(url, "Yorumumu yazayım") +
+      `<p style="margin:0 0 12px;font-size:14px;color:#6b7c93">Bağlantı size özeldir, 45 gün geçerlidir ve bir kez kullanılabilir. Yorumunuz ekibimiz inceledikten sonra sitede yayınlanır.</p>`,
+    { title: "Yolculuğunuz nasıldı?", preheader: `${p.boat_name} deneyiminizi paylaşır mısınız?` },
+  );
+  const r = await sendMail({ to: String(p.email), subject: `Yolculuğunuz nasıldı? – ${p.boat_name}`, text, html });
+  if (!r.ok) return { ok: false, message: `E-posta gönderilemedi (${r.message}). Bağlantıyı elle iletebilirsiniz: ${url}` };
+  return { ok: true, message: `Yorum bağlantısı ${p.email} adresine gönderildi.` };
+}

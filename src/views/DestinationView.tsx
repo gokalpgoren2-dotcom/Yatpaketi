@@ -8,6 +8,8 @@ import { PortArt } from "@/components/PortArt";
 import { RichText } from "@/components/RichText";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
+import { getReviews } from "@/lib/reviews";
+import { ReviewSection } from "@/components/Reviews";
 import { href, t, type Lang } from "@/lib/i18n";
 
 export async function DestinationView({ lang, slug }: { lang: Lang; slug: string }) {
@@ -16,6 +18,7 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
   const d = destinations.find((x) => x.slug === slug);
   if (!d) notFound();
   const list = boatsFor(boats, d.slug);
+  const reviews = await getReviews({ boatSlugs: list.map((b) => b.slug), limit: 9 });
 
   return (
     <div lang={lang}>
@@ -41,6 +44,7 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
           ) : (
             <p className="mt-6 rounded-2xl bg-mist p-8 text-navy/70">{L.destNone}</p>
           )}
+          <ReviewSection reviews={reviews} lang={lang} showBoat title={lang === "en" ? `Guest reviews from ${d.name}` : `${d.name} çıkışlı misafir yorumları`} />
         </div>
       </main>
       <Footer lang={lang} />

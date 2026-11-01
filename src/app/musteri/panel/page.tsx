@@ -193,6 +193,8 @@ export default async function PortalHome() {
           <p className="mt-2 text-sm text-white/75">Ekibimiz yardımcı olmaktan memnuniyet duyar.</p>
           {wa && <a href={wa} target="_blank" rel="noopener" className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-[#25D366] px-5 py-3.5 text-base font-semibold text-white">WhatsApp'tan yazın</a>}
         </section>
+
+        <p className="px-2 pb-2 text-center text-xs leading-relaxed text-navy/50">Turunuz bittiğinde, deneyiminizi ve isterseniz bir fotoğrafınızı paylaşabilmeniz için e-posta adresinize bir yorum bağlantısı göndereceğiz.</p>
       </main>
     </div>
   );

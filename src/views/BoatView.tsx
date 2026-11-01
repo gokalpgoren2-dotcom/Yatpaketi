@@ -7,6 +7,8 @@ import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
+import { getReviews } from "@/lib/reviews";
+import { RatingLine, ReviewSection } from "@/components/Reviews";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
 import { href, t, type Lang } from "@/lib/i18n";
@@ -28,6 +30,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
   const price = priceLabel(b, lang);
   const regions = destinations.filter((d) => b.destinations.includes(d.slug));
   const gallery = b.images ?? [];
+  const reviews = await getReviews({ boatSlugs: [b.slug] });
   const similar = boats.filter((x) => x.slug !== b.slug && (x.type === b.type || x.destinations.some((d) => b.destinations.includes(d)))).slice(0, 3);
 
   return (
@@ -39,6 +42,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         </nav>
         <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{[b.type, b.port].filter(Boolean).join(" · ")}</p>
         <h1 className="font-display mt-1 text-3xl font-medium text-navy lg:text-5xl">{b.name}</h1>
+        {b.rating && <a href="#yorumlar" className="mt-2 inline-block"><RatingLine rating={b.rating} lang={lang} /></a>}
         {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleBoat}</p>}
         <div className="mt-4 flex flex-wrap items-center gap-3 lg:hidden">
           <span className={`rounded-full px-4 py-2 text-sm font-semibold ${price ? "bg-navy text-white" : "bg-mist text-turquoise-dark"}`}>{price ?? L.askPrice}</span>
@@ -131,6 +135,8 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             </div>
           </aside>
         </div>
+
+        <ReviewSection id="yorumlar" reviews={reviews} lang={lang} />
 
         {similar.length > 0 && (
           <section className="mt-16">

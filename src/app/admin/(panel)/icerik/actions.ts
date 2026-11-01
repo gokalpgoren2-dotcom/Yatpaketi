@@ -11,6 +11,9 @@ export async function refreshSite() {
   revalidatePath("/limanlar");
   revalidatePath("/tekneler");
   revalidatePath("/limanlar/[slug]", "page");
+  revalidatePath("/tekneler/[slug]", "page");
+  revalidatePath("/en/tekneler/[slug]", "page");
+  revalidatePath("/en/limanlar/[slug]", "page");
   revalidatePath("/tekne-tipleri/[slug]", "page");
   revalidatePath("/rehber");
   revalidatePath("/blog");

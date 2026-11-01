@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { CodeBox } from "./PortalCreate";
 import { LocationPicker } from "./LocationPicker";
-import { emailContractToCustomer, notifyChecklistDone } from "@/app/admin/(panel)/musteri-panelleri/actions";
+import { emailContractToCustomer, notifyChecklistDone, sendReviewRequest } from "@/app/admin/(panel)/musteri-panelleri/actions";
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
@@ -77,6 +77,14 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
     say(mail.ok, mail.ok ? "Sözleşme yüklendi. " + mail.message : "Sözleşme yüklendi ama müşteriye e-posta gitmedi: " + mail.message + " Aşağıdaki düğmeyle tekrar deneyebilirsiniz.");
     router.refresh();
     if (file.current) file.current.value = "";
+  }
+
+  async function askReview() {
+    if (!confirm(`${portal.email} adresine yorum bağlantısı gönderilsin mi?`)) return;
+    setBusy(true);
+    const r = await sendReviewRequest(portal.id).catch(() => ({ ok: false, message: "E-posta gönderilemedi (sunucu hatası)." }));
+    setBusy(false);
+    say(r.ok, r.message);
   }
 
   async function resendContract() {
@@ -185,6 +193,12 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
             ? <><p className="font-medium text-green-800">İmzalı sözleşme yüklendi ({portal.signed_at ? new Date(portal.signed_at).toLocaleString("tr-TR") : ""}).</p>{signedUrl ? <a href={signedUrl} target="_blank" rel="noopener" className={`${btn} mt-2 inline-block`}>İmzalı sözleşmeyi aç</a> : <p className="mt-2 text-red-700">Dosya bağlantısı oluşturulamadı. Sayfayı yenileyin.</p>}</>
             : <p className="text-navy/60">Müşteri henüz imzalı sözleşme yüklemedi.</p>}
         </div>
+      </section>
+
+      <section className={card}>
+        <h2 className="font-semibold">Yorum iste</h2>
+        <p className="mt-1 text-sm text-navy/60">Tur bittikten sonra müşteriye, yorum ve fotoğraf bırakabileceği özel bir bağlantı e-postayla gider. Gelen yorum önce Yorumlar sayfasında bekler, siz onaylayınca yayınlanır.</p>
+        <button type="button" className={`${btn} mt-3`} disabled={busy} onClick={askReview}>Yorum bağlantısı gönder</button>
       </section>
     </div>
   );
