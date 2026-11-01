@@ -20,6 +20,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     ...(nav.hasProcess ? [{ href: href(lang, "/kiralama-sureci"), label: G.process, icon: "process" }] : []),
     ...(pageLink("sss") ? [{ href: href(lang, "/sss"), label: pageLink("sss")!, icon: "book" }] : []),
     ...(pageLink("yat-ve-yatcilik-kulturu") ? [{ href: href(lang, "/yat-ve-yatcilik-kulturu"), label: pageLink("yat-ve-yatcilik-kulturu")!, icon: "compass" }] : []),
+    ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog, icon: "book" }] : []),
     ...(nav.hasGuides ? [{ href: href(lang, "/rehber") + "#yazilar", label: G.articles, icon: "book" }] : []),
     ...(about ? [{ href: href(lang, "/hakkimizda"), label: L.navAbout, icon: "about" }] : []),
   ];
