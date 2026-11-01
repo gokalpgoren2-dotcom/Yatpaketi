@@ -14,6 +14,7 @@ const T = {
     sub: "Tarihlerinizi, kişi sayınızı ve hayalinizi yazın; size uygun tekne ve rotayı birlikte netleştirelim.",
     ways: "Bize ulaşın", wa: "WhatsApp", waSub: "En hızlı yol. Çoğu müşterimiz bizimle buradan yazışıyor.", waCta: "Mesaj yaz",
     phone: "Telefon", phoneSub: "Arayabilirsiniz.", mail: "E-posta", mailSub: "Ayrıntılı sorular için.",
+    loc: "Konum", locName: "Fethiye, Muğla", locSub: "Merkez ofis adresimiz yakında burada olacak.", locCta: "Yol tarifi al",
     formEyebrow: "Mesaj bırakın", formTitle: "Size dönelim.",
     tourTitle: "Turunuz onaylandı mı?", tourText: "Sözleşme, hazırlık listesi ve tekne konumu Turum sayfanızda. Giriş kodunuz e-postanızda.", tourCta: "Turum’a git",
   },
@@ -22,6 +23,7 @@ const T = {
     sub: "Tell us your dates, group size and what you have in mind, and we'll shape the right yacht and route together.",
     ways: "Reach us", wa: "WhatsApp", waSub: "The fastest way. Most of our guests chat with us here.", waCta: "Write a message",
     phone: "Phone", phoneSub: "Feel free to call.", mail: "Email", mailSub: "For detailed questions.",
+    loc: "Location", locName: "Fethiye, Muğla, Türkiye", locSub: "Our office address will appear here soon.", locCta: "Get directions",
     formEyebrow: "Leave a message", formTitle: "We'll get back to you.",
     tourTitle: "Is your tour confirmed?", tourText: "Your contract, preparation list and yacht location are on your My Tour page. Your login code is in your email.", tourCta: "Go to My Tour",
   },
@@ -30,7 +32,7 @@ const T = {
 export async function ContactView({ lang }: { lang: Lang }) {
   const L = T[lang];
   const c = await getContact();
-  const card = "block rounded-2xl bg-white p-6 ring-1 ring-navy/10 transition hover:ring-turquoise";
+  const card = "rounded-2xl bg-white p-6 ring-1 ring-navy/10 transition hover:ring-turquoise";
   return (
     <>
       <Header lang={lang} />
@@ -48,26 +50,35 @@ export async function ContactView({ lang }: { lang: Lang }) {
               <p className={`mb-3 ${eyebrow}`}>{L.ways}</p>
               <div className="space-y-4">
                 {c.whatsapp && (
-                  <a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener noreferrer" className={card}>
+                  <a href={`https://wa.me/${c.whatsapp}`} target="_blank" rel="noopener noreferrer" className={`block ${card}`}>
                     <p className="font-display text-xl font-bold text-navy">{L.wa}</p>
                     <p className="mt-1 text-sm text-navy/65">{L.waSub}</p>
                     <p className="mt-3 text-sm font-semibold text-turquoise-dark">{L.waCta} →</p>
                   </a>
                 )}
                 {c.phone && (
-                  <a href={`tel:+${c.phone}`} className={card}>
+                  <a href={`tel:+${c.phone}`} className={`block ${card}`}>
                     <p className="font-display text-xl font-bold text-navy">{L.phone}</p>
                     <p className="mt-1 text-sm text-navy/65">{L.phoneSub}</p>
                     <p className="mt-3 text-sm font-semibold text-turquoise-dark">{formatPhone(c.phone)}</p>
                   </a>
                 )}
                 {c.email && (
-                  <a href={`mailto:${c.email}`} className={card}>
+                  <a href={`mailto:${c.email}`} className={`block ${card}`}>
                     <p className="font-display text-xl font-bold text-navy">{L.mail}</p>
                     <p className="mt-1 text-sm text-navy/65">{L.mailSub}</p>
                     <p className="mt-3 break-all text-sm font-semibold text-turquoise-dark">{c.email}</p>
                   </a>
                 )}
+                <div className={`${card} overflow-hidden !p-0`}>
+                  <div className="p-6 pb-4">
+                    <p className="font-display text-xl font-bold text-navy">{L.loc}</p>
+                    <p className="mt-1 font-semibold text-navy">{L.locName}</p>
+                    <p className="mt-1 text-sm text-navy/65">{L.locSub}</p>
+                  </div>
+                  <iframe title={L.locName} src="https://www.google.com/maps?q=Fethiye,+Mu%C4%9Fla&z=11&output=embed" loading="lazy" referrerPolicy="no-referrer-when-downgrade" className="h-56 w-full border-0" />
+                  <a href="https://www.google.com/maps/dir/?api=1&destination=Fethiye,+Mu%C4%9Fla" target="_blank" rel="noopener noreferrer" className="block px-6 py-4 text-sm font-semibold text-turquoise-dark hover:underline">{L.locCta} →</a>
+                </div>
               </div>
             </div>
             <div className="rounded-3xl bg-mist/60 p-6 ring-1 ring-navy/10 lg:p-9">

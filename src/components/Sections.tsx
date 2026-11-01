@@ -254,6 +254,7 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
         <div>
           <div className="inline-block rounded-xl bg-white px-4 py-2"><Logo height={32} /></div>
           <p className="mt-2 max-w-xs">{L.footTag}</p>
+          <p className="mt-3">Fethiye, Muğla</p>
           {(c.phone || c.email) && (
             <p className="mt-3 flex flex-col gap-1">
               {c.phone && <a href={`tel:+${c.phone}`} className="hover:text-white">{formatPhone(c.phone)}</a>}
