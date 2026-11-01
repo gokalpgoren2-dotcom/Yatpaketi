@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { requireAdmin } from "@/lib/admin";
 import { publicImageUrl } from "@/lib/supabase/config";
-import { setFeatured, setPublished, bulkSetPublished } from "./actions";
+import { setFeatured, setPublished, bulkSetPublished, publishFiltered } from "./actions";
 import SelectAll from "@/components/admin/SelectAll";
 
 const PER_PAGE = 30;
@@ -14,8 +14,8 @@ type Row = {
   boat_images: { path: string; is_cover: boolean; sort_order: number }[];
 };
 
-export default async function BoatsAdmin({ searchParams }: { searchParams: Promise<{ deleted?: string; q?: string; durum?: string; kat?: string; sayfa?: string; bulk?: string; n?: string }> }) {
-  const { deleted, q: qRaw, durum, kat, sayfa, bulk, n } = await searchParams;
+export default async function BoatsAdmin({ searchParams }: { searchParams: Promise<{ deleted?: string; q?: string; durum?: string; kat?: string; bilgi?: string; sayfa?: string; bulk?: string; n?: string }> }) {
+  const { deleted, q: qRaw, durum, kat, bilgi, sayfa, bulk, n } = await searchParams;
   const q = (qRaw ?? "").trim().slice(0, 60).replace(/[%,()*]/g, " ").trim();
   const page = Math.max(1, Number(sayfa) || 1);
   const { supabase } = await requireAdmin();
@@ -30,6 +30,7 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
   if (durum === "taslak") query = query.eq("is_published", false);
   if (durum === "yayinda") query = query.eq("is_published", true);
   if (kat) query = query.eq("category_id", kat);
+  if (bilgi === "dolu") query = query.not("year", "is", null);
   const { data, error, count } = await query;
   const total = count ?? 0;
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
@@ -38,6 +39,7 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
     if (q) u.set("q", q);
     if (durum) u.set("durum", durum);
     if (kat) u.set("kat", kat);
+    if (bilgi) u.set("bilgi", bilgi);
     if (p > 1) u.set("sayfa", String(p));
     const s2 = u.toString();
     return `/admin/tekneler${s2 ? `?${s2}` : ""}`;
@@ -52,6 +54,7 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
       </div>
       {bulk === "pub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} tekne yayına alındı.</p>}
       {bulk === "unpub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} tekne yayından kaldırıldı.</p>}
+      {bulk === "onay" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Onay kutusunu işaretlemeden toplu yayınlanmaz.</p>}
       {bulk === "none" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Önce listeden tekne seçin.</p>}
       {bulk === "err" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">İşlem yapılamadı.</p>}
       <form method="get" className="mt-4 flex flex-wrap gap-2 rounded-2xl bg-white p-3 shadow-sm">
@@ -63,8 +66,19 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
           <option value="">Tüm kategoriler</option>
           {(cats ?? []).map((c) => <option key={c.id} value={c.id}>{c.name_tr}</option>)}
         </select>
+        <select name="bilgi" defaultValue={bilgi ?? ""} className="rounded-lg border border-navy/15 px-3 py-2.5 text-sm">
+          <option value="">Bilgi: hepsi</option><option value="dolu">Detay bilgisi girilmiş</option>
+        </select>
         <button className="rounded-lg bg-navy px-4 py-2.5 text-sm font-medium text-white">Filtrele</button>
       </form>
+      {(durum === "taslak" || bilgi === "dolu") && total > 0 && (
+        <form action={publishFiltered} className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
+          <input type="hidden" name="back" value={qs(1)} />
+          <input type="hidden" name="q" value={q} /><input type="hidden" name="kat" value={kat ?? ""} /><input type="hidden" name="bilgi" value={bilgi ?? ""} />
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="onay" value="evet" /> Bu filtredeki <b>tüm taslak tekneleri</b> yayına almak istiyorum</label>
+          <button className="rounded-lg bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">Filtredekilerin hepsini yayınla</button>
+        </form>
+      )}
       <p className="mt-3 text-sm text-navy/70">{total} tekne · sayfa {page}/{pages}</p>
       {deleted && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">Tekne silindi.</p>}
       {error && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Liste alınamadı: {error.message}. SQL şemasını çalıştırdınız mı?</p>}

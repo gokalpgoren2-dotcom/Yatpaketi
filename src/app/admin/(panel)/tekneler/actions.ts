@@ -152,3 +152,27 @@ export async function bulkSetPublished(formData: FormData) {
   if (error) redirect(`${safeBack}${sep}bulk=err`);
   redirect(`${safeBack}${sep}bulk=${value ? "pub" : "unpub"}&n=${ids.length}`);
 }
+
+// Filtredeki (arama/durum/kategori/bilgi) tüm tekneleri yayına alır. En fazla 500 tekne.
+export async function publishFiltered(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const back = String(formData.get("back") ?? "/admin/tekneler");
+  const safeBack = back.startsWith("/admin/tekneler") ? back : "/admin/tekneler";
+  const sep = safeBack.includes("?") ? "&" : "?";
+  if (String(formData.get("onay")) !== "evet") redirect(`${safeBack}${sep}bulk=onay`);
+  const q = String(formData.get("q") ?? "").trim().slice(0, 60).replace(/[%,()*]/g, " ").trim();
+  const kat = String(formData.get("kat") ?? "");
+  const bilgi = String(formData.get("bilgi") ?? "");
+  let sel = supabase.from("boats").select("id").eq("is_published", false).limit(500);
+  if (q) sel = sel.ilike("name", `%${q}%`);
+  if (kat) sel = sel.eq("category_id", kat);
+  if (bilgi === "dolu") sel = sel.not("year", "is", null);
+  const { data, error } = await sel;
+  const ids = (data ?? []).map((r: { id: string }) => r.id);
+  if (error || ids.length === 0) redirect(`${safeBack}${sep}bulk=${error ? "err" : "none"}`);
+  const { error: e2 } = await supabase.from("boats").update({ is_published: true }).in("id", ids);
+  revalidatePath("/admin/tekneler");
+  revalidatePath("/tekneler");
+  if (e2) redirect(`${safeBack}${sep}bulk=err`);
+  redirect(`${safeBack}${sep}bulk=pub&n=${ids.length}`);
+}
