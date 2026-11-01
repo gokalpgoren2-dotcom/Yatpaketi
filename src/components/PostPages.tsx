@@ -1,3 +1,4 @@
+import { regionMapFor } from "@/lib/region-maps";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
@@ -62,6 +63,17 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
             <Photo src={p.cover} alt={p.title} priority sizes="(min-width:768px) 768px, 100vw" className="object-cover" />
           </div>
         )}
+        {(() => {
+          const map = regionMapFor(kind, slug);
+          if (!map) return null;
+          return (
+            <figure className="mt-8 overflow-hidden rounded-3xl bg-[#05204a] ring-1 ring-navy/10">
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img src={map} alt={p.title} loading="lazy" className="h-auto w-full" />
+              <figcaption className="px-5 py-3 text-xs text-white/70">{lang === "en" ? "Promotional map. Coastlines are generalised; not for navigation." : "Tanıtım haritası. Kıyı çizgileri genelleştirilmiştir; seyir amacıyla kullanılmaz."}</figcaption>
+            </figure>
+          );
+        })()}
         <div className="mt-8"><RichText text={p.content} /></div>
         {kind !== "page" && (
           <div className="mt-12 rounded-3xl bg-mist p-6 text-center">

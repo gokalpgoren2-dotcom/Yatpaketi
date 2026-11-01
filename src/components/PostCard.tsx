@@ -3,6 +3,7 @@ import { Photo } from "./Photo";
 import { Placeholder } from "./Placeholder";
 import type { Post, PostKind } from "@/lib/posts";
 import { href, type Lang } from "@/lib/i18n";
+import { regionMapFor } from "@/lib/region-maps";
 
 const base: Record<PostKind, string> = { guide: "/rehber", blog: "/blog", page: "", destination: "/destinasyonlar", route: "/rotalar", package: "/tur-paketleri", process: "/kiralama-sureci" };
 export const postHref = (p: Pick<Post, "kind" | "slug">, lang: Lang = "tr") => href(lang, p.kind === "process" ? base.process : `${base[p.kind]}/${p.slug}`);
@@ -13,6 +14,9 @@ export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?
       <div className="relative aspect-[16/10] overflow-hidden">
         {p.cover ? (
           <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
+        ) : regionMapFor(p.kind, p.slug) ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img src={regionMapFor(p.kind, p.slug)!} alt="" loading="lazy" className="h-full w-full bg-[#05204a] object-contain transition duration-500 group-hover:scale-105" />
         ) : (
           <Placeholder hue={185 + (i % 5) * 12} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
         )}
