@@ -38,13 +38,15 @@ const PLACES: Record<string, Pt> = {
 };
 // Bilgisayarda tabela yönü (yoksa yakın komşuya göre otomatik seçilir).
 const SIDE: Record<string, "up" | "down"> = { bodrum: "up", datca: "up", bozburun: "down", marmaris: "up", gocek: "up", fethiye: "down", kaskekova: "up", kas: "up", kekova: "down" };
+// Kaş ve Kekova haritada tek pindir.
+const ALIAS: Record<string, string> = { kas: "kaskekova", kekova: "kaskekova" };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
 
 type Route = { name: string; pts: Pt[]; dur: number; begin: number; kind: number };
 type Layout = { w: number; h: number; x: (lon: number) => number; y: (la: number) => number; trees: number; boat: number; font: number; routes: Route[] };
 
 // Tekneler, limanlar arasında yalnızca denizdeki rotalarda gider (boylam, enlem). Kalkış limanında belirir, varışta silinir.
-const FETHIYE_KAS: Pt[] = [[29.08, 36.58], [29.05, 36.45], [29.12, 36.3], [29.3, 36.2], [29.5, 36.17], [29.66, 36.17]];
+const FETHIYE_KAS: Pt[] = [[29.08, 36.58], [29.05, 36.45], [29.12, 36.3], [29.3, 36.2], [29.5, 36.17], [29.66, 36.165], [29.75, 36.15]];
 const GOCEK_BODRUM: Pt[] = [[28.93, 36.69], [28.8, 36.58], [28.55, 36.52], [28.3, 36.52], [28.07, 36.47], [27.8, 36.5], [27.55, 36.55], [27.38, 36.62], [27.3, 36.78], [27.4, 36.88], [27.43, 36.98]];
 const BODRUM_GOCEK: Pt[] = [...GOCEK_BODRUM].reverse();
 const MARMARIS_BOZBURUN: Pt[] = [[28.28, 36.79], [28.25, 36.69], [28.18, 36.59], [28.1, 36.5], [28.0, 36.47], [27.93, 36.54], [27.93, 36.63]];
@@ -119,13 +121,18 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
   }
   const waves: Pt[] = Array.from({ length: L.w > 600 ? 40 : 14 }, () => [r() * L.w, r() * L.h]);
 
-  const pins = destinations
-    .map((d) => {
-      const key = [norm(d.slug), norm(d.name)].find((k) => PLACES[k]);
-      return key ? { d, key, pos: px(PLACES[key]) } : null;
-    })
-    .filter((v): v is { d: Destination; key: string; pos: Pt } => v !== null)
-    .sort((a, b) => a.pos[0] - b.pos[0]);
+  const found = new Map<string, { d: Destination; key: string; pos: Pt; label: string }>();
+  for (const d of destinations) {
+    const raw = [norm(d.slug), norm(d.name)].find((k) => PLACES[k]);
+    if (!raw) continue;
+    const key = ALIAS[raw] ?? raw;
+    const merged = key === "kaskekova";
+    const prev = found.get(key);
+    // Aynı yer için birden fazla kayıt varsa tek pin kalır; "kas-kekova" kaydı varsa o tercih edilir.
+    if (prev && !(merged && norm(d.slug) === "kaskekova")) continue;
+    found.set(key, { d, key, pos: px(PLACES[key]), label: merged ? "Kaş - Kekova" : d.name });
+  }
+  const pins = [...found.values()].sort((a, b) => a.pos[0] - b.pos[0]);
 
   const en = lang === "en";
   let prevLift = false; // önceki tabela aşağıya alındı mı
@@ -170,22 +177,22 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <text x={L.x(27.1)} y={L.y(36.7)} textAnchor="middle" fill="#fff" fillOpacity="0.7" fontSize={L.font - 3} fontStyle="italic" letterSpacing="2">KOS</text>
 
       {/* Destinasyon tabelaları: dokununca o bölgenin tekneleri açılır */}
-      {pins.map(({ d, key, pos }, i) => {
-        const w = d.name.length * (L.font * 0.62) + 30 * s;
+      {pins.map(({ d, key, pos, label }, i) => {
+        const w = label.length * (L.font * 0.62) + 30 * s;
         const close = L.w > 600 && pos[0] - prevX < 130 && !prevLift;
         prevLift = close; prevX = pos[0];
         const side = SIDE[key];
         const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : side ? (side === "down" ? 34 : -34) : close ? 34 : -34) * s;
         const below = dy > 0;
         return (
-          <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${d.name} ${en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
+          <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${label} ${en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
             <g className="pk-link" transform={`translate(${pos[0].toFixed(1)} ${pos[1].toFixed(1)})`}>
               <g className="pk-pin" style={{ animationDelay: `${i * 0.6}s` }}>
                 <circle r={9 * s} fill="#fff" fillOpacity="0.45" />
                 <circle r={5.5 * s} fill="#1bb4c4" stroke="#fff" strokeWidth={2 * s} />
                 <path d={below ? `M0 ${6 * s} V${dy - 8 * s}` : `M0 ${-6 * s} V${dy + 12 * s}`} stroke="#fff" strokeWidth={1.6 * s} strokeOpacity="0.8" />
                 <rect className="pk-pill" x={-w / 2} y={dy - 13 * s} width={w} height={26 * s} rx={13 * s} fill="#fff" stroke="#0b3a6a" strokeOpacity="0.15" />
-                <text className="pk-name" x="0" y={dy + L.font * 0.36} textAnchor="middle" fontSize={L.font} fontWeight="700" fill="#0b3a6a">{d.name}</text>
+                <text className="pk-name" x="0" y={dy + L.font * 0.36} textAnchor="middle" fontSize={L.font} fontWeight="700" fill="#0b3a6a">{label}</text>
               </g>
             </g>
           </Link>
