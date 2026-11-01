@@ -10,7 +10,7 @@ const COAST: Pt[] = [
   [27.55, 37.13], [27.42, 37.12], [27.3, 37.1], [27.22, 37.05], [27.25, 36.99], [27.33, 36.99], [27.43, 37.02],
   [27.52, 37.03], [27.65, 37.04], [27.8, 37.02], [27.95, 37.03], [28.1, 37.06], [28.3, 37.06], [28.25, 36.97],
   [28.1, 36.9], [27.9, 36.85], [27.7, 36.8], [27.5, 36.76], [27.37, 36.7], [27.45, 36.66], [27.65, 36.71],
-  [27.85, 36.72], [27.98, 36.72], [27.95, 36.58], [28.03, 36.5], [28.12, 36.58], [28.2, 36.68], [28.22, 36.75],
+  [27.85, 36.72], [27.98, 36.72], [27.95, 36.6], [28.03, 36.54], [28.12, 36.6], [28.2, 36.68], [28.22, 36.75],
   [28.25, 36.82], [28.28, 36.85], [28.38, 36.8], [28.45, 36.72], [28.5, 36.78], [28.55, 36.83], [28.65, 36.78],
   [28.75, 36.7], [28.85, 36.7], [28.95, 36.73], [29.05, 36.68], [29.12, 36.64], [29.15, 36.56], [29.1, 36.48],
   [29.2, 36.38], [29.3, 36.28], [29.4, 36.25], [29.55, 36.22], [29.65, 36.2], [29.8, 36.17], [29.95, 36.22],
@@ -18,7 +18,7 @@ const COAST: Pt[] = [
 ];
 const ISLANDS: Pt[][] = [
   // Rodos
-  [[28.1, 36.45], [28.23, 36.4], [28.25, 36.28], [28.12, 36.12], [28.08, 36.05], [27.88, 35.95], [27.75, 35.88], [27.78, 36.02], [27.72, 36.2], [27.75, 36.35], [27.95, 36.42]],
+  [[28.1, 36.4], [28.23, 36.36], [28.25, 36.26], [28.12, 36.12], [28.08, 36.05], [27.88, 35.95], [27.75, 35.88], [27.78, 36.02], [27.72, 36.2], [27.75, 36.32], [27.95, 36.37]],
   // Kos
   [[26.93, 36.75], [27.05, 36.83], [27.28, 36.9], [27.32, 36.85], [27.12, 36.78], [27.0, 36.72]],
   // Simi, Tilos, Halki, Meis
@@ -38,18 +38,23 @@ const PLACES: Record<string, Pt> = {
 };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
 
-type Route = { pts: Pt[]; dur: number; begin: number; kind: number };
+type Route = { name: string; pts: Pt[]; dur: number; begin: number; kind: number };
 type Layout = { w: number; h: number; x: (lon: number) => number; y: (la: number) => number; trees: number; boat: number; font: number; routes: Route[] };
 
-// Tekne rotaları yalnızca denizde kalır (boylam, enlem). Tekneler rota başında ve sonunda silinip belirir.
-const ROUTE_A: Pt[] = [[26.2, 36.25], [26.8, 36.2], [27.3, 36.0], [27.6, 35.75], [28.0, 35.65], [28.6, 35.65], [29.2, 35.75], [29.8, 35.8]];
-const ROUTE_B: Pt[] = [[28.4, 36.55], [28.7, 36.5], [29.0, 36.45], [29.2, 36.2], [29.45, 36.0], [29.9, 35.98], [30.3, 36.0], [30.6, 36.05]];
-const ROUTE_C: Pt[] = [[27.45, 36.92], [27.8, 36.93], [28.1, 36.98], [28.2, 37.0]];
+// Tekneler, limanlar arasında yalnızca denizdeki rotalarda gider (boylam, enlem). Kalkış limanında belirir, varışta silinir.
+const FETHIYE_KAS: Pt[] = [[29.08, 36.58], [29.05, 36.45], [29.12, 36.3], [29.3, 36.2], [29.5, 36.17], [29.66, 36.17]];
+const GOCEK_BODRUM: Pt[] = [[28.93, 36.69], [28.8, 36.58], [28.55, 36.52], [28.3, 36.52], [28.07, 36.47], [27.8, 36.5], [27.55, 36.55], [27.38, 36.62], [27.3, 36.78], [27.4, 36.88], [27.43, 36.98]];
+const BODRUM_GOCEK: Pt[] = [...GOCEK_BODRUM].reverse();
+const MARMARIS_BOZBURUN: Pt[] = [[28.28, 36.79], [28.25, 36.69], [28.18, 36.59], [28.1, 36.5], [28.0, 36.47], [27.93, 36.54], [27.93, 36.63]];
 
-const DESKTOP: Layout = { w: 1200, h: 700, x: (lo) => (lo - 24.6) * 215, y: (la) => (37.9 - la) * 269 + 80, trees: 90, boat: 0.5, font: 14,
-  routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
-const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.4) * 100, y: (la) => (37.55 - la) * 125 + 110, trees: 40, boat: 0.3, font: 11,
-  routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
+const ROUTES: Route[] = [
+  { name: "Fethiye – Kaş", pts: FETHIYE_KAS, dur: 55, begin: -8, kind: 0 },
+  { name: "Göcek – Bodrum", pts: GOCEK_BODRUM, dur: 90, begin: -30, kind: 2 },
+  { name: "Marmaris – Bozburun", pts: MARMARIS_BOZBURUN, dur: 38, begin: -14, kind: 1 },
+  { name: "Bodrum – Göcek", pts: BODRUM_GOCEK, dur: 90, begin: -75, kind: 1 },
+];
+const DESKTOP: Layout = { w: 1200, h: 700, x: (lo) => (lo - 24.6) * 215, y: (la) => (37.9 - la) * 269 + 80, trees: 90, boat: 0.5, font: 14, routes: ROUTES };
+const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.4) * 100, y: (la) => (37.55 - la) * 125 + 110, trees: 40, boat: 0.3, font: 11, routes: ROUTES };
 
 function curve(pts: Pt[], closed: boolean): string {
   const n = pts.length;
@@ -132,16 +137,19 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <path d={shore} fill="none" stroke="#9fe7f0" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 24 : 12} strokeLinejoin="round" strokeLinecap="round" />
       {isl.map((d, i) => <path key={"h" + i} d={d} fill="none" stroke="#7fdcea" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 26 : 12} strokeLinejoin="round" />)}
 
-      {/* Süzülen tekneler: yalnızca denizdeki rotalarda gider */}
+      {/* Süzülen tekneler: limanlar arasında, yalnızca denizdeki rotalarda */}
       {L.routes.map((rt, i) => {
         const q = rt.pts.map(px);
         const path = `M${q[0][0].toFixed(1)} ${q[0][1].toFixed(1)} ${curve(q, false)}`;
+        const west = q[q.length - 1][0] < q[0][0];
+        const common = { dur: `${rt.dur}s`, begin: `${rt.begin}s`, repeatCount: "indefinite" } as const;
         return (
           <g key={i} opacity="0">
-            <animateMotion dur={`${rt.dur}s`} begin={`${rt.begin}s`} repeatCount="indefinite" path={path} />
-            <animate attributeName="opacity" dur={`${rt.dur}s`} begin={`${rt.begin}s`} repeatCount="indefinite" values="0;0.95;0.95;0" keyTimes="0;0.06;0.94;1" />
+            <title>{rt.name}</title>
+            <animateMotion {...common} path={path} calcMode="linear" keyPoints="0;0;1;1" keyTimes="0;0.1;0.92;1" />
+            <animate {...common} attributeName="opacity" values="0;0.95;0.95;0" keyTimes="0;0.1;0.9;1" />
             <ellipse cx="0" cy="2" rx={60 * L.boat} ry={3 * L.boat} fill="#fff" fillOpacity="0.35" />
-            <g transform={`scale(${L.boat}) translate(-80 -120)`}><g className="pk-sway">{BOATS[rt.kind]}</g></g>
+            <g transform={`scale(${west ? -L.boat : L.boat} ${L.boat}) translate(-80 -120)`}><g className="pk-sway">{BOATS[rt.kind]}</g></g>
           </g>
         );
       })}
