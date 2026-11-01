@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { Destination } from "@/lib/data";
 import type { Category } from "@/lib/content";
 import { href, t, type Lang } from "@/lib/i18n";
+import { SearchDates } from "./SearchDates";
 
 const field = "w-full cursor-pointer truncate bg-transparent text-base font-medium text-navy outline-none";
 const label = "mb-0.5 flex items-center gap-1.5 text-[11px] font-semibold uppercase tracking-wider text-turquoise-dark";
@@ -15,6 +16,7 @@ export function SearchBar({ destinations, categories = [], lang = "tr" }: { dest
   const [dest, setDest] = useState("");
   const [type, setType] = useState("");
   const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
 
   function submit(e: React.FormEvent) {
     e.preventDefault();
@@ -22,6 +24,7 @@ export function SearchBar({ destinations, categories = [], lang = "tr" }: { dest
     if (dest) q.set("destinasyon", dest);
     if (type) q.set("tip", type);
     if (from) q.set("giris", from);
+    if (from && to) q.set("cikis", to);
     const qs = q.toString();
     router.push(qs ? `${href(lang, "/tekneler")}?${qs}` : href(lang, "/tekneler"));
   }
@@ -53,11 +56,7 @@ export function SearchBar({ destinations, categories = [], lang = "tr" }: { dest
         </select>
       </div>
       <div className="min-w-0 rounded-2xl px-4 py-2.5 transition hover:bg-mist sm:rounded-full sm:border-l sm:border-navy/10">
-        <label htmlFor="from" className={label}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" /></svg>
-          {L.date}
-        </label>
-        <input id="from" type="date" value={from} onChange={(e) => setFrom(e.target.value)} className={field} />
+        <SearchDates lang={lang} start={from} end={to} onChange={(a, b) => { setFrom(a); setTo(b); }} labelClass={label} fieldClass={field} icon={<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="4" y="5" width="16" height="15" rx="2" /><path d="M4 10h16M9 3v4M15 3v4" /></svg>} />
       </div>
       <button type="submit" aria-label={L.searchBoats} className="flex h-14 items-center justify-center gap-2 rounded-2xl bg-turquoise px-7 font-semibold text-white shadow-lg shadow-turquoise/30 transition hover:bg-turquoise-dark sm:ml-2 sm:self-center sm:rounded-full">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.4" strokeLinecap="round" aria-hidden><circle cx="11" cy="11" r="7" /><path d="M20 20l-3.5-3.5" /></svg>

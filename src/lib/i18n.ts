@@ -114,7 +114,7 @@ const tr = {
   sampleData: "Örnek içerik: Veritabanı bağlı olmadığı için örnek veri gösteriliyor.",
   catHero: (n: string) => `${n} Kiralama`, catBoats: (n: string) => `${n} tekneleri`, catNone1: "Bu tipte henüz yayında tekne yok.", catNone2: "Tüm tekneleri", catNone3: "inceleyebilirsiniz.",
   // takvim
-  prevMonth: "Önceki ay", nextMonth: "Sonraki ay", pickBoth: "Giriş ve çıkış tarihini seçin", pickEnd: "çıkış tarihini seçin",
+  checkIn: "Giriş", checkOut: "Çıkış", applyDates: "Tamam", prevMonth: "Önceki ay", nextMonth: "Sonraki ay", pickBoth: "Giriş ve çıkış tarihini seçin", pickEnd: "çıkış tarihini seçin",
   tapEnd: "Şimdi çıkış tarihine dokunun.", tapStart: "Önce giriş, sonra çıkış tarihine dokunun.",
   // iletişim balonu
   call: "Ara", contactAria: "İletişim", reachUs: "Bize ulaşın", sendEmail: "E-posta gönder", writeUs: "Bize yazın", closeContact: "İletişim menüsünü kapat", openContact: "İletişim menüsünü aç",
@@ -200,7 +200,7 @@ const en: typeof tr = {
   destHero: (n) => `${n} Boat Charter`, destBoats: (n) => `Boats departing from ${n}`, destNone: "No boats have been added for this destination yet.",
   sampleData: "Sample content: sample data is shown because the database is not connected.",
   catHero: (n) => `${n} Charter`, catBoats: (n) => `${n} boats`, catNone1: "There are no boats of this type listed yet.", catNone2: "Browse all boats", catNone3: "instead.",
-  prevMonth: "Previous month", nextMonth: "Next month", pickBoth: "Select check-in and check-out dates", pickEnd: "select check-out date",
+  checkIn: "Check-in", checkOut: "Check-out", applyDates: "Done", prevMonth: "Previous month", nextMonth: "Next month", pickBoth: "Select check-in and check-out dates", pickEnd: "select check-out date",
   tapEnd: "Now tap the check-out date.", tapStart: "Tap the check-in date first, then the check-out date.",
   call: "Call", contactAria: "Contact", reachUs: "Get in touch", sendEmail: "Send email", writeUs: "Write to us", closeContact: "Close contact menu", openContact: "Open contact menu",
 };
