@@ -33,13 +33,10 @@ export type Boat = {
 export type Destination = { slug: string; name: string; blurb: string; hue: number; intro: string; image?: string | null; seoTitle?: string; seoDescription?: string };
 
 export const categories = [
-  "Gulet",
   "Motoryat",
-  "Katamaran",
+  "Gulet",
   "Yelkenli",
-  "Trawler",
   "Lüks Yat",
-  "Günlük Tekneler",
 ];
 
 export const destinations: Destination[] = [
