@@ -1,5 +1,16 @@
 import { sceneFor } from "./PortScenes";
 
+// Hazır çizim görselleri (public/limanlar). Adres parçalarından eşleşir; yoksa kodla çizilen sahneye düşer.
+const IMAGES: [string[], string][] = [
+  [["bodrum", "gumusluk"], "bodrum"], [["kas", "kekova"], "kas"], [["marmaris", "icmeler", "turunc"], "marmaris"], [["selimiye"], "selimiye"], [["datca", "knidos"], "datca"],
+  [["bozburun", "sogut", "ekincik", "dalyan", "gokova"], "koy"],
+];
+function imageFor(slug: string) {
+  const t = (slug || "").toLowerCase().split("-");
+  const hit = IMAGES.find(([keys]) => keys.some((k) => t.includes(k)));
+  return hit ? `/limanlar/${hit[1]}.jpg` : null;
+}
+
 // Limanlar için çizim: gün batımı/gündüz gökyüzü, uzak dağlar, kayalık ve çam, sakin deniz, gulet ya da yelkenli.
 // Her limanın adresinden (slug) sabit bir görünüm üretilir; aynı liman hep aynı çizimi alır.
 function seed(s: string) {
@@ -15,6 +26,9 @@ const SKIES = [
 ];
 
 export function PortArt({ slug, className = "" }: { slug: string; className?: string }) {
+  const img = imageFor(slug);
+  // eslint-disable-next-line @next/next/no-img-element
+  if (img) return <img src={img} alt="" loading="lazy" className={`${className} object-cover`} />;
   const scene = sceneFor(slug);
   if (scene) return <svg className={className} viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">{scene}</svg>;
   const r = seed(slug || "x");
