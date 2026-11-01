@@ -9,7 +9,7 @@ import { offerLabel } from "@/lib/campaigns";
 import { RatingLine } from "./Reviews";
 import { href, type Lang } from "@/lib/i18n";
 import { useState } from "react";
-import { buildPoints, samePair, type Curated } from "@/lib/compare";
+import { buildPoints, eqCell, eqInfo, samePair, type Curated } from "@/lib/compare";
 import { CompareInsights } from "./CompareInsights";
 
 const T = {
@@ -60,7 +60,8 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
     [L.rows.year, (b) => (b.year ? `${b.year}${b.refit ? ` (refit ${b.refit})` : ""}` : "–")],
     [L.rows.crew, (b) => (b.crew > 0 ? b.crew : "–")],
     [L.rows.captain, (b) => (b.captained ? L.included : L.notIncluded)],
-    [L.rows.ac, (b) => (has(b, /klima|air.?cond/i) ? L.yes : L.no)],
+    [L.rows.ac, (b) => eqCell(eqInfo(b, /^klima$|air.?cond/i, lang), lang)],
+    [lang === "en" ? "Generator" : "Jeneratör", (b) => eqCell(eqInfo(b, /jenerat|generator/i, lang), lang)],
     [L.rows.jacuzzi, (b) => (has(b, /jakuzi|jacuzzi/i) ? L.yes : L.no)],
   ];
 

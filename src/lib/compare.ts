@@ -2,6 +2,7 @@ import { createClient } from "@supabase/supabase-js";
 import { supabaseConfigured } from "./supabase/config";
 import type { Boat } from "./data";
 import type { Lang } from "./i18n";
+import { localizeEquipment, parseEquipment } from "./boatOptions";
 
 // ---- Ekibin yazdığı karşılaştırma yorumları (Admin > Karşılaştırmalar; site_texts "comparisons") ----
 export type Curated = { id: string; a: string; b: string; note: string; noteEn: string; featured: boolean };
@@ -24,6 +25,33 @@ export type Side = "a" | "b" | null;
 export type Row = { label: string; a: string; b: string; win: Side };
 export type Point = { title: string; text: string; win: Side };
 
+
+// ---- Klima / jeneratör gibi "var ama ne kadar" olan donanımlar ----
+export type EqInfo = { has: boolean; detail: string; hours: number | null; extra: boolean };
+export function eqInfo(b: Boat, re: RegExp, lang: Lang = "tr"): EqInfo {
+  const raw = b.equipment.find((e) => re.test(parseEquipment(e).name));
+  if (!raw) return { has: false, detail: "", hours: null, extra: false };
+  const detail = parseEquipment(localizeEquipment(raw, lang)).detail;
+  const d = parseEquipment(raw).detail.toLocaleLowerCase("tr");
+  const extra = /ekstra ücretli|extra charge/.test(d) && !/fazlası/.test(d);
+  let hours: number | null = null;
+  if (extra) hours = 0;
+  else if (/24\s*saat|7\s*\/\s*24|tam gün|all day/.test(d)) hours = 24;
+  else { const m = d.match(/(\d{1,2})\s*saat/); if (m) hours = Number(m[1]); }
+  return { has: true, detail, hours, extra };
+}
+export function eqCell(i: EqInfo, lang: Lang): string {
+  const en = lang === "en";
+  if (!i.has) return en ? "No" : "Yok";
+  return i.detail ? i.detail : (en ? "Yes" : "Var");
+}
+// Daha iyi olan taraf: saat biliniyorsa saate, değilse var/yok'a göre.
+export function eqWin(a: EqInfo, b: EqInfo): Side {
+  if (a.has !== b.has) return a.has ? "a" : "b";
+  if (a.has && a.hours !== null && b.hours !== null && a.hours !== b.hours) return a.hours > b.hours ? "a" : "b";
+  return null;
+}
+
 const eff = (b: Boat) => Math.max(b.year ?? 0, b.refit ?? 0);
 const norm = (s: string) => s.trim().toLocaleLowerCase("tr");
 const only = (x: string[], y: string[]) => { const set = new Set(y.map(norm)); return x.filter((i) => !set.has(norm(i))); };
@@ -38,6 +66,8 @@ export function compareRows(a: Boat, b: Boat, lang: Lang, priceText: (x: Boat) =
   const yn = (v: boolean) => (v ? (en ? "Yes" : "Var") : (en ? "No" : "Yok"));
   const has = (x: Boat, re: RegExp) => x.equipment.some((e) => re.test(e));
   const num = (x: number) => (x > 0 ? String(x) : "–");
+  const acA = eqInfo(a, /^klima$|air.?cond/i, lang), acB = eqInfo(b, /^klima$|air.?cond/i, lang);
+  const gnA = eqInfo(a, /jenerat|generator/i, lang), gnB = eqInfo(b, /jenerat|generator/i, lang);
   const pa = perWeek(a), pb = perWeek(b);
   const priceWin: Side = pa && pb && a.currency === b.currency ? lower(pa, pb) : null;
   const yearTxt = (x: Boat) => (x.year ? `${x.year}${x.refit ? ` · refit ${x.refit}` : ""}` : "–");
@@ -51,7 +81,8 @@ export function compareRows(a: Boat, b: Boat, lang: Lang, priceText: (x: Boat) =
     { label: en ? "Guests" : "Misafir", a: String(a.guests), b: String(b.guests), win: higher(a.guests, b.guests) },
     { label: en ? "Crew" : "Mürettebat", a: num(a.crew), b: num(b.crew), win: null },
     { label: en ? "Captain" : "Kaptan", a: a.captained ? (en ? "Included" : "Dahil") : (en ? "Not included" : "Dahil değil"), b: b.captained ? (en ? "Included" : "Dahil") : (en ? "Not included" : "Dahil değil"), win: null },
-    { label: en ? "A/C" : "Klima", a: yn(has(a, /klima|air.?cond/i)), b: yn(has(b, /klima|air.?cond/i)), win: has(a, /klima|air.?cond/i) === has(b, /klima|air.?cond/i) ? null : has(a, /klima|air.?cond/i) ? "a" : "b" },
+    { label: en ? "A/C" : "Klima", a: eqCell(acA, lang), b: eqCell(acB, lang), win: eqWin(acA, acB) },
+    { label: en ? "Generator" : "Jeneratör", a: eqCell(gnA, lang), b: eqCell(gnB, lang), win: eqWin(gnA, gnB) },
     { label: en ? "Jacuzzi" : "Jakuzi", a: yn(has(a, /jakuzi|jacuzzi/i)), b: yn(has(b, /jakuzi|jacuzzi/i)), win: has(a, /jakuzi|jacuzzi/i) === has(b, /jakuzi|jacuzzi/i) ? null : has(a, /jakuzi|jacuzzi/i) ? "a" : "b" },
     { label: en ? "Water sports" : "Su sporları", a: a.waterSports.length ? `${a.waterSports.length} ${en ? "items" : "çeşit"}` : "–", b: b.waterSports.length ? `${b.waterSports.length} ${en ? "items" : "çeşit"}` : "–", win: higher(a.waterSports.length, b.waterSports.length) },
     { label: en ? "Price" : "Fiyat", a: priceText(a) ?? askPrice, b: priceText(b) ?? askPrice, win: priceWin },
@@ -103,6 +134,18 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
       : `${A}: ${a.crew > 0 ? `${a.crew} personel` : "personel bilgisi yok"}${a.captained ? ", kaptan dahil" : ""}. ${B}: ${b.crew > 0 ? `${b.crew} personel` : "personel bilgisi yok"}${b.captained ? ", kaptan dahil" : ""}.` });
   }
 
+  // Klima ve jeneratör
+  for (const [key, re, trN, enN] of [["ac", /^klima$|air.?cond/i, "Klima", "Air conditioning"], ["gen", /jenerat|generator/i, "Jeneratör", "Generator"]] as const) {
+    void key;
+    const x = eqInfo(a, re, lang), y = eqInfo(b, re, lang);
+    if (!x.has && !y.has) continue;
+    const w = eqWin(x, y);
+    const d = (i: EqInfo) => (i.has ? (i.detail || (en ? "available" : "var")) : (en ? "not available" : "yok"));
+    pts.push({ title: en ? enN : trN, win: w, text: en
+      ? `${A}: ${d(x)}. ${B}: ${d(y)}.${w ? ` ${nm(w)} has the better arrangement. Hours matter in summer, so check what is included in the price.` : ""}`
+      : `${A}: ${d(x)}. ${B}: ${d(y)}.${w ? ` ${nm(w)} bu konuda daha avantajlı. Yazın çalışma saati önemlidir; fiyata neyin dahil olduğuna bakın.` : ""}` });
+  }
+
   // Su sporları
   const wa = only(a.waterSports, b.waterSports), wb = only(b.waterSports, a.waterSports);
   if (a.waterSports.length || b.waterSports.length) {
@@ -116,7 +159,8 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
   }
 
   // Donanım
-  const ea = only(a.equipment, b.equipment), eb = only(b.equipment, a.equipment);
+  const clean = (l: string[]) => l.map((e) => parseEquipment(e).name);
+  const ea = only(clean(a.equipment), clean(b.equipment)), eb = only(clean(b.equipment), clean(a.equipment));
   if (ea.length || eb.length) {
     const parts: string[] = [];
     if (ea.length) parts.push(en ? `${A} also has ${join(ea.slice(0, 5), true)}` : `${A}’da ayrıca ${join(ea.slice(0, 5), false)} var`);

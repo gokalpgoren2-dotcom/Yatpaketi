@@ -14,13 +14,13 @@ const TOY_ALIASES: Record<string, string> = {
 };
 
 export const EQUIPMENT: { name: string; hint: string; options?: string[] }[] = [
-  { name: "Klima", hint: "Çalışma saati seçin ya da yazın", options: ["Tam gün (24 saat)", "Gece 00:00–07:00 arası", "Gece 23:00–08:00 arası", "Yalnızca kabinlerde", "Salon ve kabinlerde, gün boyu", "Jeneratör açıkken"] },
+  { name: "Klima", hint: "Çalışma saati seçin ya da yazın", options: ["Tam gün (24 saat), fiyata dahil", "Günde 4 saat fiyata dahil, fazlası ekstra", "Günde 6 saat fiyata dahil, fazlası ekstra", "Günde 8 saat fiyata dahil, fazlası ekstra", "Ekstra ücretli", "Gece 00:00–07:00 arası", "Gece 23:00–08:00 arası", "Yalnızca kabinlerde", "Salon ve kabinlerde, gün boyu", "Jeneratör açıkken"] },
   { name: "Wi-Fi", hint: "Örn: yalnızca Türk karasularında" },
   { name: "Jakuzi", hint: "Örn: üst güvertede" },
   { name: "Flybridge", hint: "" },
   { name: "Tender", hint: "Örn: 115 HP, 12 kişilik" },
   { name: "Sauna", hint: "" },
-  { name: "Jeneratör", hint: "Örn: gece kapalı" },
+  { name: "Jeneratör", hint: "Örn: gece kapalı", options: ["Tam gün (24 saat), fiyata dahil", "Günde 4 saat fiyata dahil, fazlası ekstra", "Günde 6 saat fiyata dahil, fazlası ekstra", "Ekstra ücretli", "Gece kapalı"] },
   { name: "Su yapıcı", hint: "" },
   { name: "Buz makinesi", hint: "" },
   { name: "Eğlence sistemi", hint: "Örn: TV, müzik sistemi" },
@@ -61,6 +61,7 @@ const EQ_EN: Record<string, string> = {
   "Jeneratör": "Generator", "Su yapıcı": "Watermaker", "Buz makinesi": "Ice maker", "Eğlence sistemi": "Entertainment system", "Fitness": "Fitness",
 };
 const DETAIL_EN: Record<string, string> = {
+  "Tam gün (24 saat), fiyata dahil": "All day (24 hours), included in the price", "Günde 4 saat fiyata dahil, fazlası ekstra": "4 hours a day included, extra beyond that", "Günde 6 saat fiyata dahil, fazlası ekstra": "6 hours a day included, extra beyond that", "Günde 8 saat fiyata dahil, fazlası ekstra": "8 hours a day included, extra beyond that", "Ekstra ücretli": "Extra charge", "Gece kapalı": "Off at night",
   "Tam gün (24 saat)": "All day (24 hours)", "Gece 00:00–07:00 arası": "At night, 00:00–07:00", "Gece 23:00–08:00 arası": "At night, 23:00–08:00",
   "Yalnızca kabinlerde": "In cabins only", "Salon ve kabinlerde, gün boyu": "Saloon and cabins, all day", "Jeneratör açıkken": "While the generator is running",
 };
