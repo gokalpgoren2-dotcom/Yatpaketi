@@ -2,12 +2,13 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { FavoritesClient } from "@/components/FavoritesClient";
 import { getBoats, getContact } from "@/lib/content";
+import { getCurated } from "@/lib/compare";
 import type { Lang } from "@/lib/i18n";
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
 export async function FavoritesView({ lang }: { lang: Lang }) {
-  const [{ boats }, c] = await Promise.all([getBoats(lang), getContact()]);
+  const [{ boats }, c, curated] = await Promise.all([getBoats(lang), getContact(), getCurated()]);
   const en = lang === "en";
   return (
     <>
@@ -20,7 +21,7 @@ export async function FavoritesView({ lang }: { lang: Lang }) {
           </div>
         </section>
         <section className="py-12 pb-24 lg:py-16">
-          <div className={wrap}><FavoritesClient boats={boats} whatsapp={c.whatsapp} email={c.email} lang={lang} /></div>
+          <div className={wrap}><FavoritesClient boats={boats} whatsapp={c.whatsapp} email={c.email} lang={lang} curated={curated} /></div>
         </section>
       </main>
       <Footer lang={lang} />

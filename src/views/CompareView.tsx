@@ -4,6 +4,7 @@ import { Footer } from "@/components/Sections";
 import { Photo } from "@/components/Photo";
 import { Placeholder } from "@/components/Placeholder";
 import { CompareSelect } from "@/components/CompareSelect";
+import { CompareInsights } from "@/components/CompareInsights";
 import { getBoats, getContact } from "@/lib/content";
 import { priceLabel, type Boat } from "@/lib/data";
 import { buildPoints, compareRows, getCurated, samePair } from "@/lib/compare";
@@ -107,28 +108,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                   <p className="border-t border-navy/10 p-3 text-xs text-navy/50">{en ? "✓ marks the stronger value in each row. Larger is not always better; it depends on your group and budget." : "✓ her satırda öne çıkan değeri gösterir. Büyük her zaman daha iyi demek değildir; grubunuza ve bütçenize bağlıdır."}</p>
                 </div>
 
-                {noteText && (
-                  <div className="rounded-3xl bg-navy p-6 text-white lg:p-8">
-                    <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{en ? "Our take" : "Yatpaketi'nin yorumu"}</p>
-                    <p className="mt-3 whitespace-pre-line text-lg leading-relaxed text-white/90">{noteText}</p>
-                  </div>
-                )}
-
-                <div>
-                  <p className={`mb-4 ${eyebrow}`}>{en ? "How they compare" : "Nasıl ayrışıyorlar?"}</p>
-                  <div className="grid gap-4 md:grid-cols-2">
-                    {result.points.map((p) => (
-                      <article key={p.title} className="rounded-2xl bg-white p-5 ring-1 ring-navy/10">
-                        <div className="flex items-center justify-between gap-3">
-                          <h3 className="font-display text-lg font-bold text-navy">{p.title}</h3>
-                          {p.win && <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">{(p.win === "a" ? A : B).name}</span>}
-                        </div>
-                        <p className="mt-2 leading-relaxed text-navy/75">{p.text}</p>
-                      </article>
-                    ))}
-                  </div>
-                  <p className="mt-5 rounded-2xl bg-turquoise/10 p-5 text-navy"><b>{en ? "In short: " : "Kısaca: "}</b>{result.summary}</p>
-                </div>
+                <CompareInsights A={A} B={B} note={noteText} points={result.points} summary={result.summary} lang={lang} />
 
                 <div className="flex flex-col gap-3 sm:flex-row">
                   {wa && <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-6 py-3.5 text-base font-semibold text-white hover:brightness-95">{en ? "Ask us which one to pick" : "Hangisini seçeceğinizi bize sorun"}</a>}

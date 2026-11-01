@@ -8,6 +8,9 @@ import { priceLabel, type Boat } from "@/lib/data";
 import { offerLabel } from "@/lib/campaigns";
 import { RatingLine } from "./Reviews";
 import { href, type Lang } from "@/lib/i18n";
+import { useState } from "react";
+import { buildPoints, samePair, type Curated } from "@/lib/compare";
+import { CompareInsights } from "./CompareInsights";
 
 const T = {
   tr: {
@@ -30,11 +33,12 @@ const T = {
   },
 };
 
-export function FavoritesClient({ boats, whatsapp, email, lang }: { boats: Boat[]; whatsapp: string; email: string; lang: Lang }) {
+export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boats: Boat[]; whatsapp: string; email: string; lang: Lang; curated: Curated[] }) {
   const L = T[lang];
   const favs = useFavorites();
   const list = favs.map((s) => boats.find((b) => b.slug === s)).filter((b): b is Boat => Boolean(b));
   const has = (b: Boat, re: RegExp) => b.equipment.some((e) => re.test(e));
+  const [pick, setPick] = useState<{ a: string; b: string }>({ a: "", b: "" });
 
   if (list.length === 0) return (
     <div className="rounded-3xl bg-mist p-10 text-center">
@@ -101,12 +105,32 @@ export function FavoritesClient({ boats, whatsapp, email, lang }: { boats: Boat[
         </table>
       </div>
 
-      {list.length >= 2 && (
-        <Link href={`${href(lang, "/tekne-karsilastir")}?a=${list[0].slug}&b=${list[1].slug}`} className="mt-4 flex items-center justify-between gap-3 rounded-2xl bg-turquoise/10 p-4 text-navy ring-1 ring-turquoise/30">
-          <span><b className="block">{lang === "en" ? "Get our detailed comparison" : "Yorumlu detaylı karşılaştırma"}</b><span className="text-sm text-navy/70">{list[0].name} {lang === "en" ? "vs" : "karşı"} {list[1].name}</span></span>
-          <span aria-hidden>→</span>
-        </Link>
-      )}
+      {list.length >= 2 && (() => {
+        const slugs = list.map((x) => x.slug);
+        const sa = slugs.includes(pick.a) ? pick.a : slugs[0];
+        const sb = slugs.includes(pick.b) && pick.b !== sa ? pick.b : slugs.find((x) => x !== sa)!;
+        const A = list.find((x) => x.slug === sa)!, B = list.find((x) => x.slug === sb)!;
+        const { points, summary } = buildPoints(A, B, lang);
+        const c = curated.find((x) => samePair(x, sa, sb));
+        const note = c ? ((lang === "en" ? c.noteEn?.trim() : "") || c.note) : "";
+        const sel = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-base font-semibold text-navy outline-none focus:border-turquoise";
+        return (
+          <section className="mt-10" aria-label={lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
+            <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
+            <p className="mt-1 text-sm text-navy/65">{lang === "en" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki tekne seçin, nasıl ayrıştıklarını görün."}</p>
+            <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
+              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang === "en" ? "First yacht" : "Birinci tekne"}>
+                {list.filter((x) => x.slug !== sb).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
+              </select>
+              <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang === "en" ? "vs" : "karşı"}</span>
+              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang === "en" ? "Second yacht" : "İkinci tekne"}>
+                {list.filter((x) => x.slug !== sa).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
+              </select>
+            </div>
+            <div className="mt-6"><CompareInsights A={A} B={B} note={note} points={points} summary={summary} lang={lang} /></div>
+          </section>
+        );
+      })()}
 
       <div className="mt-8 rounded-3xl bg-navy p-6 text-white lg:p-8">
         <h2 className="font-display text-2xl font-bold">{L.ask}</h2>
