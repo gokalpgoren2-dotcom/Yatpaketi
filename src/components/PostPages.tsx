@@ -1,3 +1,4 @@
+import { GuideArt, hasGuideArt } from "./GuideArt";
 import { regionMapFor } from "@/lib/region-maps";
 import type { Metadata } from "next";
 import Link from "next/link";
@@ -69,6 +70,9 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
           <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl bg-mist">
             <Photo src={p.cover} alt={p.title} priority sizes="(min-width:768px) 768px, 100vw" className="object-cover" />
           </div>
+        )}
+        {!map && !p.cover && hasGuideArt(p.kind, p.slug) && (
+          <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl"><GuideArt slug={p.slug} className="h-full w-full" /></div>
         )}
         <div className="mt-8"><RichText text={p.content} /></div>
         {kind !== "page" && (

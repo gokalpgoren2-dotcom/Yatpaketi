@@ -1,3 +1,4 @@
+import { GuideArt, hasGuideArt } from "./GuideArt";
 import Link from "next/link";
 import { Photo } from "./Photo";
 import { Placeholder } from "./Placeholder";
@@ -18,6 +19,8 @@ export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?
           <img src={map} alt={p.title} loading="lazy" className="h-full w-full bg-[#05204a] object-cover transition duration-500 group-hover:scale-105" />
         ) : p.cover ? (
           <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
+        ) : hasGuideArt(p.kind, p.slug) ? (
+          <GuideArt slug={p.slug} className="h-full w-full transition duration-500 group-hover:scale-105" />
         ) : (
           <Placeholder hue={185 + (i % 5) * 12} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
         )}
