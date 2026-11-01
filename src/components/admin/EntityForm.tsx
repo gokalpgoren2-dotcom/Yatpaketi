@@ -103,7 +103,7 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
-        <div><label htmlFor="name" className={lab}>{dest ? "Destinasyon adı *" : "Tekne tipi adı *"}</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} /></div>
+        <div><label htmlFor="name" className={lab}>{dest ? "Liman adı *" : "Tekne tipi adı *"}</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} /></div>
         <div>
           <label htmlFor="slug" className={lab}>Adres (slug)</label>
           <input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} disabled={Boolean(row)} className={`${input} disabled:bg-mist disabled:text-navy/60`} />

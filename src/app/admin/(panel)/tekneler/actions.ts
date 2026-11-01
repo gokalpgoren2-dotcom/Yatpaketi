@@ -109,7 +109,7 @@ export async function saveBoat(formData: FormData) {
   await supabase.from("boat_destinations").delete().eq("boat_id", boatId!);
   if (destIds.length > 0) {
     const { error } = await supabase.from("boat_destinations").insert(destIds.map((d) => ({ boat_id: boatId!, destination_id: d })));
-    if (error) fail(boatId, "Tekne kaydedildi ama destinasyonlar kaydedilemedi: " + error.message);
+    if (error) fail(boatId, "Tekne kaydedildi ama limanlar kaydedilemedi: " + error.message);
   }
 
   revalidatePath("/");

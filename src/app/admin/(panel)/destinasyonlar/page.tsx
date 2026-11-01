@@ -12,7 +12,7 @@ export default async function List() {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-3xl">Destinasyonlar</h1>
+        <h1 className="font-display text-3xl">Limanlar</h1>
         <Link href="/admin/destinasyonlar/yeni" className="rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white">+ Yeni</Link>
       </div>
       <p className="mt-1 text-sm text-navy/60">Sitede görünen bölgeler. Açıklama metni ve fotoğrafı buradan düzenlenir.</p>

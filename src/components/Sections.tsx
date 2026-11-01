@@ -103,12 +103,12 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="destinasyonlar" eyebrow={L.destEyebrow} title={L.destTitle} action={{ href: href(lang, "/destinasyonlar"), label: L.seeAll }} />
+        <Heading id="limanlar" eyebrow={L.destEyebrow} title={L.destTitle} action={{ href: href(lang, "/limanlar"), label: L.seeAll }} />
         <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
           {items.map((d) => (
             <Link
               key={d.slug}
-              href={href(lang, `/destinasyonlar/${d.slug}`)}
+              href={href(lang, `/limanlar/${d.slug}`)}
               className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
             >
               {d.image ? (
@@ -230,11 +230,11 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
     lang === "en"
       ? [
           { href: href(lang, "/tekneler"), label: L.navBoats },
-          { href: href(lang, "/destinasyonlar"), label: L.navDest },
+          { href: href(lang, "/limanlar"), label: L.navDest },
         ]
       : [
           { href: "/tekneler", label: "Kiralık Tekneler" },
-          { href: "/destinasyonlar", label: "Destinasyonlar" },
+          { href: "/limanlar", label: "Limanlar" },
           ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
           ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
           ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),

@@ -7,9 +7,9 @@ import { requireAdmin } from "@/lib/admin";
 export async function refreshSite() {
   await requireAdmin();
   revalidatePath("/");
-  revalidatePath("/destinasyonlar");
+  revalidatePath("/limanlar");
   revalidatePath("/tekneler");
-  revalidatePath("/destinasyonlar/[slug]", "page");
+  revalidatePath("/limanlar/[slug]", "page");
   revalidatePath("/tekne-tipleri/[slug]", "page");
   revalidatePath("/rehber");
   revalidatePath("/blog");

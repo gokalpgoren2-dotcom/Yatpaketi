@@ -130,7 +130,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
     const prev = found.get(key);
     // Aynı yer için birden fazla kayıt varsa tek pin kalır; "kas-kekova" kaydı varsa o tercih edilir.
     if (prev && !(merged && norm(d.slug) === "kaskekova")) continue;
-    found.set(key, { d, key, pos: px(PLACES[key]), label: merged ? "Kaş - Kekova" : key === "datcahisaronukorfezi" ? "Datça - Hisarönü" : d.name });
+    found.set(key, { d, key, pos: px(PLACES[key]), label: merged ? "Kaş - Kekova" : d.name });
   }
   const pins = [...found.values()].sort((a, b) => a.pos[0] - b.pos[0]);
 

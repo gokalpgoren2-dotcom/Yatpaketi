@@ -13,7 +13,7 @@ export default async function ContentPage() {
   return (
     <>
       <h1 className="font-display text-3xl">Site içeriği</h1>
-      <p className="mt-1 text-sm text-navy/60">Ana sayfanın büyük fotoğrafını, başlığını ve destinasyon fotoğraflarını buradan değiştirin. Değişiklik bir dakika içinde sitede görünür.</p>
+      <p className="mt-1 text-sm text-navy/60">Ana sayfanın büyük fotoğrafını, başlığını ve liman fotoğraflarını buradan değiştirin. Değişiklik bir dakika içinde sitede görünür.</p>
       <div className="mt-6">
         <SiteContentEditor
           initial={{ hero_path: v.hero_path ?? "", title: v.title ?? "", subtitle: v.subtitle ?? "" }}

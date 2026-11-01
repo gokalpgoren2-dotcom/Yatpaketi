@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: d.seoTitle || `${d.name} Boat Charter`,
     description: `Gulet, motor yacht, catamaran and sailing yacht charter from ${d.name}. ${d.intro.slice(0, 120)}`,
-    alternates: { canonical: `/en/destinasyonlar/${d.slug}`, languages: { tr: `/destinasyonlar/${d.slug}`, en: `/en/destinasyonlar/${d.slug}` } },
+    alternates: { canonical: `/en/limanlar/${d.slug}`, languages: { tr: `/limanlar/${d.slug}`, en: `/en/limanlar/${d.slug}` } },
     robots: boatsFor(boats, d.slug).length > 0 ? { index: false, follow: true } : { index: false, follow: false },
   };
 }

@@ -131,7 +131,7 @@ export function SiteContentEditor({ initial, destinations }: { initial: { hero_p
       </section>
 
       <section className="rounded-2xl bg-white p-5 shadow-sm">
-        <h2 className="font-semibold">Destinasyon fotoğrafları</h2>
+        <h2 className="font-semibold">Liman fotoğrafları</h2>
         <ul className="mt-4 grid gap-4 sm:grid-cols-2">
           {dests.map((d) => (
             <li key={d.id} className="overflow-hidden rounded-xl ring-1 ring-navy/10">

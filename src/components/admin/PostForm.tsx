@@ -16,7 +16,7 @@ const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_U
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 // Sabit sayfa adresleri, sitedeki gerçek bölümlerle çakışmasın.
-const RESERVED = ["admin", "tekneler", "destinasyonlar", "rehber", "blog", "api", "sitemap", "robots", "login"];
+const RESERVED = ["admin", "tekneler", "destinasyonlar", "limanlar", "rehber", "blog", "api", "sitemap", "robots", "login"];
 
 export function PostForm({ post }: { post: PostRow | null }) {
   const supabase = createClient();

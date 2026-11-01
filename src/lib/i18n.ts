@@ -13,7 +13,7 @@ export function langFromPath(path: string): Lang {
 }
 
 // Bulunulan sayfanın diğer dildeki karşılığı.
-const EN_PAGES = ["/tekneler", "/destinasyonlar", "/tekne-tipleri"];
+const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri"];
 export function switchPath(path: string, to: Lang): string {
   const bare = path === "/en" ? "/" : path.startsWith("/en/") ? path.slice(3) : path;
   if (to === "en") {
@@ -29,11 +29,11 @@ const tr = {
   months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
   days: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
   // menü
-  navHome: "Ana Sayfa", navBoats: "Kiralık Tekneler", navAllBoats: "Tüm tekneler", navDest: "Destinasyonlar", navAllDest: "Tüm destinasyonlar",
+  navHome: "Ana Sayfa", navBoats: "Kiralık Tekneler", navAllBoats: "Tüm tekneler", navDest: "Limanlar", navAllDest: "Tüm limanlar",
   navGuide: "Yatpaketi Rehberi", navBlueVoyage: "Mavi Yolculuk", navBlog: "Blog", navAbout: "Hakkımızda", navContact: "İletişim",
   langGroup: "Dil seçimi", mainMenu: "Ana menü", mobileMenu: "Mobil menü", menuOpen: "Menüyü aç", menuClose: "Menüyü kapat", homeAria: "yatpaketi ana sayfa",
   // mobil çubuk
-  quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Tekneler", mbDest: "Destinasyonlar", mbContact: "İletişim",
+  quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Tekneler", mbDest: "Limanlar", mbContact: "İletişim",
   // arama
   searchAria: "Tekne arama", location: "Lokasyon", boatType: "Tekne tipi", all: "Tümü", date: "Tarih", searchBoats: "Tekneleri ara",
   popular: "Popüler:", country: "Türkiye",
@@ -50,7 +50,7 @@ const tr = {
     ["2", "Talebinizi iletin", "Tarih ve kişi sayınızla rezervasyon talebi oluşturun. Talep ücretsizdir."],
     ["3", "Onayı bekleyin", "Müsaitlik ve fiyat teyit edilir. Rezervasyon, onaydan sonra kesinleşir."],
   ] as string[][],
-  destEyebrow: "Destinasyonlar", destTitle: "Popüler tekne kiralama destinasyonları", seeAll: "Hepsini gör",
+  destEyebrow: "Limanlar", destTitle: "Popüler tekne kiralama limanları", seeAll: "Hepsini gör",
   modesEyebrow: "Kiralama seçenekleri", modesTitle: "İhtiyacınıza göre planlayın",
   modes: [
     ["Günlük kiralama", "Koy turları, doğum günü ve özel organizasyonlar için."],
@@ -79,7 +79,7 @@ const tr = {
   // liste sayfası
   listEyebrow: "Kiralık Tekneler", listTitle: "Size Uygun Tekneyi Bulun",
   datesNote: "Sonuçlar tarihe göre filtrelenmez. Müsaitlik, talebiniz sonrasında teyit edilir.",
-  fDest: "Destinasyon", fType: "Tekne tipi", fGuests: "Misafir (en az)", fCabins: "Kabin (en az)", fMin: "En düşük fiyat", fMax: "En yüksek fiyat",
+  fDest: "Liman", fType: "Tekne tipi", fGuests: "Misafir (en az)", fCabins: "Kabin (en az)", fMin: "En düşük fiyat", fMax: "En yüksek fiyat",
   fLength: "Uzunluk (en az, m)", fYear: "Yapım yılı (en az)", fRental: "Kiralama", fBoth: "Günlük ve haftalık", fDaily: "Günlük", fWeekly: "Haftalık",
   fCaptain: "Kaptan", fAny: "Fark etmez", fWithCaptain: "Kaptanlı", fNoCaptain: "Kaptansız", fCrew: "Mürettebat", fWithCrew: "Mürettebatlı", fNoCrew: "Mürettebatsız",
   fSort: "Sıralama", sRec: "Önerilen", sPriceAsc: "En düşük fiyat", sPriceDesc: "En yüksek fiyat", sNew: "En yeni eklenen", sLength: "Tekne uzunluğu",
@@ -110,7 +110,7 @@ const tr = {
   sending: "Gönderiliyor…", submit: "Rezervasyon Talebi Gönder", formNote: "Talebiniz kesin rezervasyon oluşturmaz. Müsaitlik ve fiyat teyit edildikten sonra rezervasyon kesinleşir.",
   // keşfet sayfaları
   routePick: "Rotanızı Seçin", boatsCount: (n: number) => `${n} tekne`,
-  destHero: (n: string) => `${n} Tekne Kiralama`, destBoats: (n: string) => `${n} çıkışlı tekneler`, destNone: "Bu destinasyon için henüz tekne eklenmedi.",
+  destHero: (n: string) => `${n} Tekne Kiralama`, destBoats: (n: string) => `${n} çıkışlı tekneler`, destNone: "Bu liman için henüz tekne eklenmedi.",
   sampleData: "Örnek içerik: Veritabanı bağlı olmadığı için örnek veri gösteriliyor.",
   catHero: (n: string) => `${n} Kiralama`, catBoats: (n: string) => `${n} tekneleri`, catNone1: "Bu tipte henüz yayında tekne yok.", catNone2: "Tüm tekneleri", catNone3: "inceleyebilirsiniz.",
   // takvim
@@ -124,10 +124,10 @@ const en: typeof tr = {
   locale: "en-GB",
   months: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
   days: ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"],
-  navHome: "Home", navBoats: "Boats for Charter", navAllBoats: "All boats", navDest: "Destinations", navAllDest: "All destinations",
+  navHome: "Home", navBoats: "Boats for Charter", navAllBoats: "All boats", navDest: "Ports", navAllDest: "All ports",
   navGuide: "Yatpaketi Guide", navBlueVoyage: "Blue Voyage", navBlog: "Blog", navAbout: "About us", navContact: "Contact",
   langGroup: "Language", mainMenu: "Main menu", mobileMenu: "Mobile menu", menuOpen: "Open menu", menuClose: "Close menu", homeAria: "yatpaketi home",
-  quickMenu: "Quick menu", mbHome: "Home", mbBoats: "Boats", mbDest: "Destinations", mbContact: "Contact",
+  quickMenu: "Quick menu", mbHome: "Home", mbBoats: "Boats", mbDest: "Ports", mbContact: "Contact",
   searchAria: "Boat search", location: "Location", boatType: "Boat type", all: "All", date: "Date", searchBoats: "Search boats",
   popular: "Popular:", country: "Türkiye",
   heroTitle: "Charter your dream blue voyage",
@@ -142,7 +142,7 @@ const en: typeof tr = {
     ["2", "Send your request", "Create a reservation request with your dates and guest count. Requests are free."],
     ["3", "Wait for confirmation", "Availability and price are confirmed. The reservation is final only after confirmation."],
   ],
-  destEyebrow: "Destinations", destTitle: "Popular boat charter destinations", seeAll: "See all",
+  destEyebrow: "Ports", destTitle: "Popular boat charter ports", seeAll: "See all",
   modesEyebrow: "Charter options", modesTitle: "Plan it your way",
   modes: [
     ["Day charter", "For bay tours, birthdays and private events."],
@@ -169,7 +169,7 @@ const en: typeof tr = {
   perWeek: "/ week from", perDay: "/ day from",
   listEyebrow: "Boats for Charter", listTitle: "Find the Right Boat for You",
   datesNote: "Results are not filtered by date. Availability is confirmed after your request.",
-  fDest: "Destination", fType: "Boat type", fGuests: "Guests (min.)", fCabins: "Cabins (min.)", fMin: "Min. price", fMax: "Max. price",
+  fDest: "Port", fType: "Boat type", fGuests: "Guests (min.)", fCabins: "Cabins (min.)", fMin: "Min. price", fMax: "Max. price",
   fLength: "Length (min., m)", fYear: "Year built (min.)", fRental: "Charter type", fBoth: "Daily and weekly", fDaily: "Daily", fWeekly: "Weekly",
   fCaptain: "Captain", fAny: "Any", fWithCaptain: "With captain", fNoCaptain: "Without captain", fCrew: "Crew", fWithCrew: "Crewed", fNoCrew: "No crew",
   fSort: "Sort by", sRec: "Recommended", sPriceAsc: "Lowest price", sPriceDesc: "Highest price", sNew: "Newest", sLength: "Boat length",
@@ -197,7 +197,7 @@ const en: typeof tr = {
   guestsReq: "Guests *", message: "Message", consent: "I agree that my details may be processed by yatpaketi to respond to this request.",
   sending: "Sending…", submit: "Send Reservation Request", formNote: "Your request does not create a confirmed booking. The reservation is final once availability and price are confirmed.",
   routePick: "Choose Your Route", boatsCount: (n) => `${n} ${n === 1 ? "boat" : "boats"}`,
-  destHero: (n) => `${n} Boat Charter`, destBoats: (n) => `Boats departing from ${n}`, destNone: "No boats have been added for this destination yet.",
+  destHero: (n) => `${n} Boat Charter`, destBoats: (n) => `Boats departing from ${n}`, destNone: "No boats have been added for this port yet.",
   sampleData: "Sample content: sample data is shown because the database is not connected.",
   catHero: (n) => `${n} Charter`, catBoats: (n) => `${n} boats`, catNone1: "There are no boats of this type listed yet.", catNone2: "Browse all boats", catNone3: "instead.",
   checkIn: "Check-in", checkOut: "Check-out", applyDates: "Done", prevMonth: "Previous month", nextMonth: "Next month", pickBoth: "Select check-in and check-out dates", pickEnd: "select check-out date",

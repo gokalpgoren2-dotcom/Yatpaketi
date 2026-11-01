@@ -18,7 +18,7 @@ export async function DestinationsView({ lang }: { lang: Lang }) {
         <h1 className="font-display text-3xl font-medium text-navy lg:text-5xl">{L.routePick}</h1>
         <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {destinations.map((d) => (
-            <Link key={d.slug} href={href(lang, `/destinasyonlar/${d.slug}`)} className="group overflow-hidden rounded-2xl border border-navy/10 transition hover:-translate-y-1 hover:shadow-xl">
+            <Link key={d.slug} href={href(lang, `/limanlar/${d.slug}`)} className="group overflow-hidden rounded-2xl border border-navy/10 transition hover:-translate-y-1 hover:shadow-xl">
               {d.image ? (
                 <div className="relative aspect-[16/10]"><Photo src={d.image} alt={d.name} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" /></div>
               ) : (

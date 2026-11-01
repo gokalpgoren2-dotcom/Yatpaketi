@@ -18,9 +18,9 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
       children: [{ href: href(lang, "/tekneler"), label: L.navAllBoats, icon: "all" }, ...cats.map((c) => ({ href: href(lang, `/tekne-tipleri/${c.slug}`), label: c.name, icon: c.slug }))],
     },
     {
-      href: href(lang, "/destinasyonlar"),
+      href: href(lang, "/limanlar"),
       label: L.navDest,
-      children: [{ href: href(lang, "/destinasyonlar"), label: L.navAllDest, icon: "compass" }, ...dests.map((d) => ({ href: href(lang, `/destinasyonlar/${d.slug}`), label: d.name, icon: "pin" }))],
+      children: [{ href: href(lang, "/limanlar"), label: L.navAllDest, icon: "compass" }, ...dests.map((d) => ({ href: href(lang, `/limanlar/${d.slug}`), label: d.name, icon: "pin" }))],
     },
     ...(!en && nav.hasGuides ? [{ href: "/rehber", label: L.navGuide }] : [{ href: href(lang, "/#mavi-yolculuk"), label: L.navBlueVoyage }]),
     ...(!en && nav.hasBlog ? [{ href: "/blog", label: L.navBlog }] : []),

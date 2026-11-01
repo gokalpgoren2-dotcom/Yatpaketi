@@ -2,9 +2,9 @@ import type { Metadata } from "next";
 import { DestinationsView } from "@/views/DestinationsView";
 
 export const metadata: Metadata = {
-  title: "Destinations",
-  description: "Boat charter routes departing from Bodrum, Göcek, Fethiye, Marmaris, Datça and Kaş.",
-  alternates: { canonical: "/en/destinasyonlar", languages: { tr: "/destinasyonlar", en: "/en/destinasyonlar" } },
+  title: "Ports",
+  description: "Boat charter routes from the ports of Bodrum, Göcek, Fethiye, Marmaris, Datça and Kaş.",
+  alternates: { canonical: "/en/limanlar", languages: { tr: "/limanlar", en: "/en/limanlar" } },
 };
 
 export const revalidate = 60;

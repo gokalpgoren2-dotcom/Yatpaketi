@@ -13,7 +13,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: d.seoTitle || `${d.name} Tekne Kiralama`,
     description: d.seoDescription || `${d.name} çıkışlı gulet, motoryat, katamaran ve yelkenli kiralama seçenekleri. ${d.intro.slice(0, 120)}`,
-    alternates: { canonical: `/destinasyonlar/${d.slug}`, languages: { tr: `/destinasyonlar/${d.slug}`, en: `/en/destinasyonlar/${d.slug}` } },
+    alternates: { canonical: `/limanlar/${d.slug}`, languages: { tr: `/limanlar/${d.slug}`, en: `/en/limanlar/${d.slug}` } },
     // Gerçek tekne yokken sayfa indekslenmez.
     robots: boatsFor(boats, d.slug).length > 0 ? { index: false, follow: true } : { index: false, follow: false },
   };
