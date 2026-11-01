@@ -27,3 +27,11 @@ export async function getCulture(): Promise<CultureData> {
   if (!d) return CULTURE;
   return { tr: { ...CULTURE.tr, ...(d.tr ?? {}) }, en: { ...CULTURE.en, ...(d.en ?? {}) } };
 }
+
+import { ABOUT } from "./about";
+export type AboutData = typeof ABOUT;
+export async function getAbout(): Promise<AboutData> {
+  const d = await read("about");
+  if (!d) return ABOUT;
+  return { tr: { ...ABOUT.tr, ...(d.tr ?? {}) }, en: { ...ABOUT.en, ...(d.en ?? {}) } };
+}

@@ -45,7 +45,7 @@ export async function GuideHubView({ lang }: { lang: Lang }) {
     { show: nav.hasRoutes, to: "/rotalar", icon: "route", title: T.routes },
     { show: nav.hasPackages, to: "/tur-paketleri", icon: "package", title: T.packages },
     { show: nav.hasProcess, to: "/kiralama-sureci", icon: "process", title: T.process },
-    { show: nav.pages.some((p) => p.slug === "hakkimizda"), to: "/hakkimizda", icon: "about", title: T.about },
+    { show: true, to: "/hakkimizda", icon: "about", title: T.about },
   ].filter((s) => s.show);
 
   return (

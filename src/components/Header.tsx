@@ -10,7 +10,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const [nav, cats, dests] = await Promise.all([getNavInfo(lang), getCategories(lang), getDestinations(lang)]);
   const en = lang === "en";
   // İngilizce yazılar (rehber, blog, sayfalar) henüz yok; o bağlantılar yalnızca Türkçe menüde görünür.
-  const about = nav.pages.some((p) => p.slug === "hakkimizda");
+  const about = true; // Hakkımızda artık özel sayfa
   // Yatpaketi Rehberi açılır menüsü: yalnızca içeriği olan bölümler görünür.
   const G = gt(lang);
   const pageLink = (slug: string) => nav.pages.find((p) => p.slug === slug)?.title;
