@@ -13,4 +13,8 @@ export async function refreshSite() {
   revalidatePath("/tekne-tipleri/[slug]", "page");
   revalidatePath("/rehber");
   revalidatePath("/blog");
+  revalidatePath("/sss");
+  revalidatePath("/en/sss");
+  revalidatePath("/yat-ve-yatcilik-kulturu");
+  revalidatePath("/en/yat-ve-yatcilik-kulturu");
 }

@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { Photo } from "@/components/Photo";
 import { Placeholder } from "@/components/Placeholder";
-import { CULTURE } from "@/lib/culture";
+import { getCulture } from "@/lib/site-texts";
 import { getPost } from "@/lib/posts";
 import { href, type Lang } from "@/lib/i18n";
 
@@ -12,7 +12,7 @@ const h2 = "font-display text-3xl font-medium leading-tight text-navy lg:text-5x
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
 export async function CultureView({ lang }: { lang: Lang }) {
-  const C = CULTURE[lang];
+  const C = (await getCulture())[lang];
   // Kapak fotoğrafı: panel > Yazılar > "Yat ve Yatçılık Kültürü" sayfasına yüklenen fotoğraf (TR kaydında).
   const page = await getPost("page", "yat-ve-yatcilik-kulturu", "tr");
   const cover = page?.cover ?? null;

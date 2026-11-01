@@ -4,8 +4,10 @@ import { Footer } from "@/components/Sections";
 import { FaqList } from "@/components/FaqList";
 import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
+import { getFaqItems } from "@/lib/site-texts";
 
-export function FaqView({ lang }: { lang: Lang }) {
+export async function FaqView({ lang }: { lang: Lang }) {
+  const faq = await getFaqItems();
   const en = lang === "en";
   const T = gt(lang);
   return (
@@ -17,7 +19,7 @@ export function FaqView({ lang }: { lang: Lang }) {
         <p className="mt-4 max-w-2xl text-navy/70">{en ? "Everything people most often ask about chartering a boat, in one place." : "Tekne kiralamayla ilgili en çok merak edilenler tek yerde."}</p>
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[minmax(0,1fr)_20rem]">
-          <FaqList lang={lang} />
+          <FaqList lang={lang} faq={faq} />
           <aside className="space-y-4 lg:sticky lg:top-28 lg:self-start">
             <div className="rounded-3xl bg-navy p-6 text-white">
               <span className="block h-1 w-10 rounded-full bg-turquoise" />

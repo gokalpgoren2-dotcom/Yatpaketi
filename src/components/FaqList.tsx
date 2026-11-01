@@ -2,12 +2,12 @@
 
 import { useMemo, useState } from "react";
 import { RichText } from "./RichText";
-import { FAQ, FAQ_CATS, type FaqCat } from "@/lib/faq";
+import { FAQ_CATS, type FaqCat, type FaqItem } from "@/lib/faq";
 import type { Lang } from "@/lib/i18n";
 
 const norm = (s: string, lang: Lang) => s.toLocaleLowerCase(lang === "en" ? "en" : "tr");
 
-export function FaqList({ lang }: { lang: Lang }) {
+export function FaqList({ lang, faq }: { lang: Lang; faq: FaqItem[] }) {
   const en = lang === "en";
   const [q, setQ] = useState("");
   const [cat, setCat] = useState<FaqCat | "all">("all");
@@ -15,10 +15,10 @@ export function FaqList({ lang }: { lang: Lang }) {
 
   const items = useMemo(() => {
     const term = norm(q.trim(), lang);
-    return FAQ.map((f, i) => ({ id: `q${i}`, cat: f[0], q: en ? f[3] : f[1], a: en ? f[4] : f[2] })).filter(
+    return faq.map((f, i) => ({ id: `q${i}`, cat: f.cat, q: en ? f.qEn : f.qTr, a: en ? f.aEn : f.aTr })).filter((f) => f.q.trim() !== "").filter(
       (f) => (cat === "all" || f.cat === cat) && (!term || norm(f.q + " " + f.a, lang).includes(term)),
     );
-  }, [q, cat, en, lang]);
+  }, [q, cat, en, lang, faq]);
 
   const chip = "shrink-0 rounded-full px-5 py-2.5 text-sm font-semibold transition ring-1";
   return (

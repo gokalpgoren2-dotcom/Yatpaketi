@@ -44,6 +44,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         { href: "/admin/kategoriler", label: "Tekne Tipleri", icon: I.tag },
         { href: "/admin/destinasyonlar", label: "Limanlar", icon: I.pin },
         { href: "/admin/yazilar", label: "Yazılar", icon: I.doc },
+        { href: "/admin/sayfa-metinleri", label: "Sayfa Metinleri", icon: I.doc },
         { href: "/admin/icerik", label: "Site İçeriği", icon: I.edit },
       ],
     },

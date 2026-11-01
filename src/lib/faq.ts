@@ -184,3 +184,6 @@ export const FAQ: [FaqCat, string, string, string, string][] = [
    "What should we do if our flight is delayed or we reach the boat late?",
    "If there is a delay, let us and the captain know as soon as possible. We'll try to adjust the welcome time to your new arrival time. The effect of a late arrival on the route or extra costs depends on the boat and the contract."],
 ];
+
+export type FaqItem = { cat: FaqCat; qTr: string; aTr: string; qEn: string; aEn: string };
+export const FAQ_DEFAULT: FaqItem[] = FAQ.map(([cat, qTr, aTr, qEn, aEn]) => ({ cat, qTr, aTr, qEn, aEn }));

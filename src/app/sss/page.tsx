@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { FaqView } from "@/views/FaqView";
 
+export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Sıkça Sorulan Sorular",
   description: "Tekne kiralama, rezervasyon, ödeme, rota ve teknede yaşam hakkında sıkça sorulan sorular.",
