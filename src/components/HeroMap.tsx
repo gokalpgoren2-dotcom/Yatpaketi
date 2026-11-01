@@ -39,11 +39,18 @@ const PLACES: Record<string, Pt> = {
 };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
 
-type Layout = { w: number; h: number; x: (lon: number) => number; y: (lat: number) => number; trees: number; boat: number; font: number; lanes: { y: number; dur: number; delay: number; kind: number }[]; drift: number };
-const DESKTOP: Layout = { w: 1200, h: 784, x: (lo) => (lo - 25.5) * 200, y: (la) => (37.9 - la) * 250 + 300, trees: 110, boat: 0.55, font: 15, drift: 1400,
-  lanes: [{ y: 640, dur: 75, delay: -10, kind: 0 }, { y: 705, dur: 58, delay: -40, kind: 1 }, { y: 590, dur: 90, delay: -62, kind: 2 }] };
-const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.3) * 80, y: (la) => (37.55 - la) * 109 + 120, trees: 40, boat: 0.34, font: 11, drift: 560,
-  lanes: [{ y: 262, dur: 50, delay: -8, kind: 0 }, { y: 300, dur: 40, delay: -26, kind: 1 }] };
+type Route = { pts: Pt[]; dur: number; begin: number; kind: number };
+type Layout = { w: number; h: number; x: (lon: number) => number; y: (la: number) => number; trees: number; boat: number; font: number; routes: Route[] };
+
+// Tekne rotaları yalnızca denizde kalır (boylam, enlem). Tekneler rota başında ve sonunda silinip belirir.
+const ROUTE_A: Pt[] = [[26.2, 36.25], [26.8, 36.2], [27.3, 36.0], [27.6, 35.75], [28.0, 35.65], [28.6, 35.65], [29.2, 35.75], [29.8, 35.8]];
+const ROUTE_B: Pt[] = [[28.4, 36.55], [28.7, 36.5], [29.0, 36.45], [29.2, 36.2], [29.45, 36.0], [29.9, 35.98], [30.3, 36.0], [30.6, 36.1], [30.85, 36.3], [30.95, 36.65]];
+const ROUTE_C: Pt[] = [[27.45, 36.92], [27.8, 36.93], [28.1, 36.98], [28.2, 37.0]];
+
+const DESKTOP: Layout = { w: 1200, h: 700, x: (lo) => (lo - 24.2) * 175, y: (la) => (37.9 - la) * 219 + 200, trees: 90, boat: 0.5, font: 14,
+  routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
+const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.3) * 80, y: (la) => (37.55 - la) * 109 + 120, trees: 40, boat: 0.3, font: 11,
+  routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
 
 function curve(pts: Pt[], closed: boolean): string {
   const n = pts.length;
@@ -126,13 +133,19 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <path d={shore} fill="none" stroke="#9fe7f0" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 24 : 12} strokeLinejoin="round" strokeLinecap="round" />
       {isl.map((d, i) => <path key={"h" + i} d={d} fill="none" stroke="#7fdcea" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 26 : 12} strokeLinejoin="round" />)}
 
-      {/* Süzülen tekneler: adaların ve kıyının arkasından geçer */}
-      {L.lanes.map((ln, i) => (
-        <g key={i} className="pk-drift" style={{ "--dur": `${ln.dur}s`, "--drift": `${L.drift}px`, animationDelay: `${ln.delay}s` } as React.CSSProperties}>
-          <g transform={`translate(0 ${ln.y}) scale(${L.boat}) translate(-80 -120)`} opacity="0.95"><g className="pk-sway">{BOATS[ln.kind]}</g></g>
-          <ellipse cx="0" cy={ln.y + 2} rx={60 * L.boat} ry={3 * L.boat} fill="#fff" fillOpacity="0.35" />
-        </g>
-      ))}
+      {/* Süzülen tekneler: yalnızca denizdeki rotalarda gider */}
+      {L.routes.map((rt, i) => {
+        const q = rt.pts.map(px);
+        const path = `M${q[0][0].toFixed(1)} ${q[0][1].toFixed(1)} ${curve(q, false)}`;
+        return (
+          <g key={i} opacity="0">
+            <animateMotion dur={`${rt.dur}s`} begin={`${rt.begin}s`} repeatCount="indefinite" path={path} />
+            <animate attributeName="opacity" dur={`${rt.dur}s`} begin={`${rt.begin}s`} repeatCount="indefinite" values="0;0.95;0.95;0" keyTimes="0;0.06;0.94;1" />
+            <ellipse cx="0" cy="2" rx={60 * L.boat} ry={3 * L.boat} fill="#fff" fillOpacity="0.35" />
+            <g transform={`scale(${L.boat}) translate(-80 -120)`}><g className="pk-sway">{BOATS[rt.kind]}</g></g>
+          </g>
+        );
+      })}
 
       {/* Kara */}
       <path d={land} fill="#5c9a69" stroke="#efdca3" strokeWidth={L.w > 600 ? 7 : 4} strokeLinejoin="round" />
@@ -143,7 +156,6 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       ))}
 
       {/* Deniz ve ada adları */}
-      {L.w > 600 && <text x={L.x(26.55)} y={L.y(37.3)} fill="#fff" fillOpacity="0.5" fontSize={L.font} fontStyle="italic" letterSpacing="3">{en ? "AEGEAN SEA" : "EGE DENİZİ"}</text>}
       {L.w > 600 && <text x={L.x(29.3)} y={L.y(35.95)} fill="#fff" fillOpacity="0.5" fontSize={L.font} fontStyle="italic" letterSpacing="3">{en ? "MEDITERRANEAN" : "AKDENİZ"}</text>}
       <text x={L.x(27.95)} y={L.y(36.15)} textAnchor="middle" fill="#fff" fillOpacity="0.75" fontSize={L.font - 2} fontStyle="italic" letterSpacing="2">{en ? "RHODES" : "RODOS"}</text>
       <text x={L.x(27.1)} y={L.y(36.7)} textAnchor="middle" fill="#fff" fillOpacity="0.7" fontSize={L.font - 3} fontStyle="italic" letterSpacing="2">KOS</text>
@@ -176,11 +188,11 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
 export function HeroMap({ destinations, lang = "tr" }: { destinations: Destination[]; lang?: Lang }) {
   return (
     <div className="absolute inset-0 -z-10">
-      {/* Telefon: haritanın yalnızca alt kısmı görünür, üstü denize karışır */}
-      <MapSvg L={MOBILE} destinations={destinations} lang={lang} className="absolute inset-x-0 bottom-0 h-[22rem] w-full sm:hidden [mask-image:linear-gradient(to_bottom,transparent,black_28%)]" />
-      <MapSvg L={DESKTOP} destinations={destinations} lang={lang} className="absolute inset-0 hidden h-full w-full sm:block" />
       {/* Başlık okunsun diye ortayı hafifçe koyulaştırır; tabelalara dokunmayı engellemez */}
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,rgba(5,34,74,0.6),rgba(5,34,74,0.08)_72%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_50%_38%,rgba(5,34,74,0.6),rgba(5,34,74,0.08)_72%)] lg:bg-[linear-gradient(90deg,rgba(5,34,74,0.45),rgba(5,34,74,0.1)_34%,rgba(5,34,74,0)_46%)]" />
+      {/* Telefon: haritanın yalnızca alt kısmı görünür, üstü denize karışır */}
+      <MapSvg L={MOBILE} destinations={destinations} lang={lang} className="absolute inset-x-0 bottom-0 h-[22rem] w-full lg:hidden [mask-image:linear-gradient(to_bottom,transparent,black_28%)]" />
+      <MapSvg L={DESKTOP} destinations={destinations} lang={lang} className="absolute inset-0 hidden h-full w-full lg:block" />
     </div>
   );
 }

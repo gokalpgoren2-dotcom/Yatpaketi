@@ -13,7 +13,7 @@ const delay = (s: number) => ({ animationDelay: `${s}s` });
 export function Hero({ home, destinations, categories = [], lang = "tr" }: { home: HomeContent; destinations: Destination[]; categories?: Category[]; lang?: Lang }) {
   const L = t(lang);
   return (
-    <section className={`relative isolate flex items-center justify-center overflow-hidden bg-navy pt-20 text-center ${home.heroImage ? "min-h-[34rem] lg:min-h-[40rem]" : "min-h-[34rem] lg:min-h-[49rem] lg:items-start"}`}>
+    <section className={`relative isolate flex items-center justify-center overflow-hidden bg-navy pt-20 text-center ${home.heroImage ? "min-h-[34rem] lg:min-h-[40rem]" : "min-h-[34rem] lg:min-h-[42rem]"}`}>
       {home.heroImage ? (
         <>
           <div className="absolute inset-0 -z-20"><Photo src={home.heroImage} alt="" priority sizes="100vw" className="object-cover" /></div>
@@ -27,11 +27,12 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
         </>
       )}
 
-      <div className={`pointer-events-none mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-72 lg:pb-24"}`}>
-        <h1 className="fade-up font-display text-[2.4rem] font-medium leading-[1.1] text-white [text-shadow:0_2px_24px_rgba(6,38,75,0.45)] sm:text-5xl lg:text-6xl" style={delay(0)}>
+      <div className={`pointer-events-none mx-auto w-full px-5 pt-14 lg:pt-16 ${home.heroImage ? "max-w-4xl pb-14 lg:pb-20" : "max-w-4xl pb-72 lg:max-w-7xl lg:px-10 lg:pb-16"}`}>
+       <div className={home.heroImage ? "" : "lg:max-w-[34rem] lg:text-left"}>
+        <h1 className="fade-up font-display text-[2.4rem] font-medium leading-[1.1] text-white [text-shadow:0_2px_24px_rgba(6,38,75,0.45)] sm:text-5xl lg:text-[3.3rem]" style={delay(0)}>
           {home.title}
         </h1>
-        <p className="fade-up mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgba(6,38,75,0.5)] lg:text-lg" style={delay(0.12)}>
+        <p className={`fade-up mt-5 max-w-xl text-base leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgba(6,38,75,0.5)] lg:text-lg ${home.heroImage ? "mx-auto" : "mx-auto lg:mx-0"}`} style={delay(0.12)}>
           {home.subtitle}
         </p>
         <div className="fade-up pointer-events-auto mt-9" style={delay(0.25)}>
@@ -46,6 +47,7 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
             </span>
           ))}
         </p>
+       </div>
       </div>
     </section>
   );
