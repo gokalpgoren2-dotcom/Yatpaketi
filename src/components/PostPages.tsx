@@ -11,6 +11,8 @@ import { RichText } from "./RichText";
 import { getPost, getPosts, type PostKind } from "@/lib/posts";
 import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
+import { Scroller } from "./Scroller";
+import { getDestPhotos } from "@/lib/site-texts";
 
 export async function ListPage({ kind, eyebrow, title, intro, empty, lang = "tr" }: { kind: PostKind; eyebrow: string; title: string; intro: string; empty: string; lang?: Lang }) {
   const posts = await getPosts(kind, undefined, lang);
@@ -53,6 +55,77 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
   }
   const map = regionMapFor(kind, slug);
   const more = kind === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
+  if (kind === "destination") {
+    const photos = await getDestPhotos(slug);
+    const en = lang === "en";
+    const eyebrow = "text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark";
+    return (
+      <>
+        <Header lang={lang} />
+        <main className="pb-20">
+          <section className="relative isolate overflow-hidden bg-[#05204a]">
+            {map ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={map} alt={p.title} className="block h-[24rem] w-full object-cover lg:h-[32rem]" />
+            ) : p.cover ? (
+              <div className="relative h-[24rem] lg:h-[32rem]"><Photo src={p.cover} alt={p.title} priority sizes="100vw" className="object-cover" /></div>
+            ) : (
+              <div className="h-[24rem] bg-gradient-to-br from-navy via-[#0a3d63] to-[#0b6a86] lg:h-[32rem]" />
+            )}
+            <div className="absolute inset-0 bg-gradient-to-t from-navy/90 via-navy/35 to-navy/25" />
+            <div className="absolute inset-x-0 bottom-0 mx-auto max-w-7xl px-5 pb-9 text-white lg:px-8 lg:pb-14">
+              {back && <Link href={back.href} className="text-sm text-white/80 hover:text-white">← {back.label}</Link>}
+              <h1 className="font-display mt-3 max-w-3xl text-4xl font-medium leading-tight lg:text-6xl">{p.title}</h1>
+              {p.excerpt && <p className="mt-3 max-w-2xl text-lg text-white/85">{p.excerpt}</p>}
+            </div>
+          </section>
+
+          <div className="mx-auto max-w-7xl px-5 lg:px-8">
+            <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_22rem] lg:gap-14">
+              <div>
+                <p className={`mb-4 ${eyebrow}`}>{en ? "About the region" : "Bölge hakkında"}</p>
+                <div className="max-w-3xl"><RichText text={p.content} /></div>
+              </div>
+              <aside className="h-fit rounded-3xl bg-gradient-to-br from-navy to-[#0b4a66] p-7 text-white lg:sticky lg:top-28">
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{en ? "Plan your trip" : "Planınızı yapalım"}</p>
+                <h2 className="font-display mt-3 text-2xl leading-snug">{en ? "Want to sail this region?" : "Bu bölgede yolculuk mu planlıyorsunuz?"}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">{en ? "Tell us your dates and group size, we'll suggest the right yacht and route." : "Tarihlerinizi ve kişi sayınızı yazın, size uygun tekneyi ve rotayı önerelim."}</p>
+                <div className="mt-6 flex flex-col gap-3">
+                  <Link href={href(lang, "/tekneler")} className="rounded-full bg-turquoise px-6 py-3 text-center text-sm font-semibold text-navy transition hover:brightness-110">{T.browse}</Link>
+                  <Link href={href(lang, "/iletisim")} className="rounded-full px-6 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Write to us" : "Bize yazın"}</Link>
+                </div>
+              </aside>
+            </div>
+
+            {photos.length > 0 && (
+              <section className="mt-14">
+                <p className={`mb-3 ${eyebrow}`}>{en ? "Gallery" : "Galeri"}</p>
+                <div className="grid auto-rows-[10rem] grid-cols-2 gap-3 sm:auto-rows-[12rem] lg:grid-cols-4 lg:gap-4">
+                  {photos.map((src, i) => (
+                    <div key={src} className={`relative overflow-hidden rounded-2xl bg-mist lg:rounded-3xl ${i === 0 && photos.length > 2 ? "col-span-2 row-span-2" : ""}`}>
+                      <Photo src={src} alt={`${p.title} ${i + 1}`} sizes={i === 0 ? "(min-width:1024px) 50vw, 100vw" : "(min-width:1024px) 25vw, 50vw"} className="object-cover transition duration-500 hover:scale-105" />
+                    </div>
+                  ))}
+                </div>
+              </section>
+            )}
+
+            {more.length > 0 && (
+              <section className="mt-14">
+                <h2 className="font-display text-2xl text-navy lg:text-3xl">{T.moreDest}</h2>
+                <div className="mt-6">
+                  <Scroller className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
+                    {more.map((m, i) => <div key={m.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[calc((100%-3rem)/3)]"><PostCard p={m} i={i} lang={lang} /></div>)}
+                  </Scroller>
+                </div>
+              </section>
+            )}
+          </div>
+        </main>
+        <Footer lang={lang} />
+      </>
+    );
+  }
   return (
     <>
       <Header lang={lang} />
