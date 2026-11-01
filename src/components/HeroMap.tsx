@@ -14,8 +14,7 @@ const COAST: Pt[] = [
   [28.25, 36.82], [28.28, 36.85], [28.38, 36.8], [28.45, 36.72], [28.5, 36.78], [28.55, 36.83], [28.65, 36.78],
   [28.75, 36.7], [28.85, 36.7], [28.95, 36.73], [29.05, 36.68], [29.12, 36.64], [29.15, 36.56], [29.1, 36.48],
   [29.2, 36.38], [29.3, 36.28], [29.4, 36.25], [29.55, 36.22], [29.65, 36.2], [29.8, 36.17], [29.95, 36.22],
-  [30.1, 36.28], [30.3, 36.3], [30.45, 36.25], [30.5, 36.4], [30.57, 36.6], [30.65, 36.8], [30.72, 36.87],
-  [30.9, 36.85], [31.2, 36.8], [31.6, 36.78],
+  [30.1, 36.28], [30.3, 36.3], [30.7, 36.34], [31.2, 36.4],
 ];
 const ISLANDS: Pt[][] = [
   // Rodos
@@ -27,14 +26,14 @@ const ISLANDS: Pt[][] = [
   [[27.3, 36.47], [27.42, 36.45], [27.4, 36.38], [27.3, 36.4]],
   [[27.55, 36.25], [27.65, 36.24], [27.6, 36.18]],
   [[29.55, 36.16], [29.63, 36.15], [29.58, 36.11]],
+  [[29.82, 36.165], [29.93, 36.185], [29.97, 36.165], [29.9, 36.145]],
 ];
 
 // Destinasyon adı ya da adresi -> yaklaşık konum. Burada olmayan destinasyonlar haritada pin almaz (menüde yine görünür).
 const PLACES: Record<string, Pt> = {
   bodrum: [27.43, 37.03], datca: [27.68, 36.73], marmaris: [28.27, 36.85], dalyan: [28.65, 36.78], gocek: [28.93, 36.74],
-  fethiye: [29.12, 36.62], oludeniz: [29.15, 36.56], kalkan: [29.41, 36.25], kas: [29.64, 36.2], kemer: [30.57, 36.6],
-  antalya: [30.7, 36.86], bozburun: [28.05, 36.68], turgutreis: [27.26, 37.0], yalikavak: [27.29, 37.1], gokova: [28.3, 37.05],
-  akyaka: [28.32, 37.05], kekova: [29.87, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
+  fethiye: [29.12, 36.62], oludeniz: [29.15, 36.56], kalkan: [29.41, 36.25], kas: [29.64, 36.2], bozburun: [28.0, 36.64], turgutreis: [27.26, 37.0], yalikavak: [27.29, 37.1], gokova: [28.3, 37.05],
+  akyaka: [28.32, 37.05], kekova: [29.9, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
   orhaniye: [28.18, 36.72], hisaronu: [28.12, 36.65], sarigerme: [28.7, 36.7], ekincik: [28.55, 36.83],
 };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
@@ -44,12 +43,12 @@ type Layout = { w: number; h: number; x: (lon: number) => number; y: (la: number
 
 // Tekne rotaları yalnızca denizde kalır (boylam, enlem). Tekneler rota başında ve sonunda silinip belirir.
 const ROUTE_A: Pt[] = [[26.2, 36.25], [26.8, 36.2], [27.3, 36.0], [27.6, 35.75], [28.0, 35.65], [28.6, 35.65], [29.2, 35.75], [29.8, 35.8]];
-const ROUTE_B: Pt[] = [[28.4, 36.55], [28.7, 36.5], [29.0, 36.45], [29.2, 36.2], [29.45, 36.0], [29.9, 35.98], [30.3, 36.0], [30.6, 36.1], [30.85, 36.3], [30.95, 36.65]];
+const ROUTE_B: Pt[] = [[28.4, 36.55], [28.7, 36.5], [29.0, 36.45], [29.2, 36.2], [29.45, 36.0], [29.9, 35.98], [30.3, 36.0], [30.6, 36.05]];
 const ROUTE_C: Pt[] = [[27.45, 36.92], [27.8, 36.93], [28.1, 36.98], [28.2, 37.0]];
 
-const DESKTOP: Layout = { w: 1200, h: 700, x: (lo) => (lo - 24.2) * 175, y: (la) => (37.9 - la) * 219 + 200, trees: 90, boat: 0.5, font: 14,
+const DESKTOP: Layout = { w: 1200, h: 700, x: (lo) => (lo - 24.6) * 215, y: (la) => (37.9 - la) * 269 + 80, trees: 90, boat: 0.5, font: 14,
   routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
-const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.3) * 80, y: (la) => (37.55 - la) * 109 + 120, trees: 40, boat: 0.3, font: 11,
+const MOBILE: Layout = { w: 400, h: 340, x: (lo) => (lo - 26.4) * 100, y: (la) => (37.55 - la) * 125 + 110, trees: 40, boat: 0.3, font: 11,
   routes: [{ pts: ROUTE_A, dur: 70, begin: -12, kind: 1 }, { pts: ROUTE_B, dur: 85, begin: -50, kind: 0 }, { pts: ROUTE_C, dur: 30, begin: -9, kind: 2 }] };
 
 function curve(pts: Pt[], closed: boolean): string {
@@ -164,9 +163,9 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       {pins.map(({ d, pos }, i) => {
         const w = d.name.length * (L.font * 0.62) + 30 * s;
         const close = L.w > 600 && pos[0] - prevX < 130 && !prevLift;
-        const below = L.w < 600 ? i % 2 === 1 : close;
         prevLift = close; prevX = pos[0];
-        const dy = below ? 34 * s : -34 * s;
+        const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : close ? 34 : -34) * s;
+        const below = dy > 0;
         return (
           <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${d.name} ${en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
             <g className="pk-link" transform={`translate(${pos[0].toFixed(1)} ${pos[1].toFixed(1)})`}>
