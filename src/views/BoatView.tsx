@@ -47,7 +47,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleBoat}</p>}
         <div className="mt-3 flex flex-wrap gap-2">
           <FavButton slug={b.slug} name={b.name} lang={lang} label className="rounded-full border border-navy/20 px-4 py-2 text-navy hover:border-[#e8453c]" />
-          <Link href={href(lang, "/favorilerim")} className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold text-turquoise-dark hover:underline">{lang === "en" ? "Compare saved yachts →" : "Favorileri karşılaştır →"}</Link>
+          <Link href={`${href(lang, "/tekne-karsilastir")}?a=${b.slug}`} className="inline-flex items-center rounded-full bg-turquoise/10 px-4 py-2 text-sm font-semibold text-turquoise-dark hover:bg-turquoise/20">{lang === "en" ? "Compare with another yacht →" : "Başka tekneyle karşılaştır →"}</Link>
         </div>
         <div className="mt-4 flex flex-wrap items-center gap-3 lg:hidden">
           <span className={`rounded-full px-4 py-2 text-sm font-semibold ${price ? "bg-navy text-white" : "bg-mist text-turquoise-dark"}`}>{price ?? L.askPrice}</span>

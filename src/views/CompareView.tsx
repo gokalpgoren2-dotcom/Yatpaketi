@@ -78,7 +78,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                     </div>
                   </>
                 )}
-                {featured.length === 0 && <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">{en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki tekne seçin."}</p>}
+                {(featured.length === 0 || A || B) && <p className="mt-2 rounded-3xl bg-mist p-8 text-center text-navy/70">{A || B ? (en ? `${(A ?? B)!.name} is selected. Now choose the second yacht above.` : `${(A ?? B)!.name} seçildi. Şimdi yukarıdan ikinci tekneyi seçin.`) : (en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki tekne seçin.")}</p>}
                 <p className="mt-6 text-sm text-navy/60">{en ? "Tip: save yachts with the heart and compare them in " : "İpucu: Tekneleri kalple favorileyip "}<Link href={href(lang, "/favorilerim")} className="font-semibold text-turquoise-dark underline">{en ? "your saved list" : "favoriler sayfasında"}</Link>{en ? "." : " da karşılaştırabilirsiniz."}</p>
               </div>
             )}
