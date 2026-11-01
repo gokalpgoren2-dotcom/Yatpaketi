@@ -224,6 +224,8 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
   );
 }
 
+const FOOT_WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
+
 export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
   const L = t(lang);
   const [c, nav] = await Promise.all([getContact(), getNavInfo(lang)]);
@@ -240,7 +242,13 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
     { href: "/musteri", label: L.customerLogin },
   ];
   return (
-    <footer id="iletisim" className="scroll-mt-20 bg-navy py-12 text-sm text-white/70">
+    <footer id="iletisim" className="relative isolate scroll-mt-20 overflow-hidden bg-gradient-to-b from-[#0a3d63] to-navy pb-12 pt-20 text-sm text-white/80">
+      <div className="absolute inset-0 -z-10 bg-[radial-gradient(ellipse_at_50%_100%,rgba(27,180,196,0.35)_0%,rgba(27,180,196,0)_70%)]" aria-hidden />
+      <div className="absolute inset-x-0 top-0 -z-10 h-24 overflow-hidden" aria-hidden>
+        <svg className="wave-a absolute left-0 top-0 h-24 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(150)} fill="rgba(27,180,196,0.18)" /></svg>
+        <svg className="wave-b absolute left-0 top-0 h-16 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(220)} fill="rgba(255,255,255,0.12)" /></svg>
+        <svg className="wave-c absolute left-0 top-0 h-10 w-[200%] rotate-180" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(280)} fill="rgba(255,255,255,0.9)" /></svg>
+      </div>
       <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
       <div className={`${wrap} flex flex-col justify-between gap-6 md:flex-row`}>
         <div>
