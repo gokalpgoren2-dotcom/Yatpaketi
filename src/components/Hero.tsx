@@ -21,10 +21,10 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
       ) : (
         <>
           {/* Fotoğraf yüklenene kadar çizim. Panel > Site İçeriği'nden fotoğraf eklenir. */}
-          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #041a38 0%, #0a3a6b 38%, #0f6f9c 66%, #2bb7c4 88%, #7fdcd6 100%)" }} />
-          {/* Ufuktaki gün batımı ışıltısı ve ışık huzmeleri */}
-          <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_70%_100%,rgba(255,196,128,0.55)_0%,rgba(255,150,110,0.18)_40%,rgba(255,150,110,0)_70%)]" aria-hidden />
-          <div className="absolute inset-0 -z-10 opacity-60 [background:radial-gradient(circle_at_18%_22%,rgba(255,255,255,0.10)_0,rgba(255,255,255,0)_32%),radial-gradient(circle_at_85%_12%,rgba(127,220,214,0.18)_0,rgba(127,220,214,0)_36%)]" aria-hidden />
+          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #05224a 0%, #0a3d73 40%, #0d5f94 72%, #1d8fb0 100%)" }} />
+          {/* Yumuşak mavi ışık */}
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_50%_100%,rgba(127,220,230,0.28)_0%,rgba(127,220,230,0)_70%)]" aria-hidden />
+          <div className="absolute inset-0 -z-10 opacity-60 [background:radial-gradient(circle_at_18%_22%,rgba(255,255,255,0.10)_0,rgba(255,255,255,0)_32%),radial-gradient(circle_at_85%_12%,rgba(120,190,240,0.16)_0,rgba(127,220,214,0)_36%)]" aria-hidden />
           <div className="absolute inset-x-0 bottom-0 -z-10 h-32 overflow-hidden" aria-hidden>
             <svg className="wave-a absolute bottom-0 left-0 h-32 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(150)} fill="rgba(255,255,255,0.14)" /></svg>
             <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(220)} fill="rgba(255,255,255,0.2)" /></svg>
