@@ -44,7 +44,7 @@ Butterfly Valley and Ölüdeniz are crowded around midday, so go early in the mo
 Find boats departing from Göcek and Fethiye on the [Ports](/en/limanlar) page.
 $en$,'destination',1,'published',now()),
 
-('bodrum-gokova-korfezi','Bodrum - Gökova Körfezi','Canlı Bodrum ve çevresindeki koylar, ardından Gökova\'nın sakin ve yemyeşil körfezi.',
+('bodrum-gokova-korfezi','Bodrum - Gökova Körfezi','Canlı Bodrum ve çevresindeki koylar, ardından Gökova''nın sakin ve yemyeşil körfezi.',
 $tr$
 Bodrum'un canlılığı ile Gökova Körfezi'nin sakinliği tek rotada buluşur. Bodrum gece hayatı, kalesi ve marinasıyla bilinir; Gökova ise yeşil dağların arasında, adalarla dolu uzun bir körfezdir.
 
@@ -85,7 +85,7 @@ Light pollution is low in Gökova, so the night sky is very clear. Routes also r
 Find boats departing from Bodrum on the [Ports](/en/limanlar/bodrum) page.
 $en$,'destination',2,'published',now()),
 
-('datca-hisaronu-korfezi','Datça - Hisarönü Körfezi','Ege ile Akdeniz\'in buluştuğu ince yarımada: Knidos, Datça ve Hisarönü\'nün sakin koyları.',
+('datca-hisaronu-korfezi','Datça - Hisarönü Körfezi','Ege ile Akdeniz''in buluştuğu ince yarımada: Knidos, Datça ve Hisarönü''nün sakin koyları.',
 $tr$
 Datça Yarımadası, kuzeyinde Gökova, güneyinde Hisarönü olmak üzere iki körfezi ayıran uzun ve ince bir kara parçasıdır. Ucundaki Knidos, mavi yolculuğun en özel duraklarından biridir.
 
@@ -159,7 +159,7 @@ If you're interested in gulet building, ask your captain to plan a stop during t
 Find boats departing from Bozburun and Selimiye on the [Ports](/en/limanlar) page.
 $en$,'destination',4,'published',now()),
 
-('marmaris-ekincik','Marmaris - Ekincik','Marmaris\'in korunaklı limanı, İçmeler, Turunç ve Dalyan yakınındaki Ekincik Koyu.',
+('marmaris-ekincik','Marmaris - Ekincik','Marmaris''in korunaklı limanı, İçmeler, Turunç ve Dalyan yakınındaki Ekincik Koyu.',
 $tr$
 Marmaris, geniş ve korunaklı limanıyla mavi yolculuk için en pratik başlangıç noktalarından biridir. Doğuya doğru ilerleyince Dalyan'ın yakınındaki Ekincik Koyu'na ulaşılır.
 
@@ -176,7 +176,7 @@ Dalyan gezisi gibi kara programları için kaptanınızla önceden konuşun; sü
 
 Marmaris çıkışlı tekneleri [Limanlar](/limanlar/marmaris) sayfasında bulabilirsiniz.
 $tr$,
-'Marmaris - Ekincik','Marmaris\'s sheltered harbour, İçmeler, Turunç and Ekincik Cove near Dalyan.',
+'Marmaris - Ekincik','Marmaris''s sheltered harbour, İçmeler, Turunç and Ekincik Cove near Dalyan.',
 $en$
 With its wide, sheltered harbour, Marmaris is one of the most practical starting points for a blue voyage. Heading east, you reach Ekincik Cove near Dalyan.
 
@@ -194,7 +194,7 @@ For land programmes such as a Dalyan trip, talk to your captain beforehand; dura
 Find boats departing from Marmaris on the [Ports](/en/limanlar/marmaris) page.
 $en$,'destination',5,'published',now()),
 
-('kas-kekova','Kaş - Kekova','Batık şehir, Kaleköy, Üçağız, berrak sular ve Meis Adası\'na kısa bir geçiş.',
+('kas-kekova','Kaş - Kekova','Batık şehir, Kaleköy, Üçağız, berrak sular ve Meis Adası''na kısa bir geçiş.',
 $tr$
 Kaş, dağlarla denizin iç içe geçtiği küçük ve canlı bir limandır. Hemen doğusundaki Kekova ise korunaklı suları ve antik kalıntılarıyla mavi yolculuğun en sakin duraklarından biridir.
 
