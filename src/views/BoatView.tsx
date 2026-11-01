@@ -8,6 +8,7 @@ import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
+import { FavButton } from "@/components/FavButton";
 import { RatingLine, ReviewSection } from "@/components/Reviews";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
@@ -44,6 +45,10 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         <h1 className="font-display mt-1 text-3xl font-medium text-navy lg:text-5xl">{b.name}</h1>
         {b.rating && <a href="#yorumlar" className="mt-2 inline-block"><RatingLine rating={b.rating} lang={lang} /></a>}
         {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleBoat}</p>}
+        <div className="mt-3 flex flex-wrap gap-2">
+          <FavButton slug={b.slug} name={b.name} lang={lang} label className="rounded-full border border-navy/20 px-4 py-2 text-navy hover:border-[#e8453c]" />
+          <Link href={href(lang, "/favorilerim")} className="inline-flex items-center rounded-full px-4 py-2 text-sm font-semibold text-turquoise-dark hover:underline">{lang === "en" ? "Compare saved yachts →" : "Favorileri karşılaştır →"}</Link>
+        </div>
         <div className="mt-4 flex flex-wrap items-center gap-3 lg:hidden">
           <span className={`rounded-full px-4 py-2 text-sm font-semibold ${price ? "bg-navy text-white" : "bg-mist text-turquoise-dark"}`}>{price ?? L.askPrice}</span>
           <a href="#talep" className="rounded-full bg-turquoise px-5 py-2 text-sm font-semibold text-white">{L.sendRequest}</a>

@@ -5,6 +5,7 @@ import { Placeholder } from "./Placeholder";
 import { href, t, type Lang } from "@/lib/i18n";
 import { offerLabel } from "@/lib/campaigns";
 import { RatingLine } from "./Reviews";
+import { FavButton } from "./FavButton";
 
 const svg = { width: 16, height: 16, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 1.8, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
 const IconGuests = () => <svg {...svg}><circle cx="9" cy="8" r="3.2" /><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6" /><circle cx="17" cy="9" r="2.4" /><path d="M17 14.2c2.3.2 4 2 4 4.8" /></svg>;
@@ -23,9 +24,10 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
   const en = lang === "en";
   const has = (re: RegExp) => b.equipment.some((e) => re.test(e));
   return (
+    <div className="group relative transition duration-300 hover:-translate-y-1.5">
     <Link
       href={href(lang, `/tekneler/${b.slug}`)}
-      className="group block overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-navy/15"
+      className="block overflow-hidden rounded-3xl bg-white shadow-sm ring-1 ring-navy/10 transition duration-300 group-hover:shadow-2xl group-hover:shadow-navy/15"
     >
       <div className="relative aspect-[4/3] overflow-hidden">
         {b.image ? (
@@ -57,5 +59,7 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
         </ul>
       </article>
     </Link>
+    <FavButton slug={b.slug} name={b.name} lang={lang} className="absolute left-3 top-12 h-10 w-10 rounded-full bg-white/95 text-navy shadow hover:text-[#e8453c]" />
+    </div>
   );
 }
