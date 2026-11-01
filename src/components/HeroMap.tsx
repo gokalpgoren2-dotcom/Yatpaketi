@@ -33,9 +33,11 @@ const ISLANDS: Pt[][] = [
 const PLACES: Record<string, Pt> = {
   bodrum: [27.43, 37.03], datca: [27.68, 36.73], marmaris: [28.27, 36.85], dalyan: [28.65, 36.78], gocek: [28.93, 36.74],
   fethiye: [29.12, 36.62], oludeniz: [29.15, 36.56], kalkan: [29.41, 36.25], kas: [29.64, 36.2], bozburun: [28.0, 36.64], turgutreis: [27.26, 37.0], yalikavak: [27.29, 37.1], gokova: [28.3, 37.05],
-  akyaka: [28.32, 37.05], kekova: [29.9, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
+  akyaka: [28.32, 37.05], kaskekova: [29.76, 36.19], kekova: [29.9, 36.2], dalaman: [28.8, 36.72], didim: [27.27, 37.37], kusadasi: [27.26, 37.85],
   orhaniye: [28.18, 36.72], hisaronu: [28.12, 36.65], sarigerme: [28.7, 36.7], ekincik: [28.55, 36.83],
 };
+// Bilgisayarda tabela yönü (yoksa yakın komşuya göre otomatik seçilir).
+const SIDE: Record<string, "up" | "down"> = { bodrum: "up", datca: "up", bozburun: "down", marmaris: "up", gocek: "up", fethiye: "down", kaskekova: "up", kas: "up", kekova: "down" };
 const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replace(/ş/g, "s").replace(/ğ/g, "g").replace(/ü/g, "u").replace(/ö/g, "o").replace(/ç/g, "c").replace(/[^a-z]/g, "");
 
 type Route = { name: string; pts: Pt[]; dur: number; begin: number; kind: number };
@@ -120,9 +122,9 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
   const pins = destinations
     .map((d) => {
       const key = [norm(d.slug), norm(d.name)].find((k) => PLACES[k]);
-      return key ? { d, pos: px(PLACES[key]) } : null;
+      return key ? { d, key, pos: px(PLACES[key]) } : null;
     })
-    .filter((v): v is { d: Destination; pos: Pt } => v !== null)
+    .filter((v): v is { d: Destination; key: string; pos: Pt } => v !== null)
     .sort((a, b) => a.pos[0] - b.pos[0]);
 
   const en = lang === "en";
@@ -168,11 +170,12 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <text x={L.x(27.1)} y={L.y(36.7)} textAnchor="middle" fill="#fff" fillOpacity="0.7" fontSize={L.font - 3} fontStyle="italic" letterSpacing="2">KOS</text>
 
       {/* Destinasyon tabelaları: dokununca o bölgenin tekneleri açılır */}
-      {pins.map(({ d, pos }, i) => {
+      {pins.map(({ d, key, pos }, i) => {
         const w = d.name.length * (L.font * 0.62) + 30 * s;
         const close = L.w > 600 && pos[0] - prevX < 130 && !prevLift;
         prevLift = close; prevX = pos[0];
-        const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : close ? 34 : -34) * s;
+        const side = SIDE[key];
+        const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : side ? (side === "down" ? 34 : -34) : close ? 34 : -34) * s;
         const below = dy > 0;
         return (
           <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${d.name} ${en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
