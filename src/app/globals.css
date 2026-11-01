@@ -57,25 +57,22 @@ body {
 .sail-sway { animation: sail-sway 4.5s ease-in-out infinite; transform-origin: 50% 85%; }
 .menu-rise { animation: menu-rise 0.22s ease-out both; transform-origin: bottom right; }
 
-/* Ana sayfa sahnesi: paketten çıkan tekneler (yelkenli, yat, gulet). Döngü 15 sn; üç paket sırayla açılır. */
-@keyframes pk-flap-l { 0%, 6% { transform: rotate(0deg); } 15%, 82% { transform: rotate(-112deg); } 93%, 100% { transform: rotate(0deg); } }
-@keyframes pk-flap-r { 0%, 6% { transform: rotate(0deg); } 15%, 82% { transform: rotate(112deg); } 93%, 100% { transform: rotate(0deg); } }
+/* Ana sayfa sahnesi: logodaki açık kutudan sırayla gulet, motor yat ve yelkenli çıkar. Döngü 24 sn, her tekne 8 sn. */
 @keyframes pk-boat {
-  0%, 14% { transform: translateY(34px); }
-  26% { transform: translateY(-52px); }
-  31%, 78% { transform: translateY(-44px); }
-  90%, 100% { transform: translateY(34px); }
+  0%, 2% { transform: translateY(95px); }
+  8% { transform: translateY(-64px); }
+  11%, 27% { transform: translateY(-54px); }
+  33%, 100% { transform: translateY(95px); }
 }
-@keyframes pk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
-@keyframes pk-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
-.pk-box { animation: pk-float 4.5s ease-in-out infinite; }
-.pk-flap-l { animation: pk-flap-l 15s ease-in-out infinite; transform-box: view-box; transform-origin: 20px 70px; }
-.pk-flap-r { animation: pk-flap-r 15s ease-in-out infinite; transform-box: view-box; transform-origin: 140px 70px; }
-.pk-boat { animation: pk-boat 15s cubic-bezier(0.34, 1.2, 0.5, 1) infinite; }
-.pk-sway { animation: pk-sway 3.6s ease-in-out infinite; transform-box: view-box; transform-origin: 80px 118px; }
+@keyframes pk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
+@keyframes pk-sway { 0%, 100% { transform: rotate(-1.8deg); } 50% { transform: rotate(1.8deg); } }
+@keyframes pk-ripple { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.25); opacity: 0; } }
+.pk-box { animation: pk-float 5s ease-in-out infinite; }
+.pk-boat { animation: pk-boat 24s cubic-bezier(0.34, 1.15, 0.5, 1) infinite; }
+.pk-sway { animation: pk-sway 3.8s ease-in-out infinite; transform-box: view-box; transform-origin: 120px 170px; }
+.pk-ripple { animation: pk-ripple 4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
 @media (prefers-reduced-motion: reduce) {
-  .pk-box, .pk-sway { animation: none !important; }
-  .pk-flap-l { animation: none !important; transform: rotate(-112deg); }
-  .pk-flap-r { animation: none !important; transform: rotate(112deg); }
-  .pk-boat { animation: none !important; transform: translateY(-44px); }
+  .pk-box, .pk-sway, .pk-ripple { animation: none !important; }
+  .pk-boat { animation: none !important; transform: translateY(95px); }
+  .pk-boat.pk-first { transform: translateY(-54px); }
 }

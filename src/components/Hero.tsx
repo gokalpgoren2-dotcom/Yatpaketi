@@ -34,7 +34,7 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
         </>
       )}
 
-      <div className={`mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-40 lg:pb-52"}`}>
+      <div className={`mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-56 lg:pb-60 xl:pb-20"}`}>
         <h1 className="fade-up font-display text-[2.4rem] font-medium leading-[1.1] text-white [text-shadow:0_2px_24px_rgba(6,38,75,0.45)] sm:text-5xl lg:text-6xl" style={delay(0)}>
           {home.title}
         </h1>
