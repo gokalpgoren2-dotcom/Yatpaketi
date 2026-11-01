@@ -3,6 +3,7 @@ import { boats as sampleBoats, categories as sampleCategories, destinations as s
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import { normalizePhone } from "./phone";
 import { slugify } from "./slug";
+import { t, type Lang } from "./i18n";
 
 // Herkese açık okuma: oturum/çerez gerektirmez, yalnızca RLS'in izin verdiği (yayınlanmış) içerik gelir.
 function db() {
@@ -19,36 +20,37 @@ export const homeDefaults: HomeContent = {
   subtitle: "Gulet, motoryat, katamaran ve yelkenli seçeneklerini keşfedin, rezervasyon talebinizi iletin.",
 };
 
-export async function getHome(): Promise<HomeContent> {
-  if (!supabaseConfigured()) return homeDefaults;
+export async function getHome(lang: Lang = "tr"): Promise<HomeContent> {
+  const defs: HomeContent = lang === "en" ? { heroImage: null, title: t("en").heroTitle, subtitle: t("en").heroSubtitle } : homeDefaults;
+  if (!supabaseConfigured()) return defs;
   try {
     const { data } = await db().from("site_settings").select("value").eq("key", "home").maybeSingle();
-    const v = (data?.value ?? {}) as { hero_path?: string; title?: string; subtitle?: string };
+    const v = (data?.value ?? {}) as { hero_path?: string; title?: string; subtitle?: string; title_en?: string; subtitle_en?: string };
     return {
       heroImage: publicImageUrl(v.hero_path),
-      title: v.title?.trim() || homeDefaults.title,
-      subtitle: v.subtitle?.trim() || homeDefaults.subtitle,
+      title: (lang === "en" ? v.title_en?.trim() : v.title?.trim()) || defs.title,
+      subtitle: (lang === "en" ? v.subtitle_en?.trim() : v.subtitle?.trim()) || defs.subtitle,
     };
   } catch {
-    return homeDefaults;
+    return defs;
   }
 }
 
 // Destinasyonlar veritabanından gelir. Veritabanına ulaşılamazsa örnek liste kullanılır.
-export async function getDestinations(): Promise<Destination[]> {
+export async function getDestinations(lang: Lang = "tr"): Promise<Destination[]> {
   if (!supabaseConfigured()) return sampleDestinations;
   try {
     const { data, error } = await db()
       .from("destinations")
-      .select("slug,name_tr,blurb_tr,intro_tr,cover_path,seo_title,seo_description")
+      .select("slug,name_tr,name_en,blurb_tr,blurb_en,intro_tr,intro_en,cover_path,seo_title,seo_description")
       .eq("is_published", true)
       .order("sort_order");
     if (error || !data || data.length === 0) return sampleDestinations;
     return data.map((d, i) => ({
       slug: d.slug as string,
-      name: d.name_tr as string,
-      blurb: (d.blurb_tr as string | null) ?? "",
-      intro: (d.intro_tr as string | null) ?? "",
+      name: ((lang === "en" ? d.name_en : null) || d.name_tr) as string,
+      blurb: ((lang === "en" ? d.blurb_en : null) || d.blurb_tr || "") as string,
+      intro: ((lang === "en" ? d.intro_en : null) || d.intro_tr || "") as string,
       hue: 175 + i * 9,
       image: publicImageUrl(d.cover_path as string | null),
       seoTitle: (d.seo_title as string | null) ?? "",
@@ -69,7 +71,7 @@ function hueFor(slug: string) {
   return 170 + (h % 60);
 }
 
-function mapBoat(r: Row): Boat {
+function mapBoat(r: Row, lang: Lang = "tr"): Boat {
   const imgs = ((r.boat_images ?? []) as { path: string; is_cover: boolean; sort_order: number }[])
     .slice()
     .sort((a, b) => Number(b.is_cover) - Number(a.is_cover) || a.sort_order - b.sort_order)
@@ -81,7 +83,7 @@ function mapBoat(r: Row): Boat {
   return {
     slug: r.slug,
     name: r.name,
-    type: r.categories?.name_tr ?? "",
+    type: (lang === "en" ? r.categories?.name_en : null) || r.categories?.name_tr || "",
     brand: r.brand ?? "",
     model: r.model ?? "",
     year: r.year ?? null,
@@ -100,7 +102,7 @@ function mapBoat(r: Row): Boat {
     currency: r.currency ?? "EUR",
     equipment: r.equipment ?? [],
     waterSports: r.water_sports ?? [],
-    description: r.description_tr ?? "",
+    description: (lang === "en" ? r.description_en : null) || r.description_tr || "",
     hue: hueFor(r.slug),
     addedAt: r.created_at ?? "",
     image: imgs[0] ?? null,
@@ -110,22 +112,22 @@ function mapBoat(r: Row): Boat {
 }
 
 const BOAT_SELECT =
-  "*, categories(name_tr), boat_destinations(destinations(slug)), boat_images(path,is_cover,sort_order)";
+  "*, categories(name_tr,name_en), boat_destinations(destinations(slug)), boat_images(path,is_cover,sort_order)";
 
 // Yayındaki tekneler. Supabase tanımlı değilse örnek tekneler (sample: true) döner.
-export async function getBoats(): Promise<{ boats: Boat[]; sample: boolean }> {
+export async function getBoats(lang: Lang = "tr"): Promise<{ boats: Boat[]; sample: boolean }> {
   if (!supabaseConfigured()) return { boats: sampleBoats, sample: true };
   try {
     const { data, error } = await db().from("boats").select(BOAT_SELECT).eq("is_published", true).order("sort_order").order("created_at", { ascending: false });
     if (error) throw error;
-    return { boats: (data ?? []).map(mapBoat), sample: false };
+    return { boats: (data ?? []).map((r) => mapBoat(r, lang)), sample: false };
   } catch {
     return { boats: [], sample: false };
   }
 }
 
-export async function getBoatBySlug(slug: string): Promise<{ boat: Boat | null; all: Boat[]; sample: boolean }> {
-  const { boats, sample } = await getBoats();
+export async function getBoatBySlug(slug: string, lang: Lang = "tr"): Promise<{ boat: Boat | null; all: Boat[]; sample: boolean }> {
+  const { boats, sample } = await getBoats(lang);
   return { boat: boats.find((b) => b.slug === slug) ?? null, all: boats, sample };
 }
 
@@ -134,26 +136,26 @@ export type Category = { slug: string; name: string; intro: string; image: strin
 const toCategory = (n: string): Category => ({ slug: slugify(n), name: n, intro: "", image: null, seoTitle: "", seoDescription: "" });
 
 // Tekne tipleri. Yeni alanlar (tanıtım metni vb.) henüz eklenmediyse yalnızca ad ve adres okunur.
-export async function getCategories(): Promise<Category[]> {
+export async function getCategories(lang: Lang = "tr"): Promise<Category[]> {
   if (!supabaseConfigured()) return sampleCategories.map(toCategory);
   try {
-    const full = await db().from("categories").select("slug,name_tr,intro_tr,cover_path,seo_title,seo_description").eq("is_active", true).order("sort_order");
+    const full = await db().from("categories").select("slug,name_tr,name_en,intro_tr,cover_path,seo_title,seo_description").eq("is_active", true).order("sort_order");
     if (!full.error && full.data && full.data.length > 0) {
       return full.data.map((c) => ({
-        slug: c.slug as string, name: c.name_tr as string, intro: (c.intro_tr as string | null) ?? "",
+        slug: c.slug as string, name: ((lang === "en" ? c.name_en : null) || c.name_tr) as string, intro: (c.intro_tr ?? "") as string,
         image: publicImageUrl(c.cover_path as string | null), seoTitle: (c.seo_title as string | null) ?? "", seoDescription: (c.seo_description as string | null) ?? "",
       }));
     }
-    const basic = await db().from("categories").select("slug,name_tr").eq("is_active", true).order("sort_order");
+    const basic = await db().from("categories").select("slug,name_tr,name_en").eq("is_active", true).order("sort_order");
     if (basic.error || !basic.data || basic.data.length === 0) return sampleCategories.map(toCategory);
-    return basic.data.map((c) => ({ slug: c.slug as string, name: c.name_tr as string, intro: "", image: null, seoTitle: "", seoDescription: "" }));
+    return basic.data.map((c) => ({ slug: c.slug as string, name: ((lang === "en" ? c.name_en : null) || c.name_tr) as string, intro: "", image: null, seoTitle: "", seoDescription: "" }));
   } catch {
     return sampleCategories.map(toCategory);
   }
 }
 
-export async function getCategoryNames(): Promise<string[]> {
-  return (await getCategories()).map((c) => c.name);
+export async function getCategoryNames(lang: Lang = "tr"): Promise<string[]> {
+  return (await getCategories(lang)).map((c) => c.name);
 }
 
 // ---- İletişim ayarları (Panel > Ayarlar) ----

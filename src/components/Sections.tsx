@@ -4,12 +4,13 @@ import Link from "next/link";
 import { Logo } from "./Logo";
 import { BoatCard } from "./BoatCard";
 import { Placeholder } from "./Placeholder";
-import { routes, type Boat, type Destination } from "@/lib/data";
+import { type Boat, type Destination } from "@/lib/data";
 import type { Category } from "@/lib/content";
 import { getContact } from "@/lib/content";
 import { formatPhone } from "@/lib/phone";
 import { getNavInfo, type Post } from "@/lib/posts";
 import { PostCard, postHref } from "./PostCard";
+import { href, t, type Lang } from "@/lib/i18n";
 
 function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
   return (
@@ -29,16 +30,17 @@ function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: strin
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
-export function Categories({ items }: { items: Category[] }) {
+export function Categories({ items, lang = "tr" }: { items: Category[]; lang?: Lang }) {
+  const L = t(lang);
   return (
     <section className="pb-4 pt-14 lg:pt-20">
       <div className={wrap}>
-        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">Tekne tipine göre keşfedin</p>
+        <p className="mb-4 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">{L.byType}</p>
         <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0">
           {items.map((c) => (
             <Link
               key={c.slug}
-              href={`/tekne-tipleri/${c.slug}`}
+              href={href(lang, `/tekne-tipleri/${c.slug}`)}
               className="shrink-0 rounded-full bg-mist px-6 py-3 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:-translate-y-0.5 hover:bg-turquoise hover:text-white hover:ring-turquoise"
             >
               {c.name}
@@ -50,19 +52,20 @@ export function Categories({ items }: { items: Category[] }) {
   );
 }
 
-export function FeaturedBoats({ items, sample }: { items: Boat[]; sample: boolean }) {
+export function FeaturedBoats({ items, sample, lang = "tr" }: { items: Boat[]; sample: boolean; lang?: Lang }) {
+  const L = t(lang);
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="tekneler" eyebrow="Öne çıkan tekneler" title="Sizin için seçtiklerimiz" action={{ href: "/tekneler", label: "Tüm tekneler" }} />
-        {sample && <p className="-mt-4 mb-6 text-sm text-navy/50">Örnek içerik: Veritabanı bağlı olmadığı için örnek tekneler gösteriliyor.</p>}
+        <Heading id="tekneler" eyebrow={L.featuredEyebrow} title={L.featuredTitle} action={{ href: href(lang, "/tekneler"), label: L.allBoatsBtn }} />
+        {sample && <p className="-mt-4 mb-6 text-sm text-navy/50">{L.sampleHome}</p>}
         {items.length === 0 ? (
-          <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">Henüz yayında tekne yok. Çok yakında burada olacak.</p>
+          <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">{L.noBoatsHome}</p>
         ) : (
           <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:grid lg:grid-cols-3 lg:gap-6 lg:overflow-visible lg:px-0">
             {items.map((b) => (
               <div key={b.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-auto">
-                <BoatCard b={b} />
+                <BoatCard b={b} lang={lang} />
               </div>
             ))}
           </div>
@@ -72,17 +75,14 @@ export function FeaturedBoats({ items, sample }: { items: Boat[]; sample: boolea
   );
 }
 
-export function HowItWorks() {
-  const steps = [
-    ["1", "Tekneyi seçin", "Bölge, tarih, kişi sayısı ve bütçenize göre tekneleri filtreleyin."],
-    ["2", "Talebinizi iletin", "Tarih ve kişi sayınızla rezervasyon talebi oluşturun. Talep ücretsizdir."],
-    ["3", "Onayı bekleyin", "Müsaitlik ve fiyat teyit edilir. Rezervasyon, onaydan sonra kesinleşir."],
-  ];
+export function HowItWorks({ lang = "tr" }: { lang?: Lang }) {
+  const L = t(lang);
+  const steps = L.steps;
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
         <div className="rounded-[2rem] bg-mist p-6 sm:p-10 lg:p-14">
-          <Heading eyebrow="Nasıl çalışır?" title="Üç adımda talebinizi iletin" />
+          <Heading eyebrow={L.howEyebrow} title={L.howTitle} />
           <ol className="grid gap-6 md:grid-cols-3">
             {steps.map(([n, t, d]) => (
               <li key={n} className="relative rounded-2xl bg-white p-6 shadow-sm">
@@ -98,16 +98,17 @@ export function HowItWorks() {
   );
 }
 
-export function Destinations({ items }: { items: Destination[] }) {
+export function Destinations({ items, lang = "tr" }: { items: Destination[]; lang?: Lang }) {
+  const L = t(lang);
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading id="destinasyonlar" eyebrow="Destinasyonlar" title="Popüler tekne kiralama destinasyonları" action={{ href: "/destinasyonlar", label: "Hepsini gör" }} />
+        <Heading id="destinasyonlar" eyebrow={L.destEyebrow} title={L.destTitle} action={{ href: href(lang, "/destinasyonlar"), label: L.seeAll }} />
         <div className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
           {items.map((d) => (
             <Link
               key={d.slug}
-              href={`/destinasyonlar/${d.slug}`}
+              href={href(lang, `/destinasyonlar/${d.slug}`)}
               className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
             >
               {d.image ? (
@@ -117,7 +118,7 @@ export function Destinations({ items }: { items: Destination[] }) {
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-transparent to-transparent" />
               <div className="absolute bottom-0 p-5 text-white">
-                <p className="text-sm text-white/85">Türkiye</p>
+                <p className="text-sm text-white/85">{L.country}</p>
                 <h3 className="font-display text-3xl">{d.name}</h3>
                 <p className="mt-1 text-sm text-white/85">{d.blurb}</p>
               </div>
@@ -129,25 +130,26 @@ export function Destinations({ items }: { items: Destination[] }) {
   );
 }
 
-export function RentalModes() {
+export function RentalModes({ lang = "tr" }: { lang?: Lang }) {
+  const L = t(lang);
   const modes = [
-    { title: "Günlük kiralama", text: "Koy turları, doğum günü ve özel organizasyonlar için.", hue: 178, href: "/tekneler?kiralama=gunluk" },
-    { title: "Haftalık kiralama", text: "Kabinli mavi yolculuk: kaptan ve mürettebat dahil seçenekler.", hue: 200, href: "/tekneler?kiralama=haftalik" },
-    { title: "Lüks yat koleksiyonu", text: "Üst segment yatlar, kişiye özel rota ve hizmet.", hue: 225, href: "/tekneler?tip=L%C3%BCks%20Yat" },
+    { title: L.modes[0][0], text: L.modes[0][1], hue: 178, href: "/tekneler?kiralama=gunluk" },
+    { title: L.modes[1][0], text: L.modes[1][1], hue: 200, href: "/tekneler?kiralama=haftalik" },
+    { title: L.modes[2][0], text: L.modes[2][1], hue: 225, href: "/tekneler?tip=L%C3%BCks%20Yat" },
   ];
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <Heading eyebrow="Kiralama seçenekleri" title="İhtiyacınıza göre planlayın" />
+        <Heading eyebrow={L.modesEyebrow} title={L.modesTitle} />
         <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
           {modes.map((m) => (
-            <Link key={m.title} href={m.href} className="group relative flex min-h-[15rem] items-end overflow-hidden rounded-3xl p-6 text-white lg:min-h-[19rem] lg:p-8">
+            <Link key={m.title} href={href(lang, m.href)} className="group relative flex min-h-[15rem] items-end overflow-hidden rounded-3xl p-6 text-white lg:min-h-[19rem] lg:p-8">
               <Placeholder hue={m.hue} className="absolute inset-0 transition duration-500 group-hover:scale-105" label={false} />
               <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/20 to-transparent" />
               <div className="relative">
                 <h3 className="font-display text-2xl">{m.title}</h3>
                 <p className="mt-2 max-w-xs text-sm leading-relaxed text-white/85">{m.text}</p>
-                <span className="mt-4 inline-block rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy">Tekneleri gör →</span>
+                <span className="mt-4 inline-block rounded-full bg-white px-4 py-2 text-xs font-semibold text-navy">{L.seeBoats}</span>
               </div>
             </Link>
           ))}
@@ -157,21 +159,22 @@ export function RentalModes() {
   );
 }
 
-export function Routes() {
+export function Routes({ lang = "tr" }: { lang?: Lang }) {
+  const L = t(lang);
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
         <div className="rounded-[2rem] bg-navy p-6 text-white sm:p-10 lg:p-14">
           <div id="mavi-yolculuk" className="mb-8 scroll-mt-24 max-w-2xl lg:mb-10">
-            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">Mavi yolculuk</p>
-            <h2 className="font-display text-3xl font-medium lg:text-4xl">Klasik rotalar</h2>
+            <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{L.routesEyebrow}</p>
+            <h2 className="font-display text-3xl font-medium lg:text-4xl">{L.routesTitle}</h2>
           </div>
           <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
-            {routes.map((r) => (
-              <div key={r.name} className="rounded-2xl bg-white/[0.07] p-6 ring-1 ring-white/10">
-                <p className="inline-block rounded-full bg-turquoise px-3 py-1 text-xs font-semibold">{r.days}</p>
-                <h3 className="font-display mt-4 text-2xl">{r.name}</h3>
-                <p className="mt-3 text-sm leading-relaxed text-white/70">{r.stops}</p>
+            {L.routes.map(([name, days, stops]) => (
+              <div key={name} className="rounded-2xl bg-white/[0.07] p-6 ring-1 ring-white/10">
+                <p className="inline-block rounded-full bg-turquoise px-3 py-1 text-xs font-semibold">{days}</p>
+                <h3 className="font-display mt-4 text-2xl">{name}</h3>
+                <p className="mt-3 text-sm leading-relaxed text-white/70">{stops}</p>
               </div>
             ))}
           </div>
@@ -181,17 +184,13 @@ export function Routes() {
   );
 }
 
-export function WhyUs() {
-  const items = [
-    ["Seçilmiş filo", "Tekneleri tek tek inceleyip listeliyoruz."],
-    ["Şeffaf süreç", "Rezervasyon talebiniz kesin rezervasyon değildir; onay sonrası netleşir."],
-    ["Yerel uzmanlık", "Rota ve koy önerilerinde bölgeyi bilen ekip."],
-    ["Yakın destek", "Telefon ve WhatsApp ile hızlı iletişim."],
-  ];
+export function WhyUs({ lang = "tr" }: { lang?: Lang }) {
+  const L = t(lang);
+  const items = L.why;
   return (
     <section className="py-14 lg:py-20" id="hakkimizda">
       <div className={wrap}>
-        <Heading eyebrow="Neden yatpaketi?" title="Güvenle seçin, rahatça yolculuk yapın" />
+        <Heading eyebrow={L.whyEyebrow} title={L.whyTitle} />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {items.map(([t, d]) => (
             <div key={t} className="rounded-3xl bg-white p-6 ring-1 ring-navy/10 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10">
@@ -208,12 +207,14 @@ export function WhyUs() {
   );
 }
 
-export function Blog({ items }: { items: Post[] }) {
+export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
+  const L = t(lang);
+  if (lang === "en") return null;
   if (items.length === 0) return null;
   return (
     <section className="py-14 lg:py-20" id="blog">
       <div className={wrap}>
-        <Heading eyebrow="Yatpaketi Rehberi" title="Okuyun, planlayın" action={{ href: "/rehber", label: "Tüm yazılar" }} />
+        <Heading eyebrow={L.blogEyebrow} title={L.blogTitle} action={{ href: "/rehber", label: L.allPosts }} />
         <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
           {items.map((p, i) => <PostCard key={p.slug} p={p} i={i} />)}
         </div>
@@ -222,22 +223,29 @@ export function Blog({ items }: { items: Post[] }) {
   );
 }
 
-export async function Footer() {
+export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
+  const L = t(lang);
   const [c, nav] = await Promise.all([getContact(), getNavInfo()]);
-  const links = [
-    { href: "/tekneler", label: "Kiralık Tekneler" },
-    { href: "/destinasyonlar", label: "Destinasyonlar" },
-    ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
-    ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
-    ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),
-  ];
+  const links =
+    lang === "en"
+      ? [
+          { href: href(lang, "/tekneler"), label: L.navBoats },
+          { href: href(lang, "/destinasyonlar"), label: L.navDest },
+        ]
+      : [
+          { href: "/tekneler", label: "Kiralık Tekneler" },
+          { href: "/destinasyonlar", label: "Destinasyonlar" },
+          ...(nav.hasGuides ? [{ href: "/rehber", label: "Yatpaketi Rehberi" }] : []),
+          ...(nav.hasBlog ? [{ href: "/blog", label: "Blog" }] : []),
+          ...nav.pages.map((p) => ({ href: postHref({ kind: "page", slug: p.slug }), label: p.title })),
+        ];
   return (
     <footer id="iletisim" className="scroll-mt-20 bg-navy py-12 text-sm text-white/70">
       <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
       <div className={`${wrap} flex flex-col justify-between gap-6 md:flex-row`}>
         <div>
           <div className="inline-block rounded-xl bg-white px-4 py-2"><Logo height={32} /></div>
-          <p className="mt-2 max-w-xs">Türkiye’de yat ve tekne kiralama platformu.</p>
+          <p className="mt-2 max-w-xs">{L.footTag}</p>
           {(c.phone || c.email) && (
             <p className="mt-3 flex flex-col gap-1">
               {c.phone && <a href={`tel:+${c.phone}`} className="hover:text-white">{formatPhone(c.phone)}</a>}
@@ -247,10 +255,10 @@ export async function Footer() {
         </div>
         <ul className="flex flex-col gap-2 md:items-end">
           {links.map((l) => <li key={l.href}><Link href={l.href} className="hover:text-white">{l.label}</Link></li>)}
-          <li><Link href="/musteri" className="hover:text-white">Müşteri Girişi</Link></li>
+          <li><Link href="/musteri" className="hover:text-white">{L.customerLogin}</Link></li>
         </ul>
       </div>
-      <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. Tüm hakları saklıdır.</p>
+      <p className={`${wrap} mt-8 border-t border-white/10 pt-6`}>© {new Date().getFullYear()} yatpaketi. {L.rights}</p>
     </footer>
   );
 }

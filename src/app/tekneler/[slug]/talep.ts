@@ -20,22 +20,37 @@ const messages: Record<string, string> = {
   rate: "Çok fazla talep gönderildi. Lütfen daha sonra tekrar deneyin.",
 };
 
+const messagesEn: Record<string, string> = {
+  name: "Please enter your full name.",
+  contact: "Please enter at least a phone number or an email address.",
+  phone: "The phone number looks invalid.",
+  email: "The email address looks invalid.",
+  dates: "Please check the dates: check-in cannot be in the past, check-out must be after check-in, and the stay can be at most 60 days.",
+  guests: "The guest count is invalid.",
+  capacity: "The guest count exceeds this boat's capacity.",
+  message: "Your message is too long (max. 2000 characters).",
+  boat: "This boat is no longer listed.",
+  rate: "Too many requests were sent. Please try again later.",
+};
+
 const s = (fd: FormData, k: string, max: number) => String(fd.get(k) ?? "").trim().slice(0, max);
 
 export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
+  const en = String(fd.get("lang") ?? "") === "en";
+  const messages_ = en ? messagesEn : messages;
   // Gizli alan (botlar doldurur) ve çok hızlı gönderim: sessizce "başarılı" gibi davranılır.
   if (s(fd, "website", 200) !== "") return { ok: true };
   const elapsed = Number(fd.get("elapsed"));
-  if (!Number.isFinite(elapsed) || elapsed < 2500) return { ok: false, message: "Lütfen formu doldurup birkaç saniye sonra tekrar gönderin." };
+  if (!Number.isFinite(elapsed) || elapsed < 2500) return { ok: false, message: en ? "Please fill in the form and submit again in a few seconds." : "Lütfen formu doldurup birkaç saniye sonra tekrar gönderin." };
 
-  if (fd.get("consent") !== "on") return { ok: false, message: "Devam etmek için kişisel verilerin işlenmesini onaylamanız gerekir." };
+  if (fd.get("consent") !== "on") return { ok: false, message: en ? "To continue, please agree to the processing of your personal data." : "Devam etmek için kişisel verilerin işlenmesini onaylamanız gerekir." };
 
   const start = s(fd, "start", 10);
   const end = s(fd, "end", 10);
   const dateOk = (v: string) => /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v));
-  if (!dateOk(start) || !dateOk(end)) return { ok: false, message: messages.dates };
+  if (!dateOk(start) || !dateOk(end)) return { ok: false, message: messages_.dates };
   const guests = Number(s(fd, "guests", 4));
-  if (!Number.isInteger(guests)) return { ok: false, message: messages.guests };
+  if (!Number.isInteger(guests)) return { ok: false, message: messages_.guests };
 
   const h = await headers();
   const ip = (h.get("x-forwarded-for") ?? "").split(",")[0].trim() || h.get("x-real-ip") || "";
@@ -55,7 +70,7 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     p_message: s(fd, "message", 2000),
     p_ip_hash: ipHash,
   });
-  if (error) return { ok: false, message: "Talebiniz şu an gönderilemedi. Lütfen daha sonra tekrar deneyin." };
+  if (error) return { ok: false, message: en ? "Your request could not be sent right now. Please try again later." : "Talebiniz şu an gönderilemedi. Lütfen daha sonra tekrar deneyin." };
   const r = data as { ok?: boolean; error?: string } | null;
   if (r?.ok) {
     let boatName = s(fd, "boat", 200);
@@ -75,7 +90,7 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     // Tanı amaçlı: ad "TESTMAIL" ise bildirim sonucu ekranda gösterilir.
     return s(fd, "name", 100).toUpperCase() === "TESTMAIL" ? { ok: true, debug: nr.ok ? "Bildirim e-postası gönderildi." : "Bildirim e-postası gönderilemedi: " + nr.message } : { ok: true };
   }
-  return { ok: false, message: messages[r?.error ?? ""] ?? "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin." };
+  return { ok: false, message: messages_[r?.error ?? ""] ?? (en ? "Your request could not be sent. Please check your details." : "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin.") };
 }
 
 // WhatsApp düğmesine basılınca talebi sessizce panele kaydeder (telefon/e-posta yoktur). Hata olursa WhatsApp yolu etkilenmez.

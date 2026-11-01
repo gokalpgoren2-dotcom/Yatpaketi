@@ -81,11 +81,13 @@ export function boatsFor(list: Boat[], destSlug: string) {
 }
 
 // Fiyat gösterimi: showPrice false ise null döner ("Fiyat sorunuz").
-export function priceLabel(b: Boat): string | null {
+export function priceLabel(b: Boat, lang: "tr" | "en" = "tr"): string | null {
   if (!b.showPrice) return null;
-  const n = (v: number) => v.toLocaleString("tr-TR");
-  if (b.priceWeekly) return `${n(b.priceWeekly)} ${b.currency} / hafta’dan`;
-  if (b.priceDaily) return `${n(b.priceDaily)} ${b.currency} / gün’den`;
+  const n = (v: number) => v.toLocaleString(lang === "en" ? "en-GB" : "tr-TR");
+  const w = lang === "en" ? "/ week from" : "/ hafta’dan";
+  const d = lang === "en" ? "/ day from" : "/ gün’den";
+  if (b.priceWeekly) return `${n(b.priceWeekly)} ${b.currency} ${w}`;
+  if (b.priceDaily) return `${n(b.priceDaily)} ${b.currency} ${d}`;
   return null;
 }
 

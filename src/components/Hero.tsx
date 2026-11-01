@@ -3,11 +3,13 @@ import Link from "next/link";
 import { SearchBar } from "./SearchBar";
 import type { Destination } from "@/lib/data";
 import type { HomeContent } from "@/lib/content";
+import { href, t, type Lang } from "@/lib/i18n";
 
 const wave = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
 const delay = (s: number) => ({ animationDelay: `${s}s` });
 
-export function Hero({ home, destinations }: { home: HomeContent; destinations: Destination[] }) {
+export function Hero({ home, destinations, lang = "tr" }: { home: HomeContent; destinations: Destination[]; lang?: Lang }) {
+  const L = t(lang);
   return (
     <section className="relative isolate flex min-h-[34rem] items-center justify-center overflow-hidden bg-navy pt-20 text-center lg:min-h-[40rem]">
       {home.heroImage ? (
@@ -36,14 +38,14 @@ export function Hero({ home, destinations }: { home: HomeContent; destinations: 
           {home.subtitle}
         </p>
         <div className="fade-up mt-9" style={delay(0.25)}>
-          <SearchBar destinations={destinations} />
+          <SearchBar destinations={destinations} lang={lang} />
         </div>
         <p className="fade-up mt-6 text-sm text-white/90" style={delay(0.35)}>
-          <span className="font-semibold">Popüler:</span>{" "}
+          <span className="font-semibold">{L.popular}</span>{" "}
           {destinations.slice(0, 5).map((d, i) => (
             <span key={d.slug}>
               {i > 0 && <span aria-hidden> • </span>}
-              <Link href={`/tekneler?destinasyon=${d.slug}`} className="underline decoration-white/50 underline-offset-4 hover:decoration-white">{d.name}</Link>
+              <Link href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} className="underline decoration-white/50 underline-offset-4 hover:decoration-white">{d.name}</Link>
             </span>
           ))}
         </p>

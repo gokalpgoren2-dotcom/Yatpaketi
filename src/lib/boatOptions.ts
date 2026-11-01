@@ -48,3 +48,30 @@ export function parseEquipment(raw: string): { name: string; detail: string } {
 
 export const formatToy = (name: string, qty: number | null) => (qty && qty > 1 ? `${name} ×${qty}` : name);
 export const formatEquipment = (name: string, detail: string) => (detail.trim() ? `${name}${SEP}${detail.trim()}` : name);
+
+// ---- İngilizce gösterim (site /en) ----
+const TOY_EN: Record<string, string> = {
+  "Jet ski": "Jet ski", "Seabob": "Seabob", "Paddle board": "Paddle board", "Kano": "Canoe / kayak", "Wakeboard": "Wakeboard",
+  "Su kayağı": "Water skis", "Kneeboard": "Kneeboard", "Monoski": "Monoski", "Ringo": "Ringo ride", "Muz (banana) botu": "Banana boat",
+  "Şişme kaydırak": "Inflatable slide", "Rüzgar sörfü": "Windsurf", "Şnorkel ekipmanı": "Snorkelling gear",
+  "Balık tutma ekipmanı": "Fishing gear", "Dalış ekipmanı": "Diving equipment", "Yüzme platformu": "Swim platform",
+};
+const EQ_EN: Record<string, string> = {
+  "Klima": "Air conditioning", "Wi-Fi": "Wi-Fi", "Jakuzi": "Jacuzzi", "Flybridge": "Flybridge", "Tender": "Tender", "Sauna": "Sauna",
+  "Jeneratör": "Generator", "Su yapıcı": "Watermaker", "Buz makinesi": "Ice maker", "Eğlence sistemi": "Entertainment system", "Fitness": "Fitness",
+};
+const DETAIL_EN: Record<string, string> = {
+  "Tam gün (24 saat)": "All day (24 hours)", "Gece 00:00–07:00 arası": "At night, 00:00–07:00", "Gece 23:00–08:00 arası": "At night, 23:00–08:00",
+  "Yalnızca kabinlerde": "In cabins only", "Salon ve kabinlerde, gün boyu": "Saloon and cabins, all day", "Jeneratör açıkken": "While the generator is running",
+};
+
+export function localizeToy(raw: string, lang: "tr" | "en"): string {
+  if (lang === "tr") return raw;
+  const { name, qty } = parseToy(raw);
+  return formatToy(TOY_EN[name] ?? name, qty);
+}
+export function localizeEquipment(raw: string, lang: "tr" | "en"): string {
+  if (lang === "tr") return raw;
+  const { name, detail } = parseEquipment(raw);
+  return formatEquipment(EQ_EN[name] ?? name, DETAIL_EN[detail] ?? detail);
+}

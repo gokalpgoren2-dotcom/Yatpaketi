@@ -1,9 +1,8 @@
 "use client";
 
 import { useState } from "react";
+import { t, type Lang } from "@/lib/i18n";
 
-const MONTHS = ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
-const DAYS = ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"];
 const pad = (n: number) => String(n).padStart(2, "0");
 const iso = (y: number, m: number, d: number) => `${y}-${pad(m + 1)}-${pad(d)}`;
 
@@ -12,7 +11,7 @@ export function todayIso() {
   return iso(n.getFullYear(), n.getMonth(), n.getDate());
 }
 
-const short = (s: string) => new Date(s + "T00:00:00").toLocaleDateString("tr-TR", { day: "numeric", month: "short", year: "numeric" });
+const shortFor = (loc: string) => (s: string) => new Date(s + "T00:00:00").toLocaleDateString(loc, { day: "numeric", month: "short", year: "numeric" });
 
 type Props = {
   start: string;
@@ -23,10 +22,14 @@ type Props = {
   blocked?: (isoDate: string) => boolean;
   // Yönetici için geçmiş günler de seçilebilsin (sürmekte olan turlar).
   allowPast?: boolean;
+  lang?: Lang;
 };
 
 // Tek takvimde giriş ve çıkış seçimi: önce girişe, sonra çıkışa dokunulur. Aradaki günler renklenir.
-export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked, allowPast = false }: Props) {
+export function DateRangePicker({ start, end, onChange, label, blocked, allowPast = false, lang = "tr" }: Props) {
+  const L = t(lang);
+  const short = shortFor(L.locale);
+  label = label ?? L.date;
   const today = todayIso();
   const base = start || today;
   const [open, setOpen] = useState(false);
@@ -53,7 +56,7 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
     }
   }
 
-  const summary = start && end ? `${short(start)} – ${short(end)}` : start ? `${short(start)} – çıkış tarihini seçin` : "Giriş ve çıkış tarihini seçin";
+  const summary = start && end ? `${short(start)} – ${short(end)}` : start ? `${short(start)} – ${L.pickEnd}` : L.pickBoth;
 
   return (
     <div>
@@ -71,14 +74,14 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
       </button>
 
       {open && (
-        <div className="mt-2 rounded-2xl border border-navy/10 bg-white p-3 shadow-lg" role="group" aria-label="Takvim">
+        <div className="mt-2 rounded-2xl border border-navy/10 bg-white p-3 shadow-lg" role="group" aria-label={L.date}>
           <div className="mb-2 flex items-center justify-between">
-            <button type="button" onClick={() => shift(-1)} disabled={!canPrev} aria-label="Önceki ay" className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-navy hover:bg-mist disabled:opacity-30">‹</button>
-            <span className="text-sm font-semibold text-navy" aria-live="polite">{MONTHS[view.m]} {view.y}</span>
-            <button type="button" onClick={() => shift(1)} aria-label="Sonraki ay" className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-navy hover:bg-mist">›</button>
+            <button type="button" onClick={() => shift(-1)} disabled={!canPrev} aria-label={L.prevMonth} className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-navy hover:bg-mist disabled:opacity-30">‹</button>
+            <span className="text-sm font-semibold text-navy" aria-live="polite">{L.months[view.m]} {view.y}</span>
+            <button type="button" onClick={() => shift(1)} aria-label={L.nextMonth} className="flex h-10 w-10 items-center justify-center rounded-full text-xl text-navy hover:bg-mist">›</button>
           </div>
           <div className="grid grid-cols-7 text-center text-[11px] font-semibold uppercase text-navy/45">
-            {DAYS.map((d) => <span key={d} className="py-1">{d}</span>)}
+            {L.days.map((d) => <span key={d} className="py-1">{d}</span>)}
           </div>
           <div className="grid grid-cols-7 gap-y-1">
             {cells.map((d, i) => {
@@ -114,8 +117,8 @@ export function DateRangePicker({ start, end, onChange, label = "Tarih", blocked
             })}
           </div>
           <div className="mt-2 flex items-center justify-between px-1 text-xs text-navy/60">
-            <span>{start && !end ? "Şimdi çıkış tarihine dokunun." : "Önce giriş, sonra çıkış tarihine dokunun."}</span>
-            {start && <button type="button" onClick={() => onChange("", "")} className="font-semibold text-turquoise-dark">Temizle</button>}
+            <span>{start && !end ? L.tapEnd : L.tapStart}</span>
+            {start && <button type="button" onClick={() => onChange("", "")} className="font-semibold text-turquoise-dark">{L.clear}</button>}
           </div>
         </div>
       )}
