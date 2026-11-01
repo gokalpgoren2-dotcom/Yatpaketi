@@ -1,18 +1,19 @@
 import { Photo } from "./Photo";
 import Link from "next/link";
 import { SearchBar } from "./SearchBar";
-import { HeroBoats } from "./HeroBoats";
+import { HeroMap } from "./HeroMap";
 import type { Destination } from "@/lib/data";
 import type { HomeContent, Category } from "@/lib/content";
 import { href, t, type Lang } from "@/lib/i18n";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const wave = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
 const delay = (s: number) => ({ animationDelay: `${s}s` });
 
 export function Hero({ home, destinations, categories = [], lang = "tr" }: { home: HomeContent; destinations: Destination[]; categories?: Category[]; lang?: Lang }) {
   const L = t(lang);
   return (
-    <section className="relative isolate flex min-h-[34rem] items-center justify-center overflow-hidden bg-navy pt-20 text-center lg:min-h-[40rem]">
+    <section className={`relative isolate flex items-center justify-center overflow-hidden bg-navy pt-20 text-center ${home.heroImage ? "min-h-[34rem] lg:min-h-[40rem]" : "min-h-[34rem] lg:min-h-[49rem] lg:items-start"}`}>
       {home.heroImage ? (
         <>
           <div className="absolute inset-0 -z-20"><Photo src={home.heroImage} alt="" priority sizes="100vw" className="object-cover" /></div>
@@ -20,31 +21,23 @@ export function Hero({ home, destinations, categories = [], lang = "tr" }: { hom
         </>
       ) : (
         <>
-          {/* Fotoğraf yüklenene kadar çizim. Panel > Site İçeriği'nden fotoğraf eklenir. */}
-          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #05224a 0%, #0a3d73 40%, #0d5f94 72%, #1d8fb0 100%)" }} />
-          {/* Yumuşak mavi ışık */}
-          <div className="absolute inset-x-0 bottom-0 -z-10 h-2/3 bg-[radial-gradient(ellipse_at_50%_100%,rgba(127,220,230,0.28)_0%,rgba(127,220,230,0)_70%)]" aria-hidden />
-          <div className="absolute inset-0 -z-10 opacity-60 [background:radial-gradient(circle_at_18%_22%,rgba(255,255,255,0.10)_0,rgba(255,255,255,0)_32%),radial-gradient(circle_at_85%_12%,rgba(120,190,240,0.16)_0,rgba(127,220,214,0)_36%)]" aria-hidden />
-          <div className="absolute inset-x-0 bottom-0 -z-10 h-32 overflow-hidden" aria-hidden>
-            <svg className="wave-a absolute bottom-0 left-0 h-32 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(150)} fill="rgba(255,255,255,0.14)" /></svg>
-            <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(220)} fill="rgba(255,255,255,0.2)" /></svg>
-            <svg className="wave-c absolute bottom-0 left-0 h-16 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={wave(280)} fill="rgba(6,38,75,0.55)" /></svg>
-          </div>
-          <HeroBoats />
+          {/* Fotoğraf yüklenene kadar kıyı haritası. Panel > Site İçeriği'nden fotoğraf eklenir. */}
+          <div className="absolute inset-0 -z-20" style={{ background: "linear-gradient(180deg, #0a5a9c 0%, #1189c4 55%, #22b0cc 100%)" }} />
+          <HeroMap destinations={destinations} lang={lang} />
         </>
       )}
 
-      <div className={`mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-56 lg:pb-60 xl:pb-20"}`}>
+      <div className={`pointer-events-none mx-auto w-full max-w-4xl px-5 pt-14 lg:pt-20 ${home.heroImage ? "pb-14 lg:pb-20" : "pb-72 lg:pb-24"}`}>
         <h1 className="fade-up font-display text-[2.4rem] font-medium leading-[1.1] text-white [text-shadow:0_2px_24px_rgba(6,38,75,0.45)] sm:text-5xl lg:text-6xl" style={delay(0)}>
           {home.title}
         </h1>
         <p className="fade-up mx-auto mt-5 max-w-xl text-base leading-relaxed text-white/90 [text-shadow:0_1px_12px_rgba(6,38,75,0.5)] lg:text-lg" style={delay(0.12)}>
           {home.subtitle}
         </p>
-        <div className="fade-up mt-9" style={delay(0.25)}>
+        <div className="fade-up pointer-events-auto mt-9" style={delay(0.25)}>
           <SearchBar destinations={destinations} categories={categories} lang={lang} />
         </div>
-        <p className="fade-up mt-6 text-sm text-white/90" style={delay(0.35)}>
+        <p className="fade-up pointer-events-auto mt-6 text-sm text-white/90" style={delay(0.35)}>
           <span className="font-semibold">{L.popular}</span>{" "}
           {destinations.slice(0, 5).map((d, i) => (
             <span key={d.slug}>

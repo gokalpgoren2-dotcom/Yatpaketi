@@ -57,22 +57,17 @@ body {
 .sail-sway { animation: sail-sway 4.5s ease-in-out infinite; transform-origin: 50% 85%; }
 .menu-rise { animation: menu-rise 0.22s ease-out both; transform-origin: bottom right; }
 
-/* Ana sayfa sahnesi: logodaki açık kutudan sırayla gulet, motor yat ve yelkenli çıkar. Döngü 24 sn, her tekne 8 sn. */
-@keyframes pk-boat {
-  0%, 2% { transform: translateY(95px); }
-  8% { transform: translateY(-64px); }
-  11%, 27% { transform: translateY(-54px); }
-  33%, 100% { transform: translateY(95px); }
-}
-@keyframes pk-float { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-4px); } }
-@keyframes pk-sway { 0%, 100% { transform: rotate(-1.8deg); } 50% { transform: rotate(1.8deg); } }
-@keyframes pk-ripple { 0% { transform: scale(0.8); opacity: 0.5; } 100% { transform: scale(1.25); opacity: 0; } }
-.pk-box { animation: pk-float 5s ease-in-out infinite; }
-.pk-boat { animation: pk-boat 24s cubic-bezier(0.34, 1.15, 0.5, 1) infinite; }
-.pk-sway { animation: pk-sway 3.8s ease-in-out infinite; transform-box: view-box; transform-origin: 120px 170px; }
-.pk-ripple { animation: pk-ripple 4s ease-out infinite; transform-box: fill-box; transform-origin: center; }
+/* Ana sayfa haritası: kıyı boyunca süzülen tekneler ve nazikçe sallanan tabelalar. */
+@keyframes pk-drift { from { transform: translateX(-180px); } to { transform: translateX(var(--drift, 1400px)); } }
+@keyframes pk-sway { 0%, 100% { transform: rotate(-2deg); } 50% { transform: rotate(2deg); } }
+@keyframes pk-pin { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
+.pk-drift { animation: pk-drift var(--dur, 70s) linear infinite; }
+.pk-sway { animation: pk-sway 4s ease-in-out infinite; transform-box: fill-box; transform-origin: 50% 90%; }
+.pk-pin { animation: pk-pin 4.5s ease-in-out infinite; }
+.pk-link:hover .pk-pill, .pk-link:focus-visible .pk-pill { fill: #1bb4c4; }
+.pk-link:hover .pk-name, .pk-link:focus-visible .pk-name { fill: #ffffff; }
+.pk-link { outline: none; cursor: pointer; }
 @media (prefers-reduced-motion: reduce) {
-  .pk-box, .pk-sway, .pk-ripple { animation: none !important; }
-  .pk-boat { animation: none !important; transform: translateY(95px); }
-  .pk-boat.pk-first { transform: translateY(-54px); }
+  .pk-drift, .pk-sway, .pk-pin { animation: none !important; }
+  .pk-drift { transform: translateX(300px); }
 }
