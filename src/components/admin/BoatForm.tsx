@@ -128,7 +128,8 @@ function EquipmentAndToys({ boat }: { boat: Row | null }) {
                 <label className="flex items-center gap-2 text-sm font-medium">
                   <input type="checkbox" name="equipment_std" value={e.name} defaultChecked={!!cur} className="h-4 w-4" /> {e.name}
                 </label>
-                <input name={`ed:${e.name}`} defaultValue={cur?.detail ?? ""} placeholder={e.hint || "Ayrıntı (isteğe bağlı)"} aria-label={`${e.name} ayrıntısı`} className={`${input} mt-2 py-2 text-sm`} />
+                <input name={`ed:${e.name}`} defaultValue={cur?.detail ?? ""} placeholder={e.hint || "Ayrıntı (isteğe bağlı)"} aria-label={`${e.name} ayrıntısı`} list={e.options ? `opt-${e.name}` : undefined} className={`${input} mt-2 py-2 text-sm`} />
+                {e.options && <datalist id={`opt-${e.name}`}>{e.options.map((o) => <option key={o} value={o} />)}</datalist>}
               </div>
             );
           })}

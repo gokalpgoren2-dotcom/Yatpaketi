@@ -13,8 +13,8 @@ const TOY_ALIASES: Record<string, string> = {
   "yüzen platform": "Yüzme platformu", "su kaydırağı": "Şişme kaydırak", "tüp (tube)": "Muz (banana) botu",
 };
 
-export const EQUIPMENT = [
-  { name: "Klima", hint: "Örn: gece 00:00–07:00 arası / tam gün" },
+export const EQUIPMENT: { name: string; hint: string; options?: string[] }[] = [
+  { name: "Klima", hint: "Çalışma saati seçin ya da yazın", options: ["Tam gün (24 saat)", "Gece 00:00–07:00 arası", "Gece 23:00–08:00 arası", "Yalnızca kabinlerde", "Salon ve kabinlerde, gün boyu", "Jeneratör açıkken"] },
   { name: "Wi-Fi", hint: "Örn: yalnızca Türk karasularında" },
   { name: "Jakuzi", hint: "Örn: üst güvertede" },
   { name: "Flybridge", hint: "" },
