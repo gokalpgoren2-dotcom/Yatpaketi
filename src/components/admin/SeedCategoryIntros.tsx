@@ -9,7 +9,7 @@ const INTROS: Record<string, string> = {
   gulet: "Gulet, ahşap gövdeli, geniş güverteli klasik mavi yolculuk teknesidir. Genellikle birden fazla kabini vardır ve kaptan ile mürettebatla kiralanır. Kalabalık gruplar ve geleneksel bir mavi yolculuk deneyimi isteyenler için uygundur.",
   motoryat: "Motoryatlar motorla ilerler; kısa sürede daha fazla koy görmeye uygundur. Konfor, hız ve modern iç mekân arayan gruplar için tercih edilir.",
   katamaran: "Katamaranlar iki gövdelidir; dengeli seyreder ve geniş bir ortak yaşam alanı sunar. Aileler ve küçük gruplar için rahat bir seçenektir.",
-  yelkenli: "Yelkenliler rüzgârın gücüyle ilerler. Yelken deneyimi yaşamak isteyenler için uygundur; tekneye göre kaptanlı ya da kaptansız kiralanabilir.",
+  yelkenli: "Yelkenli ve katamaranlar rüzgârın gücüyle ilerler. Yelken deneyimi yaşamak isteyenler için uygundur; tekneye göre kaptanlı ya da kaptansız kiralanabilir.",
   trawler: "Trawlerler, yavaş ve ekonomik seyir için tasarlanmış, geniş iç hacimli motorlu teknelerdir. Rahat ve sakin bir tekne tatili isteyenler için uygundur.",
   "luks-yat": "Lüks yatlar, geniş mürettebatı ve üst düzey konforuyla öne çıkar. Kişiye özel rota ve hizmet isteyenler için uygundur.",
   gunluk: "Günübirlik tekneler, tek günlük koy turları, doğum günü ve özel organizasyonlar için kiralanır. Yüzme molaları ve güvertede keyifli bir gün sunar.",

@@ -211,7 +211,7 @@ create policy "media admin delete" on storage.objects for delete using (bucket_i
 
 -- ============ Başlangıç kategorileri ve destinasyonlar ============
 insert into public.categories (slug, name_tr, name_en, sort_order) values
-  ('motoryat','Motoryat','Motor Yacht',1), ('gulet','Gulet','Gulet',2), ('yelkenli','Yelkenli','Sailing Yacht',3), ('luks-yat','Lüks Yat','Luxury Yacht',4)
+  ('motoryat','Motoryat','Motor Yacht',1), ('gulet','Gulet','Gulet',2), ('yelkenli','Yelkenli - Katamaran','Sailing Yacht - Catamaran',3), ('luks-yat','Lüks Yat','Luxury Yacht',4)
 on conflict (slug) do nothing;
 
 insert into public.destinations (slug, name_tr, name_en, blurb_tr, intro_tr, sort_order, is_published) values
