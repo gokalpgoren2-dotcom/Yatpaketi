@@ -18,7 +18,7 @@ const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-b
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
 // Destinasyon ve tekne tipi (kategori) düzenleme formu. Kayıtlar tarayıcıdan, yönetici yetkisiyle yapılır (RLS korur).
-export function EntityForm({ table, row, gallery: gallery0 = [] }: { table: Table; row: EntityRow | null; gallery?: string[] }) {
+export function EntityForm({ table, row }: { table: Table; row: EntityRow | null }) {
   const supabase = createClient();
   const tbl = table as "destinations";
   const router = useRouter();
@@ -36,8 +36,6 @@ export function EntityForm({ table, row, gallery: gallery0 = [] }: { table: Tabl
   const [sort, setSort] = useState(String(row?.sort_order ?? 0));
   const [on, setOn] = useState(dest ? row?.is_published ?? true : row?.is_active ?? true);
   const [featured, setFeatured] = useState(row?.is_featured ?? false);
-  const [gallery, setGallery] = useState<string[]>(gallery0);
-  const gfile = useRef<HTMLInputElement>(null);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
@@ -59,27 +57,6 @@ export function EntityForm({ table, row, gallery: gallery0 = [] }: { table: Tabl
     setBusy(false);
     if (file.current) file.current.value = "";
   }
-
-  async function pickGallery(files: FileList | null) {
-    if (!files || files.length === 0) return;
-    setBusy(true); setMsg(null);
-    try {
-      const added: string[] = [];
-      for (const f of Array.from(files).slice(0, 8 - gallery.length)) {
-        const path = `site/${crypto.randomUUID()}.jpg`;
-        const up = await supabase.storage.from("media").upload(path, await shrink(f), { contentType: "image/jpeg", cacheControl: "31536000" });
-        if (up.error) throw new Error(up.error.message);
-        added.push(path);
-      }
-      setGallery((g) => [...g, ...added]);
-      setMsg({ ok: true, text: "Fotoğraflar yüklendi. Kaydet'e basınca eklenir." });
-    } catch (e) {
-      setMsg({ ok: false, text: "Fotoğraf yüklenemedi: " + (e instanceof Error ? e.message : "bilinmeyen hata") });
-    }
-    setBusy(false);
-    if (gfile.current) gfile.current.value = "";
-  }
-  const moveG = (i: number, d: number) => setGallery((g) => { const a = [...g]; const j = i + d; if (j < 0 || j >= a.length) return a; [a[i], a[j]] = [a[j], a[i]]; return a; });
 
   async function save() {
     setBusy(true);
@@ -112,13 +89,6 @@ export function EntityForm({ table, row, gallery: gallery0 = [] }: { table: Tabl
     if (errMsg) {
       fail(errCode === "23505" ? "Bu adres başka bir kayıtta kullanılıyor." : "Kaydedilemedi: " + errMsg + (errMsg.includes("column") ? " (Önce Supabase'e kategori SQL kodunu yapıştırın.)" : ""));
       return;
-    }
-    if (dest) {
-      const key = row ? row.slug : s;
-      const cur = await supabase.from("site_texts").select("data").eq("key", "port_photos").maybeSingle();
-      const all = { ...((cur.data?.data as Record<string, string[]>) ?? {}), [key]: gallery };
-      const g = await supabase.from("site_texts").upsert({ key: "port_photos", data: all, updated_at: new Date().toISOString() });
-      if (g.error) { fail("Galeri kaydedilemedi: " + g.error.message); return; }
     }
     await refreshSite();
     if (newId) { router.push(back + "/" + newId); return; }
@@ -161,30 +131,6 @@ export function EntityForm({ table, row, gallery: gallery0 = [] }: { table: Tabl
           {cover && <button type="button" disabled={busy} onClick={() => setCover("")} className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold text-red-700">Kaldır</button>}
         </div>
       </section>
-
-      {dest && (
-        <section className="rounded-2xl bg-white p-5 shadow-sm">
-          <h2 className="font-semibold">Galeri (ek fotoğraflar)</h2>
-          <p className="mt-1 text-xs text-navy/55">Liman sayfasında, metnin altında görünür. En fazla 8 fotoğraf. İlk fotoğraf büyük gösterilir.</p>
-          {gallery.length > 0 && (
-            <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
-              {gallery.map((g, i) => (
-                <li key={g} className="overflow-hidden rounded-xl bg-mist">
-                  {/* eslint-disable-next-line @next/next/no-img-element */}
-                  <img src={BASE + g} alt="" className="aspect-[4/3] w-full object-cover" />
-                  <div className="flex justify-between gap-1 p-1.5 text-xs">
-                    <button type="button" onClick={() => moveG(i, -1)} className="rounded-lg border border-navy/15 px-2 py-1">←</button>
-                    <button type="button" onClick={() => setGallery(gallery.filter((x) => x !== g))} className="rounded-lg border border-navy/15 px-2 py-1 text-red-700">Kaldır</button>
-                    <button type="button" onClick={() => moveG(i, 1)} className="rounded-lg border border-navy/15 px-2 py-1">→</button>
-                  </div>
-                </li>
-              ))}
-            </ul>
-          )}
-          <input ref={gfile} type="file" accept="image/*" multiple hidden onChange={(e) => pickGallery(e.target.files)} />
-          <button type="button" disabled={busy || gallery.length >= 8} onClick={() => gfile.current?.click()} className="mt-3 rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold disabled:opacity-50">Fotoğraf ekle</button>
-        </section>
-      )}
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Yayın ve Google</h2>

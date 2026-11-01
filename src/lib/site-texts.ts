@@ -48,11 +48,3 @@ export async function getFeaturedOrder(): Promise<string[]> {
   const d = await read("featured");
   return Array.isArray(d?.order) ? d.order : [];
 }
-
-import { publicImageUrl } from "./supabase/config";
-// Liman sayfalarındaki ek fotoğraflar: { liman-adresi: [yol, ...] } (site_texts: port_photos)
-export async function getPortPhotos(slug: string): Promise<string[]> {
-  const d = await read("port_photos");
-  const list = d?.[slug];
-  return Array.isArray(list) ? (list.map((x: string) => publicImageUrl(x)).filter(Boolean) as string[]) : [];
-}
