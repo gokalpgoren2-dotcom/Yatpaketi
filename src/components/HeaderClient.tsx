@@ -75,7 +75,7 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
             title={track}
             className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-turquoise hover:text-turquoise-dark lg:h-auto lg:w-auto lg:gap-2 lg:px-4 lg:py-2 lg:text-sm lg:font-semibold"
           >
-            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 13V5.5A1.5 1.5 0 0 1 8.5 4h7A1.5 1.5 0 0 1 17 5.5V13" /><path d="M7 8h10M10 2.5V5M14 2.5V5" /><path d="M10 10.5h.01M14 10.5h.01" /><path d="M3 13h18v7.5a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 20.5z" /><path d="M10 17h4" /></svg>
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="6" y="2.5" width="12" height="12" rx="1.6" fill="#1bb4c4" stroke="#1bb4c4" /><path d="M6 6.5h12" stroke="#fff" /><path d="M9.5 1.5v2.5M14.5 1.5v2.5" /><path d="M9 9.5h.01M12 9.5h.01M15 9.5h.01M9 12h.01M12 12h.01" stroke="#fff" strokeWidth="2" /><path d="M3 12.5l1.2 8a1.5 1.5 0 0 0 1.5 1.3h12.6a1.5 1.5 0 0 0 1.5-1.3l1.2-8" fill="#fff" /><path d="M3 12.5h18" /><path d="M10 16.5h4" /></svg>
             <span className="hidden lg:inline">{track}</span>
           </Link>
           <div
