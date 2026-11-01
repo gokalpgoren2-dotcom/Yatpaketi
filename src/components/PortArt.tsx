@@ -1,3 +1,5 @@
+import { sceneFor } from "./PortScenes";
+
 // Limanlar için çizim: gün batımı/gündüz gökyüzü, uzak dağlar, kayalık ve çam, sakin deniz, gulet ya da yelkenli.
 // Her limanın adresinden (slug) sabit bir görünüm üretilir; aynı liman hep aynı çizimi alır.
 function seed(s: string) {
@@ -13,6 +15,8 @@ const SKIES = [
 ];
 
 export function PortArt({ slug, className = "" }: { slug: string; className?: string }) {
+  const scene = sceneFor(slug);
+  if (scene) return <svg className={className} viewBox="0 0 800 400" preserveAspectRatio="xMidYMid slice" role="img" aria-hidden="true">{scene}</svg>;
   const r = seed(slug || "x");
   const sky = SKIES[Math.floor(r() * SKIES.length)];
   const sunX = 120 + r() * 560, sunY = 90 + r() * 70, sunR = 34 + r() * 18;
