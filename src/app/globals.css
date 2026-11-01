@@ -6,12 +6,21 @@
   --color-navy: #06264b;
   --color-navy-soft: #0b3566;
   --color-mist: #f7f9fa;
-  --font-display: var(--font-fraunces), Georgia, serif;
+  --font-display: var(--font-urbanist), var(--font-inter), system-ui, sans-serif;
   --font-sans: var(--font-inter), system-ui, sans-serif;
 }
 
 html {
   scroll-behavior: smooth;
+}
+
+/* Tüm başlıklar (tekne adları dahil) ana sayfa başlığındaki yazı tipiyle */
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+}
+.font-display {
+  font-weight: 700 !important;
 }
 
 body {

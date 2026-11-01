@@ -37,7 +37,7 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
         <p className="absolute bottom-3 left-3 rounded-full bg-navy/80 px-3 py-1.5 text-sm font-semibold text-white backdrop-blur">{price ?? L.askPrice}</p>
       </div>
       <article className="p-5">
-        <h3 className="text-lg font-semibold text-navy">{b.name}</h3>
+        <h3 className="text-lg font-bold text-navy">{b.name}</h3>
         {b.port && <p className="mt-0.5 text-sm text-navy/55">{b.port}</p>}
         <ul className="mt-4 flex flex-wrap gap-2 text-xs font-medium text-navy/75">
           <li className={chip}><IconGuests /><span className="text-navy/80">{L.guestsN(b.guests)}</span></li>
