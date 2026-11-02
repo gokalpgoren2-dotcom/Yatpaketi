@@ -42,16 +42,10 @@ function Zoom({ src, alt, title, label, open: openLabel, close, hero = false, ch
         </section>
       ) : (
       <button type="button" onClick={() => setOpen(true)} aria-label={openLabel}
-        className="group block w-full overflow-hidden rounded-3xl bg-navy p-3 text-left shadow-xl shadow-navy/15 transition hover:-translate-y-0.5 hover:shadow-2xl lg:p-4">
-        <div className="px-3 pb-3 pt-2 lg:px-4">
-          <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise">{label}</p>
-          <p className="font-display mt-1 text-xl font-semibold text-white">{title}</p>
-        </div>
-        <div className="relative overflow-hidden rounded-2xl">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={src} alt={alt} className="block h-auto w-full transition duration-500 group-hover:scale-[1.03]" loading="lazy" />
-          <span className="absolute bottom-3 right-3">{badge}</span>
-        </div>
+        className="group relative block w-full overflow-hidden rounded-3xl bg-navy shadow-xl shadow-navy/15 transition hover:-translate-y-0.5 hover:shadow-2xl">
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+        <img src={src} alt={alt} className="block h-auto w-full transition duration-500 group-hover:scale-[1.02]" loading="lazy" />
+        <span className="absolute bottom-3 right-3">{badge}</span>
       </button>
       )}
       {open && (
