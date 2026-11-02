@@ -34,16 +34,16 @@ export function RichText({ text, article = false }: { text: string; article?: bo
     let firstP = true;
     let h2n = 0;
     return (
-      <div className="space-y-5 text-[0.97rem] font-[350] leading-[1.85] text-[#476079] lg:text-[1.02rem] [&_strong]:font-semibold [&_strong]:text-navy">
+      <div className="space-y-5 text-[0.94rem] font-light leading-[1.85] text-[#4a627c] lg:text-[0.98rem] [&_strong]:font-medium [&_strong]:text-navy">
         {blocks.map((b, i) => {
-          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="scroll-mt-28 pt-1 text-[1.08rem] font-semibold text-navy lg:text-[1.15rem]">{b.slice(4)}</h3>;
+          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="scroll-mt-28 pt-1 text-[1.02rem] font-medium text-navy lg:text-[1.08rem]">{b.slice(4)}</h3>;
           if (b.startsWith("## ")) {
             const t = b.slice(3).trim();
             h2n++;
             return (
               <h2 key={i} id={headingId(t)} className="scroll-mt-28 pt-6">
                 <span className="block text-[11px] font-semibold tracking-[0.3em] text-turquoise-dark">{String(h2n).padStart(2, "0")}</span>
-                <span className="font-display mt-1.5 block text-[1.3rem] leading-tight text-navy lg:text-[1.55rem]">{t}</span>
+                <span className="mt-1.5 block text-[1.2rem] font-medium leading-tight text-navy lg:text-[1.38rem]">{t}</span>
               </h2>
             );
           }
@@ -62,7 +62,7 @@ export function RichText({ text, article = false }: { text: string; article?: bo
           }
           if (firstP) {
             firstP = false;
-            return <p key={i} className="whitespace-pre-line text-[1.06rem] leading-[1.8] text-[#34506d] first-letter:float-left first-letter:mr-2 first-letter:mt-1 first-letter:font-display first-letter:text-[2.6rem] first-letter:leading-[0.85] first-letter:text-turquoise-dark lg:text-[1.12rem]"><Inline text={b} /></p>;
+            return <p key={i} className="whitespace-pre-line text-[1rem] leading-[1.8] text-[#3c5774] first-letter:float-left first-letter:mr-2 first-letter:mt-1 first-letter:text-[2.3rem] first-letter:font-medium first-letter:leading-[0.85] first-letter:text-turquoise-dark lg:text-[1.04rem]"><Inline text={b} /></p>;
           }
           return <p key={i} className="whitespace-pre-line"><Inline text={b} /></p>;
         })}

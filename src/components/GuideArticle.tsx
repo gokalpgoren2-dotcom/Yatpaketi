@@ -55,8 +55,8 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
                 {back && <Link href={back.href} className="transition hover:text-white">← {back.label}</Link>}
               </p>
               {!isPage && <p className="mt-5 text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{kindLabel(p.kind, lang)}</p>}
-              <h1 className="font-display mt-3 text-[2rem] leading-[1.12] lg:text-[2.75rem]">{p.title}</h1>
-              {p.excerpt && <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/75 lg:text-[1.05rem]">{p.excerpt}</p>}
+              <h1 className="mt-3 text-[1.75rem] font-medium leading-[1.15] lg:text-[2.3rem]">{p.title}</h1>
+              {p.excerpt && <p className="mt-4 max-w-xl text-[0.95rem] font-light leading-relaxed text-white/75 lg:text-base">{p.excerpt}</p>}
               <ul className="mt-6 flex flex-wrap gap-2 text-[13px]">
                 <li className="flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-white/15 backdrop-blur">
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>{L.min}
@@ -98,7 +98,7 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
                 <div className="relative isolate mt-12 overflow-hidden rounded-[2rem] p-7 text-white lg:p-10" style={{ background: "linear-gradient(135deg, #06264b 0%, #0b4a6e 60%, #0d6a86 100%)" }}>
                   <svg className="absolute -bottom-8 -right-8 -z-10 h-48 w-48 text-white/[0.06]" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 3v13l7-1L12 3ZM11 6v9H6l5-9ZM4 17h16l-2 3H6l-2-3Z" /></svg>
                   <p className="text-xs font-semibold uppercase tracking-[0.28em] text-turquoise">{L.ctaEyebrow}</p>
-                  <h2 className="font-display mt-3 text-xl lg:text-2xl">{L.ctaTitle}</h2>
+                  <h2 className="mt-3 text-lg font-medium lg:text-xl">{L.ctaTitle}</h2>
                   <p className="mt-2.5 text-[0.95rem] font-light text-white/75">{L.ctaText}</p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <a href={wa} target={contact.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="rounded-full bg-turquoise px-6 py-3 text-sm font-semibold text-navy transition hover:brightness-110">{L.wa}</a>
@@ -112,7 +112,7 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
                 {toc.length > 1 && <Toc items={toc} title={L.toc} />}
                 {!isPage && (
                   <a href={wa} target={contact.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="group block rounded-3xl bg-mist p-5 transition hover:bg-navy hover:text-white">
-                    <p className="font-display text-lg font-semibold">{L.ctaTitle}</p>
+                    <p className="text-base font-medium" style={{ fontFamily: "var(--font-display)" }}>{L.ctaTitle}</p>
                     <p className="mt-2 text-sm font-semibold text-turquoise-dark group-hover:text-turquoise">{L.wa} →</p>
                   </a>
                 )}
@@ -125,7 +125,7 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
           <section className="bg-mist py-16 lg:py-20">
             <div className={wrap}>
               <div className="flex flex-wrap items-end justify-between gap-4">
-                <h2 className="font-display text-3xl font-semibold text-navy lg:text-4xl">{L.more}</h2>
+                <h2 className="text-2xl font-semibold text-navy lg:text-3xl">{L.more}</h2>
                 {back && <Link href={back.href} className="text-sm font-semibold text-turquoise-dark">{back.label} →</Link>}
               </div>
               <div className="mt-8">

@@ -42,8 +42,8 @@ export function Toc({ items, title }: { items: { t: string; id: string }[]; titl
       <ol className="mt-4 space-y-1 border-l-2 border-navy/10">
         {items.map(({ t, id }, i) => (
           <li key={id}>
-            <a href={`#${id}`} className={`-ml-0.5 flex gap-3 border-l-2 py-1.5 pl-4 text-sm leading-snug transition ${act === id ? "border-turquoise font-semibold text-navy" : "border-transparent text-navy/55 hover:text-navy"}`}>
-              <span className={`font-display text-xs ${act === id ? "text-turquoise-dark" : "text-navy/30"}`}>{String(i + 1).padStart(2, "0")}</span>{t}
+            <a href={`#${id}`} className={`-ml-0.5 flex gap-3 border-l-2 py-1.5 pl-4 text-[13px] font-light leading-snug transition ${act === id ? "border-turquoise font-medium text-navy" : "border-transparent text-navy/55 hover:text-navy"}`}>
+              <span className={`text-[11px] font-medium ${act === id ? "text-turquoise-dark" : "text-navy/30"}`}>{String(i + 1).padStart(2, "0")}</span>{t}
             </a>
           </li>
         ))}
