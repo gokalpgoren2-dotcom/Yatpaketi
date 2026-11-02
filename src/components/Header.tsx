@@ -1,13 +1,14 @@
 import { HeaderClient, type NavLink } from "./HeaderClient";
 import { gt } from "@/lib/guide-text";
 import { getNavInfo } from "@/lib/posts";
-import { getCategories, getDestinations } from "@/lib/content";
+import { getCategories, getContact, getDestinations } from "@/lib/content";
+import { socialList } from "./SocialLinks";
 import { href, t, type Lang } from "@/lib/i18n";
 
 // Menüde yalnızca içeriği olan bağlantılar görünür; böylece boş sayfaya giden düğme olmaz.
 export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const L = t(lang);
-  const [nav, cats, dests] = await Promise.all([getNavInfo(lang), getCategories(lang), getDestinations(lang)]);
+  const [nav, cats, dests, contact] = await Promise.all([getNavInfo(lang), getCategories(lang), getDestinations(lang), getContact()]);
   const en = lang === "en";
   // İngilizce yazılar (rehber, blog, sayfalar) henüz yok; o bağlantılar yalnızca Türkçe menüde görünür.
   const about = true; // Hakkımızda artık özel sayfa
@@ -41,5 +42,5 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     ...(aboutInGuide ? [] : [{ href: about ? href(lang, "/hakkimizda") : href(lang, "/#hakkimizda"), label: L.navAbout }]),
     { href: href(lang, "/iletisim"), label: L.navContact },
   ];
-  return <HeaderClient links={links} lang={lang} />;
+  return <HeaderClient links={links} lang={lang} socials={socialList(contact)} />;
 }

@@ -165,7 +165,8 @@ export async function getCategoryNames(lang: Lang = "tr"): Promise<string[]> {
 export type Contact = { phone: string; whatsapp: string; email: string; instagram: string; tiktok: string; linkedin: string };
 
 export async function getContact(): Promise<Contact> {
-  const empty = { phone: "", whatsapp: "", email: "", instagram: "https://www.instagram.com/yatpaketi/", tiktok: "", linkedin: "" };
+  // TikTok ve LinkedIn henüz açılmadı: Ayarlar'dan girilene kadar örnek adresler görünür.
+  const empty = { phone: "", whatsapp: "", email: "", instagram: "https://www.instagram.com/yatpaketi/", tiktok: "https://www.tiktok.com/@yatpaketi", linkedin: "https://www.linkedin.com/company/yatpaketi/" };
   if (!supabaseConfigured()) return empty;
   try {
     const { data } = await db().from("site_settings").select("value").eq("key", "contact").maybeSingle();
@@ -173,7 +174,7 @@ export async function getContact(): Promise<Contact> {
     return {
       phone: normalizePhone(v.phone ?? ""), whatsapp: normalizePhone(v.whatsapp ?? ""), email: v.email ?? "",
       // Instagram adresi girilmediyse markanın hesabı gösterilir
-      instagram: v.instagram || empty.instagram, tiktok: v.tiktok ?? "", linkedin: v.linkedin ?? "",
+      instagram: v.instagram || empty.instagram, tiktok: v.tiktok ?? empty.tiktok, linkedin: v.linkedin ?? empty.linkedin,
     };
   } catch {
     return empty;

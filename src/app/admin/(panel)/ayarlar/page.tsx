@@ -47,11 +47,11 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         </div>
         <div>
           <label htmlFor="tiktok" className={lab}>TikTok</label>
-          <input id="tiktok" name="tiktok" defaultValue={v.tiktok ?? ""} placeholder="yatpaketi" className={input} />
+          <input id="tiktok" name="tiktok" defaultValue={v.tiktok ?? "https://www.tiktok.com/@yatpaketi"} placeholder="yatpaketi" className={input} />
         </div>
         <div>
           <label htmlFor="linkedin" className={lab}>LinkedIn</label>
-          <input id="linkedin" name="linkedin" defaultValue={v.linkedin ?? ""} placeholder="https://www.linkedin.com/company/yatpaketi/" className={input} />
+          <input id="linkedin" name="linkedin" defaultValue={v.linkedin ?? "https://www.linkedin.com/company/yatpaketi/"} placeholder="https://www.linkedin.com/company/yatpaketi/" className={input} />
         </div>
         <SubmitButton>Kaydet</SubmitButton>
       </form>

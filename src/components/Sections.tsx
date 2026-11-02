@@ -1,4 +1,4 @@
-import { SocialLinks } from "./SocialLinks";
+import { SocialLinks, socialList } from "./SocialLinks";
 import { Scroller } from "./Scroller";
 import { Photo } from "./Photo";
 import { ContactBubble } from "./ContactBubble";
@@ -448,7 +448,7 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
         <svg className="wave-b absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(220)} fill="rgba(255,255,255,0.2)" /></svg>
         <svg className="wave-c absolute bottom-0 left-0 h-16 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={FOOT_WAVE(280)} fill="rgba(6,38,75,0.55)" /></svg>
       </div>
-      <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} />
+      <ContactBubble whatsapp={c.whatsapp} phone={c.phone} phoneLabel={formatPhone(c.phone)} email={c.email} socials={socialList(c)} />
       <div className={`${wrap} flex flex-col justify-between gap-6 md:flex-row`}>
         <div>
           <div className="inline-block rounded-xl bg-white px-4 py-2"><Logo height={32} /></div>

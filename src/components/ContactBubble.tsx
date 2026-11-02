@@ -3,13 +3,14 @@
 import { useEffect, useRef, useState } from "react";
 import { usePathname } from "next/navigation";
 import { langFromPath, t } from "@/lib/i18n";
+import { SOCIAL_ICONS, SOCIAL_NAMES } from "./SocialLinks";
 
-type Props = { whatsapp: string; phone: string; phoneLabel: string; email: string };
+type Props = { whatsapp: string; phone: string; phoneLabel: string; email: string; socials?: [string, string][] };
 
 const ic = { width: 20, height: 20, viewBox: "0 0 24 24", fill: "none", stroke: "currentColor", strokeWidth: 2, strokeLinecap: "round" as const, strokeLinejoin: "round" as const, "aria-hidden": true };
 
 // Sağ altta sabit iletişim balonu. İletişim bilgisi girilmemişse hiç görünmez.
-export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
+export function ContactBubble({ whatsapp, phone, phoneLabel, email, socials = [] }: Props) {
   const [open, setOpen] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
   const path = usePathname();
@@ -56,6 +57,18 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email }: Props) {
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white"><svg {...ic}><path d="M3 6h18v12H3zM3 7l9 7 9-7" /></svg></span>
               {L.sendEmail}
             </a>
+          )}
+          {socials.length > 0 && (
+            <div className="mt-1 border-t border-navy/10 px-4 pb-2 pt-3">
+              <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{path.startsWith("/en") ? "Follow us" : "Bizi takip edin"}</p>
+              <div className="mt-2 flex gap-2">
+                {socials.map(([k, url]) => (
+                  <a key={k} href={url} target="_blank" rel="noopener noreferrer" aria-label={SOCIAL_NAMES[k]} title={SOCIAL_NAMES[k]} className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy ring-1 ring-navy/10 transition hover:bg-navy hover:text-white">
+                    <svg {...ic}><path d={SOCIAL_ICONS[k]} /></svg>
+                  </a>
+                ))}
+              </div>
+            </div>
           )}
         </div>
       )}

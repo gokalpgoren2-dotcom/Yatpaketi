@@ -6,11 +6,12 @@ import { usePathname } from "next/navigation";
 import { href as hrefFor, switchPath, t, type Lang } from "@/lib/i18n";
 import { Logo } from "./Logo";
 import { BoatIcon } from "./BoatIcon";
+import { SOCIAL_ICONS, SOCIAL_NAMES } from "./SocialLinks";
 import { useFavHint, useFavorites } from "@/lib/favorites";
 
 export type NavLink = { href: string; label: string; children?: { href: string; label: string; icon?: string }[] };
 
-export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: Lang }) {
+export function HeaderClient({ links, lang = "tr", socials = [] }: { links: NavLink[]; lang?: Lang; socials?: [string, string][] }) {
   const L = t(lang);
   const track = lang === "en" ? "My Tour" : "Turum";
   const favCount = useFavorites().length;
@@ -153,6 +154,18 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
             ),
           )}
           <Link href="/musteri" onClick={() => setOpen(false)} className="flex items-center gap-3 border-b border-navy/5 py-4 text-base font-semibold text-navy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="7.5" y="2.5" width="9" height="12" rx="1.5" fill="#1bb4c4" stroke="#1bb4c4" /><path d="M7.5 6.2h9" stroke="#fff" /><path d="M10 1.4v2.4M14 1.4v2.4" /><path d="M10 9h.01M12 9h.01M14 9h.01M10 11.6h.01M12 11.6h.01" stroke="#fff" strokeWidth="2" /><path d="M4 13L1.8 9.6h4.6L7.2 13" fill="#fff" /><path d="M20 13l2.2-3.4h-4.6L16.8 13" fill="#fff" /><rect x="4" y="13" width="16" height="8.5" rx="1.4" fill="#fff" /><path d="M10 16.5h4" /></svg>{track}</Link>
+          {socials.length > 0 && (
+            <div className="flex items-center justify-between gap-3 pt-5">
+              <span className="text-sm font-medium text-navy/60">{lang === "en" ? "Follow us" : "Bizi takip edin"}</span>
+              <div className="flex gap-2">
+                {socials.map(([k, url]) => (
+                  <a key={k} href={url} target="_blank" rel="noopener noreferrer" aria-label={SOCIAL_NAMES[k]} className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy ring-1 ring-navy/10">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={SOCIAL_ICONS[k]} /></svg>
+                  </a>
+                ))}
+              </div>
+            </div>
+          )}
         </nav>
       )}
     </header>
