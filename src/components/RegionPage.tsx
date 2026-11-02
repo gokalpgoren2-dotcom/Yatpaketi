@@ -104,8 +104,10 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
   const fit = cfg ? boats.filter((b) => b.destinations.some((d) => cfg.ports.includes(d))).slice(0, 8) : [];
   const routeCards = cfg ? routes.map((r) => toCard(r, lang)).filter((c) => c.chart.some((s) => cfg.places.includes(s))).slice(0, 8) : [];
   const others = allDest.filter((d) => d.slug !== p.slug);
+  // Galeri sırası: 1-3 keşif kartları, 4-6 manzara alanı, kalanlar sayfa altındaki galeri.
   const explorePhotos = photos.slice(0, R.explore.length);
-  const gallery = photos.slice(R.explore.length);
+  const views = photos.slice(R.explore.length, R.explore.length + 3);
+  const gallery = photos.slice(R.explore.length + 3);
   const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(U.waText(p.title))}` : href(lang, "/iletisim");
   const nav: string[][] = [[U.navStops, "duraklar"], [U.navExplore, "kesif"]];
   if (fit.length) nav.push([U.navBoats, "tekneler"]);
@@ -163,6 +165,20 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
           <div className={`${wrap} grid gap-6 lg:grid-cols-[1fr_1.6fr] lg:gap-20`}>
             <p className={eyebrow}>{p.title}</p>
             <p className="text-xl leading-relaxed text-navy/80 lg:text-2xl lg:leading-relaxed">{R.introText}</p>
+          </div>
+
+          {/* Manzaralar: solda büyük, sağda üst üste iki fotoğraf */}
+          <div className={`${wrap} mt-12 grid gap-3 sm:grid-cols-2 lg:mt-16 lg:grid-cols-[1.45fr_1fr] lg:grid-rows-2 lg:gap-4`}>
+            {[0, 1, 2].map((k) => (
+              <figure key={k} className={`group relative overflow-hidden rounded-[1.75rem] bg-mist shadow-lg shadow-navy/5 ${k === 0 ? "aspect-[4/3] sm:col-span-2 lg:col-span-1 lg:row-span-2 lg:aspect-auto lg:min-h-[30rem]" : "aspect-[16/10] lg:aspect-auto"}`}>
+                {views[k] ? (
+                  <Photo src={views[k]} alt={`${p.title} ${U.views} ${k + 1}`} sizes={k === 0 ? "(min-width:1024px) 58vw, 100vw" : "(min-width:1024px) 40vw, 50vw"} className="object-cover transition duration-700 group-hover:scale-[1.04]" />
+                ) : <Sea label={`${p.title} ${U.views} ${k + 1}`} />}
+                {k === 0 && (
+                  <figcaption className="pointer-events-none absolute bottom-4 left-4 rounded-full bg-white/90 px-3.5 py-1.5 text-xs font-semibold text-navy shadow backdrop-blur">{U.views}</figcaption>
+                )}
+              </figure>
+            ))}
           </div>
         </section>
 

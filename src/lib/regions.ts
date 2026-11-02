@@ -1,5 +1,5 @@
 // Destinasyon (bölge) sayfalarının bölümlü içeriği. Her bölge: giriş, numaralı duraklar, fotoğraflı "ileri keşif" kartları, not kutusu, harita.
-// Fotoğraflar panelden gelir (Yazılar > destinasyon > Galeri): 1-3. fotoğraflar keşif kartlarında, kalanlar galeride.
+// Fotoğraflar panelden gelir (Yazılar > destinasyon > Galeri): 1-3. fotoğraflar keşif kartlarında, 4-6. fotoğraflar manzara alanında, kalanlar galeride.
 export type Item = [name: string, tagline: string, text: string];
 export type RegionText = {
   introEyebrow: string; introTitle: string; introLead: string; introText: string; introCta: string;
@@ -11,7 +11,7 @@ export type RegionText = {
 
 export const REGION_UI = {
   tr: {
-    mapNote: "Harita tanıtım amaçlıdır; seyir ve navigasyon için kullanılmaz.", gallery: "Galeri", planEyebrow: "Planınızı yapalım", planTitle: "Bu bölgede bir tatil mi düşünüyorsunuz?",
+    mapNote: "Harita tanıtım amaçlıdır; seyir ve navigasyon için kullanılmaz.", gallery: "Galeri", views: "Bölgeden manzaralar", planEyebrow: "Planınızı yapalım", planTitle: "Bu bölgede bir tatil mi düşünüyorsunuz?",
     planText: "Tarihlerinizi ve kişi sayınızı yazın; size uygun tekneyi ve rotayı birlikte belirleyelim.", write: "Bize yazın",
     stopsCount: (n: number) => `${n} durak`, exploreCount: (n: number) => `${n} keşif noktası`, routesCount: (n: number) => `${n} klasik rota`,
     quote: "Bu bölge için teklif alın", enlarge: "Haritayı büyüt", close: "Kapat",
@@ -22,7 +22,7 @@ export const REGION_UI = {
     waText: (r: string) => `Merhaba, ${r} bölgesinde tekne kiralamak istiyorum.`,
   },
   en: {
-    mapNote: "The map is for illustration only and is not for navigation.", gallery: "Gallery", planEyebrow: "Plan your trip", planTitle: "Thinking of a holiday in this region?",
+    mapNote: "The map is for illustration only and is not for navigation.", gallery: "Gallery", views: "Views from the region", planEyebrow: "Plan your trip", planTitle: "Thinking of a holiday in this region?",
     planText: "Tell us your dates and group size, and we'll pick the right yacht and route together.", write: "Write to us",
     stopsCount: (n: number) => `${n} stops`, exploreCount: (n: number) => `${n} highlights`, routesCount: (n: number) => `${n} classic routes`,
     quote: "Get a quote for this region", enlarge: "Enlarge map", close: "Close",
