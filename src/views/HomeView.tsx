@@ -4,6 +4,7 @@ import { Blog, Destinations, FeaturedBoats, Footer, HowItWorks, WhyUs } from "@/
 import { getBoats, getCategories, getDestinations, getHome } from "@/lib/content";
 import { getPosts } from "@/lib/posts";
 import { getFeaturedOrder } from "@/lib/site-texts";
+import { InstagramSection } from "@/components/InstagramSection";
 import type { Lang } from "@/lib/i18n";
 
 export async function HomeView({ lang }: { lang: Lang }) {
@@ -22,6 +23,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
         <Destinations items={dests} lang={lang} />
         <FeaturedBoats items={shown} sample={sample} lang={lang} />
         <Blog items={posts} lang={lang} />
+        {lang === "tr" && <InstagramSection />}
         <HowItWorks lang={lang} />
         <WhyUs lang={lang} />
       </main>
