@@ -4,6 +4,7 @@ import { Footer } from "./Sections";
 import { Photo } from "./Photo";
 import { PostCard } from "./PostCard";
 import { Scroller } from "./Scroller";
+import { MapZoom } from "./MapZoom";
 import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
 import { REGION_UI, type RegionText } from "@/lib/regions";
@@ -131,14 +132,7 @@ export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R
                 <p className="mt-5 leading-relaxed text-navy/65">{R.mapText}</p>
                 <p className="mt-4 text-xs text-navy/45">{U.mapNote}</p>
               </div>
-              <div className="overflow-hidden rounded-3xl bg-navy p-3 shadow-xl shadow-navy/15 lg:p-4">
-                <div className="px-3 pb-3 pt-2 lg:px-4">
-                  <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise">Yatpaketi / {T.destinations}</p>
-                  <p className="font-display mt-1 text-xl font-semibold text-white">{p.title}</p>
-                </div>
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={map} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} className="block h-auto w-full rounded-2xl" loading="lazy" />
-              </div>
+              <MapZoom src={map} title={p.title} label={`Yatpaketi / ${T.destinations}`} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} open={lang === "en" ? "Enlarge map" : "Haritayı büyüt"} close={lang === "en" ? "Close" : "Kapat"} />
             </div>
           </section>
         )}
