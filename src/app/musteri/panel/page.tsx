@@ -88,42 +88,86 @@ export default async function PortalHome() {
   const hasLoc = p.lat != null && p.lng != null;
   const wa = whatsapp ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(`Merhaba, ${p.boat_name} rezervasyonum hakkında yazıyorum.`)}` : "";
 
-  const tiles = [
-    { href: "#sozlesme", icon: ICON.doc, label: "Sözleşme", value: !p.contract_path ? "Hazırlanıyor" : signed ? "İmzalandı" : "İmza bekliyor", ok: signed },
-    { href: "#hazirlik", icon: ICON.list, label: "Hazırlık", value: total ? `${done}/${total} tamam` : "—", ok: total > 0 && done === total },
-    { href: "#konum", icon: ICON.pin, label: "Konum", value: hasLoc ? "Açıldı" : p.location_open ? "Yakında" : "Kapalı", ok: hasLoc },
-  ];
+  // Misafirin yapacakları ve durumları
+  const guestsN = extras?.guests.length ?? 0;
+  const prefsDone = Boolean(extras && Object.keys(extras.prefs ?? {}).length > 0);
+  const menusN = extras?.menus.filter((m) => m.chosen).length ?? 0;
+  const hasMenus = (extras?.menus.length ?? 0) > 0;
+  type Task = { id: string; icon: string; label: string; value: string; ok: boolean; show: boolean };
+  const tasks: Task[] = [
+    { id: "sozlesme", icon: ICON.doc, label: "Sözleşmeyi imzalayın", value: !p.contract_path ? "Hazırlanıyor" : signed ? "İmzalandı" : "İmza bekliyor", ok: signed, show: true },
+    { id: "misafirler", icon: ICON.users, label: "Misafir listesi", value: guestsN ? `${guestsN} kişi eklendi` : "Bekleniyor", ok: guestsN > 0, show: Boolean(extras) },
+    { id: "tercihler", icon: ICON.heart, label: "Tercihleriniz", value: prefsDone ? "Kaydedildi" : "Bekleniyor", ok: prefsDone, show: Boolean(extras) },
+    { id: "menuler", icon: ICON.menu, label: "Menü seçimi", value: !hasMenus ? "Yakında" : menusN ? `${menusN} menü seçildi` : "Bekleniyor", ok: menusN > 0, show: Boolean(extras) },
+  ].filter((t) => t.show);
+  const myDone = tasks.filter((t) => t.ok).length;
+  const nextTask = tasks.find((t) => !t.ok && !(t.id === "sozlesme" && !p.contract_path) && !(t.id === "menuler" && !hasMenus));
 
-  const card = "scroll-mt-4 rounded-3xl bg-white p-5 shadow-[0_1px_2px_rgba(6,38,75,0.06),0_8px_24px_-12px_rgba(6,38,75,0.12)] ring-1 ring-navy/5 sm:p-6";
+  const card = "scroll-mt-20 rounded-3xl bg-white shadow-[0_1px_2px_rgba(6,38,75,0.06),0_8px_24px_-12px_rgba(6,38,75,0.12)] ring-1 ring-navy/5";
+  const pad = "p-5 sm:p-6";
+  const chip = (ok: boolean, text: string) => <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${ok ? "bg-emerald-100 text-emerald-800" : "bg-amber-100 text-amber-800"}`}>{text}</span>;
+  const neutral = (text: string) => <span className="shrink-0 rounded-full bg-navy/[0.07] px-3 py-1 text-xs font-semibold text-navy/60">{text}</span>;
   const head = (icon: string, title: string, right?: React.ReactNode) => (
     <div className="flex items-center justify-between gap-3">
       <h2 className="font-display flex items-center gap-3 text-xl text-navy">
-        <span className="flex h-10 w-10 items-center justify-center rounded-2xl bg-turquoise/12 text-turquoise-dark"><Ic d={icon} /></span>
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-turquoise/12 text-turquoise-dark"><Ic d={icon} /></span>
         {title}
       </h2>
       {right}
     </div>
+  );
+  // Açılır kapanır bölüm: tamamlananlar kapalı gelir, sayfa kısa kalır
+  const fold = (id: string, icon: string, title: string, right: React.ReactNode, open: boolean, body: React.ReactNode, sub?: string) => (
+    <details id={id} open={open || undefined} className={`group ${card}`}>
+      <summary className={`flex cursor-pointer list-none items-center gap-3 ${pad} [&::-webkit-details-marker]:hidden`}>
+        <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-turquoise/12 text-turquoise-dark"><Ic d={icon} /></span>
+        <span className="min-w-0 flex-1">
+          <span className="font-display block text-xl leading-tight text-navy">{title}</span>
+          {sub && <span className="mt-0.5 block text-xs text-navy/50">{sub}</span>}
+        </span>
+        {right}
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className="shrink-0 text-navy/35 transition group-open:rotate-180"><path d="M6 9l6 6 6-6" /></svg>
+      </summary>
+      <div className="-mt-2 px-5 pb-5 sm:px-6 sm:pb-6">{body}</div>
+    </details>
+  );
+  const groupTitle = (t: string) => <p className="px-1 pt-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{t}</p>;
+
+  const reviewSection = (
+    <section id="yorum" className={`${card} ${pad}`}>
+      {head(ICON.star, "Tur yorumu", p.review_done ? chip(true, "Gönderildi") : !p.review_open ? neutral("Kapalı") : undefined)}
+      {p.review_done ? (
+        <p className="mt-4 text-sm leading-relaxed text-navy/70">Yorumunuz için teşekkür ederiz. Ekibimiz inceledikten sonra sitede yayınlanacak.</p>
+      ) : p.review_open ? (
+        <div className="mt-4">
+          <p className="mb-5 text-sm leading-relaxed text-navy/70">Turunuz nasıldı? Deneyiminizi ve isterseniz bir fotoğrafınızı paylaşın, sonraki misafirlerimize yol gösterin.</p>
+          <ReviewForm token={null} lang="tr" defaultName={p.customer_name ?? ""} />
+        </div>
+      ) : (
+        <p className="mt-3 text-sm leading-relaxed text-navy/60">Turunuz bittikten sonra ekibimiz burada yorum bölümünü açar.</p>
+      )}
+    </section>
   );
 
   return (
     <div className="min-h-screen bg-mist pb-12">
       <header className="mx-auto flex max-w-2xl items-center justify-between px-5 py-4">
         <Link href="/" aria-label="Ana sayfa"><Logo height={34} /></Link>
-        <form action={portalLogout}><button type="submit" className="rounded-full border border-navy/15 bg-white px-4 py-2 text-sm font-medium text-navy">Çıkış</button></form>
+        <div className="flex items-center gap-2">
+          <span className="rounded-full bg-navy px-3 py-1.5 text-xs font-bold tracking-wider text-turquoise">TURUM</span>
+          <form action={portalLogout}><button type="submit" className="rounded-full border border-navy/15 bg-white px-4 py-2 text-sm font-medium text-navy">Çıkış</button></form>
+        </div>
       </header>
 
-      <main className="mx-auto max-w-2xl space-y-5 px-5">
-        {/* Kahraman kart */}
+      <main className="mx-auto max-w-2xl space-y-4 px-5">
+        {/* Karşılama */}
         <section className="relative overflow-hidden rounded-[28px] bg-gradient-to-br from-navy via-navy-soft to-[#0e6a96] p-6 text-white shadow-[0_20px_40px_-20px_rgba(6,38,75,0.6)]">
           <div aria-hidden className="pointer-events-none absolute -right-16 -top-16 h-56 w-56 rounded-full bg-turquoise/25 blur-3xl" />
           <svg aria-hidden className="pointer-events-none absolute inset-x-0 bottom-0 w-full opacity-[0.12]" viewBox="0 0 400 60" preserveAspectRatio="none" height="60"><path d="M0 30c40-20 80 20 120 0s80-20 120 0 80 20 120 0 40-10 40-10v40H0z" fill="#fff" /></svg>
           <div className="relative">
-            <p className="flex items-center gap-2 text-sm text-white/80">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1 text-xs font-semibold"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />Rezervasyon onaylandı</span>
-            </p>
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-white/12 px-3 py-1 text-xs font-semibold text-white/85"><span className="h-1.5 w-1.5 rounded-full bg-emerald-300" />Rezervasyon onaylandı</span>
             <p className="mt-4 text-base text-white/80">{p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,"}</p>
             <h1 className="font-display mt-0.5 text-[32px] leading-tight">{p.boat_name}</h1>
-
             <div className="mt-6 flex items-end justify-between gap-4">
               <div>
                 <p className="flex items-center gap-2 text-sm text-white/85"><Ic d={ICON.cal} size={18} />{fmtShort(p.tour_start)} → {fmtShort(p.tour_end)} {p.tour_end.slice(0, 4)}</p>
@@ -137,115 +181,88 @@ export default async function PortalHome() {
           </div>
         </section>
 
-        {/* Tur yorumu */}
-        <section id="yorum" className={card}>
-          {head(ICON.star, "Tur yorumu", p.review_done ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Gönderildi</span> : !p.review_open ? <span className="rounded-full bg-navy/10 px-3 py-1 text-xs font-semibold text-navy/60">Kapalı</span> : undefined)}
-          {p.review_done ? (
-            <p className="mt-4 text-sm leading-relaxed text-navy/70">Yorumunuz için teşekkür ederiz. Ekibimiz inceledikten sonra sitede yayınlanacak.</p>
-          ) : p.review_open ? (
-            <div className="mt-4">
-              <p className="mb-5 text-sm leading-relaxed text-navy/70">Turunuz nasıldı? Deneyiminizi ve isterseniz bir fotoğrafınızı paylaşın, sonraki misafirlerimize yol gösterin.</p>
-              <ReviewForm token={null} lang="tr" defaultName={p.customer_name ?? ""} />
-            </div>
-          ) : (
-            <div className="mt-4 flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-navy/50 ring-1 ring-navy/10"><Ic d={ICON.lock} /></span>
-              <p className="text-sm leading-relaxed text-navy/70">Tur yorumu, turunuz bittikten sonra ekibimiz tarafından burada açılır. O zaman deneyiminizi ve isterseniz fotoğraflarınızı paylaşabilirsiniz.</p>
-            </div>
-          )}
-        </section>
+        {/* Tur bittiyse önce yorum */}
+        {over && reviewSection}
 
-        {/* Durum özeti */}
-        {!over && <nav aria-label="Adımlar" className="grid grid-cols-3 gap-2.5">
-          {tiles.map((t) => (
-            <a key={t.label} href={t.href} className="rounded-2xl bg-white p-3 text-center shadow-[0_1px_2px_rgba(6,38,75,0.06)] ring-1 ring-navy/5 active:scale-[0.98]">
-              <span className={`mx-auto flex h-9 w-9 items-center justify-center rounded-full ${t.ok ? "bg-emerald-100 text-emerald-700" : "bg-amber-100 text-amber-700"}`}><Ic d={t.ok ? ICON.check : t.icon} size={18} /></span>
-              <p className="mt-2 text-xs font-semibold text-navy">{t.label}</p>
-              <p className={`mt-0.5 text-[11px] leading-tight ${t.ok ? "text-emerald-700" : "text-navy/55"}`}>{t.value}</p>
-            </a>
-          ))}
-        </nav>}
-
-        {/* Sıradaki adım */}
-        {!over && p.contract_path && !signed && (
-          <a href="#sozlesme" className="flex items-center gap-3 rounded-2xl bg-turquoise/12 p-4 ring-1 ring-turquoise/30">
-            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-turquoise text-white"><Ic d={ICON.doc} /></span>
-            <span className="min-w-0 text-sm"><b className="block text-navy">Sıradaki adım</b><span className="text-navy/70">Sözleşmeyi indirip imzalayın ve buradan yükleyin.</span></span>
-            <span aria-hidden className="ml-auto text-navy/40">↓</span>
-          </a>
+        {/* Yapılacaklar özeti */}
+        {!over && (
+          <section className={`${card} ${pad}`}>
+            <div className="flex items-center justify-between gap-3">
+              <h2 className="font-display text-xl text-navy">Turdan önce sizden istediklerimiz</h2>
+              <span className="shrink-0 text-sm font-semibold text-navy/55">{myDone}/{tasks.length}</span>
+            </div>
+            <div className="mt-3 h-2 overflow-hidden rounded-full bg-navy/8"><div className="h-full rounded-full bg-gradient-to-r from-turquoise to-emerald-400" style={{ width: `${tasks.length ? Math.round((myDone / tasks.length) * 100) : 0}%` }} /></div>
+            <ul className="mt-4 grid gap-2 sm:grid-cols-2">
+              {tasks.map((t) => (
+                <li key={t.id}>
+                  <a href={`#${t.id}`} className={`flex items-center gap-3 rounded-2xl p-3 ring-1 transition active:scale-[0.99] ${t.ok ? "bg-emerald-50 ring-emerald-100" : "bg-mist ring-navy/5 hover:ring-turquoise/40"}`}>
+                    <span className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full ${t.ok ? "bg-emerald-500 text-white" : "bg-white text-turquoise-dark ring-1 ring-navy/10"}`}><Ic d={t.ok ? ICON.check : t.icon} size={17} /></span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-sm font-semibold text-navy">{t.label}</span>
+                      <span className={`block text-xs ${t.ok ? "text-emerald-700" : "text-navy/55"}`}>{t.value}</span>
+                    </span>
+                    {!t.ok && <span aria-hidden className="text-navy/30">›</span>}
+                  </a>
+                </li>
+              ))}
+            </ul>
+            {nextTask && (
+              <a href={`#${nextTask.id}`} className="mt-4 flex items-center justify-center gap-2 rounded-xl bg-navy px-5 py-3.5 text-sm font-semibold text-white">
+                Sıradaki: {nextTask.label} ↓
+              </a>
+            )}
+          </section>
         )}
 
+        {!over && groupTitle("Sizden beklenenler")}
+
         {/* Sözleşme */}
-        <section id="sozlesme" className={card}>
-          {head(ICON.doc, "Sözleşme", signed ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">İmzalandı</span> : undefined)}
+        <section id="sozlesme" className={`${card} ${pad}`}>
+          {head(ICON.doc, "Sözleşme", signed ? chip(true, "İmzalandı") : p.contract_path ? chip(false, "İmza bekliyor") : neutral("Hazırlanıyor"))}
           <ContractSection viewUrl={contractUrl} downloadUrl={downloadUrl} signedAt={p.signed_at} />
         </section>
 
         {extras && !over && (
           <>
-            {/* Misafir listesi (transit log) */}
-            <section id="misafirler" className={card}>
-              {head(ICON.users, "Misafir listesi", extras.guests.length ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">{extras.guests.length} kişi</span> : <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Bekleniyor</span>)}
-              <div className="mt-4 rounded-2xl bg-turquoise/10 p-4 text-sm leading-relaxed text-navy ring-1 ring-turquoise/25">
-                <b>Neden gerekli?</b> Yatın tur öncesi limandan çıkış yapabilmesi için tüm misafirlerin bilgileri <b>transit log</b> kaydına girilmelidir. Lütfen yatta bulunacak herkesi, kimlik veya pasaportundaki bilgilerle, turdan en az 3 gün önce ekleyin. Bilgileriniz yalnızca bu kayıt için kullanılır.
-              </div>
-              <GuestsForm initial={extras.guests} />
-            </section>
+            {fold("misafirler", ICON.users, "Misafir listesi", guestsN ? chip(true, `${guestsN} kişi`) : chip(false, "Bekleniyor"), guestsN === 0, (
+              <>
+                <div className="rounded-2xl bg-turquoise/10 p-4 text-sm leading-relaxed text-navy ring-1 ring-turquoise/25">
+                  <b>Neden gerekli?</b> Yatın tur öncesi limandan çıkış yapabilmesi için tüm misafirlerin bilgileri <b>transit log</b> kaydına girilmelidir. Lütfen yatta bulunacak herkesi, kimlik veya pasaportundaki bilgilerle, turdan en az 3 gün önce ekleyin. Bilgileriniz yalnızca bu kayıt için kullanılır.
+                </div>
+                <GuestsForm initial={extras.guests} />
+              </>
+            ), "Transit log için gerekli")}
 
-            {/* Misafir tercihleri */}
-            <section id="tercihler" className={card}>
-              {head(ICON.heart, "Misafir tercihleri")}
-              <p className="mt-3 text-sm leading-relaxed text-navy/70">Size en uygun turu hazırlayabilmemiz için birkaç tercihinizi öğrenmek istiyoruz. İstediğiniz zaman değiştirebilirsiniz.</p>
-              <PrefsForm initial={extras.prefs} tourStart={p.tour_start} tourEnd={p.tour_end} />
-            </section>
+            {fold("tercihler", ICON.heart, "Misafir tercihleri", prefsDone ? chip(true, "Kaydedildi") : chip(false, "Bekleniyor"), !prefsDone, (
+              <>
+                <p className="text-sm leading-relaxed text-navy/70">Size en uygun turu hazırlayabilmemiz için birkaç tercihinizi öğrenmek istiyoruz. İstediğiniz zaman değiştirebilirsiniz.</p>
+                <PrefsForm initial={extras.prefs} tourStart={p.tour_start} tourEnd={p.tour_end} />
+              </>
+            ), "Market, sağlık, kutlama, hizmet tarzı, aktiviteler")}
 
-            {/* Menüler */}
-            <section id="menuler" className={card}>
-              {head(ICON.menu, "Menüler")}
-              {extras.menus.length ? (
-                <>
-                  <p className="mt-3 text-sm leading-relaxed text-navy/70">Şefimizin hazırladığı menülerden beğendiklerinizi seçin. Kumanya ve yemek planı seçiminize göre hazırlanır.</p>
-                  <MenusPicker menus={extras.menus} urls={menuUrls} />
-                </>
-              ) : (
-                <p className="mt-4 rounded-2xl bg-mist p-4 text-sm leading-relaxed text-navy/70 ring-1 ring-navy/5">Menüler ekibimiz tarafından yakında buraya eklenecek. Eklendiğinde beğendiklerinizi seçebileceksiniz.</p>
-              )}
-            </section>
-
-            {/* Alışveriş */}
-            <section id="alisveris" className={card}>
-              {head(ICON.bag, "Alışveriş")}
-              {extras.files.length ? (
-                <ul className="mt-4 space-y-2.5">
-                  {extras.files.map((f) => (
-                    <li key={f.id} className="flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
-                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-turquoise-dark ring-1 ring-navy/10"><Ic d={f.kind === "receipt" ? ICON.doc : ICON.bag} size={18} /></span>
-                      <div className="min-w-0 flex-1">
-                        <p className="text-[15px] font-semibold text-navy">{f.title}</p>
-                        <p className="text-xs text-navy/50">{f.kind === "receipt" ? "Fatura / fiş" : "Alınanların listesi"} · {new Date(f.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</p>
-                        {f.note && <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-navy/70">{f.note}</p>}
-                        {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-2 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Dosyayı aç</a>}
-                      </div>
-                    </li>
-                  ))}
-                </ul>
-              ) : (
-                <p className="mt-4 rounded-2xl bg-mist p-4 text-sm leading-relaxed text-navy/70 ring-1 ring-navy/5">Alışveriş yapıldıktan sonra alınanların listesi ve faturası burada görünecek.</p>
-              )}
-            </section>
+            {fold("menuler", ICON.menu, "Menüler", !hasMenus ? neutral("Yakında") : menusN ? chip(true, `${menusN} seçildi`) : chip(false, "Bekleniyor"), hasMenus && menusN === 0, hasMenus ? (
+              <>
+                <p className="text-sm leading-relaxed text-navy/70">Şefimizin hazırladığı menülerden beğendiklerinizi seçin. Kumanya ve yemek planı seçiminize göre hazırlanır.</p>
+                <MenusPicker menus={extras.menus} urls={menuUrls} />
+              </>
+            ) : (
+              <p className="rounded-2xl bg-mist p-4 text-sm leading-relaxed text-navy/70 ring-1 ring-navy/5">Menüler ekibimiz tarafından yakında buraya eklenecek. Eklendiğinde beğendiklerinizi seçebileceksiniz.</p>
+            ))}
           </>
         )}
 
+        {!over && groupTitle("Ekibimizin hazırlıkları")}
+
         {/* Hazırlık */}
-        {!over && <section id="hazirlik" className={card}>
+        {!over && <section id="hazirlik" className={`${card} ${pad}`}>
           {head(ICON.list, "Tur hazırlığı", <span className="text-sm font-semibold text-navy/60">{done}/{total}</span>)}
           <div className="mt-4 h-2 overflow-hidden rounded-full bg-navy/8" role="progressbar" aria-valuenow={pct} aria-valuemin={0} aria-valuemax={100} aria-label="Hazırlık ilerlemesi">
             <div className="h-full rounded-full bg-gradient-to-r from-turquoise to-emerald-400 transition-all" style={{ width: `${pct}%` }} />
           </div>
           <p className="mt-2 text-xs text-navy/55">Her adım tamamlandığında e-posta ile haber veririz.</p>
-          <ul className="mt-4 space-y-2.5">
+          <ul className="mt-4 space-y-2">
             {p.checklist.map((c) => (
-              <li key={c.label} className={`flex items-center gap-3 rounded-2xl px-4 py-3.5 ${c.done ? "bg-emerald-50 ring-1 ring-emerald-100" : "bg-mist ring-1 ring-navy/5"}`}>
+              <li key={c.label} className={`flex items-center gap-3 rounded-2xl px-4 py-3 ${c.done ? "bg-emerald-50 ring-1 ring-emerald-100" : "bg-mist ring-1 ring-navy/5"}`}>
                 <span aria-hidden className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full ${c.done ? "bg-emerald-500 text-white" : "border-2 border-navy/20 text-navy/30"}`}>{c.done ? <Ic d={ICON.check} size={16} /> : <Ic d={ICON.clock} size={14} />}</span>
                 <span className={`text-[15px] ${c.done ? "font-medium text-navy" : "text-navy/70"}`}>{c.label}<span className="sr-only">{c.done ? " (tamamlandı)" : " (bekliyor)"}</span></span>
                 <span className={`ml-auto shrink-0 text-xs font-semibold ${c.done ? "text-emerald-700" : "text-navy/45"}`}>{c.done ? "Tamam" : "Bekliyor"}</span>
@@ -254,9 +271,33 @@ export default async function PortalHome() {
           </ul>
         </section>}
 
+        {/* Alışveriş */}
+        {extras && (
+          <section id="alisveris" className={`${card} ${pad}`}>
+            {head(ICON.bag, "Alışveriş", extras.files.length ? chip(true, `${extras.files.length} dosya`) : neutral("Henüz yok"))}
+            {extras.files.length ? (
+              <ul className="mt-4 space-y-2.5">
+                {extras.files.map((f) => (
+                  <li key={f.id} className="flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
+                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-turquoise-dark ring-1 ring-navy/10"><Ic d={f.kind === "receipt" ? ICON.doc : ICON.bag} size={18} /></span>
+                    <div className="min-w-0 flex-1">
+                      <p className="text-[15px] font-semibold text-navy">{f.title}</p>
+                      <p className="text-xs text-navy/50">{f.kind === "receipt" ? "Fatura / fiş" : "Alınanların listesi"} · {new Date(f.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</p>
+                      {f.note && <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-navy/70">{f.note}</p>}
+                      {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-2 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Dosyayı aç</a>}
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="mt-3 text-sm leading-relaxed text-navy/60">Alışveriş yapıldıktan sonra alınanların listesi ve faturası burada görünecek.</p>
+            )}
+          </section>
+        )}
+
         {/* Konum */}
-        {!over && <section id="konum" className={card}>
-          {head(ICON.pin, "Yatın konumu")}
+        {!over && <section id="konum" className={`${card} ${pad}`}>
+          {head(ICON.pin, "Yatın konumu", hasLoc ? chip(true, "Açıldı") : neutral(p.location_open ? "Yakında" : "Kapalı"))}
           {hasLoc ? (
             <>
               <iframe
@@ -273,14 +314,14 @@ export default async function PortalHome() {
               {p.location_updated_at && <p className="mt-3 text-xs text-navy/50">Son güncelleme: {new Date(p.location_updated_at).toLocaleString("tr-TR", { timeZone: "Europe/Istanbul", dateStyle: "medium", timeStyle: "short" })}. Konum ekibimiz tarafından işaretlenir, canlı takip değildir.</p>}
             </>
           ) : (
-            <div className="mt-4 flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
-              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-navy/50 ring-1 ring-navy/10"><Ic d={p.location_open ? ICON.clock : ICON.lock} /></span>
-              <p className="text-sm leading-relaxed text-navy/70">
-                {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Yatın konumu, turunuzdan yaklaşık 12 saat önce burada açılır."}
-              </p>
-            </div>
+            <p className="mt-3 text-sm leading-relaxed text-navy/60">
+              {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Yatın konumu, turunuzdan yaklaşık 12 saat önce burada açılır."}
+            </p>
           )}
         </section>}
+
+        {/* Tur sürerken / öncesinde yorum en altta */}
+        {!over && reviewSection}
 
         {/* İletişim */}
         <section className="rounded-3xl bg-navy p-5 text-white sm:p-6">
