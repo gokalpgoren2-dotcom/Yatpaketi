@@ -8,7 +8,7 @@ type Meta = { from: string; to: string; port: string; stops: string[]; greek?: b
 const META: Record<string, Meta> = {
   "gocek-korfezi-12-adalar": {
     from: "Göcek", to: "Göcek", port: "gocek",
-    stops: ["Göcek", "Yassıcalar / Zeytin Adası", "Akvaryum Koyu", "Binlik", "Hamam Koyu", "Bedri Rahmi", "Boynuzbükü"],
+    stops: ["Göcek", "Yassıcalar / Zeytin Adası", "Akvaryum Koyu", "Binlik Koyu", "Hamam Koyu", "Bedri Rahmi", "Boynuzbükü"],
     days: {
       tr: [
         "Göcek'te karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",

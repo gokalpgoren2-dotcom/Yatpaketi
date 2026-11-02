@@ -57,7 +57,7 @@ export const ISLANDS: LL[][] = [
 // Durak adı (Türkçe ve İngilizce) -> konum (kıyıya çok yakın, denizde).
 const P: Record<string, LL> = {
   "Göcek": [28.935, 36.745], "Tersane Adası": [28.93, 36.663], "Yassıcalar": [28.915, 36.695], "Bedri Rahmi": [28.884, 36.671], "12 Adalar": [28.955, 36.69],
-  "Yassıcalar / Zeytin Adası": [28.93, 36.703], "Akvaryum Koyu": [28.948, 36.658], "Binlik": [28.895, 36.632], "Hamam Koyu": [28.884, 36.647], "Boynuzbükü": [28.869, 36.699],
+  "Yassıcalar / Zeytin Adası": [28.93, 36.703], "Akvaryum Koyu": [28.948, 36.658], "Binlik Koyu": [28.895, 36.632], "Hamam Koyu": [28.884, 36.647], "Boynuzbükü": [28.869, 36.699],
   "Gemiler Adası": [29.06, 36.545], "Ölüdeniz": [29.105, 36.552], "Fethiye": [29.1, 36.625], "Kalkan & Kaş": [29.5, 36.214], "Meis": [29.585, 36.168],
   "Kekova": [29.85, 36.194], "Ekincik": [28.54, 36.81], "Marmaris": [28.27, 36.842], "Orhaniye": [28.108, 36.77], "Bozburun": [28.045, 36.685],
   "Dalyan": [28.628, 36.778], "Sömbeki": [28.03, 36.668], "Selimiye": [28.083, 36.72], "Söğüt": [28.037, 36.645], "Datça": [27.69, 36.712],
@@ -71,7 +71,7 @@ export const placeOf = (name: string): LL | null => P[name] ?? P[EN[name] ?? ""]
 // Her rotanın denizden giden güzergâhı: durak adları ve burunları dolaşan ara noktalar.
 type Way = (string | LL)[];
 export const ROUTE_WAYS: Record<string, Way> = {
-  "gocek-korfezi-12-adalar": ["Göcek", [28.945, 36.725], "Yassıcalar / Zeytin Adası", [28.945, 36.682], "Akvaryum Koyu", [28.915, 36.645], "Binlik", "Hamam Koyu", [28.89, 36.66], "Bedri Rahmi", [28.885, 36.69], "Boynuzbükü", [28.9, 36.718], "Göcek"],
+  "gocek-korfezi-12-adalar": ["Göcek", [28.945, 36.725], "Yassıcalar / Zeytin Adası", [28.945, 36.682], "Akvaryum Koyu", [28.915, 36.645], "Binlik Koyu", "Hamam Koyu", [28.89, 36.66], "Bedri Rahmi", [28.885, 36.69], "Boynuzbükü", [28.9, 36.718], "Göcek"],
   "gocek-fethiye-korfezi": ["Göcek", [28.94, 36.722], "Yassıcalar", [28.91, 36.675], "Tersane Adası", "Bedri Rahmi", [28.95, 36.645], [29.02, 36.6], "Gemiler Adası", "Ölüdeniz", [29.07, 36.57], [29.06, 36.615], "Fethiye"],
   "fethiye-kekova": ["Fethiye", [29.06, 36.615], [29.07, 36.57], "Ölüdeniz", [29.1, 36.49], [29.19, 36.34], [29.33, 36.24], "Kalkan & Kaş", [29.55, 36.19], "Meis", [29.66, 36.165], [29.76, 36.17], "Kekova"],
   "fethiye-bozburun": ["Fethiye", [29.06, 36.615], [29.07, 36.57], "Ölüdeniz", [29.03, 36.52], [28.87, 36.598], [28.8, 36.63], [28.68, 36.69], "Ekincik", [28.43, 36.775], [28.32, 36.778], "Marmaris", [28.3, 36.79], [28.24, 36.69], [28.13, 36.57], [28.02, 36.545], [27.98, 36.62], [27.99, 36.72], "Orhaniye", [28.06, 36.73], "Bozburun"],
