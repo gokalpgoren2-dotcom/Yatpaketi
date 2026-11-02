@@ -38,7 +38,7 @@ const UI = {
     mock: { label: "Örnek görünüm", title: "Turum", trip: "Göcek · 7 gün", items: [["Sözleşme imzalandı", "done"], ["Yolcu listesi", "done"], ["Kumanya listesi", "now"], ["Karşılama · Göcek Marina", "next"]] as [string, string][], ready: "Hazırlık", now: "Hazırlanıyor" },
     factsTitle: "Kısaca bilmeniz gerekenler",
     facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Tekne, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Listenize göre alınır, belgeleriyle ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
-    ctaTitle: "İlk adım sadece bir mesaj.", ctaText: "Tarihinizi, kişi sayınızı ve aklınızdaki bölgeyi yazın; size uygun tekneleri ve teklifi birlikte netleştirelim.", boats: "Tekneleri inceleyin", faq: "Sık sorulan sorular",
+    ctaTitle: "İlk adım sadece bir mesaj.", ctaText: "Tatil tarihinizi, kişi sayınızı ve aklınızdaki bölgeyi yazın; size uygun tekneleri ve teklifi birlikte netleştirelim.", boats: "Tekneleri inceleyin", faq: "Sık sorulan sorular",
     wa: "Merhaba, tekne kiralamak istiyorum. Tarih ve kişi sayısı: ",
   },
   en: {
