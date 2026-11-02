@@ -7,6 +7,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
 import { normalizePhone } from "@/lib/phone";
+import { igCheck } from "@/lib/instagram";
 
 function back(kind: "saved" | "error", msg = ""): never {
   redirect(`/admin/ayarlar?${kind === "saved" ? "saved=1" : "error=" + encodeURIComponent(msg)}&t=${Date.now()}`);
@@ -47,4 +48,26 @@ export async function testRequestMail() {
   await requireAdmin();
   const r = await notifyAdmin({ name: "Test Müşteri", phone: "0500 000 00 00", email: "test@example.com", boat: "Örnek Yat", start: "2027-06-01", end: "2027-06-08", guests: 4, message: "Bu bir örnek taleptir." });
   redirect("/admin/ayarlar?mail=" + encodeURIComponent(r.ok ? "Örnek talep e-postası gönderildi. Gelen kutusuna bakın." : "Talep e-postası gönderilemedi: " + r.message) + `&t=${Date.now()}`);
+}
+
+// ---- Instagram bağlantısı ----
+
+export async function saveInstagram(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const token = String(formData.get("ig_token") ?? "").replace(/\s+/g, "");
+  if (!token) back("error", "Instagram erişim anahtarını yapıştırın.");
+  const c = await igCheck(token);
+  if (!c.ok) back("error", "Instagram bu anahtarı kabul etmedi: " + (c.message ?? "") + " Anahtarı yeniden kopyalayıp deneyin.");
+  const { error } = await supabase.from("private_settings").upsert({ key: "instagram", value: { token, username: c.username, refreshed_at: new Date().toISOString() }, updated_at: new Date().toISOString() });
+  if (error) back("error", error.message.includes("private_settings") ? "Önce Supabase'de instagram.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message);
+  revalidatePath("/", "layout");
+  back("saved");
+}
+
+export async function removeInstagram() {
+  const { supabase } = await requireAdmin();
+  const { error } = await supabase.from("private_settings").delete().eq("key", "instagram");
+  if (error) back("error", "Kaldırılamadı: " + error.message);
+  revalidatePath("/", "layout");
+  back("saved");
 }
