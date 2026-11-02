@@ -223,7 +223,30 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "bodrum-yunan-adalari": { from: "Bodrum", to: "Bodrum", port: "bodrum", greek: true, stops: ["Bodrum", "Karaada", "Kos", "Kos", "Dönüş", "Gümüşlük", "Bodrum"] },
+  "bodrum-yunan-adalari": {
+    from: "Bodrum", to: "Yalıkavak", port: "bodrum", greek: true,
+    stops: ["Bodrum", "Kos", "Kalimnos", "Leros", "Patmos", "Arki", "Yalıkavak"],
+    days: {
+      tr: [
+        "Bodrum'da karşılama, kabinlere yerleşme ve kumanya; pasaport ve çıkış işlemleri.",
+        "Kos'ta giriş işlemleri; Hipokrat'ın çınarı ve antik agora çevresinde yürüyüş, akşam limanda yemek.",
+        "Sünger avcılığıyla ünlü Kalimnos'ta rengârenk Pothia limanı ve berrak koylarda yüzme.",
+        "İtalyan döneminin izlerini taşıyan Leros'ta sakin koylarda yüzme ve kale manzaralı akşam.",
+        "Aziz Yuhanna Manastırı ve Vahiy Mağarası'yla bilinen Patmos'ta Hora'ya çıkış ve yüzme.",
+        "Birkaç evden ibaret küçük Arki'de turkuaz koylarda yüzme ve balık tavernasında akşam yemeği.",
+        "Türkiye'ye dönüş; Yalıkavak'ta giriş işlemleri, son kahvaltı ve teslim.",
+      ],
+      en: [
+        "Welcome in Bodrum, settling into the cabins and provisioning; passport and exit formalities.",
+        "Entry formalities in Kos; a walk around Hippocrates' plane tree and the ancient agora, dinner at the harbour.",
+        "Kalymnos, famous for its sponge divers: the colourful harbour of Pothia and swimming in clear coves.",
+        "Swimming in quiet coves on Leros, with its Italian-era heritage, and an evening with a view of the castle.",
+        "Patmos, known for the Monastery of St John and the Cave of the Apocalypse: up to Chora, and a swim.",
+        "Swimming in turquoise coves on tiny Arki and dinner at a fish taverna.",
+        "Back to Türkiye; entry formalities in Yalıkavak, last breakfast and hand-over.",
+      ],
+    },
+  },
   "marmaris-yunan-adalari": { from: "Marmaris", to: "Marmaris", port: "marmaris", greek: true, stops: ["Marmaris", "Orhaniye", "Rodos", "Rodos", "Symi", "Dönüş", "Marmaris"] },
   "datca-yunan-adalari": { from: "Datça", to: "Datça", port: "datca", greek: true, stops: ["Datça", "Knidos", "Symi", "Rodos", "Rodos", "Dönüş", "Datça"] },
   "bodrum-yarimadasi": { from: "Bodrum", to: "Bodrum", port: "bodrum", stops: ["Bodrum", "Karaada", "Gümüşlük", "Serbest gün", "Yalıkavak", "Serbest gün", "Bodrum"] },
@@ -232,7 +255,7 @@ const META: Record<string, Meta> = {
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };

@@ -5,7 +5,7 @@ export type LL = [number, number];
 // Anakara kıyısı: Güllük Körfezi'nden başlayıp Bodrum Yarımadası, Gökova, Datça ve Bozburun yarımadaları,
 // Marmaris, Dalyan, Göcek-Fethiye körfezleri ve Likya kıyısı boyunca Kekova'nın doğusuna kadar.
 export const MAINLAND: LL[] = [
-  [27.70, 37.32], [27.60, 37.24], [27.52, 37.19], [27.46, 37.16], [27.41, 37.145], [27.38, 37.135], [27.34, 37.12], [27.30, 37.11],
+  [27.28, 38.2], [27.25, 37.95], [27.22, 37.75], [27.2, 37.58], [27.21, 37.45], [27.24, 37.37], [27.32, 37.35], [27.45, 37.34], [27.58, 37.33], [27.70, 37.32], [27.60, 37.24], [27.52, 37.19], [27.46, 37.16], [27.41, 37.145], [27.38, 37.135], [27.34, 37.12], [27.30, 37.11],
   [27.27, 37.09], [27.245, 37.07], [27.23, 37.05], [27.235, 37.025], [27.25, 36.995], [27.27, 36.975], [27.295, 36.962], [27.32, 36.97],
   [27.35, 36.995], [27.375, 37.02], [27.40, 37.025], [27.43, 37.033], [27.455, 37.022], [27.48, 37.03], [27.52, 37.02], [27.58, 37.015],
   [27.66, 37.025], [27.75, 37.02], [27.85, 37.025], [27.94, 37.035], [28.02, 37.04], [28.10, 37.045], [28.18, 37.05], [28.26, 37.06],
@@ -27,6 +27,13 @@ export const MAINLAND: LL[] = [
 ];
 
 export const ISLANDS: LL[][] = [
+  // Kalimnos, Pserimos, Leros, Patmos, Arki, Lipsi (yaklaşık)
+  [[26.93, 36.95], [26.95, 36.99], [26.98, 37.03], [27.01, 37.06], [27.05, 37.03], [27.06, 36.99], [27.03, 36.955], [26.99, 36.94], [26.96, 36.935]],
+  [[27.11, 36.925], [27.13, 36.94], [27.15, 36.93], [27.13, 36.915]],
+  [[26.82, 37.1], [26.86, 37.105], [26.885, 37.13], [26.875, 37.17], [26.85, 37.2], [26.815, 37.185], [26.83, 37.15], [26.805, 37.125]],
+  [[26.555, 37.275], [26.59, 37.29], [26.575, 37.32], [26.595, 37.355], [26.57, 37.37], [26.54, 37.335], [26.55, 37.3]],
+  [[26.715, 37.365], [26.745, 37.37], [26.755, 37.385], [26.725, 37.39]],
+  [[26.745, 37.285], [26.785, 37.29], [26.79, 37.305], [26.755, 37.31]],
   // Kos
   [[26.93, 36.76], [26.97, 36.80], [27.04, 36.845], [27.12, 36.875], [27.2, 36.89], [27.27, 36.9], [27.31, 36.895], [27.33, 36.875], [27.26, 36.86], [27.18, 36.84], [27.1, 36.8], [27.03, 36.765], [26.97, 36.735]],
   // Rodos (kuzey)
@@ -58,7 +65,7 @@ export const ISLANDS: LL[][] = [
 const P: Record<string, LL> = {
   "Göcek": [28.935, 36.745], "Tersane Adası": [28.93, 36.663], "Yassıcalar": [28.915, 36.695], "Bedri Rahmi": [28.884, 36.671], "12 Adalar": [28.955, 36.69],
   "Yassıcalar / Zeytin Adası": [28.93, 36.703], "Akvaryum Koyu": [28.948, 36.658], "Binlik Koyu": [28.895, 36.632], "Hamam Koyu": [28.884, 36.647], "Boynuzbükü": [28.869, 36.699],
-  "Kızılada": [29.035, 36.638], "Turunç Pınarı": [29.056, 36.617], "Katrancı Adası": [29.02, 36.662], "Göcek Adası": [28.948, 36.733], "Göbün": [28.874, 36.683], "Bozukkale": [28.018, 36.572], "Sömbeki Koyu": [28.03, 36.668], "D-Maris Koyu": [27.82, 36.722], "Dirsekbükü": [28.058, 36.703], "Bencik Koyu": [28.06, 36.78], "Palamutbükü": [27.5, 36.668], "Tuzla Koyu": [27.62, 36.775], "İngiliz Limanı": [28.08, 36.885], "Kissebükü": [27.8, 36.985], "Kaş": [29.625, 36.196], "Ağalimanı Koyu": [28.79, 36.668], "Kadırga Koyu": [28.35, 36.78], "Serçe Limanı": [28.06, 36.58],
+  "Kızılada": [29.035, 36.638], "Turunç Pınarı": [29.056, 36.617], "Katrancı Adası": [29.02, 36.662], "Göcek Adası": [28.948, 36.733], "Göbün": [28.874, 36.683], "Bozukkale": [28.018, 36.572], "Sömbeki Koyu": [28.03, 36.668], "Kalimnos": [26.995, 36.932], "Leros": [26.9, 37.145], "Patmos": [26.603, 37.32], "Arki": [26.768, 37.372], "D-Maris Koyu": [27.82, 36.722], "Dirsekbükü": [28.058, 36.703], "Bencik Koyu": [28.06, 36.78], "Palamutbükü": [27.5, 36.668], "Tuzla Koyu": [27.62, 36.775], "İngiliz Limanı": [28.08, 36.885], "Kissebükü": [27.8, 36.985], "Kaş": [29.625, 36.196], "Ağalimanı Koyu": [28.79, 36.668], "Kadırga Koyu": [28.35, 36.78], "Serçe Limanı": [28.06, 36.58],
   "Gemiler Adası": [29.06, 36.545], "Ölüdeniz": [29.105, 36.552], "Fethiye": [29.1, 36.625], "Kalkan & Kaş": [29.5, 36.214], "Meis": [29.585, 36.168],
   "Kekova": [29.85, 36.194], "Ekincik": [28.54, 36.81], "Marmaris": [28.27, 36.842], "Orhaniye": [28.108, 36.77], "Bozburun": [28.045, 36.685],
   "Dalyan": [28.628, 36.778], "Sömbeki": [28.03, 36.668], "Selimiye": [28.083, 36.72], "Söğüt": [28.037, 36.645], "Datça": [27.69, 36.712],
@@ -66,7 +73,7 @@ const P: Record<string, LL> = {
   "Kos": [27.29, 36.905], "Rodos": [28.225, 36.46], "Symi": [27.85, 36.638], "Gümüşlük": [27.226, 37.055], "Yalıkavak": [27.285, 37.114],
   "Sedir Adası": [28.212, 37.003], "Akyaka": [28.315, 37.045],
 };
-const EN: Record<string, string> = { "Yassıca / Zeytin Island": "Yassıcalar / Zeytin Adası", "Aquarium Bay": "Akvaryum Koyu", "Hamam Bay": "Hamam Koyu", "Agalimani Bay": "Ağalimanı Koyu", "Kadirga Bay": "Kadırga Koyu", "Sombeki Bay": "Sömbeki Koyu", "Dirsekbuku": "Dirsekbükü", "Bencik Bay": "Bencik Koyu", "Palamutbuku": "Palamutbükü", "Tuzla Bay": "Tuzla Koyu", "English Harbour": "İngiliz Limanı", "Kissebuku": "Kissebükü", "Serce Harbour": "Serçe Limanı", "Kizilada": "Kızılada", "Turunc Pinari": "Turunç Pınarı", "Katranci Island": "Katrancı Adası", "Gocek Island": "Göcek Adası", "Tersane Island": "Tersane Adası", "12 Islands": "12 Adalar", "Gemiler Island": "Gemiler Adası", "Rhodes": "Rodos", "Kastellorizo": "Meis", "Sedir Island": "Sedir Adası" };
+const EN: Record<string, string> = { "Yassıca / Zeytin Island": "Yassıcalar / Zeytin Adası", "Aquarium Bay": "Akvaryum Koyu", "Hamam Bay": "Hamam Koyu", "Agalimani Bay": "Ağalimanı Koyu", "Kadirga Bay": "Kadırga Koyu", "Sombeki Bay": "Sömbeki Koyu", "Kalymnos": "Kalimnos", "Dirsekbuku": "Dirsekbükü", "Bencik Bay": "Bencik Koyu", "Palamutbuku": "Palamutbükü", "Tuzla Bay": "Tuzla Koyu", "English Harbour": "İngiliz Limanı", "Kissebuku": "Kissebükü", "Serce Harbour": "Serçe Limanı", "Kizilada": "Kızılada", "Turunc Pinari": "Turunç Pınarı", "Katranci Island": "Katrancı Adası", "Gocek Island": "Göcek Adası", "Tersane Island": "Tersane Adası", "12 Islands": "12 Adalar", "Gemiler Island": "Gemiler Adası", "Rhodes": "Rodos", "Kastellorizo": "Meis", "Sedir Island": "Sedir Adası" };
 export const placeOf = (name: string): LL | null => P[name] ?? P[EN[name] ?? ""] ?? null;
 
 // Her rotanın denizden giden güzergâhı: durak adları ve burunları dolaşan ara noktalar.
@@ -82,7 +89,7 @@ export const ROUTE_WAYS: Record<string, Way> = {
   "bozburun-bodrum": ["Bozburun", [28.02, 36.695], [27.94, 36.68], [27.8, 36.715], "Datça", [27.6, 36.66], "Palamutbükü", [27.4, 36.655], [27.38, 36.73], "Tuzla Koyu", [27.8, 36.83], [27.98, 36.87], "İngiliz Limanı", [27.95, 36.93], "Kissebükü", [27.6, 36.99], [27.48, 36.99], "Bodrum"],
   "bozburun-hisaronu-korfezi": ["Bozburun", [28.04, 36.695], "Dirsekbükü", [28.06, 36.712], "Selimiye", [28.07, 36.75], "Orhaniye", [28.08, 36.775], "Bencik Koyu", [28.02, 36.75], [27.99, 36.7], [27.99, 36.66], "Söğüt", [28.02, 36.675], "Bozburun"],
   "bodrum-datca-hisaronu-korfezi": ["Bodrum", "Karaada", [27.38, 36.88], [27.34, 36.72], "Knidos", [27.45, 36.645], [27.6, 36.67], "Datça", [27.75, 36.7], "D-Maris Koyu", [27.95, 36.74], [28.06, 36.765], "Orhaniye", [28.07, 36.745], "Selimiye"],
-  "bodrum-yunan-adalari": ["Bodrum", "Karaada", [27.38, 36.94], "Kos", [27.25, 36.95], [27.21, 37.0], "Gümüşlük", [27.22, 37.0], [27.3, 36.95], "Bodrum"],
+  "bodrum-yunan-adalari": ["Bodrum", [27.38, 36.99], "Kos", [27.17, 36.905], "Kalimnos", [27.09, 36.97], [27.04, 37.08], "Leros", [26.8, 37.24], [26.65, 37.29], "Patmos", [26.68, 37.35], "Arki", [26.9, 37.3], [27.15, 37.17], "Yalıkavak"],
   "marmaris-yunan-adalari": ["Marmaris", [28.3, 36.79], [28.24, 36.69], [28.13, 36.57], [28.02, 36.545], [27.98, 36.62], [27.99, 36.72], "Orhaniye", [27.98, 36.67], [28.0, 36.53], [28.15, 36.48], "Rodos", [28.03, 36.52], "Symi", [27.97, 36.58], [28.12, 36.545], [28.24, 36.66], [28.3, 36.79], "Marmaris"],
   "datca-yunan-adalari": ["Datça", [27.55, 36.655], "Knidos", [27.45, 36.63], [27.7, 36.62], "Symi", [27.98, 36.5], "Rodos", [28.03, 36.56], [27.85, 36.68], "Datça"],
   "bodrum-yarimadasi": ["Bodrum", "Karaada", [27.33, 36.955], [27.22, 37.0], "Gümüşlük", [27.235, 37.085], "Yalıkavak", [27.24, 37.09], [27.21, 37.03], [27.27, 36.96], [27.38, 36.995], "Bodrum"],
