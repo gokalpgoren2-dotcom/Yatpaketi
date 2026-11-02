@@ -79,7 +79,30 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "kekova-bodrum": { from: "Kekova", to: "Bodrum", port: "kas", stops: ["Kekova", "Kalkan & Kaş", "Seyir günü", "Tersane Adası", "Seyir günü", "Knidos", "Bodrum"] },
+  "kekova-bodrum": {
+    from: "Kekova", to: "Bodrum", port: "kas",
+    stops: ["Kekova", "Kaş", "Gemiler Adası", "Ağalimanı Koyu", "Serçe Limanı", "Knidos", "Bodrum"],
+    days: {
+      tr: [
+        "Kekova'da karşılama; batık şehrin üzerinden süzülerek Kaleköy'e ve Simena kalesine yürüyüş.",
+        "Beyaz evleri ve dar sokaklarıyla Kaş'ta yüzme, akşam kasabada yürüyüş ve yemek.",
+        "Bizans dönemi kilise ve yapı kalıntılarıyla dolu adada gün batımı yürüyüşü ve yüzme.",
+        "Çam ormanının denize indiği sakin ve korunaklı koyda yüzme ve dinlenme.",
+        "Bozburun yarımadasının ucundaki, dar girişli ve rüzgârdan korunaklı doğal limanda yüzme.",
+        "Datça yarımadasının ucundaki antik Knidos'ta tiyatro ve tapınak kalıntıları arasında yürüyüş.",
+        "Bodrum'a varış, kalenin gölgesinde son kahvaltı ve teslim.",
+      ],
+      en: [
+        "Welcome at Kekova; glide over the sunken city, then walk up to Kaleköy and Simena castle.",
+        "Swimming in Kaş with its white houses and narrow streets; an evening stroll and dinner in town.",
+        "A sunset walk and swim on the island full of Byzantine church and building ruins.",
+        "Swimming and rest in a calm, sheltered cove where the pine forest meets the sea.",
+        "Swimming in the narrow-mouthed, sheltered natural harbour at the tip of the Bozburun peninsula.",
+        "A walk among the theatre and temple ruins of ancient Knidos at the tip of the Datça peninsula.",
+        "Arrival in Bodrum, last breakfast in the shadow of the castle and hand-over.",
+      ],
+    },
+  },
   "marmaris-ekincik-fethiye": { from: "Marmaris", to: "Fethiye", port: "marmaris", stops: ["Marmaris", "Orhaniye", "Ekincik", "Dalyan", "Seyir günü", "Yassıcalar", "Fethiye"] },
   "marmaris-hisaronu-korfezi": { from: "Marmaris", to: "Marmaris", port: "marmaris", stops: ["Marmaris", "Orhaniye", "Selimiye", "Sömbeki", "Söğüt", "Serbest gün", "Marmaris"] },
   "bozburun-bodrum": { from: "Bozburun", to: "Bodrum", port: "bozburun", stops: ["Bozburun", "Sömbeki", "Datça", "Knidos", "Gökova", "Karaada", "Bodrum"] },
@@ -94,7 +117,7 @@ const META: Record<string, Meta> = {
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
