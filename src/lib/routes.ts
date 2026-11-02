@@ -30,7 +30,30 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "gocek-fethiye-korfezi": { from: "Göcek", to: "Fethiye", port: "gocek", stops: ["Göcek", "Tersane Adası", "Yassıcalar", "Bedri Rahmi", "Gemiler Adası", "Ölüdeniz", "Fethiye"] },
+  "gocek-fethiye-korfezi": {
+    from: "Göcek", to: "Göcek", port: "gocek",
+    stops: ["Göcek", "Tersane Adası", "Kızılada", "Turunç Pınarı", "Gemiler Adası", "Katrancı Adası", "Göcek Adası"],
+    days: {
+      tr: [
+        "Göcek'te karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
+        "Eski tersane kalıntılarıyla bilinen adada yüzme ve kıyıda kısa bir yürüyüş.",
+        "Fethiye körfezinin girişindeki deniz feneriyle bilinen adada, berrak suda yüzme ve şnorkel.",
+        "Yalnızca denizden ulaşılan, kayalardan tatlı su süzülen serin koyda dinlenme günü.",
+        "Bizans dönemi kilise ve yapı kalıntılarıyla dolu adada gün batımı yürüyüşü ve yüzme.",
+        "Çamlarla çevrili sakin koyda uzun bir yüzme molası ve keyifli bir akşam.",
+        "Göcek'in hemen önündeki adada son yüzme; ardından Göcek'e dönüş ve teslim.",
+      ],
+      en: [
+        "Welcome in Göcek, settling into the cabins and provisioning; first evening in a quiet cove.",
+        "Swimming and a short walk ashore on the island known for its old shipyard ruins.",
+        "Swimming and snorkelling in clear water at the lighthouse island at the mouth of Fethiye Bay.",
+        "A day of rest in the cool cove reachable only by sea, where fresh water trickles from the rocks.",
+        "A sunset walk and swim on the island full of Byzantine church and building ruins.",
+        "A long swimming break and a relaxed evening in a calm, pine-fringed cove.",
+        "A last swim at the island just off Göcek; then back to Göcek for hand-over.",
+      ],
+    },
+  },
   "fethiye-kekova": { from: "Fethiye", to: "Kekova", port: "fethiye", stops: ["Fethiye", "Ölüdeniz", "Seyir günü", "Kalkan & Kaş", "Meis", "Kekova", "Kekova"] },
   "fethiye-bozburun": { from: "Fethiye", to: "Bozburun", port: "fethiye", stops: ["Fethiye", "Ölüdeniz", "Seyir günü", "Ekincik", "Marmaris", "Orhaniye", "Bozburun"] },
   "kekova-bodrum": { from: "Kekova", to: "Bodrum", port: "kas", stops: ["Kekova", "Kalkan & Kaş", "Seyir günü", "Tersane Adası", "Seyir günü", "Knidos", "Bodrum"] },
@@ -48,7 +71,7 @@ const META: Record<string, Meta> = {
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
