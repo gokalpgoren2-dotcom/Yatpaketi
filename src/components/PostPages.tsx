@@ -16,6 +16,7 @@ import { getDestPhotos } from "@/lib/site-texts";
 import { regionText } from "@/lib/regions";
 import { RegionPage, RegionsIndex } from "./RegionPage";
 import { RoutePage, RoutesIndex } from "./RoutePage";
+import { GuideArticle } from "./GuideArticle";
 
 export async function ListPage({ kind, eyebrow, title, intro, empty, lang = "tr" }: { kind: PostKind; eyebrow: string; title: string; intro: string; empty: string; lang?: Lang }) {
   const posts = await getPosts(kind, undefined, lang);
@@ -59,8 +60,12 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
     notFound();
   }
   if (kind === "route") return <RoutePage p={p} all={await getPosts("route", undefined, lang)} back={back} lang={lang} />;
+  if (kind === "guide" || kind === "blog" || kind === "package" || kind === "page") {
+    const others = kind === "page" ? [] : (await getPosts(kind === "package" ? "package" : ["guide", "blog"], undefined, lang)).filter((x) => x.slug !== slug).slice(0, 6);
+    return <GuideArticle p={p} more={others} back={back} lang={lang} />;
+  }
   const map = regionMapFor(kind, slug);
-  const more = kind === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
+  const more = (kind as PostKind) === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
   if (kind === "destination") {
     const photos = await getDestPhotos(slug);
     const R = regionText(slug, lang);
@@ -156,7 +161,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
           <div className="relative mt-8 aspect-[16/9] overflow-hidden rounded-3xl"><GuideArt slug={p.slug} className="h-full w-full" /></div>
         )}
         <div className="mt-8"><RichText text={p.content} /></div>
-        {kind !== "page" && (
+        {(kind as PostKind) !== "page" && (
           <div className="mt-12 rounded-3xl bg-mist p-6 text-center">
             <p className="font-display text-2xl text-navy">{T.findBoat}</p>
             <Link href={href(lang, "/tekneler")} className="mt-4 inline-block rounded-full bg-turquoise px-7 py-3 text-sm font-semibold text-white transition hover:bg-turquoise-dark">{T.browse}</Link>
@@ -164,7 +169,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
         )}
         {more.length > 0 && (
           <section className="mt-14">
-            <h2 className="font-display text-2xl text-navy">{kind === "package" ? T.morePackages : T.morePosts}</h2>
+            <h2 className="font-display text-2xl text-navy">{(kind as PostKind) === "package" ? T.morePackages : T.morePosts}</h2>
             <div className="mt-5 grid gap-5 sm:grid-cols-2">{more.map((m, i) => <PostCard key={m.slug} p={m} i={i} lang={lang} />)}</div>
           </section>
         )}
