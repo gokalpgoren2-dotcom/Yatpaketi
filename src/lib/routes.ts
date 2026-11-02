@@ -2,10 +2,34 @@
 import type { Post } from "./posts";
 import { href, type Lang } from "./i18n";
 
-type Meta = { from: string; to: string; port: string; stops: string[]; greek?: boolean };
+// days: panelde yazılan gün metinleri yerine kullanılacak gün gün program (Türkçe ve İngilizce).
+type Meta = { from: string; to: string; port: string; stops: string[]; greek?: boolean; days?: { tr: string[]; en: string[] } };
 
 const META: Record<string, Meta> = {
-  "gocek-korfezi-12-adalar": { from: "Göcek", to: "Göcek", port: "gocek", stops: ["Göcek", "Tersane Adası", "Yassıcalar", "Bedri Rahmi", "12 Adalar", "Serbest gün", "Göcek"] },
+  "gocek-korfezi-12-adalar": {
+    from: "Göcek", to: "Göcek", port: "gocek",
+    stops: ["Göcek", "Yassıcalar / Zeytin Adası", "Akvaryum Koyu", "Binlik", "Hamam Koyu", "Bedri Rahmi", "Boynuzbükü"],
+    days: {
+      tr: [
+        "Göcek'te karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
+        "Birbirine yakın adacıklar arasında sığ, turkuaz sularda yüzme ve şnorkel molaları.",
+        "Adını berrak suyundan alan koyda, dipteki kumu ve balıkları görebileceğiniz bir yüzme günü.",
+        "Çamlarla çevrili sakin bir koyda dinlenme ve uzun bir öğle molası.",
+        "Kıyıdaki, kısmen denizin içinde kalan eski hamam kalıntılarının yanında yüzme ve kısa bir yürüyüş.",
+        "Ressam Bedri Rahmi Eyüboğlu'nun adını taşıyan koyda, kayadaki balık resmini arayın; akşam demirlemesi için de çok sevilir.",
+        "Ormanın denize uzandığı derin ve sakin koyda son gün; ardından Göcek'e dönüş ve teslim.",
+      ],
+      en: [
+        "Welcome in Göcek, settling into the cabins and provisioning; first evening in a quiet cove.",
+        "Swimming and snorkelling stops in shallow turquoise water among the small islands.",
+        "A day of swimming in the cove named for its clear water, where you can see the sandy bottom and the fish.",
+        "Relaxing and a long lunch break in a calm, pine-fringed cove.",
+        "Swimming and a short walk beside the old bath ruins on the shore, partly under the sea.",
+        "In the cove named after the painter Bedri Rahmi Eyüboğlu, look for the fish painted on the rock; a favourite evening anchorage.",
+        "Last day in the deep, calm cove where the forest meets the sea; then back to Göcek for hand-over.",
+      ],
+    },
+  },
   "gocek-fethiye-korfezi": { from: "Göcek", to: "Fethiye", port: "gocek", stops: ["Göcek", "Tersane Adası", "Yassıcalar", "Bedri Rahmi", "Gemiler Adası", "Ölüdeniz", "Fethiye"] },
   "fethiye-kekova": { from: "Fethiye", to: "Kekova", port: "fethiye", stops: ["Fethiye", "Ölüdeniz", "Seyir günü", "Kalkan & Kaş", "Meis", "Kekova", "Kekova"] },
   "fethiye-bozburun": { from: "Fethiye", to: "Bozburun", port: "fethiye", stops: ["Fethiye", "Ölüdeniz", "Seyir günü", "Ekincik", "Marmaris", "Orhaniye", "Bozburun"] },
@@ -24,6 +48,7 @@ const META: Record<string, Meta> = {
 };
 
 const EN_NAMES: Record<string, string> = {
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
@@ -87,6 +112,11 @@ export function routeInfo(p: Post, lang: Lang): RouteInfo {
     if (sec === "intro") intro.push(l);
     else if (sec === "who") { if (!/ek masraf|ek ücret|extra cost|extra fee|additional cost/i.test(l)) who.push(l.replace(/^[-*]\s*/, "")); }
     else outro.push(l);
+  }
+  if (m?.days) {
+    const list = m.days[lang === "tr" ? "tr" : "en"];
+    days.length = 0;
+    list.forEach((text, i) => days.push({ n: i + 1, title: nm(m.stops[i], lang), text, acts: ACT.filter(([, re]) => re.test(text)).map(([a]) => a).slice(0, 3) }));
   }
   const introText = intro.join(" ");
   const parts = introText.split(/(?<=\.)\s+/);
