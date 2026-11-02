@@ -37,8 +37,19 @@ const UI = {
     turum: "Turum'a giriş yapın",
     turumText: "**Turum:** Rezervasyonunuz onaylandığında size özel Turum sayfanız açılır. Giriş kodunuzu ekibimiz sizinle paylaşır; sitenin sağ üstündeki **Turum** düğmesinden e-posta adresiniz ve bu kodla giriş yaparsınız. Sözleşmenizi burada görüntüleyebilir, indirebilir ve imzalayabilir, hazırlıkların durumunu takip edebilirsiniz.",
     mock: { label: "Örnek görünüm", title: "Turum", trip: "Göcek · 7 gün", items: [["Sözleşme imzalandı", "done"], ["Yolcu listesi", "done"], ["Kumanya listesi", "now"], ["Karşılama · Göcek Marina", "next"]] as [string, string][], ready: "Hazırlık", now: "Hazırlanıyor" },
+    // Panelden gelen adım metinleri yerine kullanılan güncel metinler (Turum ile uyumlu)
+    steps: {
+      "detaylar-kumanya-listesi": {
+        excerpt: "Misafir listenizi, tercihlerinizi ve menü seçiminizi Turum sayfanızdan paylaşırsınız.",
+        content: "Onaydan sonra, yolculuktan önce Turum sayfanızdan şunları paylaşırsınız:\n\n- **Misafir listesi:** Yatta bulunacak herkesin kimlik veya pasaport bilgileri. Yatın limandan çıkışı için gereken transit log kaydında kullanılır.\n- **Varış zamanı:** Uçuş ya da ulaşım saatleriniz\n- **Tercihleriniz:** Alışverişin yapılacağı market, alerji ve sağlık durumu, kutlamak istediğiniz özel gün, hizmet tarzı ve ilgilendiğiniz aktiviteler\n- **Menü seçimi:** Şefimizin hazırladığı menülerden beğendikleriniz\n\nBu bilgilere göre alışveriş listeniz hazırlanır ve Turum sayfanızda onayınıza sunulur.",
+      },
+      "kumanya-alimi": {
+        excerpt: "Onayladığınız listeye göre alışverişi ekibimiz yapar ve yata yükler.",
+        content: "Kumanya, yolculuğun en önemli hazırlıklarından biridir. Onayladığınız alışveriş listesine göre yiyecek ve içecekleri ekibimiz, tercih ettiğiniz marketten alır ve yolculuk başlamadan önce yata yükler.\n\n- Alışveriş listesi Turum sayfanıza yüklenir; onayınızdan sonra alışveriş yapılır.\n- Değişiklik isterseniz listeyi güncelleyip yeniden onayınıza sunarız.\n- Yolculuk sırasında eksilenler, uğranan liman ve köylerde tamamlanır.\n\nKumanya bedeli kiralama ücretine dahil değildir, ayrıca hesaplanır. Ayrıntılar sözleşmenizde yer alır.",
+      },
+    } as Record<string, { excerpt: string; content: string }>,
     factsTitle: "Kısaca bilmeniz gerekenler",
-    facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Yat, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Listenize göre alınır, belgeleriyle ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
+    facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Yat, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Onayladığınız listeye göre ekibimiz alır; ücrete dahil değildir, ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
     ctaTitle: "İlk adım sadece bir mesaj.", ctaText: "Tatil tarihinizi, kişi sayınızı ve aklınızdaki bölgeyi yazın; size uygun yatları ve teklifi birlikte netleştirelim.", boats: "Yatları inceleyin", faq: "Sık sorulan sorular",
     wa: "Merhaba, yat kiralamak istiyorum. Tarih ve kişi sayısı: ",
   },
@@ -50,8 +61,18 @@ const UI = {
     turum: "Sign in to My Tour",
     turumText: "**My Tour:** Once your booking is confirmed, your own My Tour page is opened. Our team shares your access code with you; sign in with your e-mail address and this code using the **My Tour** button at the top right of the site. There you can view, download and sign your contract and follow the preparations.",
     mock: { label: "Example view", title: "My Tour", trip: "Göcek · 7 days", items: [["Contract signed", "done"], ["Guest list", "done"], ["Provisions list", "now"], ["Welcome · Göcek Marina", "next"]] as [string, string][], ready: "Preparation", now: "In progress" },
+    steps: {
+      "detaylar-kumanya-listesi": {
+        excerpt: "You share your guest list, preferences and menu choices on your My Tour page.",
+        content: "After confirmation and before the trip, you share the following on your My Tour page:\n\n- **Guest list:** ID or passport details of everyone on board, needed for the transit log the yacht requires to leave port.\n- **Arrival time:** Your flight or travel times\n- **Your preferences:** Preferred supermarket, allergies and health conditions, any special day to celebrate, service style and the activities you enjoy\n- **Menu choice:** The menus you like from those prepared by our chef\n\nYour shopping list is prepared from this information and presented for your approval on My Tour.",
+      },
+      "kumanya-alimi": {
+        excerpt: "Our team does the shopping from the list you approve and loads it on board.",
+        content: "Provisions are one of the most important preparations. Our team buys the food and drinks on the shopping list you approve, from the supermarket you prefer, and loads them on board before the trip.\n\n- The shopping list is uploaded to your My Tour page; shopping is done after you approve it.\n- If you'd like changes, we update the list and send it for your approval again.\n- Anything that runs low is restocked at ports and villages along the way.\n\nProvisions are not included in the charter fee and are charged separately. Details are set out in your contract.",
+      },
+    } as Record<string, { excerpt: string; content: string }>,
     factsTitle: "Good to know",
-    facts: [["A request is not binding", "Sending a request is free; no payment is taken at this stage."], ["What sets the price?", "The boat, season, route and duration. Your quote is based on these."], ["Provisions", "Bought from your list and charged separately, with receipts."], ["A flexible route", "Your captain adjusts the route to the weather for your safety."]],
+    facts: [["A request is not binding", "Sending a request is free; no payment is taken at this stage."], ["What sets the price?", "The boat, season, route and duration. Your quote is based on these."], ["Provisions", "Our team buys them from the list you approve; charged separately from the charter fee."], ["A flexible route", "Your captain adjusts the route to the weather for your safety."]],
     ctaTitle: "The first step is just a message.", ctaText: "Tell us your dates, group size and the region you have in mind; we'll find the right boats and finalise your quote together.", boats: "Browse boats", faq: "FAQ",
     wa: "Hello, I'd like to charter a boat. Dates and group size: ",
   },
@@ -72,11 +93,18 @@ const PANEL_RE = /m[üu]şteri panel|rezervasyon takib|turum|customer (panel|por
 function cleanStep(content: string, U: (typeof UI)["tr"]): { text: string; turum: boolean } {
   const blocks = content.split(/\n\s*\n/);
   let hit = false;
+  const seen = new Set<string>();
   const keep = blocks.filter((b) => {
     const t = b.trim();
     const heading = /^#{2,3}\s/.test(t) && PANEL_RE.test(t);
     const link = /^\[[^\]]+\]\([^)]*\)\s*\S{0,3}$/.test(t) && PANEL_RE.test(t.replace(/\(.*\)/, "") + (/musteri/.test(t) ? " müşteri panel" : ""));
     if (heading || link) { hit = true; return false; }
+    // Eski adla ("rezervasyon takip sayfası") yazılmış tekrar paragrafları
+    if (/rezervasyon takip|booking track/i.test(t)) return false;
+    // Aynı cümleyle başlayan tekrar paragraflar: ilki kalır
+    const key = t.toLocaleLowerCase("tr").replace(/\*/g, "").slice(0, 45);
+    if (seen.has(key)) return false;
+    seen.add(key);
     return true;
   });
   const rename = (t: string) => t
@@ -88,7 +116,9 @@ function cleanStep(content: string, U: (typeof UI)["tr"]): { text: string; turum
 
 function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
   const right = i % 2 === 1;
-  const { text, turum } = cleanStep(s.content, U);
+  const o = U.steps[s.slug];
+  const { text, turum } = cleanStep(o?.content ?? s.content, U);
+  const excerpt = o?.excerpt ?? s.excerpt;
   return (
     <li data-step id={s.slug} className="group relative scroll-mt-40 pb-10 lg:grid lg:grid-cols-2 lg:gap-28 lg:pb-14">
       <span className="absolute left-[1.65rem] top-6 z-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border-2 border-navy/10 bg-white font-display text-lg font-semibold text-navy/40 transition duration-500 group-data-[on]:border-navy group-data-[on]:bg-navy group-data-[on]:text-white group-data-[on]:shadow-lg group-data-[on]:shadow-navy/30 lg:left-1/2 lg:h-14 lg:w-14 lg:text-xl">
@@ -102,7 +132,7 @@ function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
           {U.when[s.slug] && <span className="rounded-full bg-mist px-3 py-1.5 text-xs font-semibold text-navy/60">{U.when[s.slug]}</span>}
         </div>
         <h3 className="font-display mt-5 text-2xl font-semibold leading-snug text-navy lg:text-[1.7rem]">{s.title}</h3>
-        {s.excerpt && <p className="mt-2 text-lg font-medium leading-relaxed text-turquoise-dark">{s.excerpt}</p>}
+        {excerpt && <p className="mt-2 text-lg font-medium leading-relaxed text-turquoise-dark">{excerpt}</p>}
         {text && <div className="mt-4 text-[15px] leading-relaxed text-navy/70 [&_h2]:!mt-4 [&_h2]:!pt-0 [&_h2]:!font-sans [&_h2]:!text-[15px] [&_h2]:!font-semibold [&_h2]:!normal-case [&_h2]:!tracking-normal [&_h2]:!text-navy [&_h3]:!mt-4 [&_h3]:!pt-0 [&_h3]:!font-sans [&_h3]:!text-[15px] [&_h3]:!font-semibold [&_h3]:!text-navy"><RichText text={text} /></div>}
         {turum && (
           <Link href="/musteri" className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-turquoise-dark">
