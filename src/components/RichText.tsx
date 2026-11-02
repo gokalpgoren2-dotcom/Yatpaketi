@@ -32,28 +32,29 @@ export function RichText({ text, article = false }: { text: string; article?: bo
   const blocks = text.replace(/\r\n/g, "\n").split(/\n{2,}/).map((b) => b.trim()).filter(Boolean);
   if (article) {
     let firstP = true;
+    let h2n = 0;
     return (
-      <div className="space-y-6 text-[1.075rem] leading-[1.85] text-navy/75 lg:text-lg lg:leading-[1.9]">
+      <div className="space-y-6 text-[1.06rem] font-light leading-[1.9] text-[#3d5470] lg:text-[1.125rem] [&_strong]:font-semibold [&_strong]:text-navy">
         {blocks.map((b, i) => {
-          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="font-display scroll-mt-28 pt-2 text-xl font-semibold text-navy lg:text-2xl">{b.slice(4)}</h3>;
+          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="scroll-mt-28 pt-2 text-xl font-semibold text-navy lg:text-[1.35rem]">{b.slice(4)}</h3>;
           if (b.startsWith("## ")) {
             const t = b.slice(3).trim();
+            h2n++;
             return (
-              <h2 key={i} id={headingId(t)} className="font-display flex scroll-mt-28 items-center gap-3 pt-6 text-2xl font-semibold leading-tight text-navy lg:text-3xl">
-                <span className="h-7 w-1.5 shrink-0 rounded-full bg-turquoise" aria-hidden />{t}
+              <h2 key={i} id={headingId(t)} className="scroll-mt-28 pt-8">
+                <span className="block text-xs font-semibold tracking-[0.3em] text-turquoise-dark">{String(h2n).padStart(2, "0")}</span>
+                <span className="font-display mt-2 block text-[1.65rem] leading-tight text-navy lg:text-[2rem]">{t}</span>
               </h2>
             );
           }
           const lines = b.split("\n");
           if (lines.every((l) => l.trim().startsWith("- "))) {
             return (
-              <ul key={i} className="space-y-3 rounded-3xl bg-mist p-5 lg:p-7">
+              <ul key={i} className="space-y-3 border-l-2 border-turquoise/30 pl-5">
                 {lines.map((l, j) => (
-                  <li key={j} className="flex gap-3">
-                    <span className="mt-1.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-turquoise text-white" aria-hidden>
-                      <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3.2" strokeLinecap="round" strokeLinejoin="round"><path d="M5 12l5 5 9-10" /></svg>
-                    </span>
-                    <span><Inline text={l.trim().slice(2)} /></span>
+                  <li key={j} className="relative">
+                    <span className="absolute -left-[1.6rem] top-[0.85em] h-2 w-2 -translate-y-1/2 rounded-full bg-turquoise ring-4 ring-white" aria-hidden />
+                    <Inline text={l.trim().slice(2)} />
                   </li>
                 ))}
               </ul>
@@ -61,7 +62,7 @@ export function RichText({ text, article = false }: { text: string; article?: bo
           }
           if (firstP) {
             firstP = false;
-            return <p key={i} className="whitespace-pre-line text-xl leading-relaxed text-navy/85 lg:text-[1.4rem] lg:leading-relaxed"><Inline text={b} /></p>;
+            return <p key={i} className="whitespace-pre-line text-[1.25rem] leading-[1.75] text-[#2c4562] first-letter:float-left first-letter:mr-2.5 first-letter:mt-1 first-letter:font-display first-letter:text-[3.6rem] first-letter:leading-[0.85] first-letter:text-turquoise-dark lg:text-[1.375rem]"><Inline text={b} /></p>;
           }
           return <p key={i} className="whitespace-pre-line"><Inline text={b} /></p>;
         })}

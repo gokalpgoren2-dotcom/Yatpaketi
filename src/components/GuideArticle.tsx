@@ -41,34 +41,31 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
       <Header lang={lang} />
       <ReadProgress />
       <main>
-        {/* Başlık */}
-        <section className="relative isolate overflow-hidden bg-navy pb-16 pt-28 text-white lg:pb-24 lg:pt-36">
-          <div className="absolute inset-0 -z-20 opacity-45"><PostThumb p={p} sizes="100vw" /></div>
-          <div className="absolute inset-0 -z-10 bg-gradient-to-t from-navy via-navy/80 to-navy/40" />
-          <svg className="absolute bottom-0 left-0 -z-10 h-10 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#ffffff" /></svg>
-          <div className="mx-auto max-w-4xl px-5 lg:px-8">
-            <p className="flex flex-wrap items-center gap-2 text-sm text-white/65">
-              {back && <><Link href={back.href} className="hover:text-white">← {back.label}</Link><span>/</span></>}
-              {!isPage && <span className="rounded-full bg-turquoise px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-navy">{kindLabel(p.kind, lang)}</span>}
+        {/* Başlık: beyaz zemin, ortada başlık, altında geniş kapak */}
+        <section className="pt-28 lg:pt-36">
+          <div className="mx-auto max-w-3xl px-5 text-center lg:px-8">
+            <p className="flex flex-wrap items-center justify-center gap-2 text-sm text-navy/50">
+              {back && <Link href={back.href} className="transition hover:text-turquoise-dark">← {back.label}</Link>}
+              {back && !isPage && <span className="text-navy/25">/</span>}
+              {!isPage && <span className="font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{kindLabel(p.kind, lang)}</span>}
             </p>
-            <h1 className="font-display mt-5 text-4xl font-semibold leading-[1.08] lg:text-6xl">{p.title}</h1>
-            {p.excerpt && <p className="mt-5 max-w-2xl text-lg leading-relaxed text-white/80 lg:text-xl">{p.excerpt}</p>}
-            <ul className="mt-7 flex flex-wrap gap-2.5 text-sm">
-              <li className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 ring-1 ring-white/15 backdrop-blur">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>{L.min}
-              </li>
-              {toc.length > 1 && <li className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 ring-1 ring-white/15 backdrop-blur">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M4 6h16M4 12h16M4 18h10" /></svg>{L.parts}
-              </li>}
-              {date && !isPage && <li className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 ring-1 ring-white/15 backdrop-blur">
-                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M4 6h16v14H4zM8 3v4M16 3v4M4 10h16" /></svg>{date}
-              </li>}
-            </ul>
+            <h1 className="font-display mt-5 text-[2.4rem] leading-[1.08] text-navy lg:text-[3.6rem]">{p.title}</h1>
+            {p.excerpt && <p className="mx-auto mt-5 max-w-2xl text-lg font-light leading-relaxed text-navy/60 lg:text-xl">{p.excerpt}</p>}
+            <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-navy/45">
+              <span>{L.min}</span>
+              {toc.length > 1 && <><span aria-hidden>·</span><span>{L.parts}</span></>}
+              {date && !isPage && <><span aria-hidden>·</span><span>{date}</span></>}
+            </p>
+          </div>
+          <div className="mx-auto mt-10 max-w-6xl px-5 lg:mt-14 lg:px-8">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] bg-mist shadow-2xl shadow-navy/10 sm:aspect-[21/9]">
+              <PostThumb p={p} sizes="(min-width:1152px) 1152px, 100vw" />
+            </div>
           </div>
         </section>
 
         {/* Metin + yan sütun */}
-        <section className="pb-16 pt-6 lg:pb-24 lg:pt-10">
+        <section className="pb-16 pt-12 lg:pb-24 lg:pt-16">
           <div className={`${wrap} grid gap-12 lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-16`}>
             <article id="yazi" className="mx-auto w-full max-w-[44rem] lg:mx-0 lg:ml-auto">
               {toc.length > 1 && (
