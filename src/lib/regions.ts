@@ -1,5 +1,5 @@
 // Destinasyon (bölge) sayfalarının bölümlü içeriği. Her bölge: giriş, numaralı duraklar, fotoğraflı "ileri keşif" kartları, not kutusu, harita.
-// Fotoğraflar panelden gelir (Yazılar > destinasyon > Galeri): 1. fotoğraf girişte, 2-4. fotoğraflar keşif kartlarında, kalanlar galeride.
+// Fotoğraflar panelden gelir (Yazılar > destinasyon > Galeri): 1-3. fotoğraflar keşif kartlarında, kalanlar galeride.
 export type Item = [name: string, tagline: string, text: string];
 export type RegionText = {
   introEyebrow: string; introTitle: string; introLead: string; introText: string; introCta: string;

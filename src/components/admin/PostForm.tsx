@@ -188,7 +188,7 @@ export function PostForm({ post, gallery: gallery0 = [] }: { post: PostRow | nul
       {kind === "destination" && (
         <section className="rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="font-semibold">Galeri (ek fotoğraflar)</h2>
-          <p className="mt-1 text-xs text-navy/55">En fazla 8 fotoğraf. Sıra önemli: 1. fotoğraf giriş bölümünde, 2., 3. ve 4. fotoğraflar "keşif" kartlarında (sırasıyla), kalanlar sayfanın altındaki galeride görünür. Kapak fotoğrafı üstteki lacivert bantta soluk arka plan olur.</p>
+          <p className="mt-1 text-xs text-navy/55">En fazla 8 fotoğraf. Sıra önemli: 1., 2. ve 3. fotoğraflar "keşif" kartlarında (sırasıyla), kalanlar sayfanın altındaki galeride görünür.</p>
           {gallery.length > 0 && (
             <ul className="mt-3 grid grid-cols-2 gap-3 sm:grid-cols-4">
               {gallery.map((g, i) => (

@@ -4,7 +4,7 @@ import { Footer } from "./Sections";
 import { Photo } from "./Photo";
 import { PostCard } from "./PostCard";
 import { Scroller } from "./Scroller";
-import { MapHero } from "./MapZoom";
+import { MapZoom } from "./MapZoom";
 import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
 import { REGION_UI, type RegionText } from "@/lib/regions";
@@ -27,43 +27,26 @@ function Sea({ label }: { label: string }) {
 }
 
 // Destinasyon (bölge) sayfası: giriş, numaralı duraklar, fotoğraflı keşif kartları, not, harita, galeri.
-// Fotoğraf sırası (panel galerisi): 1 → giriş, 2-4 → keşif kartları, kalanlar → galeri.
+// Fotoğraf sırası (panel galerisi): 1-3 → keşif kartları, kalanlar → galeri. Harita girişin sağında, tıklayınca büyür.
 export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R: RegionText; photos: string[]; map: string | null; more: Post[]; back?: { href: string; label: string }; lang: Lang }) {
   const U = REGION_UI[lang];
   const T = gt(lang);
-  const introPhoto = photos[0] ?? p.cover;
-  const explorePhotos = photos.slice(1, 1 + R.explore.length);
-  const gallery = photos.slice(1 + R.explore.length);
-  const head = (
-    <>
-      {back && <Link href={back.href} className="text-sm text-white/80 hover:text-white">← {back.label}</Link>}
-      <h1 className="font-display mt-3 max-w-3xl text-4xl font-semibold leading-tight lg:text-6xl">{p.title}</h1>
-      {p.excerpt && <p className="mt-3 max-w-2xl text-lg text-white/85">{p.excerpt}</p>}
-    </>
-  );
+  const explorePhotos = photos.slice(0, R.explore.length);
+  const gallery = photos.slice(R.explore.length);
   return (
     <>
       <Header lang={lang} />
       <main>
-        {/* Başlık: bölge haritası (tıklayınca büyür) */}
-        {map ? (
-          <MapHero src={map} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} open={lang === "en" ? "Enlarge map" : "Haritayı büyüt"} close={lang === "en" ? "Close" : "Kapat"}>
-            {head}
-          </MapHero>
-        ) : (
-          <section className="relative isolate overflow-hidden bg-navy pb-12 pt-28 text-white lg:pb-16 lg:pt-36">
-            {p.cover && <div className="absolute inset-0 -z-10 opacity-30"><Photo src={p.cover} alt="" priority sizes="100vw" className="object-cover" /></div>}
-            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy via-navy/85 to-navy/50" />
-            <div className={wrap}>{head}</div>
-          </section>
-        )}
-
         {/* Giriş */}
-        <section className="py-14 lg:py-24">
+        <section className="pb-14 pt-28 lg:pb-24 lg:pt-36">
           <div className={`${wrap} grid items-center gap-10 lg:grid-cols-2 lg:gap-16`}>
             <div>
+              <p className="mb-5 text-sm text-navy/55">
+                {back && <><Link href={back.href} className="hover:text-turquoise-dark">← {back.label}</Link><span className="mx-2">/</span></>}
+                <span className="font-semibold text-navy/80">{p.title}</span>
+              </p>
               <p className={eyebrow}>{R.introEyebrow}</p>
-              <h2 className={h2}>{R.introTitle}</h2>
+              <h1 className={h2}>{R.introTitle}</h1>
               <p className="mt-6 text-lg leading-relaxed text-navy/75">{R.introLead}</p>
               <p className="mt-4 leading-relaxed text-navy/60">{R.introText}</p>
               <a href="#duraklar" className="mt-8 inline-flex items-center gap-2 rounded-xl bg-turquoise px-6 py-3.5 text-sm font-semibold text-white shadow-lg shadow-turquoise/25 transition hover:bg-turquoise-dark">
@@ -71,9 +54,13 @@ export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 5v14M6 13l6 6 6-6" /></svg>
               </a>
             </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-mist shadow-xl shadow-navy/10">
-              {introPhoto ? <Photo src={introPhoto} alt={p.title} sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" /> : <Sea label={p.title} />}
-            </div>
+            {map ? (
+              <MapZoom src={map} title={p.title} label={`Yatpaketi / ${T.destinations}`} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} open={lang === "en" ? "Enlarge map" : "Haritayı büyüt"} close={lang === "en" ? "Close" : "Kapat"} />
+            ) : (
+              <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-mist shadow-xl shadow-navy/10">
+                {p.cover ? <Photo src={p.cover} alt={p.title} priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" /> : <Sea label={p.title} />}
+              </div>
+            )}
           </div>
         </section>
 
