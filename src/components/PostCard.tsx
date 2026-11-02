@@ -32,7 +32,7 @@ export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?
   const map = regionMapFor(p.kind, p.slug);
   return (
     <Link href={postHref(p, lang)} className="group flex h-full flex-col rounded-[1.75rem] bg-white p-2.5 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
-      <div className={`relative overflow-hidden rounded-[1.35rem] bg-mist ${map ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
+      <div className={`relative overflow-hidden rounded-[1.35rem] bg-mist ${map ? "aspect-[7/4]" : "aspect-[16/10]"}`}>
         <PostThumb p={p} i={i} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" />
       </div>
       <div className="flex flex-1 flex-col px-3 pb-3 pt-5">

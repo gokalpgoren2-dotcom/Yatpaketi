@@ -75,7 +75,7 @@ export function RegionCard({ p, lang }: { p: Post; lang: Lang }) {
   const U = REGION_UI[lang];
   return (
     <Link href={href(lang, `/destinasyonlar/${p.slug}`)} className="group flex h-full flex-col rounded-[1.75rem] bg-white p-2.5 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
-      <div className="relative aspect-[4/3] overflow-hidden rounded-[1.35rem] bg-navy">
+      <div className="relative aspect-[7/4] overflow-hidden rounded-[1.35rem] bg-navy">
         {map ? (
           // eslint-disable-next-line @next/next/no-img-element
           <img src={map} alt={p.title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
