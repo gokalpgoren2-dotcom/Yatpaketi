@@ -34,7 +34,8 @@ const UI = {
     start: "Adımları görün", quote: "Hemen talep gönderin", step: "Adım",
     phases: [["Rezervasyon", "Talep, teklif ve onay"], ["Hazırlık", "Detaylar ve kumanya"], ["Yolculuk", "Karşılamadan teslime"], ["Sonrası", "Anılar ve geri bildirim"]],
     when: { talep: "Şimdi", "musaitlik-teklif": "Talebinizden sonra", "onay-sozlesme": "Teklifi onayladığınızda", "detaylar-kumanya-listesi": "Yolculuktan önce", "kumanya-alimi": "Biniş öncesi", "karsilama-welcome": "1. gün", "seyir-gunleri": "Yolculuk boyunca", "donus-teslim": "Son gün", sonrasi: "Dönüşte" } as Record<string, string>,
-    turum: "Turum'da takip edin",
+    turum: "Turum'a giriş yapın",
+    turumText: "**Turum:** Rezervasyonunuz onaylandığında size özel Turum sayfanız açılır. Giriş kodunuzu ekibimiz sizinle paylaşır; sitenin sağ üstündeki **Turum** düğmesinden e-posta adresiniz ve bu kodla giriş yaparsınız. Sözleşmenizi burada görüntüleyebilir, indirebilir ve imzalayabilir, hazırlıkların durumunu takip edebilirsiniz.",
     mock: { label: "Örnek görünüm", title: "Turum", trip: "Göcek · 7 gün", items: [["Sözleşme imzalandı", "done"], ["Yolcu listesi", "done"], ["Kumanya listesi", "now"], ["Karşılama · Göcek Marina", "next"]] as [string, string][], ready: "Hazırlık", now: "Hazırlanıyor" },
     factsTitle: "Kısaca bilmeniz gerekenler",
     facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Yat, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Listenize göre alınır, belgeleriyle ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
@@ -46,7 +47,8 @@ const UI = {
     start: "See the steps", quote: "Send a request", step: "Step",
     phases: [["Booking", "Request, quote and confirmation"], ["Preparation", "Details and provisions"], ["The voyage", "From welcome to hand-over"], ["Afterwards", "Memories and feedback"]],
     when: { talep: "Now", "musaitlik-teklif": "After your request", "onay-sozlesme": "When you accept the quote", "detaylar-kumanya-listesi": "Before the trip", "kumanya-alimi": "Before boarding", "karsilama-welcome": "Day 1", "seyir-gunleri": "Throughout the trip", "donus-teslim": "Last day", sonrasi: "Back home" } as Record<string, string>,
-    turum: "Follow it on My Tour",
+    turum: "Sign in to My Tour",
+    turumText: "**My Tour:** Once your booking is confirmed, your own My Tour page is opened. Our team shares your access code with you; sign in with your e-mail address and this code using the **My Tour** button at the top right of the site. There you can view, download and sign your contract and follow the preparations.",
     mock: { label: "Example view", title: "My Tour", trip: "Göcek · 7 days", items: [["Contract signed", "done"], ["Guest list", "done"], ["Provisions list", "now"], ["Welcome · Göcek Marina", "next"]] as [string, string][], ready: "Preparation", now: "In progress" },
     factsTitle: "Good to know",
     facts: [["A request is not binding", "Sending a request is free; no payment is taken at this stage."], ["What sets the price?", "The boat, season, route and duration. Your quote is based on these."], ["Provisions", "Bought from your list and charged separately, with receipts."], ["A flexible route", "Your captain adjusts the route to the weather for your safety."]],
@@ -64,9 +66,29 @@ function Ic({ d, size = 22, className = "" }: { d: string; size?: number; classN
   );
 }
 
+// Adım metnindeki müşteri paneli / rezervasyon takibi / Turum anlatımları (panelden birden çok kez eklenmiş)
+// ayıklanır ve yerine tek, sade bir Turum paragrafı konur.
+const PANEL_RE = /m[üu]şteri panel|rezervasyon takib|turum|customer (panel|portal)|booking track|my tour/i;
+function cleanStep(content: string, U: (typeof UI)["tr"]): { text: string; turum: boolean } {
+  const blocks = content.split(/\n\s*\n/);
+  let hit = false;
+  const keep = blocks.filter((b) => {
+    const t = b.trim();
+    const heading = /^#{2,3}\s/.test(t) && PANEL_RE.test(t);
+    const link = /^\[[^\]]+\]\([^)]*\)\s*\S{0,3}$/.test(t) && PANEL_RE.test(t.replace(/\(.*\)/, "") + (/musteri/.test(t) ? " müşteri panel" : ""));
+    if (heading || link) { hit = true; return false; }
+    return true;
+  });
+  const rename = (t: string) => t
+    .replace(/[Mm]üşteri panelinizden/g, "Turum sayfanızdan").replace(/[Mm]üşteri panelinden/g, "Turum sayfasından")
+    .replace(/[Mm]üşteri panelinize/g, "Turum sayfanıza").replace(/[Mm]üşteri paneline/g, "Turum sayfasına")
+    .replace(/[Mm]üşteri panelinde/g, "Turum sayfasında").replace(/[Mm]üşteri paneli/g, "Turum sayfası");
+  return hit ? { text: rename([...keep, U.turumText].join("\n\n")), turum: true } : { text: rename(content), turum: /turum|my tour|müşteri panel/i.test(content) };
+}
+
 function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
   const right = i % 2 === 1;
-  const turum = /turum|my tour/i.test(s.content);
+  const { text, turum } = cleanStep(s.content, U);
   return (
     <li data-step id={s.slug} className="group relative scroll-mt-40 pb-10 lg:grid lg:grid-cols-2 lg:gap-28 lg:pb-14">
       <span className="absolute left-[1.65rem] top-6 z-10 flex h-11 w-11 -translate-x-1/2 items-center justify-center rounded-full border-2 border-navy/10 bg-white font-display text-lg font-semibold text-navy/40 transition duration-500 group-data-[on]:border-navy group-data-[on]:bg-navy group-data-[on]:text-white group-data-[on]:shadow-lg group-data-[on]:shadow-navy/30 lg:left-1/2 lg:h-14 lg:w-14 lg:text-xl">
@@ -81,7 +103,7 @@ function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
         </div>
         <h3 className="font-display mt-5 text-2xl font-semibold leading-snug text-navy lg:text-[1.7rem]">{s.title}</h3>
         {s.excerpt && <p className="mt-2 text-lg font-medium leading-relaxed text-turquoise-dark">{s.excerpt}</p>}
-        {s.content && <div className="mt-4 text-[15px] leading-relaxed text-navy/70 [&_h2]:!mt-5 [&_h2]:!pt-0 [&_h2]:!font-sans [&_h2]:!text-[0.72rem] [&_h2]:!font-semibold [&_h2]:!uppercase [&_h2]:!tracking-[0.16em] [&_h2]:!text-turquoise-dark [&_h3]:!mt-4 [&_h3]:!pt-0 [&_h3]:!font-sans [&_h3]:!text-[15px] [&_h3]:!font-semibold [&_h3]:!text-navy"><RichText text={s.content} /></div>}
+        {text && <div className="mt-4 text-[15px] leading-relaxed text-navy/70 [&_h2]:!mt-4 [&_h2]:!pt-0 [&_h2]:!font-sans [&_h2]:!text-[15px] [&_h2]:!font-semibold [&_h2]:!normal-case [&_h2]:!tracking-normal [&_h2]:!text-navy [&_h3]:!mt-4 [&_h3]:!pt-0 [&_h3]:!font-sans [&_h3]:!text-[15px] [&_h3]:!font-semibold [&_h3]:!text-navy"><RichText text={text} /></div>}
         {turum && (
           <Link href="/musteri" className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-turquoise-dark">
             <Ic d={BOX} size={16} />{U.turum} →
