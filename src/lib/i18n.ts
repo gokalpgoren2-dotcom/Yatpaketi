@@ -64,7 +64,7 @@ const tr = {
     ["Bodrum – Datça", "7 gün", "Karaada, Knidos, Gökova"],
     ["Fethiye – Kekova", "7 gün", "Kaş, Kekova, Kaleköy"],
   ] as string[][],
-  whyEyebrow: "Neden yatpaketi?", whyTitle: "Güvenle seçin, rahatça yolculuk yapın",
+  whyEyebrow: "Neden yatpaketi?", whyTitle: "Güvenle seçin, rahatça tatil yapın",
   why: [
     ["Seçilmiş filo", "Tekneleri tek tek inceleyip listeliyoruz."],
     ["Şeffaf süreç", "Rezervasyon talebiniz kesin rezervasyon değildir; onay sonrası netleşir."],
