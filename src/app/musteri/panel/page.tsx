@@ -7,6 +7,7 @@ import { loadExtras, loadPortal, portalDb } from "@/lib/portal";
 import { PrefsForm } from "@/components/turum/PrefsForm";
 import { GuestsForm } from "@/components/turum/GuestsForm";
 import { MenusPicker } from "@/components/turum/MenusPicker";
+import { ShoppingAnswer } from "@/components/turum/ShoppingAnswer";
 import { normalizePhone } from "@/lib/phone";
 import { portalLogout } from "../actions";
 
@@ -95,15 +96,19 @@ export default async function PortalHome() {
   const prefsDone = Boolean(extras && Object.keys(extras.prefs ?? {}).length > 0);
   const menusN = extras?.menus.filter((m) => m.chosen).length ?? 0;
   const hasMenus = (extras?.menus.length ?? 0) > 0;
+  const shopLists = extras?.files.filter((f) => f.kind !== "receipt") ?? [];
+  const shopN = shopLists.length;
+  const shopWaiting = shopLists.filter((f) => !f.approved_at).length;
   type Task = { id: string; icon: string; label: string; value: string; ok: boolean; show: boolean };
   const tasks: Task[] = [
     { id: "sozlesme", icon: ICON.doc, label: "Sözleşmeyi imzalayın", value: !p.contract_path ? "Hazırlanıyor" : signed ? "İmzalandı" : "İmza bekliyor", ok: signed, show: true },
     { id: "misafirler", icon: ICON.users, label: "Misafir listesi", value: guestsN ? `${guestsN} kişi eklendi` : "Bekleniyor", ok: guestsN > 0, show: Boolean(extras) },
     { id: "tercihler", icon: ICON.heart, label: "Tercihleriniz", value: prefsDone ? "Kaydedildi" : "Bekleniyor", ok: prefsDone, show: Boolean(extras) },
     { id: "menuler", icon: ICON.menu, label: "Menü seçimi", value: !hasMenus ? "Yakında" : menusN ? `${menusN} menü seçildi` : "Bekleniyor", ok: menusN > 0, show: Boolean(extras) },
+    { id: "alisveris", icon: ICON.bag, label: "Alışveriş listesi onayı", value: !shopN ? "Hazırlanıyor" : shopWaiting ? "Onayınızı bekliyor" : "Onaylandı", ok: shopN > 0 && !shopWaiting, show: Boolean(extras) },
   ].filter((t) => t.show);
   const myDone = tasks.filter((t) => t.ok).length;
-  const nextTask = tasks.find((t) => !t.ok && !(t.id === "sozlesme" && !p.contract_path) && !(t.id === "menuler" && !hasMenus));
+  const nextTask = tasks.find((t) => !t.ok && !(t.id === "sozlesme" && !p.contract_path) && !(t.id === "menuler" && !hasMenus) && !(t.id === "alisveris" && !shopN));
 
   const card = "scroll-mt-20 rounded-3xl bg-white shadow-[0_1px_2px_rgba(6,38,75,0.06),0_8px_24px_-12px_rgba(6,38,75,0.12)] ring-1 ring-navy/5";
   const pad = "p-5 sm:p-6";
@@ -253,6 +258,40 @@ export default async function PortalHome() {
           </>
         )}
 
+        {/* Alışveriş listesi: ekip yükler, misafir onaylar */}
+        {extras && (() => {
+          const lists = extras.files.filter((f) => f.kind !== "receipt");
+          const waiting = lists.filter((f) => !f.approved_at).length;
+          return (
+            <section id="alisveris" className={`${card} ${pad}`}>
+              {head(ICON.bag, "Alışveriş listesi", !lists.length ? neutral("Henüz yok") : waiting ? chip(false, "Onayınızı bekliyor") : chip(true, "Onaylandı"))}
+              {lists.length ? (
+                <>
+                  <p className="mt-3 text-sm leading-relaxed text-navy/70">Tercihlerinize ve menü seçiminize göre hazırladığımız alışveriş listesini inceleyin. Onayınızdan sonra alışveriş yapılır.</p>
+                  <ul className="mt-4 space-y-3">
+                    {lists.map((f) => (
+                      <li key={f.id} className={`rounded-2xl p-4 ring-1 ${f.approved_at ? "bg-emerald-50/50 ring-emerald-100" : "bg-mist ring-navy/5"}`}>
+                        <div className="flex items-start gap-3">
+                          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-turquoise-dark ring-1 ring-navy/10"><Ic d={ICON.bag} size={18} /></span>
+                          <div className="min-w-0 flex-1">
+                            <p className="text-[15px] font-semibold text-navy">{f.title}</p>
+                            <p className="text-xs text-navy/50">{new Date(f.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</p>
+                          </div>
+                        </div>
+                        {f.note && <p className="mt-3 whitespace-pre-line rounded-xl bg-white p-3.5 text-sm leading-relaxed text-navy/80 ring-1 ring-navy/5">{f.note}</p>}
+                        {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-3 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Listeyi aç</a>}
+                        {!over && <ShoppingAnswer id={f.id} approvedAt={f.approved_at} changeAt={f.change_requested_at} note={f.customer_note} />}
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              ) : (
+                <p className="mt-3 text-sm leading-relaxed text-navy/60">Alışveriş listeniz hazırlandığında burada görünecek. Onayınızdan sonra alışveriş yapılır.</p>
+              )}
+            </section>
+          );
+        })()}
+
         {!over && groupTitle("Ekibimizin hazırlıkları")}
 
         {/* Hazırlık */}
@@ -272,30 +311,6 @@ export default async function PortalHome() {
             ))}
           </ul>
         </section>}
-
-        {/* Alışveriş */}
-        {extras && (
-          <section id="alisveris" className={`${card} ${pad}`}>
-            {head(ICON.bag, "Alışveriş", extras.files.length ? chip(true, `${extras.files.length} dosya`) : neutral("Henüz yok"))}
-            {extras.files.length ? (
-              <ul className="mt-4 space-y-2.5">
-                {extras.files.map((f) => (
-                  <li key={f.id} className="flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
-                    <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-turquoise-dark ring-1 ring-navy/10"><Ic d={f.kind === "receipt" ? ICON.doc : ICON.bag} size={18} /></span>
-                    <div className="min-w-0 flex-1">
-                      <p className="text-[15px] font-semibold text-navy">{f.title}</p>
-                      <p className="text-xs text-navy/50">{f.kind === "receipt" ? "Fatura / fiş" : "Alınanların listesi"} · {new Date(f.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</p>
-                      {f.note && <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-navy/70">{f.note}</p>}
-                      {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-2 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Dosyayı aç</a>}
-                    </div>
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="mt-3 text-sm leading-relaxed text-navy/60">Alışveriş yapıldıktan sonra alınanların listesi ve faturası burada görünecek.</p>
-            )}
-          </section>
-        )}
 
         {/* Konum */}
         {!over && <section id="konum" className={`${card} ${pad}`}>

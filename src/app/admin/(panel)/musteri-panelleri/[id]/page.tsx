@@ -27,7 +27,7 @@ export default async function PortalDetail({ params }: { params: Promise<{ id: s
     supabase.from("portal_prefs").select("data,updated_at").eq("portal_id", id).maybeSingle(),
     supabase.from("portal_guests").select("full_name,gender,birth_date,nationality,doc_type,doc_no,phone").eq("portal_id", id).order("sort_order"),
     supabase.from("portal_menu_choices").select("menu_id,portal_menus(title)").eq("portal_id", id),
-    supabase.from("portal_files").select("id,kind,title,note,path,created_at").eq("portal_id", id).order("created_at", { ascending: false }),
+    supabase.from("portal_files").select("*").eq("portal_id", id).order("created_at", { ascending: false }),
     supabase.from("customer_portals").select("guests_updated_at").eq("id", id).maybeSingle(),
   ]);
   const kv = await supabase.from("customer_portals").select("kvkk_info_at,kvkk_health_at").eq("id", id).maybeSingle();

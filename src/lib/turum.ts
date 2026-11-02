@@ -12,7 +12,7 @@ export type Prefs = {
 };
 export type Guest = { full_name: string; gender?: string | null; birth_date?: string | null; nationality?: string | null; doc_type?: string | null; doc_no?: string | null; phone?: string | null };
 export type PortalMenu = { id: string; title: string; description: string | null; file_path: string | null; chosen: boolean };
-export type PortalFile = { id: string; kind: "shopping" | "receipt"; title: string; note: string | null; path: string | null; created_at: string };
+export type PortalFile = { id: string; kind: "shopping" | "receipt"; title: string; note: string | null; path: string | null; created_at: string; approved_at?: string | null; change_requested_at?: string | null; customer_note?: string | null };
 export type PortalExtras = { kvkk_info_at?: string | null; kvkk_health_at?: string | null; prefs: Prefs; guests: Guest[]; menus: PortalMenu[]; files: PortalFile[] };
 
 

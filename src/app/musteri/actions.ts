@@ -136,3 +136,14 @@ export async function saveMenus(ids: string[]): Promise<{ ok: boolean; error?: s
   await notifyAdmin("Menü seçimi güncellendi", `${ids.length} menü seçti.`);
   return { ok: true };
 }
+
+// Alışveriş listesi: misafir onaylar ya da değişiklik ister
+export async function answerShopping(id: string, ok: boolean, note: string): Promise<{ ok: boolean; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  if (!ok && !note.trim()) return { ok: false, error: "Neyin değişmesini istediğinizi yazın." };
+  const { data, error } = await portalDb().rpc("portal_file_answer", { p_token: token, p_id: id, p_ok: ok, p_note: note });
+  if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
+  await notifyAdmin(ok ? "Alışveriş listesi onaylandı" : "Alışveriş listesinde değişiklik istendi", ok ? `alışveriş listesini onayladı.${note.trim() ? " Not: " + note.trim() : ""}` : `alışveriş listesinde değişiklik istedi: ${note.trim()}`);
+  return { ok: true };
+}

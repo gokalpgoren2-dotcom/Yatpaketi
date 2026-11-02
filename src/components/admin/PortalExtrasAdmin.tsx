@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { createClient } from "@/lib/supabase/client";
 import { MARKETS, SERVICES, type Guest, type Prefs } from "@/lib/turum";
 
-export type AdminFile = { id: string; kind: "shopping" | "receipt"; title: string; note: string | null; path: string | null; created_at: string; url: string | null };
+export type AdminFile = { id: string; kind: "shopping" | "receipt"; title: string; note: string | null; path: string | null; created_at: string; url: string | null; approved_at?: string | null; change_requested_at?: string | null; customer_note?: string | null };
 
 const card = "rounded-2xl bg-white p-5 shadow-sm";
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
@@ -23,7 +23,6 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
   const supabase = createClient();
   const router = useRouter();
   const fileRef = useRef<HTMLInputElement>(null);
-  const [kind, setKind] = useState<"shopping" | "receipt">("shopping");
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
@@ -54,11 +53,11 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
       const up = await supabase.storage.from("portal-files").upload(path, f, { contentType: f.type || undefined });
       if (up.error) { setBusy(false); setMsg({ ok: false, text: "Dosya yüklenemedi: " + up.error.message }); return; }
     }
-    const { error } = await supabase.from("portal_files").insert({ portal_id: portalId, kind, title: title.trim(), note: note.trim() || null, path });
+    const { error } = await supabase.from("portal_files").insert({ portal_id: portalId, kind: "shopping", title: title.trim(), note: note.trim() || null, path });
     setBusy(false);
     if (error) { setMsg({ ok: false, text: "Kaydedilemedi: " + error.message }); return; }
     setTitle(""); setNote(""); if (fileRef.current) fileRef.current.value = "";
-    setMsg({ ok: true, text: "Eklendi. Müşteri Turum'da görebilir." });
+    setMsg({ ok: true, text: "Liste eklendi. Müşteri Turum'da görüp onaylayacak; onaylayınca e-posta gelir." });
     router.refresh();
   }
 
@@ -122,28 +121,26 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
 
       {/* Alışveriş */}
       <section className={card}>
-        <h2 className={h2}>Alışveriş listesi ve fatura</h2>
-        <p className="mt-1 text-sm text-navy/60">Alışveriş yapıldıktan sonra alınanların listesini veya faturayı ekleyin; müşteri Turum'da görür.</p>
+        <h2 className={h2}>Alışveriş listesi</h2>
+        <p className="mt-1 text-sm text-navy/60">Alışveriş listesini ekleyin; müşteri Turum&apos;da onaylar ya da değişiklik ister. Onaydan sonra alışveriş yapılır.</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
-          <div className="flex gap-2 sm:col-span-2">
-            {([["shopping", "Alınanların listesi"], ["receipt", "Fatura / fiş"]] as const).map(([v, l]) => (
-              <button key={v} type="button" onClick={() => setKind(v)} className={`rounded-full border px-4 py-2 text-sm font-medium ${kind === v ? "border-navy bg-navy text-white" : "border-navy/15 text-navy"}`}>{l}</button>
-            ))}
-          </div>
-          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık (ör. Biniş alışverişi)" className={input} />
+          <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık (ör. 1. hafta alışveriş listesi)" className={input} />
           <input ref={fileRef} type="file" accept="application/pdf,image/*" className="text-sm" />
-          <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="İsteğe bağlı: alınanları yazabilirsiniz (her satıra bir ürün)" className={`${input} sm:col-span-2`} />
+          <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="Listeyi yazın (her satıra bir ürün) ya da dosya yükleyin" className={`${input} sm:col-span-2`} />
         </div>
         {msg && <p role="status" className={`mt-3 rounded-xl px-4 py-3 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700"}`}>{msg.text}</p>}
         <button type="button" onClick={upload} disabled={busy} className="mt-3 rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white disabled:opacity-50">{busy ? "Yükleniyor…" : "Ekle"}</button>
         {files.length > 0 && (
           <ul className="mt-5 space-y-2">
             {files.map((f) => (
-              <li key={f.id} className="flex flex-wrap items-center gap-3 rounded-xl bg-mist px-4 py-3">
-                <span className="rounded-full bg-white px-2.5 py-1 text-xs font-semibold text-navy/60">{f.kind === "receipt" ? "Fatura" : "Liste"}</span>
-                <span className="flex-1 text-sm font-medium text-navy">{f.title}</span>
-                {f.url && <a href={f.url} target="_blank" rel="noopener" className="text-sm font-semibold text-turquoise-dark">Aç</a>}
-                <button type="button" onClick={() => remove(f)} className="text-sm font-semibold text-red-600">Sil</button>
+              <li key={f.id} className="rounded-xl bg-mist px-4 py-3">
+                <div className="flex flex-wrap items-center gap-3">
+                  <span className={`rounded-full px-2.5 py-1 text-xs font-semibold ${f.approved_at ? "bg-emerald-100 text-emerald-800" : f.change_requested_at ? "bg-amber-100 text-amber-800" : "bg-white text-navy/60"}`}>{f.approved_at ? `Onaylandı · ${stamp(f.approved_at)}` : f.change_requested_at ? "Değişiklik istendi" : "Onay bekliyor"}</span>
+                  <span className="flex-1 text-sm font-medium text-navy">{f.title}</span>
+                  {f.url && <a href={f.url} target="_blank" rel="noopener" className="text-sm font-semibold text-turquoise-dark">Aç</a>}
+                  <button type="button" onClick={() => remove(f)} className="text-sm font-semibold text-red-600">Sil</button>
+                </div>
+                {f.customer_note && <p className="mt-2 rounded-lg bg-white px-3 py-2 text-sm text-navy"><b>Müşterinin notu:</b> {f.customer_note}</p>}
               </li>
             ))}
           </ul>
