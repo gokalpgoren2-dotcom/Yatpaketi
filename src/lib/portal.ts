@@ -40,3 +40,16 @@ export async function loadPortal(): Promise<PortalData | null> {
   if (error || !data) return null;
   return data as PortalData;
 }
+
+// ---- Turum ek bölümleri: misafir tercihleri, misafir listesi, menüler, alışveriş ----
+import type { PortalExtras } from "@/lib/turum";
+export type { Prefs, Guest, PortalMenu, PortalFile, PortalExtras } from "@/lib/turum";
+// SQL (turum-misafir.sql) henüz çalıştırılmadıysa null döner; panel bu bölümleri göstermez.
+export async function loadExtras(): Promise<PortalExtras | null> {
+  const token = await getPortalToken();
+  if (!token) return null;
+  const { data, error } = await portalDb().rpc("portal_extras_get", { p_token: token });
+  if (error || !data) return null;
+  return data as PortalExtras;
+}
+

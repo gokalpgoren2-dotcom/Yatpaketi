@@ -36,6 +36,7 @@ export default async function PanelLayout({ children }: { children: React.ReactN
         { href: "/admin/turlar", label: "Turlar", icon: I.tour },
         { href: "/admin/takvim", label: "Takvim", icon: I.cal },
         { href: "/admin/musteri-panelleri", label: "Müşteri Panelleri", icon: I.user },
+        { href: "/admin/menuler", label: "Menüler (Turum)", icon: I.doc },
         { href: "/admin/iptal-edilenler", label: "İptal Edilenler", icon: I.x },
       ],
     },

@@ -2,7 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { PORTAL_COOKIE, getPortalToken, loadPortal, portalDb } from "@/lib/portal";
+import { PORTAL_COOKIE, getPortalToken, loadPortal, portalDb, type Prefs, type Guest } from "@/lib/portal";
 import { sendMail, adminMail, esc, wrap, fmtDate, mailFacts } from "@/lib/mailer";
 
 export async function portalLogin(form: FormData) {
@@ -83,5 +83,47 @@ export async function submitPortalReview(name: string, rating: number, body: str
   if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
   const { data, error } = await portalDb().rpc("portal_review_submit", { p_token: token, p_name: name, p_rating: rating, p_body: body, p_photo: photo ?? "" });
   if (error || data !== true) return { ok: false, error: "Yorum gönderilemedi. Alanları kontrol edip tekrar deneyin." };
+  return { ok: true };
+}
+
+// ---- Turum: misafir tercihleri, misafir listesi, menü seçimi ----
+
+async function notifyAdmin(subject: string, body: string) {
+  try {
+    const admin = adminMail();
+    if (!admin) return;
+    const p = await loadPortal();
+    if (!p) return;
+    const who = p.customer_name || p.email;
+    const range = `${fmtDate(p.tour_start)} – ${fmtDate(p.tour_end)}`;
+    const note = `${who} (${p.email}), ${p.boat_name} – ${range}: ${body}`;
+    await sendMail({ to: admin, subject: `${subject} – ${p.boat_name} – ${who}`, text: note + "\n\nAyrıntılar: Yönetim > Müşteri Panelleri", html: wrap(`<p style="margin:0 0 12px">${esc(note)}</p><p style="margin:0">Ayrıntılar: Yönetim › Müşteri Panelleri</p>`, { title: subject }) });
+  } catch { /* e-posta gitmese de kayıt geçerlidir */ }
+}
+
+export async function savePrefs(prefs: Prefs): Promise<{ ok: boolean; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const { data, error } = await portalDb().rpc("portal_prefs_save", { p_token: token, p_data: prefs });
+  if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
+  await notifyAdmin("Misafir tercihleri güncellendi", "misafir tercihlerini kaydetti.");
+  return { ok: true };
+}
+
+export async function saveGuests(guests: Guest[]): Promise<{ ok: boolean; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const { data, error } = await portalDb().rpc("portal_guests_save", { p_token: token, p_guests: guests });
+  if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen bilgileri kontrol edip tekrar deneyin." };
+  await notifyAdmin("Misafir listesi güncellendi", `misafir listesini kaydetti (${guests.filter((g) => g.full_name.trim()).length} kişi).`);
+  return { ok: true };
+}
+
+export async function saveMenus(ids: string[]): Promise<{ ok: boolean; error?: string }> {
+  const token = await getPortalToken();
+  if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const { data, error } = await portalDb().rpc("portal_menus_save", { p_token: token, p_ids: ids });
+  if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
+  await notifyAdmin("Menü seçimi güncellendi", `${ids.length} menü seçti.`);
   return { ok: true };
 }

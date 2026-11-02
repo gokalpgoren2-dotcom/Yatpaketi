@@ -3,7 +3,10 @@ import { redirect } from "next/navigation";
 import { Logo } from "@/components/Logo";
 import { ContractSection } from "@/components/ContractSection";
 import { ReviewForm } from "@/components/ReviewForm";
-import { loadPortal, portalDb } from "@/lib/portal";
+import { loadExtras, loadPortal, portalDb } from "@/lib/portal";
+import { PrefsForm } from "@/components/turum/PrefsForm";
+import { GuestsForm } from "@/components/turum/GuestsForm";
+import { MenusPicker } from "@/components/turum/MenusPicker";
 import { normalizePhone } from "@/lib/phone";
 import { portalLogout } from "../actions";
 
@@ -30,6 +33,10 @@ const ICON = {
   cal: "M5 5h14v15H5zM5 10h14M9 3v4M15 3v4",
   chat: "M4 5h16v11H8l-4 4z",
   lock: "M7 11V8a5 5 0 0110 0v3M6 11h12v9H6z",
+  users: "M16 20v-1.5a3.5 3.5 0 00-3.5-3.5h-5A3.5 3.5 0 004 18.5V20M10 11.5a3.5 3.5 0 100-7 3.5 3.5 0 000 7zM20 20v-1.5a3.5 3.5 0 00-2.5-3.35M15.5 4.6a3.5 3.5 0 010 6.8",
+  heart: "M12 20s-8-4.5-8-11a4.5 4.5 0 018-2.8A4.5 4.5 0 0120 9c0 6.5-8 11-8 11z",
+  menu: "M7 3v8M5 3v4a2 2 0 004 0V3M7 11v10M17 3c-1.7 1-3 3.2-3 6v4h3v8",
+  bag: "M5 8h14l-1 12H6L5 8zM9 8V6a3 3 0 016 0v2",
   star: "M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z",
 };
 
@@ -37,6 +44,7 @@ export default async function PortalHome() {
   const p = await loadPortal();
   if (!p) redirect("/musteri");
 
+  const extras = await loadExtras();
   let contractUrl: string | null = null;
   let downloadUrl: string | null = null;
   const db = portalDb();
@@ -45,6 +53,18 @@ export default async function PortalHome() {
     const [view, dl] = await Promise.all([store.createSignedUrl(p.contract_path, 600), store.createSignedUrl(p.contract_path, 600, { download: "sozlesme" })]);
     contractUrl = view.data?.signedUrl ?? null;
     downloadUrl = dl.data?.signedUrl ?? null;
+  }
+
+  // Menü ve alışveriş dosyaları için kısa süreli bağlantılar
+  const fileStore = db.storage.from("portal-files");
+  const signFile = async (path: string | null, dl?: string) => (path ? (await fileStore.createSignedUrl(path, 1800, dl ? { download: dl } : undefined)).data?.signedUrl ?? null : null);
+  const menuUrls: Record<string, string> = {};
+  const fileUrls: Record<string, string> = {};
+  if (extras) {
+    await Promise.all([
+      ...extras.menus.map(async (m) => { const u = await signFile(m.file_path); if (u) menuUrls[m.id] = u; }),
+      ...extras.files.map(async (f) => { const u = await signFile(f.path); if (u) fileUrls[f.id] = u; }),
+    ]);
   }
 
   // Ekibe ulaşma düğmesi için site ayarlarındaki WhatsApp numarası (herkese açık ayar).
@@ -160,6 +180,61 @@ export default async function PortalHome() {
           {head(ICON.doc, "Sözleşme", signed ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">İmzalandı</span> : undefined)}
           <ContractSection viewUrl={contractUrl} downloadUrl={downloadUrl} signedAt={p.signed_at} />
         </section>
+
+        {extras && !over && (
+          <>
+            {/* Misafir listesi (transit log) */}
+            <section id="misafirler" className={card}>
+              {head(ICON.users, "Misafir listesi", extras.guests.length ? <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">{extras.guests.length} kişi</span> : <span className="rounded-full bg-amber-100 px-3 py-1 text-xs font-semibold text-amber-800">Bekleniyor</span>)}
+              <div className="mt-4 rounded-2xl bg-turquoise/10 p-4 text-sm leading-relaxed text-navy ring-1 ring-turquoise/25">
+                <b>Neden gerekli?</b> Yatın tur öncesi limandan çıkış yapabilmesi için tüm misafirlerin bilgileri <b>transit log</b> kaydına girilmelidir. Lütfen yatta bulunacak herkesi, kimlik veya pasaportundaki bilgilerle, turdan en az 3 gün önce ekleyin. Bilgileriniz yalnızca bu kayıt için kullanılır.
+              </div>
+              <GuestsForm initial={extras.guests} />
+            </section>
+
+            {/* Misafir tercihleri */}
+            <section id="tercihler" className={card}>
+              {head(ICON.heart, "Misafir tercihleri")}
+              <p className="mt-3 text-sm leading-relaxed text-navy/70">Size en uygun turu hazırlayabilmemiz için birkaç tercihinizi öğrenmek istiyoruz. İstediğiniz zaman değiştirebilirsiniz.</p>
+              <PrefsForm initial={extras.prefs} tourStart={p.tour_start} tourEnd={p.tour_end} />
+            </section>
+
+            {/* Menüler */}
+            <section id="menuler" className={card}>
+              {head(ICON.menu, "Menüler")}
+              {extras.menus.length ? (
+                <>
+                  <p className="mt-3 text-sm leading-relaxed text-navy/70">Şefimizin hazırladığı menülerden beğendiklerinizi seçin. Kumanya ve yemek planı seçiminize göre hazırlanır.</p>
+                  <MenusPicker menus={extras.menus} urls={menuUrls} />
+                </>
+              ) : (
+                <p className="mt-4 rounded-2xl bg-mist p-4 text-sm leading-relaxed text-navy/70 ring-1 ring-navy/5">Menüler ekibimiz tarafından yakında buraya eklenecek. Eklendiğinde beğendiklerinizi seçebileceksiniz.</p>
+              )}
+            </section>
+
+            {/* Alışveriş */}
+            <section id="alisveris" className={card}>
+              {head(ICON.bag, "Alışveriş")}
+              {extras.files.length ? (
+                <ul className="mt-4 space-y-2.5">
+                  {extras.files.map((f) => (
+                    <li key={f.id} className="flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
+                      <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white text-turquoise-dark ring-1 ring-navy/10"><Ic d={f.kind === "receipt" ? ICON.doc : ICON.bag} size={18} /></span>
+                      <div className="min-w-0 flex-1">
+                        <p className="text-[15px] font-semibold text-navy">{f.title}</p>
+                        <p className="text-xs text-navy/50">{f.kind === "receipt" ? "Fatura / fiş" : "Alınanların listesi"} · {new Date(f.created_at).toLocaleDateString("tr-TR", { day: "numeric", month: "long" })}</p>
+                        {f.note && <p className="mt-1.5 whitespace-pre-line text-sm leading-relaxed text-navy/70">{f.note}</p>}
+                        {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-2 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Dosyayı aç</a>}
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="mt-4 rounded-2xl bg-mist p-4 text-sm leading-relaxed text-navy/70 ring-1 ring-navy/5">Alışveriş yapıldıktan sonra alınanların listesi ve faturası burada görünecek.</p>
+              )}
+            </section>
+          </>
+        )}
 
         {/* Hazırlık */}
         {!over && <section id="hazirlik" className={card}>
