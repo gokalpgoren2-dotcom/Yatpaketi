@@ -35,7 +35,7 @@ const hit = (a: Box, b: Box) => a.x < b.x + b.w && b.x < a.x + a.w && a.y < b.y 
 
 export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id: string; slug: string; stops: string[]; loop: boolean; compact?: boolean; label: string }) {
   const way = ROUTE_WAYS[slug];
-  const wayLL: LL[] = way.map((w) => (typeof w === "string" ? placeOf(w)! : w)).filter(Boolean);
+  const wayLL: LL[] = way.map((w) => (typeof w === "string" ? placeOf(w, slug)! : w)).filter(Boolean);
 
   // görünüm: güzergâhı çerçeveleyen kutu, kenar payı ve 600x340 oranına uydurma
   const lat0 = wayLL.reduce((s, p) => s + p[1], 0) / wayLL.length;
@@ -56,14 +56,14 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
   const land = `${smooth(coast, false, 0.6)} L${(W + 2000).toFixed(0)} ${coast[coast.length - 1][1].toFixed(0)} L${(W + 2000).toFixed(0)} -3000 L-3000 -3000 L-3000 ${coast[0][1].toFixed(0)} Z`;
   const coastLine = smooth(coast, false, 0.6);
   const isles = ISLANDS.map((isl) => smooth(isl.map(pr), true, 0.6));
-  const route = way.map((w) => pr(typeof w === "string" ? placeOf(w)! : w));
+  const route = way.map((w) => pr(typeof w === "string" ? placeOf(w, slug)! : w));
   const d = smooth(route, false, 1);
   const g = `gc-${id}`;
   const fs = compact ? 17 : 12.5;
 
   // duraklar (aynı yer iki kez geçerse tek işaret)
   const seen = new Set<string>();
-  const marks = stops.map((name, i) => ({ name, i, p: placeOf(name) })).filter((m) => m.p && !seen.has(m.name) && seen.add(m.name)).map((m) => ({ ...m, xy: pr(m.p!) }));
+  const marks = stops.map((name, i) => ({ name, i, p: placeOf(name, slug) })).filter((m) => m.p && !seen.has(m.name) && seen.add(m.name)).map((m) => ({ ...m, xy: pr(m.p!) }));
   const startName = stops[0], endName = stops[stops.length - 1];
   const isEnd = (n: string) => n === startName || (!loop && n === endName);
 

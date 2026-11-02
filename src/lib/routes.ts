@@ -295,13 +295,36 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "bodrum-yarimadasi": { from: "Bodrum", to: "Bodrum", port: "bodrum", stops: ["Bodrum", "Karaada", "Gümüşlük", "Serbest gün", "Yalıkavak", "Serbest gün", "Bodrum"] },
+  "bodrum-yarimadasi": {
+    from: "Bodrum", to: "Bodrum", port: "bodrum",
+    stops: ["Bodrum", "Akvaryum Koyu", "Bitez", "Gümüşlük", "Cennet Koyu", "Yalıkavak", "Karaada"],
+    days: {
+      tr: [
+        "Bodrum'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam kalenin karşısında.",
+        "Adını berrak suyundan alan koyda, dipteki kumu ve balıkları görebileceğiniz bir yüzme günü.",
+        "Mandalina bahçeleri ve sakin koyuyla Bitez'de yüzme, akşam sahilde yemek.",
+        "Antik Myndos kalıntılarının yanındaki balıkçı köyünde yüzme ve gün batımında balık yemeği.",
+        "Yarımadanın batı kıyısında, berrak ve sakin sulu koyda yüzme ve dinlenme.",
+        "Yel değirmenleri ve marinasıyla Yalıkavak'ta yüzme, akşam marinada yürüyüş.",
+        "Mağarasındaki sıcak su kaynağı ve şifalı çamuruyla bilinen adada son yüzme; ardından Bodrum'a dönüş ve teslim.",
+      ],
+      en: [
+        "Welcome in Bodrum, settling into the cabins and provisioning; first evening facing the castle.",
+        "A day of swimming in the cove named for its clear water, where you can see the sandy bottom and the fish.",
+        "Swimming at Bitez with its tangerine orchards and calm bay; dinner on the shore.",
+        "Swimming at the fishing village beside the ruins of ancient Myndos, and a fish dinner at sunset.",
+        "Swimming and rest in a clear, calm cove on the western shore of the peninsula.",
+        "Swimming at Yalıkavak with its windmills and marina; an evening stroll along the marina.",
+        "A last swim at the island known for the hot spring and healing mud in its cave; then back to Bodrum for hand-over.",
+      ],
+    },
+  },
   "bodrum-gokova-korfezi-rotasi": { from: "Bodrum", to: "Bodrum", port: "bodrum", stops: ["Bodrum", "Karaada", "Gökova", "Sedir Adası", "Akyaka", "Serbest gün", "Bodrum"] },
   "bodrum-gocek": { from: "Bodrum", to: "Göcek", port: "bodrum", stops: ["Bodrum", "Knidos", "Datça", "Marmaris", "Ekincik", "Tersane Adası", "Göcek"] },
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Cennet Koyu": "Cennet Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
