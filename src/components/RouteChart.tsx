@@ -1,6 +1,6 @@
-// Rota şeması: ana sayfa haritasıyla aynı çizim dili. Turkuaz deniz ve dalgacıklar, kumsal kenarlı yeşil kara ve çamlar,
-// beyaz tabelalı duraklar ve rota boyunca sallanarak ilerleyen bir gulet. Gerçek harita değildir, rotanın akışını gösterir.
-// Dönüş rotaları bir adanın çevresinde halka, tek yön rotalar iki kıyı arasında soldan sağa çizilir.
+// Rota şeması: sade bir deniz haritası. Girintili kıyılar ve karada yükselti çizgileri, denizde derinlik çizgileri,
+// kıyı dibinde sığ su, ince pusula; durak adları beyaz yazıyla, kalkış ve varış limanları lacivert etiketle. Rota boyunca gulet ilerler.
+// Gerçek harita değildir, rotanın akışını gösterir. Dönüş rotaları bir adanın çevresinde, tek yön rotalar iki kıyı arasında çizilir.
 type P = [number, number];
 const W = 600, H = 340;
 
@@ -36,33 +36,39 @@ function smooth(pts: P[], closed: boolean): string {
   return closed ? d + "Z" : d;
 }
 
-// Kenardan giren kıyı şeridi (üst ya da alt). base: kıyının ortalama yüksekliği.
-function coast(r: () => number, base: number, top: boolean) {
-  const pts: P[] = [];
-  for (let x = -30; x <= W + 30; x += 50) pts.push([x, base + (r() - 0.5) * 34]);
-  const line = smooth(pts, false);
-  const edge = top ? -20 : H + 20;
-  const area = `${line} L${W + 30} ${edge} L-30 ${edge}Z`;
-  const trees: P[] = [];
-  for (const [x, y] of pts) for (let k = 0; k < 2; k++) {
-    const tx = x + (r() - 0.5) * 44, ty = top ? y - 10 - r() * 26 : y + 12 + r() * 26;
-    if (top ? ty > 4 : ty < H - 4) trees.push([tx, ty]);
-  }
-  return { line, area, trees };
+// Doğal görünen kıyı: farklı dalga boylarındaki girinti çıkıntıların toplamı.
+function noise(r: () => number) {
+  const w = [0, 1, 2].map(() => ({ f: 0.01 + r() * 0.03, p: r() * 6.3 }));
+  return (x: number, amp: number) => amp * (0.55 * Math.sin(x * w[0].f + w[0].p) + 0.3 * Math.sin(x * w[1].f * 2.3 + w[1].p) + 0.15 * Math.sin(x * w[2].f * 5.1 + w[2].p));
 }
 
-// Kapalı ada şekli
+// Kenardan giren kıyı (üst ya da alt). Kıyı çizgisi, karanın alanı ve iç/dış eş yükselti çizgileri döner.
+function coast(r: () => number, base: number, top: boolean) {
+  const n = noise(r);
+  const line = (off: number) => {
+    const pts: P[] = [];
+    for (let x = -30; x <= W + 30; x += 22) pts.push([x, base + n(x, 20) + off]);
+    return smooth(pts, false);
+  };
+  const s = top ? -1 : 1; // karaya doğru yön
+  const edge = top ? -30 : H + 30;
+  return {
+    line: line(0),
+    area: `${line(0)} L${W + 30} ${edge} L-30 ${edge}Z`,
+    hills: [10, 20, 30].map((k) => line(s * k)),
+    depth: [16, 34, 58].map((k) => line(-s * k)),
+  };
+}
+
+// Kapalı ada; yükselti çizgileri için içe doğru küçültülmüş kopyaları da döner.
 function island(r: () => number, cx: number, cy: number, rx: number, ry: number) {
-  const n = 9;
-  const pts: P[] = Array.from({ length: n }, (_, i) => {
-    const a = (i / n) * Math.PI * 2, k = 0.82 + r() * 0.3;
-    return [cx + Math.cos(a) * rx * k, cy + Math.sin(a) * ry * k] as P;
-  });
-  const trees: P[] = Array.from({ length: Math.round((rx * ry) / 260) }, () => {
-    const a = r() * Math.PI * 2, d = Math.sqrt(r()) * 0.6;
-    return [cx + Math.cos(a) * rx * d, cy + Math.sin(a) * ry * d] as P;
-  });
-  return { d: smooth(pts, true), trees };
+  const n = 14;
+  const k = Array.from({ length: n }, () => 0.8 + r() * 0.32);
+  const ring = (sc: number) => smooth(k.map((kk, i) => {
+    const a = (i / n) * Math.PI * 2;
+    return [cx + Math.cos(a) * rx * kk * sc, cy + Math.sin(a) * ry * kk * sc] as P;
+  }), true);
+  return { d: ring(1), hills: [0.72, 0.45].map(ring), depth: [1.22, 1.5].map(ring) };
 }
 
 const GULET = (
@@ -70,14 +76,9 @@ const GULET = (
     <path d="M62 50 V102 M100 60 V102" stroke="#e8f4fb" strokeWidth="2" />
     <path d="M60 52 V98 H36 Z" fill="#fff" />
     <path d="M98 62 V98 H76 Z" fill="#e6f3fb" />
-    <path d="M54 92 H108 L112 100 H52 Z" fill="#e6f3fb" />
-    <path d="M30 100 H128 Q124 118 106 118 H56 Q38 116 30 100 Z" fill="#12395f" />
+    <path d="M30 100 H128 Q124 118 106 118 H56 Q38 116 30 100 Z" fill="#0b3a6a" />
   </g>
 );
-
-function Tree({ p, s }: { p: P; s: number }) {
-  return <g><circle cx={p[0]} cy={p[1]} r={4.2 * s} fill="#3f7c52" /><circle cx={p[0] - 1.1 * s} cy={p[1] - 1.3 * s} r={2.3 * s} fill="#68ab76" /></g>;
-}
 
 export function RouteChart({ id, stops, loop, compact = false, label }: { id: string; stops: string[]; loop: boolean; compact?: boolean; label: string }) {
   const closed = loop && stops.length > 2;
@@ -85,20 +86,15 @@ export function RouteChart({ id, stops, loop, compact = false, label }: { id: st
   const d = smooth(pts, closed);
   const r = rng(id.replace(/^(c-|home-|hero-)/, ""));
   const g = `rc-${id}`;
-  const fs = compact ? 19 : 13;
-  const ts = compact ? 1.2 : 1;
+  const fs = compact ? 17 : 12.5;
 
-  // kara: tek yönde üstte ve altta kıyı, dönüşte ortada bir ada ve köşelerde kara
-  const shores = closed ? [] : [coast(r, 34, true), coast(r, H - 30, false)];
+  const shores = closed ? [] : [coast(r, 30, true), coast(r, H - 26, false)];
+  const mid = pts[Math.floor(pts.length / 2)];
   const isles = closed
-    ? [island(r, W / 2, H / 2 + 6, 112, 48), island(r, 30, 24, 70, 44), island(r, W - 26, H - 20, 76, 46)]
-    : [island(r, pts[Math.floor(pts.length / 2)][0] + 40, pts[Math.floor(pts.length / 2)][1] < H / 2 ? 238 : 112, 20, 11)];
-  const waves: P[] = [];
-  for (let k = 0; k < 60 && waves.length < (compact ? 8 : 16); k++) {
-    const p: P = [20 + r() * (W - 40), 60 + r() * (H - 120)];
-    if (pts.every(([x, y]) => Math.hypot(x - p[0], y - p[1]) > 40)) waves.push(p);
-  }
+    ? [island(r, W / 2, H / 2 + 6, 108, 46), island(r, 26, 22, 74, 46), island(r, W - 22, H - 18, 80, 48)]
+    : [island(r, mid[0] + 44, mid[1] < H / 2 ? 236 : 116, 22, 11)];
   const dur = `${Math.max(14, stops.length * 3)}s`;
+
   // tabela yönü: tepedeki durak üstte, çukurdaki altta; uçtaki tabela komşusuna çok yakınsa ters yöne geçer
   const sides = pts.map(([, y], i) => {
     if (closed) return y < H / 2 + 6;
@@ -111,62 +107,112 @@ export function RouteChart({ id, stops, loop, compact = false, label }: { id: st
     if (sides[0] === sides[1] && pts[1][0] - pts[0][0] < 120) sides[0] = !sides[0];
   }
 
+  const lands = [...shores.map((s) => ({ d: s.area, line: s.line, hills: s.hills, depth: s.depth })), ...isles.map((s) => ({ d: s.d, line: s.d, hills: s.hills, depth: s.depth }))];
+
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${stops.join(" → ")}`} className="block h-full w-full">
       <defs>
-        <linearGradient id={`${g}-sea`} x1="0" y1="0" x2="0.4" y2="1">
-          <stop offset="0" stopColor="#2bb7c4" />
-          <stop offset="0.55" stopColor="#1a8fb2" />
-          <stop offset="1" stopColor="#13679a" />
+        <linearGradient id={`${g}-sea`} x1="0" y1="0" x2="0.35" y2="1">
+          <stop offset="0" stopColor="#1d9fba" />
+          <stop offset="0.5" stopColor="#127fa6" />
+          <stop offset="1" stopColor="#0b5683" />
         </linearGradient>
+        <linearGradient id={`${g}-land`} x1="0" y1="0" x2="1" y2="1">
+          <stop offset="0" stopColor="#7aa982" />
+          <stop offset="1" stopColor="#4f8360" />
+        </linearGradient>
+        <radialGradient id={`${g}-vig`} cx="0.5" cy="0.5" r="0.75">
+          <stop offset="0.6" stopColor="#05223f" stopOpacity="0" />
+          <stop offset="1" stopColor="#05223f" stopOpacity="0.35" />
+        </radialGradient>
+        <filter id={`${g}-soft`} x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="7" /></filter>
+        <filter id={`${g}-sh`} x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#05223f" floodOpacity="0.35" /></filter>
       </defs>
+
       <rect width={W} height={H} fill={`url(#${g}-sea)`} />
-      {waves.map((w, i) => <path key={i} d={`M${w[0].toFixed(0)} ${w[1].toFixed(0)} q6 -5 12 0 q6 5 12 0`} stroke="#fff" strokeOpacity="0.28" strokeWidth="1.6" fill="none" strokeLinecap="round" />)}
 
-      {/* sığ su halesi */}
-      {shores.map((s, i) => <path key={"h" + i} d={s.line} fill="none" stroke="#9fe7f0" strokeOpacity="0.45" strokeWidth="22" strokeLinecap="round" />)}
-      {isles.map((s, i) => <path key={"hi" + i} d={s.d} fill="none" stroke="#9fe7f0" strokeOpacity="0.45" strokeWidth="16" strokeLinejoin="round" />)}
-      {/* kara */}
-      {shores.map((s, i) => <path key={"l" + i} d={s.area} fill="#5c9a69" stroke="#efdca3" strokeWidth="4" strokeLinejoin="round" />)}
-      {isles.map((s, i) => <path key={"li" + i} d={s.d} fill="#5c9a69" stroke="#efdca3" strokeWidth="3.5" strokeLinejoin="round" />)}
-      {[...shores.flatMap((s) => s.trees), ...isles.flatMap((s) => s.trees)].map((p, i) => <Tree key={"t" + i} p={p} s={ts} />)}
+      {/* derinlik çizgileri */}
+      {lands.flatMap((l, i) => l.depth.map((dd, k) => (
+        <path key={`dp${i}-${k}`} d={dd} fill="none" stroke="#fff" strokeOpacity={0.14 - k * 0.035} strokeWidth="1" strokeDasharray={k ? "2 5" : undefined} />
+      )))}
+      {/* kıyı dibinde sığ su */}
+      <g filter={`url(#${g}-soft)`}>
+        {lands.map((l, i) => <path key={"sh" + i} d={l.line} fill="none" stroke="#7fe0ea" strokeOpacity="0.55" strokeWidth="20" strokeLinejoin="round" />)}
+      </g>
 
-      {/* rota: teknenin ardında kalan iz gibi beyaz kesikli çizgi */}
-      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.9" strokeWidth={compact ? 3.4 : 2.4} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" className="route-dash" />
+      {/* kara: kumsal kenarı, eğimli yeşil, yükselti çizgileri */}
+      {lands.map((l, i) => (
+        <g key={"ld" + i} filter={`url(#${g}-sh)`}>
+          <path d={l.d} fill={`url(#${g}-land)`} stroke="#eadcb4" strokeWidth="2.4" strokeLinejoin="round" />
+        </g>
+      ))}
+      {lands.flatMap((l, i) => l.hills.map((hd, k) => (
+        <path key={`hl${i}-${k}`} d={hd} fill="none" stroke="#2f5e3f" strokeOpacity={0.22 + k * 0.05} strokeWidth="0.9" />
+      )))}
+
+      {/* pusula (dönüş rotalarında sağ üstte, açık denizde) */}
+      {closed && !compact && (
+        <g transform="translate(548 56)" opacity="0.75">
+          <circle r="20" fill="none" stroke="#fff" strokeOpacity="0.5" strokeWidth="0.8" />
+          <circle r="14" fill="none" stroke="#fff" strokeOpacity="0.3" strokeWidth="0.6" />
+          <path d="M0 -24 L3 0 L0 24 L-3 0Z M-24 0 L0 3 L24 0 L0 -3Z" fill="#fff" fillOpacity="0.35" />
+          <path d="M0 -24 L3 0 L-3 0Z" fill="#fff" />
+          <text y="-28" textAnchor="middle" fontSize="8" fontWeight="700" fill="#fff" letterSpacing="1">N</text>
+        </g>
+      )}
+
+      {/* rota: teknenin bıraktığı iz */}
+      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth={compact ? 9 : 7} strokeLinecap="round" />
+      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.92" strokeWidth={compact ? 2.6 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" className="route-dash" />
 
       {/* gulet */}
       {stops.length > 1 && (
         <g>
           <animateMotion dur={dur} repeatCount="indefinite" path={d} />
-          <ellipse cx="0" cy="3" rx={compact ? 30 : 22} ry="2.5" fill="#fff" fillOpacity="0.45" />
-          <g transform={`scale(${compact ? 0.36 : 0.3}) translate(-80 -118)`}><g className="pk-sway">{GULET}</g></g>
+          <ellipse cx="0" cy="3" rx={compact ? 26 : 19} ry="2" fill="#fff" fillOpacity="0.4" />
+          <g transform={`scale(${compact ? 0.32 : 0.26}) translate(-80 -118)`} filter={`url(#${g}-sh)`}><g className="pk-sway">{GULET}</g></g>
         </g>
       )}
 
-      {/* durak tabelaları */}
+      {/* duraklar */}
       {pts.map(([x, y], i) => {
         const end = i === 0 || (!closed && i === pts.length - 1);
         const show = !compact || end;
         const above = sides[i];
         const name = stops[i];
-        const w = name.length * fs * 0.6 + (compact ? 26 : 20) + (end ? fs * 1.3 : 0);
-        const dy = (above ? -1 : 1) * (compact ? 34 : 28);
-        const bx = Math.max(w / 2 + 4, Math.min(W - w / 2 - 4, x));
+        const up = name.toLocaleUpperCase("tr");
+        const dy = (above ? -1 : 1) * (compact ? 30 : 22);
+        if (end) {
+          const ef = fs * 0.82;
+          const w = up.length * ef * 0.72 + ef * 3.2;
+          const bx = Math.max(w / 2 + 4, Math.min(W - w / 2 - 4, x));
+          return (
+            <g key={i}>
+              <circle cx={x} cy={y} r={compact ? 9 : 7} fill="#fff" fillOpacity="0.25" />
+              <circle cx={x} cy={y} r={compact ? 5 : 4} fill="#0b3a6a" stroke="#fff" strokeWidth="1.8" />
+              {show && (
+                <g filter={`url(#${g}-sh)`}>
+                  <rect x={bx - w / 2} y={y + dy - ef * 1.1} width={w} height={ef * 2.2} rx={ef * 1.1} fill="#0b3a6a" />
+                  <circle cx={bx - w / 2 + ef * 1.15} cy={y + dy} r={ef * 0.28} fill={i === 0 ? "#1bb4c4" : "#ffffff"} />
+                  <text x={bx + ef * 0.55} y={y + dy + ef * 0.36} textAnchor="middle" fontSize={ef} fontWeight="700" letterSpacing={ef * 0.12} fill="#fff">{up}</text>
+                </g>
+              )}
+            </g>
+          );
+        }
+        const tx = Math.max(name.length * fs * 0.3 + 6, Math.min(W - name.length * fs * 0.3 - 6, x));
         return (
           <g key={i}>
-            {show && <path d={`M${x} ${y} L${bx} ${y + dy}`} stroke="#fff" strokeOpacity="0.85" strokeWidth="1.4" />}
-            <circle cx={x} cy={y} r={end ? (compact ? 9 : 7) : compact ? 6 : 5} fill="#fff" fillOpacity="0.5" />
-            <circle cx={x} cy={y} r={end ? (compact ? 6 : 4.5) : compact ? 3.8 : 3.2} fill={end ? "#12395f" : "#1bb4c4"} stroke="#fff" strokeWidth="1.6" />
+            <circle cx={x} cy={y} r={compact ? 4.5 : 3.6} fill="#fff" />
+            <circle cx={x} cy={y} r={compact ? 2 : 1.6} fill="#127fa6" />
             {show && (
-              <g>
-                <rect x={bx - w / 2} y={y + dy - fs * 0.95} width={w} height={fs * 1.9} rx={fs * 0.95} fill="#fff" stroke="#0b3a6a" strokeOpacity="0.15" />
-                {end && <circle cx={bx - w / 2 + fs * 1.0} cy={y + dy} r={fs * 0.32} fill={i === 0 ? "#1bb4c4" : "#12395f"} />}
-                <text x={bx + (end ? fs * 0.65 : 0)} y={y + dy + fs * 0.36} textAnchor="middle" fontSize={fs} fontWeight="700" fill="#0b3a6a">{name}</text>
-              </g>
+              <text x={tx} y={y + dy + (above ? 0 : fs * 0.4)} textAnchor="middle" fontSize={fs} fontWeight="600" fill="#fff" stroke="#05223f" strokeOpacity="0.45" strokeWidth="3" paintOrder="stroke" letterSpacing="0.2">{name}</text>
             )}
           </g>
         );
       })}
+
+      <rect width={W} height={H} fill={`url(#${g}-vig)`} pointerEvents="none" />
     </svg>
   );
 }
