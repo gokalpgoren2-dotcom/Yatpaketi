@@ -20,8 +20,8 @@ export async function HomeView({ lang }: { lang: Lang }) {
       <Header lang={lang} />
       <main>
         <Hero home={home} destinations={dests} categories={cats} lang={lang} />
+        <FeaturedBoats items={shown} sample={sample} cats={cats} lang={lang} />
         <Destinations items={dests} lang={lang} />
-        <FeaturedBoats items={shown} sample={sample} lang={lang} />
         <Blog items={posts} lang={lang} />
         {lang === "tr" && <InstagramSection />}
         <HowItWorks lang={lang} />

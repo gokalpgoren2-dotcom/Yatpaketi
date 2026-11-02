@@ -16,20 +16,26 @@ import { gt } from "@/lib/guide-text";
 import { PostCard, postHref } from "./PostCard";
 import { href, t, type Lang } from "@/lib/i18n";
 
-function Heading({ eyebrow, title, id, action }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string } }) {
+function Heading({ eyebrow, title, id, action, dark = false }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string }; dark?: boolean }) {
   return (
-    <div id={id} className="mb-8 flex scroll-mt-24 flex-wrap items-end justify-between gap-4 lg:mb-10">
+    <div id={id} className="mb-8 flex scroll-mt-24 flex-wrap items-end justify-between gap-4 lg:mb-12">
       <div className="max-w-2xl">
-        <p className="mb-2 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">{eyebrow}</p>
-        <h2 className="font-display text-3xl font-medium text-navy lg:text-4xl">{title}</h2>
+        <p className={`text-xs font-semibold uppercase tracking-[0.28em] ${dark ? "text-turquoise" : "text-turquoise-dark"}`}>{eyebrow}</p>
+        <h2 className={`font-display mt-3 text-3xl font-semibold leading-tight lg:text-5xl ${dark ? "text-white" : "text-navy"}`}>{title}</h2>
       </div>
       {action && (
-        <Link href={action.href} className="rounded-full border border-navy/15 px-5 py-2.5 text-sm font-semibold text-navy transition hover:border-turquoise hover:text-turquoise-dark">
-          {action.label} →
+        <Link href={action.href} className={`group flex items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold ring-1 transition ${dark ? "text-white ring-white/25 hover:bg-white/10" : "text-navy ring-navy/15 hover:ring-turquoise"}`}>
+          {action.label}
+          <span className={`flex h-8 w-8 items-center justify-center rounded-full transition group-hover:translate-x-0.5 ${dark ? "bg-turquoise text-navy" : "bg-navy text-white group-hover:bg-turquoise"}`} aria-hidden>→</span>
         </Link>
       )}
     </div>
   );
+}
+
+const SEC_WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
+function Ic({ d, size = 22 }: { d: string; size?: number }) {
+  return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>;
 }
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
@@ -57,12 +63,22 @@ export function Categories({ items, lang = "tr" }: { items: Category[]; lang?: L
   );
 }
 
-export function FeaturedBoats({ items, sample, lang = "tr" }: { items: Boat[]; sample: boolean; lang?: Lang }) {
+export function FeaturedBoats({ items, sample, cats = [], lang = "tr" }: { items: Boat[]; sample: boolean; cats?: Category[]; lang?: Lang }) {
   const L = t(lang);
   return (
-    <section className="py-14 lg:py-20">
+    <section className="py-14 lg:py-24">
       <div className={wrap}>
         <Heading id="tekneler" eyebrow={L.featuredEyebrow} title={L.featuredTitle} action={{ href: href(lang, "/tekneler"), label: L.allBoatsBtn }} />
+        {cats.length > 0 && (
+          <div className="no-scrollbar -mx-5 -mt-2 mb-8 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:-mt-4 lg:flex-wrap lg:px-0">
+            {cats.map((c) => (
+              <Link key={c.slug} href={href(lang, `/tekne-tipleri/${c.slug}`)} className="group flex shrink-0 items-center gap-2.5 rounded-full bg-mist py-1.5 pl-1.5 pr-4 text-sm font-semibold text-navy transition hover:bg-navy hover:text-white">
+                <span className="flex h-8 w-8 items-center justify-center rounded-full bg-white text-turquoise-dark transition group-hover:bg-turquoise group-hover:text-white"><BoatIcon name={c.slug} /></span>
+                {c.name}
+              </Link>
+            ))}
+          </div>
+        )}
         {sample && <p className="-mt-4 mb-6 text-sm text-navy/50">{L.sampleHome}</p>}
         {items.length === 0 ? (
           <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">{L.noBoatsHome}</p>
@@ -80,20 +96,28 @@ export function FeaturedBoats({ items, sample, lang = "tr" }: { items: Boat[]; s
   );
 }
 
+const STEP_IC = ["M4 5h16v11H8l-4 4V5ZM8 9h8M8 12h5", "M4 6h16v14H4zM8 3v4M16 3v4M4 10h16M9 15l2 2 4-4", "M12 3v13l7-1L12 3ZM11 6v9H6l5-9ZM3 19c2 1.5 4 1.5 6 0s4-1.5 6 0 4 1.5 6 0"];
 export function HowItWorks({ lang = "tr" }: { lang?: Lang }) {
   const L = t(lang);
   const steps = L.steps;
   return (
     <section className="py-14 lg:py-20">
       <div className={wrap}>
-        <div className="rounded-[2rem] bg-mist p-6 sm:p-10 lg:p-14">
-          <Heading eyebrow={L.howEyebrow} title={L.howTitle} />
-          <ol className="grid gap-6 md:grid-cols-3">
-            {steps.map(([n, t, d]) => (
-              <li key={n} className="relative rounded-2xl bg-white p-6 shadow-sm">
-                <span className="flex h-11 w-11 items-center justify-center rounded-full bg-turquoise text-lg font-semibold text-white">{n}</span>
-                <h3 className="mt-5 text-lg font-semibold text-navy">{t}</h3>
-                <p className="mt-2 text-sm leading-relaxed text-navy/65">{d}</p>
+        <div className="relative isolate overflow-hidden rounded-[2.5rem] px-6 py-12 sm:px-10 lg:px-14 lg:py-20" style={{ background: "linear-gradient(150deg, #05204a 0%, #0a3f63 55%, #0b6a86 100%)" }}>
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-24 overflow-hidden opacity-70" aria-hidden>
+            <svg className="wave-a absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(160)} fill="rgba(127,220,230,0.14)" /></svg>
+          </div>
+          <Heading dark eyebrow={L.howEyebrow} title={L.howTitle} action={{ href: href(lang, "/kiralama-sureci"), label: lang === "en" ? "Charter process" : "Kiralama süreci" }} />
+          <ol className="relative grid gap-5 md:grid-cols-3 lg:gap-6">
+            <span className="absolute left-8 right-8 top-[2.6rem] hidden h-0.5 bg-[repeating-linear-gradient(90deg,rgba(127,220,230,0.45)_0_10px,transparent_10px_20px)] md:block" aria-hidden />
+            {steps.map(([n, title, d], i) => (
+              <li key={n} className="relative rounded-3xl bg-white/[0.06] p-6 ring-1 ring-white/10 backdrop-blur transition hover:bg-white/[0.1] lg:p-7">
+                <div className="flex items-center justify-between">
+                  <span className="relative z-10 flex h-14 w-14 items-center justify-center rounded-2xl bg-turquoise text-navy shadow-lg shadow-turquoise/25"><Ic d={STEP_IC[i % 3]} size={24} /></span>
+                  <span className="font-display text-5xl font-semibold text-white/10">{n}</span>
+                </div>
+                <h3 className="font-display mt-6 text-xl font-semibold text-white">{title}</h3>
+                <p className="mt-2 text-sm leading-relaxed text-white/70">{d}</p>
               </li>
             ))}
           </ol>
@@ -106,22 +130,26 @@ export function HowItWorks({ lang = "tr" }: { lang?: Lang }) {
 export function Destinations({ items, lang = "tr" }: { items: Destination[]; lang?: Lang }) {
   const L = t(lang);
   return (
-    <section className="py-14 lg:py-20">
+    <section className="bg-mist py-14 lg:py-24">
       <div className={wrap}>
         <Heading id="limanlar" eyebrow={L.destEyebrow} title={L.destTitle} action={{ href: href(lang, "/limanlar"), label: L.seeAll }} />
         <Scroller center className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-4 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
-          {items.map((d) => (
+          {items.map((d, i) => (
             <Link
               key={d.slug}
               href={href(lang, `/limanlar/${d.slug}`)}
-              className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-3xl sm:w-[42%] lg:w-[23.5%]"
+              className="group relative aspect-[4/5] w-[76%] shrink-0 snap-start overflow-hidden rounded-[1.75rem] shadow-lg shadow-navy/10 sm:w-[42%] lg:w-[23.5%]"
             >
-              <PortArt slug={d.slug} className="absolute inset-0 h-full w-full transition duration-500 group-hover:scale-105" />
-              <div className="absolute inset-0 bg-gradient-to-t from-navy/75 via-transparent to-transparent" />
-              <div className="absolute bottom-0 p-5 text-white">
-                <p className="text-sm text-white/85">{L.country}</p>
-                <h3 className="font-display text-3xl">{d.name}</h3>
-                <p className="mt-1 text-sm text-white/85">{d.blurb}</p>
+              <PortArt slug={d.slug} className="absolute inset-0 h-full w-full transition duration-700 group-hover:scale-105" />
+              <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
+              <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 font-display text-xs font-semibold text-navy shadow backdrop-blur">{String(i + 1).padStart(2, "0")}</span>
+              <div className="absolute inset-x-0 bottom-0 p-5 text-white">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquoise">{L.country}</p>
+                <h3 className="font-display mt-1 text-3xl font-semibold">{d.name}</h3>
+                <div className="mt-1 flex items-end justify-between gap-3">
+                  <p className="line-clamp-2 text-sm text-white/80">{d.blurb}</p>
+                  <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 ring-1 ring-white/30 backdrop-blur transition group-hover:bg-turquoise group-hover:text-navy group-hover:ring-turquoise" aria-hidden>→</span>
+                </div>
               </div>
             </Link>
           ))}
@@ -185,21 +213,26 @@ export function Routes({ lang = "tr" }: { lang?: Lang }) {
   );
 }
 
+const WHY_IC = [
+  "M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4ZM9 12l2 2 4-4",
+  "M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z",
+  "M12 19a7 7 0 1 0 0-14 7 7 0 0 0 0 14ZM12 14a2 2 0 1 0 0-4 2 2 0 0 0 0 4ZM12 2v3M12 19v3M2 12h3M19 12h3",
+  "M12 20s-8-4.5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 9c0 6.5-8 11-8 11Z",
+];
 export function WhyUs({ lang = "tr" }: { lang?: Lang }) {
   const L = t(lang);
   const items = L.why;
   return (
-    <section className="py-14 lg:py-20" id="hakkimizda">
+    <section className="py-14 lg:py-24" id="hakkimizda">
       <div className={wrap}>
-        <Heading eyebrow={L.whyEyebrow} title={L.whyTitle} />
+        <Heading eyebrow={L.whyEyebrow} title={L.whyTitle} action={{ href: href(lang, "/hakkimizda"), label: lang === "en" ? "About us" : "Hakkımızda" }} />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
-          {items.map(([t, d]) => (
-            <div key={t} className="rounded-3xl bg-white p-6 ring-1 ring-navy/10 transition hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10">
-              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-2xl bg-turquoise/15">
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0f95a4" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
-              </div>
-              <h3 className="font-semibold text-navy">{t}</h3>
-              <p className="mt-2 text-sm leading-relaxed text-navy/65">{d}</p>
+          {items.map(([title, d], i) => (
+            <div key={title} className="group relative overflow-hidden rounded-[1.75rem] bg-white p-6 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-navy/10 hover:ring-turquoise/40 lg:p-7">
+              <span className="absolute -right-2 -top-5 font-display text-[6.5rem] font-semibold leading-none text-navy/[0.04] transition group-hover:text-turquoise/15" aria-hidden>{i + 1}</span>
+              <span className="relative flex h-12 w-12 items-center justify-center rounded-2xl bg-turquoise/15 text-turquoise-dark transition duration-300 group-hover:bg-navy group-hover:text-turquoise"><Ic d={WHY_IC[i % WHY_IC.length]} /></span>
+              <h3 className="font-display relative mt-5 text-lg font-semibold text-navy">{title}</h3>
+              <p className="relative mt-2 text-sm leading-relaxed text-navy/65">{d}</p>
             </div>
           ))}
         </div>
@@ -213,7 +246,7 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
   if (lang === "en") return null;
   if (items.length === 0) return null;
   return (
-    <section className="py-14 lg:py-20" id="blog">
+    <section className="py-14 lg:py-24" id="blog">
       <div className={wrap}>
         <Heading eyebrow={L.blogEyebrow} title={L.blogTitle} action={{ href: "/rehber", label: L.allPosts }} />
         <Scroller className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
