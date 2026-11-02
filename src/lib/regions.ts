@@ -10,8 +10,28 @@ export type RegionText = {
 };
 
 export const REGION_UI = {
-  tr: { mapNote: "Harita tanıtım amaçlıdır; seyir ve navigasyon için kullanılmaz.", gallery: "Bölgeden kareler", planEyebrow: "Planınızı yapalım", planTitle: "Bu bölgede bir tatil mi düşünüyorsunuz?", planText: "Tarihlerinizi ve kişi sayınızı yazın; size uygun tekneyi ve rotayı birlikte belirleyelim.", write: "Bize yazın" },
-  en: { mapNote: "The map is for illustration only and is not for navigation.", gallery: "Moments from the region", planEyebrow: "Plan your trip", planTitle: "Thinking of a holiday in this region?", planText: "Tell us your dates and group size, and we'll pick the right yacht and route together.", write: "Write to us" },
+  tr: {
+    mapNote: "Harita tanıtım amaçlıdır; seyir ve navigasyon için kullanılmaz.", gallery: "Galeri", planEyebrow: "Planınızı yapalım", planTitle: "Bu bölgede bir tatil mi düşünüyorsunuz?",
+    planText: "Tarihlerinizi ve kişi sayınızı yazın; size uygun tekneyi ve rotayı birlikte belirleyelim.", write: "Bize yazın",
+    stopsCount: (n: number) => `${n} durak`, exploreCount: (n: number) => `${n} keşif noktası`, routesCount: (n: number) => `${n} klasik rota`,
+    quote: "Bu bölge için teklif alın", enlarge: "Haritayı büyüt", close: "Kapat",
+    navStops: "Duraklar", navExplore: "Keşif", navBoats: "Tekneler", navRoutes: "Rotalar",
+    boatsEyebrow: "Bu bölgeden kalkan tekneler", boatsTitle: "Tatilinize uygun tekneler.", allBoats: "Tüm tekneler",
+    routesEyebrow: "Bu bölgeden geçen rotalar", routesTitle: "Gün gün hazırlanmış klasik rotalar.", allRoutes: "Tüm rotalar",
+    allRegions: "Tüm destinasyonlar", explore: "Bölgeyi keşfedin", regions: "bölge", stopsLabel: "seçilmiş durak",
+    waText: (r: string) => `Merhaba, ${r} bölgesinde tekne kiralamak istiyorum.`,
+  },
+  en: {
+    mapNote: "The map is for illustration only and is not for navigation.", gallery: "Gallery", planEyebrow: "Plan your trip", planTitle: "Thinking of a holiday in this region?",
+    planText: "Tell us your dates and group size, and we'll pick the right yacht and route together.", write: "Write to us",
+    stopsCount: (n: number) => `${n} stops`, exploreCount: (n: number) => `${n} highlights`, routesCount: (n: number) => `${n} classic routes`,
+    quote: "Get a quote for this region", enlarge: "Enlarge map", close: "Close",
+    navStops: "Stops", navExplore: "Highlights", navBoats: "Boats", navRoutes: "Routes",
+    boatsEyebrow: "Boats departing from this region", boatsTitle: "Boats for your holiday.", allBoats: "All boats",
+    routesEyebrow: "Routes through this region", routesTitle: "Classic routes, day by day.", allRoutes: "All routes",
+    allRegions: "All destinations", explore: "Explore the region", regions: "regions", stopsLabel: "selected stops",
+    waText: (r: string) => `Hello, I'd like to charter a boat in the ${r} region.`,
+  },
 };
 
 const TR: Record<string, RegionText> = {
