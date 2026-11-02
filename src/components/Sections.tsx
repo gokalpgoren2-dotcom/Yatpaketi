@@ -378,7 +378,7 @@ export async function FinalCta({ lang = "tr" }: { lang?: Lang }) {
   const en = lang === "en";
   const [c, about] = await Promise.all([getContact(), getAbout()]);
   const stats = ((about[lang].stats ?? []) as string[][]).slice(0, 2);
-  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}?text=${encodeURIComponent(en ? "Hello, I'd like to charter a boat. Dates and group size: " : "Merhaba, tekne kiralamak istiyorum. Tarih ve kişi sayısı: ")}` : href(lang, "/iletisim");
+  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}?text=${encodeURIComponent(en ? "Hello, I'd like to charter a boat. Dates and group size: " : "Merhaba, yat kiralamak istiyorum. Tarih ve kişi sayısı: ")}` : href(lang, "/iletisim");
   return (
     <section className="pb-20 pt-6 lg:pb-28">
       <div className={wrap}>
@@ -393,12 +393,12 @@ export async function FinalCta({ lang = "tr" }: { lang?: Lang }) {
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Ready when you are" : "Hazır olduğunuzda"}</p>
               <h2 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-7xl">{en ? <>The first step is<br /><span className="text-turquoise">just a message.</span></> : <>İlk adım<br /><span className="text-turquoise">sadece bir mesaj.</span></>}</h2>
-              <p className="mt-6 max-w-xl text-lg text-white/75">{en ? "Tell us your dates, group size and the region you dream of. We'll find the right boat and route, and stay with you until you're back on shore." : "Tatil tarihinizi, kişi sayınızı ve hayalinizdeki bölgeyi yazın. Size uygun tekneyi ve rotayı bulalım, kıyıya dönene kadar yanınızda olalım."}</p>
+              <p className="mt-6 max-w-xl text-lg text-white/75">{en ? "Tell us your dates, group size and the region you dream of. We'll find the right boat and route, and stay with you until you're back on shore." : "Tatil tarihinizi, kişi sayınızı ve hayalinizdeki bölgeyi yazın. Size uygun yatı ve rotayı bulalım, kıyıya dönene kadar yanınızda olalım."}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href={wa} target={c.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="flex items-center gap-2.5 rounded-full bg-turquoise px-7 py-4 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">
                   <Ic d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" size={18} />{en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
                 </a>
-                <Link href={href(lang, "/tekneler")} className="rounded-full px-7 py-4 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Browse boats" : "Tekneleri inceleyin"}</Link>
+                <Link href={href(lang, "/tekneler")} className="rounded-full px-7 py-4 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Browse boats" : "Yatları inceleyin"}</Link>
               </div>
             </div>
             <div className="space-y-3">

@@ -98,7 +98,7 @@ export function SiteContentEditor({ initial, destinations }: { initial: { hero_p
 
       <section className="rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Ana sayfa büyük fotoğraf</h2>
-        <p className="mt-1 text-sm text-navy/60">Yatay (geniş) bir deniz veya tekne fotoğrafı seçin. Yazılar fotoğrafın üstünde beyaz görünür; çok açık renkli fotoğraflarda okunmayabilir.</p>
+        <p className="mt-1 text-sm text-navy/60">Yatay (geniş) bir deniz veya yat fotoğrafı seçin. Yazılar fotoğrafın üstünde beyaz görünür; çok açık renkli fotoğraflarda okunmayabilir.</p>
         <div className="mt-4 overflow-hidden rounded-xl bg-mist">
           {hero ? (
             // eslint-disable-next-line @next/next/no-img-element

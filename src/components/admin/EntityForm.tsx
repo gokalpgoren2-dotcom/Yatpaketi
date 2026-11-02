@@ -17,7 +17,7 @@ const BASE = `${(() => { try { return new URL(process.env.NEXT_PUBLIC_SUPABASE_U
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-// Destinasyon ve tekne tipi (kategori) düzenleme formu. Kayıtlar tarayıcıdan, yönetici yetkisiyle yapılır (RLS korur).
+// Destinasyon ve yat tipi (kategori) düzenleme formu. Kayıtlar tarayıcıdan, yönetici yetkisiyle yapılır (RLS korur).
 export function EntityForm({ table, row }: { table: Table; row: EntityRow | null }) {
   const supabase = createClient();
   const tbl = table as "destinations";
@@ -103,7 +103,7 @@ export function EntityForm({ table, row }: { table: Table; row: EntityRow | null
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
-        <div><label htmlFor="name" className={lab}>{dest ? "Liman adı *" : "Tekne tipi adı *"}</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} /></div>
+        <div><label htmlFor="name" className={lab}>{dest ? "Liman adı *" : "Yat tipi adı *"}</label><input id="name" value={name} onChange={(e) => setName(e.target.value)} className={input} /></div>
         <div>
           <label htmlFor="slug" className={lab}>Adres (slug)</label>
           <input id="slug" value={slug} onChange={(e) => setSlug(e.target.value)} disabled={Boolean(row)} className={`${input} disabled:bg-mist disabled:text-navy/60`} />

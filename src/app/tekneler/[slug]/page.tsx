@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   if (!b) return {};
   return {
     title: [b.name, b.type && `${b.type} Kiralama`, b.port].filter(Boolean).join(" | "),
-    description: `${b.name}: ${b.guests} misafir${b.cabins ? `, ${b.cabins} kabin` : ""}${b.length ? `, ${b.length} m` : ""}.${b.port ? ` ${b.port} çıkışlı` : ""} ${b.type ? b.type.toLowerCase() + " kiralama." : "tekne kiralama."}`,
+    description: `${b.name}: ${b.guests} misafir${b.cabins ? `, ${b.cabins} kabin` : ""}${b.length ? `, ${b.length} m` : ""}.${b.port ? ` ${b.port} çıkışlı` : ""} ${b.type ? b.type.toLowerCase() + " kiralama." : "yat kiralama."}`,
     alternates: { canonical: `/tekneler/${b.slug}`, languages: { tr: `/tekneler/${b.slug}`, en: `/en/tekneler/${b.slug}` } },
     robots: { index: false, follow: true }, // rezervasyon talep formu hazır olana kadar kapalı
   };

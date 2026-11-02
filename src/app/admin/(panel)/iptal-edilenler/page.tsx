@@ -43,7 +43,7 @@ export default async function Cancelled({ searchParams }: { searchParams: Promis
             <details>
               <summary className="cursor-pointer list-none p-4">
                 <span className="block font-semibold">{r.customer_name}</span>
-                <span className="block text-sm text-navy/60">{r.boat_name ?? "Tekne belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
+                <span className="block text-sm text-navy/60">{r.boat_name ?? "Yat belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
                 <span className="mt-1 block text-sm text-red-700">İptal sebebi: {r.cancel_reason || "Yazılmamış"}</span>
               </summary>
               <div className="space-y-4 border-t border-navy/10 p-4 text-sm">

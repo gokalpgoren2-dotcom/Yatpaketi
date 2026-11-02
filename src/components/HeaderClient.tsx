@@ -72,13 +72,13 @@ export function HeaderClient({ links, lang = "tr" }: { links: NavLink[]; lang?: 
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href={hrefFor(lang, "/favorilerim")} aria-label={lang === "en" ? "Saved yachts" : "Favori tekneler"} title={lang === "en" ? "Saved yachts" : "Favori tekneler"} className="relative hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-[#e8453c] hover:text-[#e8453c] lg:flex">
+          <Link href={hrefFor(lang, "/favorilerim")} aria-label={lang === "en" ? "Saved yachts" : "Favori yatlar"} title={lang === "en" ? "Saved yachts" : "Favori yatlar"} className="relative hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-[#e8453c] hover:text-[#e8453c] lg:flex">
             <svg width="20" height="20" viewBox="0 0 24 24" fill={favCount ? "#e8453c" : "none"} stroke={favCount ? "#e8453c" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.7 3.7 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.3 0 5.4 3.2 4.2 6.6-1.7 4.8-9.2 9.4-9.2 9.4z" /></svg>
             {favCount > 0 && <span className="absolute -right-1 -top-1 rounded-full bg-[#e8453c] px-1.5 text-[10px] font-bold leading-4 text-white">{favCount}</span>}
             {hint && favCount > 0 && (
               <span role="status" onClick={hideHint} className="absolute right-0 top-full z-50 mt-3 w-max rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
                 <span aria-hidden className="absolute -top-1.5 right-3 h-3 w-3 rotate-45 bg-navy" />
-                {lang === "en" ? "Compare your saved yachts →" : "Favori tekneleri karşılaştırın →"}
+                {lang === "en" ? "Compare your saved yachts →" : "Favori yatları karşılaştırın →"}
               </span>
             )}
           </Link>

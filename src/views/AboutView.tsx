@@ -28,9 +28,9 @@ export async function AboutView({ lang }: { lang: Lang }) {
   const A = about[lang];
   const en = lang === "en";
   const [t1, ...t2] = A.title.split(/(?<=\.)\s+/);
-  // Rakamlar: {tekne} ve {liman} yerine yayındaki tekne ve liman sayısı. Eski kayıtta "kurucu ortak / destinasyon bölgesi" kaldıysa onlar da sayıya çevrilir.
+  // Rakamlar: {tekne} ve {liman} yerine yayındaki yat ve liman sayısı. Eski kayıtta "kurucu ortak / destinasyon bölgesi" kaldıysa onlar da sayıya çevrilir.
   const stats = ((A.stats ?? []) as string[][]).map(([v, l]) => {
-    if (v.includes("{tekne}") || /kurucu ortak|founding partner/i.test(l)) return [String(boats.length), v.includes("{tekne}") ? l : en ? "boats in our portfolio" : "portföyümüzdeki tekne"];
+    if (v.includes("{tekne}") || /kurucu ortak|founding partner/i.test(l)) return [String(boats.length), v.includes("{tekne}") ? l : en ? "boats in our portfolio" : "portföyümüzdeki yat"];
     if (v.includes("{liman}") || /destinasyon bölgesi|destination region/i.test(l)) return [String(dests.length), v.includes("{liman}") ? l : en ? "ports" : "liman"];
     return [v, l];
   });

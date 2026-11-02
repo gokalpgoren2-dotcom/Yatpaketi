@@ -16,7 +16,7 @@ export type Campaign = {
   active: boolean;
   kind: CampaignKind;
   percent: number;
-  boats: string[];              // seçili teknelerin slug'ları; boşsa tüm tekneler
+  boats: string[];              // seçili yatların slug'ları; boşsa tüm yatlar
   until: string;                // "2027-03-31"; boşsa süresiz
   title: string; titleEn: string; // isteğe bağlı: kendi başlığınız (boşsa otomatik yazılır)
   text: string; textEn: string;   // isteğe bağlı: kendi açıklamanız
@@ -40,7 +40,7 @@ export function isLive(c: Campaign, now = new Date()): boolean {
   return !e || e.getTime() >= now.getTime();
 }
 
-// Tekne kartlarında ve tekne sayfasında gösterilecek kampanya: tekne başına en yüksek yüzdeli geçerli kampanya.
+// Yat kartlarında ve yat sayfasında gösterilecek kampanya: yat başına en yüksek yüzdeli geçerli kampanya.
 export async function getOffers(): Promise<Record<string, Offer>> {
   if (!supabaseConfigured()) return {};
   try {

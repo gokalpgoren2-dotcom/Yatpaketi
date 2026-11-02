@@ -94,7 +94,7 @@ export function ReviewsAdmin({ initial, boats }: { initial: AdminReview[]; boats
           <p className="text-sm text-navy/65">Gerçek bir misafirin size ilettiği yorumu (ör. WhatsApp'tan) burada ekleyebilirsiniz. Misafirin onayını almayı unutmayın.</p>
           <div className="grid gap-4 sm:grid-cols-2">
             <div><label className={lab}>Misafir adı</label><input className={input} value={f.name} onChange={(e) => setF({ ...f, name: e.target.value })} placeholder="Ayşe K." /></div>
-            <div><label className={lab}>Tekne</label><select className={input} value={f.boat} onChange={(e) => setF({ ...f, boat: e.target.value })}><option value="">Seçilmedi</option>{boats.map((b) => <option key={b.slug} value={b.slug}>{b.name}</option>)}</select></div>
+            <div><label className={lab}>Yat</label><select className={input} value={f.boat} onChange={(e) => setF({ ...f, boat: e.target.value })}><option value="">Seçilmedi</option>{boats.map((b) => <option key={b.slug} value={b.slug}>{b.name}</option>)}</select></div>
           </div>
           <div><label className={lab}>Puan</label><div className="flex gap-1">{[1, 2, 3, 4, 5].map((n) => <button key={n} type="button" aria-label={`${n} yıldız`} onClick={() => setF({ ...f, rating: n })} className="p-1"><svg viewBox="0 0 24 24" width="32" height="32" fill="currentColor" className={n <= f.rating ? "text-[#f5a623]" : "text-navy/15"}><path d="M12 2.5l2.9 6.1 6.6.8-4.9 4.6 1.3 6.6L12 17.2 6.1 20.6l1.3-6.6L2.5 9.4l6.6-.8z" /></svg></button>)}</div></div>
           <div><label className={lab}>Yorum</label><textarea rows={4} className={input} value={f.body} onChange={(e) => setF({ ...f, body: e.target.value })} maxLength={1200} /></div>
@@ -124,20 +124,20 @@ export function ReviewsAdmin({ initial, boats }: { initial: AdminReview[]; boats
               {photo && /* eslint-disable-next-line @next/next/no-img-element */ <img src={photo} alt="" className="mt-3 aspect-[4/3] w-full max-w-xs rounded-xl object-cover" />}
               <div className="mt-4 grid gap-3 sm:grid-cols-[1fr_auto] sm:items-end">
                 <div>
-                  <label className={lab}>Hangi tekne sayfasında görünsün?</label>
+                  <label className={lab}>Hangi yat sayfasında görünsün?</label>
                   <select className={input} value={r.boat_slug ?? ""} onChange={(e) => boatPatch(r.id, e.target.value)}>
-                    <option value="">Tekne seçilmedi (sitede görünmez)</option>
+                    <option value="">Yat seçilmedi (sitede görünmez)</option>
                     {boats.map((b) => <option key={b.slug} value={b.slug}>{b.name}</option>)}
                   </select>
                 </div>
                 <div className="flex flex-wrap gap-2">
                   {r.status !== "approved" && <button type="button" disabled={busy || !r.boat_slug} onClick={() => approve(r)} className="rounded-xl bg-turquoise px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-40">Onayla</button>}
-                  {r.status === "approved" && <button type="button" disabled={busy} onClick={() => approve(r)} className={btn}>Tekneyi kaydet</button>}
+                  {r.status === "approved" && <button type="button" disabled={busy} onClick={() => approve(r)} className={btn}>Yatı kaydet</button>}
                   {r.status !== "rejected" && <button type="button" disabled={busy} onClick={() => patch(r.id, { status: "rejected" }, "Yorum reddedildi, sitede görünmez.")} className={btn}>{r.status === "approved" ? "Yayından kaldır" : "Reddet"}</button>}
                   <button type="button" disabled={busy} onClick={() => remove(r)} className={`${btn} text-red-700`}>Sil</button>
                 </div>
               </div>
-              {r.status !== "approved" && !r.boat_slug && <p className="mt-2 text-xs text-navy/55">Onaylamak için önce tekneyi seçin.</p>}
+              {r.status !== "approved" && !r.boat_slug && <p className="mt-2 text-xs text-navy/55">Onaylamak için önce yatı seçin.</p>}
             </li>
           );
         })}

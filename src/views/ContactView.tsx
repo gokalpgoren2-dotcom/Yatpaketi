@@ -11,12 +11,12 @@ const eyebrow = "text-xs font-semibold uppercase tracking-[0.25em] text-turquois
 const T = {
   tr: {
     title: "Bizimle konuşalım.", accent: "Yolculuğu birlikte planlayalım.",
-    sub: "Tarihlerinizi, kişi sayınızı ve hayalinizi yazın; size uygun tekne ve rotayı birlikte netleştirelim.",
+    sub: "Tarihlerinizi, kişi sayınızı ve hayalinizi yazın; size uygun yat ve rotayı birlikte netleştirelim.",
     ways: "Bize ulaşın", wa: "WhatsApp", waSub: "En hızlı yol. Çoğu müşterimiz bizimle buradan yazışıyor.", waCta: "Mesaj yaz",
     phone: "Telefon", phoneSub: "Arayabilirsiniz.", mail: "E-posta", mailSub: "Ayrıntılı sorular için.",
     loc: "Konum", locName: "Fethiye, Muğla", locSub: "Merkez ofis adresimiz yakında burada olacak.", locCta: "Yol tarifi al",
     formEyebrow: "Mesaj bırakın", formTitle: "Size dönelim.",
-    tourTitle: "Turunuz onaylandı mı?", tourText: "Sözleşme, hazırlık listesi ve tekne konumu Turum sayfanızda. Giriş kodunuz e-postanızda.", tourCta: "Turum’a git",
+    tourTitle: "Turunuz onaylandı mı?", tourText: "Sözleşme, hazırlık listesi ve yat konumu Turum sayfanızda. Giriş kodunuz e-postanızda.", tourCta: "Turum’a git",
   },
   en: {
     title: "Let's talk.", accent: "Let's plan the voyage together.",

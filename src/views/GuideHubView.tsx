@@ -19,7 +19,7 @@ const TAG: Record<string, [string, string]> = {
   "arkadas-grubuyla-tatil": ["Birlikte yolculuk", "Travelling together"],
   "teknede-yemek-plani": ["Lezzet ve hazırlık", "Food and prep"],
   "tekne-tatilinde-fotograflar": ["Fotoğraf ve anılar", "Photos and memories"],
-  "gunubirlik-mi-konaklamali-mi": ["Tekne seçimi", "Choosing a trip"],
+  "gunubirlik-mi-konaklamali-mi": ["Yat seçimi", "Choosing a trip"],
   "teknede-muzik-yuzme-kurallar": ["Kurallar ve güvenlik", "Rules and safety"],
 };
 const FEATURED_SLUGS = ["gulet-kiralamadan-once", "motoryat-tatilinin-butcesi", "hangi-tekne-nasil-bir-yolculuk"];
@@ -34,9 +34,9 @@ export async function GuideHubView({ lang }: { lang: Lang }) {
   type Feat = { tag: string; title: string; text: string; to: string; cover?: string | null };
   const feats: Feat[] = [
     ...FEATURED_SLUGS.map(bySlug).filter((p): p is Post => !!p).map((p) => ({ tag: tag(p) ?? "", title: p.title, text: p.excerpt ?? "", to: postHref(p, lang), cover: p.cover })),
-    { tag: en ? "Life at sea" : "Denizde yaşam", title: en ? "Yachting culture: the finer points of a voyage" : "Yatçılık kültürü: yolculuğun incelikleri", text: en ? "Sharing shared spaces, respecting the coves and living by the rhythm of the sea: discover the habits that enrich a boat holiday." : "Ortak alanları paylaşmak, kıyılara özen göstermek ve denizin ritmine uyum sağlamak. Tekne tatilini zenginleştiren alışkanlıkları keşfet.", to: href(lang, "/yat-ve-yatcilik-kulturu") },
+    { tag: en ? "Life at sea" : "Denizde yaşam", title: en ? "Yachting culture: the finer points of a voyage" : "Yatçılık kültürü: yolculuğun incelikleri", text: en ? "Sharing shared spaces, respecting the coves and living by the rhythm of the sea: discover the habits that enrich a boat holiday." : "Ortak alanları paylaşmak, kıyılara özen göstermek ve denizin ritmine uyum sağlamak. Yat tatilini zenginleştiren alışkanlıkları keşfet.", to: href(lang, "/yat-ve-yatcilik-kulturu") },
     { tag: en ? "Route ideas" : "Rota fikirleri", title: en ? "Which coast is your next voyage?" : "Bir sonraki yolculuğun hangi kıyıda?", text: en ? "Discover regions from Göcek to Gökova, Hisarönü to Kekova, and shape your holiday around the places you want to see." : "Göcek'ten Gökova'ya, Hisarönü'nden Kekova'ya uzanan bölgeleri tanı. Görmek istediğin yerlerden yola çıkarak tatilini şekillendir.", to: href(lang, "/rotalar") },
-    { tag: en ? "Holiday prep" : "Tatil hazırlığı", title: en ? "Settle your questions before you set off." : "Aklındaki soruları yola çıkmadan netleştir.", text: en ? "From meal planning to reservations and the equipment on board: find answers to what you are wondering about." : "Yemek düzeninden rezervasyona, teknede kullanılan ekipmanlardan ulaşım hazırlığına kadar merak edilen konuların cevaplarını bul.", to: href(lang, "/sss") },
+    { tag: en ? "Holiday prep" : "Tatil hazırlığı", title: en ? "Settle your questions before you set off." : "Aklındaki soruları yola çıkmadan netleştir.", text: en ? "From meal planning to reservations and the equipment on board: find answers to what you are wondering about." : "Yemek düzeninden rezervasyona, yatta kullanılan ekipmanlardan ulaşım hazırlığına kadar merak edilen konuların cevaplarını bul.", to: href(lang, "/sss") },
   ];
   const featuredSet = new Set(FEATURED_SLUGS);
   const articles = posts.filter((p) => !featuredSet.has(p.slug));

@@ -4,7 +4,7 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { requireAdmin } from "@/lib/admin";
 
-// Ana sayfadaki "öne çıkan" teknelerin sırası (site_texts: featured).
+// Ana sayfadaki "öne çıkan" yatların sırası (site_texts: featured).
 export async function moveFeatured(formData: FormData) {
   const { supabase } = await requireAdmin();
   const order = String(formData.get("order") ?? "").split(",").filter(Boolean);

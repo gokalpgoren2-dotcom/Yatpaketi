@@ -21,7 +21,7 @@ const h2 = "font-display mt-3 text-3xl font-semibold leading-tight text-navy lg:
 const WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
 const NAVY_BG = { background: "linear-gradient(160deg, #05204a 0%, #06264b 45%, #0b4a6e 80%, #0d6a86 100%)" };
 
-// Bölgeye göre kalkış limanları (tekneler) ve rotalarda aranacak yer adları.
+// Bölgeye göre kalkış limanları (yatlar) ve rotalarda aranacak yer adları.
 const REGION: Record<string, { ports: string[]; places: string[] }> = {
   "fethiye-korfezi-gocek": { ports: ["gocek", "fethiye"], places: ["Göcek", "Fethiye", "Tersane Adası", "Tersane Island", "Yassıcalar", "Ölüdeniz", "Gemiler Adası", "Gemiler Island"] },
   "bodrum-gokova-korfezi": { ports: ["bodrum"], places: ["Bodrum", "Gökova", "Karaada", "Akyaka", "Sedir Adası", "Sedir Island", "Gümüşlük", "Yalıkavak"] },
@@ -110,7 +110,7 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
   const gallery = photos.slice(R.explore.length + 3);
   const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(U.waText(p.title))}` : href(lang, "/iletisim");
   const nav: string[][] = [[U.navStops, "duraklar"], [U.navExplore, "kesif"]];
-  if (fit.length) nav.push([U.navBoats, "tekneler"]);
+  if (fit.length) nav.push([U.navBoats, "yatlar"]);
   if (routeCards.length) nav.push([U.navRoutes, "rotalar"]);
   if (gallery.length) nav.push([U.gallery, "galeri"]);
   const pills: [string, string][] = [
@@ -239,9 +239,9 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
           </div>
         </section>
 
-        {/* Tekneler */}
+        {/* Yatlar */}
         {fit.length > 0 && (
-          <section id="tekneler" className="scroll-mt-32 bg-mist py-16 lg:py-20">
+          <section id="yatlar" className="scroll-mt-32 bg-mist py-16 lg:py-20">
             <div className={wrap}>
               <div className="flex flex-wrap items-end justify-between gap-4">
                 <div>

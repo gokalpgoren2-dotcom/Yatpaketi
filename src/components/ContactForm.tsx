@@ -6,7 +6,7 @@ import type { Lang } from "@/lib/i18n";
 const T = {
   tr: {
     name: "Adınız", topic: "Konu", msg: "Mesajınız", msgPh: "Tarihleriniz, kişi sayınız ve hayalinizdeki rota…",
-    topics: ["Tekne kiralama", "Rota ve liman önerisi", "Mevcut turum hakkında", "Diğer"],
+    topics: ["Yat kiralama", "Rota ve liman önerisi", "Mevcut turum hakkında", "Diğer"],
     wa: "WhatsApp ile gönder", mail: "E-posta ile gönder", note: "Mesajınız hazır olarak WhatsApp’ta açılır, göndermek için tek dokunuş yeter.",
     hi: "Merhaba, ben", subj: "İletişim formu",
   },

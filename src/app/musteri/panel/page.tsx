@@ -181,11 +181,11 @@ export default async function PortalHome() {
 
         {/* Konum */}
         {!over && <section id="konum" className={card}>
-          {head(ICON.pin, "Teknenin konumu")}
+          {head(ICON.pin, "Yatın konumu")}
           {hasLoc ? (
             <>
               <iframe
-                title="Teknenin konumu"
+                title="Yatın konumu"
                 loading="lazy"
                 className="mt-4 h-72 w-full rounded-2xl border-0 ring-1 ring-navy/10"
                 src={`https://www.openstreetmap.org/export/embed.html?bbox=${p.lng! - 0.03}%2C${p.lat! - 0.02}%2C${p.lng! + 0.03}%2C${p.lat! + 0.02}&layer=mapnik&marker=${p.lat}%2C${p.lng}`}
@@ -201,7 +201,7 @@ export default async function PortalHome() {
             <div className="mt-4 flex items-start gap-3 rounded-2xl bg-mist p-4 ring-1 ring-navy/5">
               <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-white text-navy/50 ring-1 ring-navy/10"><Ic d={p.location_open ? ICON.clock : ICON.lock} /></span>
               <p className="text-sm leading-relaxed text-navy/70">
-                {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Teknenin konumu, turunuzdan yaklaşık 12 saat önce burada açılır."}
+                {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Yatın konumu, turunuzdan yaklaşık 12 saat önce burada açılır."}
               </p>
             </div>
           )}

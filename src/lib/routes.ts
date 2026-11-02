@@ -63,10 +63,10 @@ const META: Record<string, Meta> = {
         "Fethiye'de karşılama, kabinlere yerleşme ve kumanya; ilk akşam körfezde sakin bir koyda.",
         "Eski tersane kalıntılarıyla bilinen adada yüzme ve kıyıda kısa bir yürüyüş.",
         "Göcek körfezinin çam ormanlarıyla çevrili, rüzgârdan korunaklı koyunda yüzme ve dinlenme.",
-        "Dalyan deltasına yakın Ekincik'te demirleme; isteyenler için Kaunos ve kaya mezarlarına tekneyle gezi.",
+        "Dalyan deltasına yakın Ekincik'te demirleme; isteyenler için Kaunos ve kaya mezarlarına yatla gezi.",
         "Antik Loryma kalesinin yükseldiği korunaklı koyda yüzme ve kale kalıntılarına yürüyüş.",
         "Sakin bir köy koyunda yüzme, kıyıda yerel bir sofrada akşam yemeği.",
-        "Tekne yapımıyla ünlü Bozburun'a varış, son kahvaltı ve teslim.",
+        "Yat yapımıyla ünlü Bozburun'a varış, son kahvaltı ve teslim.",
       ],
       en: [
         "Welcome in Fethiye, settling into the cabins and provisioning; first evening in a quiet cove in the bay.",
@@ -111,7 +111,7 @@ const META: Record<string, Meta> = {
         "Marmaris'te karşılama, kabinlere yerleşme ve kumanya; ilk akşam marinada ya da yakın bir koyda.",
         "Çam ormanlarıyla çevrili, berrak sulu sakin koyda yüzme ve dinlenme.",
         "Dalyan deltasına yakın Ekincik'te demirleme, mağaralara yüzme ve akşam sessiz bir koy.",
-        "Küçük teknelerle sazlıklar arasından Kaunos'a, kaya mezarlarına ve İztuzu plajına gezi.",
+        "Küçük yatlarla sazlıklar arasından Kaunos'a, kaya mezarlarına ve İztuzu plajına gezi.",
         "Rüzgârdan korunaklı sakin koyda uzun bir yüzme molası ve keyifli bir akşam.",
         "Fethiye körfezinin girişindeki deniz feneriyle bilinen adada, berrak suda yüzme ve şnorkel.",
         "Fethiye'ye varış, son kahvaltı ve teslim.",
@@ -156,7 +156,7 @@ const META: Record<string, Meta> = {
     stops: ["Bozburun", "Datça", "Palamutbükü", "Tuzla Koyu", "İngiliz Limanı", "Kissebükü", "Bodrum"],
     days: {
       tr: [
-        "Tekne yapımıyla ünlü Bozburun'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
+        "Yat yapımıyla ünlü Bozburun'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
         "Datça'da yüzme, akşam Eski Datça'nın taş sokaklarında yürüyüş ve yemek.",
         "Uzun çakıl plajı ve kıyıdaki balık lokantalarıyla bilinen koyda yüzme ve akşam yemeği.",
         "Gökova körfezinin rüzgârdan korunaklı, berrak sulu koyunda yüzme ve dinlenme.",
@@ -180,7 +180,7 @@ const META: Record<string, Meta> = {
     stops: ["Bozburun", "Dirsekbükü", "Selimiye", "Orhaniye", "Bencik Koyu", "Söğüt", "Bozburun"],
     days: {
       tr: [
-        "Tekne yapımıyla ünlü Bozburun'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
+        "Yat yapımıyla ünlü Bozburun'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
         "Dağların arasına sokulmuş, rüzgârdan korunaklı derin koyda yüzme ve kıyıdaki küçük lokantada akşam yemeği.",
         "Rengârenk evleri ve kıyı lokantalarıyla bilinen balıkçı köyünde yüzme ve akşam yürüyüşü.",
         "Denizin ortasında kum dili Kız Kumu'nda yürüyüş ve sığ, sıcak suda yüzme.",
@@ -253,7 +253,7 @@ const META: Record<string, Meta> = {
     days: {
       tr: [
         "Marmaris'te karşılama, kabinlere yerleşme ve kumanya; ilk akşam marinada ya da yakın bir koyda.",
-        "Tekne yapımıyla ünlü Bozburun'da yüzme; akşam limanda yemek ve ertesi gün için çıkış işlemleri.",
+        "Yat yapımıyla ünlü Bozburun'da yüzme; akşam limanda yemek ve ertesi gün için çıkış işlemleri.",
         "Renkli neoklasik evleriyle Symi'de giriş işlemleri, limanda yürüyüş ve berrak koylarda yüzme.",
         "Rodos'ta şövalyelerin surlarla çevrili eski şehrinde, Üstatlar Sarayı ve dar sokaklarda gezinti.",
         "Rodos'ta ikinci gün: Lindos akropolüne gezi ya da plajlarda serbest zaman; akşam çıkış işlemleri.",
@@ -277,7 +277,7 @@ const META: Record<string, Meta> = {
     days: {
       tr: [
         "Datça'da karşılama, kabinlere yerleşme ve kumanya; akşam Eski Datça'nın taş sokaklarında yürüyüş.",
-        "Tekne yapımıyla ünlü Bozburun'da yüzme; akşam limanda yemek ve ertesi gün için çıkış işlemleri.",
+        "Yat yapımıyla ünlü Bozburun'da yüzme; akşam limanda yemek ve ertesi gün için çıkış işlemleri.",
         "Renkli neoklasik evleriyle Symi'de giriş işlemleri, limanda yürüyüş ve berrak koylarda yüzme.",
         "Rodos'ta şövalyelerin surlarla çevrili eski şehrinde, Üstatlar Sarayı ve dar sokaklarda gezinti.",
         "Rodos'ta ikinci gün: Lindos akropolüne gezi ya da plajlarda serbest zaman; akşam çıkış işlemleri.",
@@ -464,10 +464,10 @@ export const ROUTE_UI = {
     eyebrow: "Klasik rota", days: (n: number) => `${n} gün · ${Math.max(n - 1, 1)} gece`, from: "Kalkış", to: "Varış", loop: "Aynı limana dönüş", oneway: "Tek yön",
     stops: (n: number) => `${n} durak`, greek: "Yunan adaları", quote: "Bu rota için teklif alın", program: "Programı görün", dayLabel: "Gün",
     programEyebrow: "Gün gün program", programTitle: "Rotanızın akışı.", whoEyebrow: "Kimlere uygun?", noteTitle: "Program esnektir",
-    onewayNote: "Tek yön rotalarda tekne bir limandan alınıp başka bir limanda teslim edilir; bu durum tekneye göre ek ücret getirebilir.",
+    onewayNote: "Tek yön rotalarda yat bir limandan alınıp başka bir limanda teslim edilir; bu durum yata göre ek ücret getirebilir.",
     greekNote: "Yunan adalarına geçişte pasaport ve giriş-çıkış işlemleri gerekir. Belgeleri rezervasyon sırasında birlikte netleştiririz.",
-    boatsEyebrow: "Bu rotaya uygun tekneler", boatsTitle: (p: string) => `${p} çıkışlı tekneler`, allBoats: "Tüm tekneler",
-    ctaTitle: "Bu rotada yelken açmaya hazır mısınız?", ctaText: "Tarihlerinizi ve kişi sayınızı yazın, size uygun tekneyi ve programı birlikte netleştirelim.", write: "Bize yazın",
+    boatsEyebrow: "Bu rotaya uygun yatlar", boatsTitle: (p: string) => `${p} çıkışlı yatlar`, allBoats: "Tüm yatlar",
+    ctaTitle: "Bu rotada yelken açmaya hazır mısınız?", ctaText: "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve programı birlikte netleştirelim.", write: "Bize yazın",
     more: "Diğer rotalar", all: "Tümü", allRoutes: "Tüm rotalar", filter: "Kalkış limanı", route: "Rotayı incele", count: (n: number) => `${n} rota`, chartLabel: "Rota şeması",
     acts: { swim: "Yüzme", snorkel: "Şnorkel", walk: "Yürüyüş", dinner: "Akşam yemeği", sunset: "Gün batımı", history: "Tarih", market: "Çarşı", sail: "Uzun seyir", passport: "Pasaport", beach: "Plaj", relax: "Dinlenme" },
   },

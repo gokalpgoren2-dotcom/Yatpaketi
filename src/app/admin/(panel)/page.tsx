@@ -56,8 +56,8 @@ export default async function Dashboard() {
     if (p && !p.signed_at && d <= 21) todo.push({ text: `${r.customer_name}: tura ${d} gün var, sözleşme imzalanmadı`, href: `/admin/musteri-panelleri/${p.id}`, tone: d <= 7 ? "red" : "amber" });
     if (p && d <= 7) { const g = prog(p.id); if (g.total > 0 && g.done < g.total) todo.push({ text: `${r.customer_name}: hazırlık ${g.done}/${g.total}, tura ${d} gün var`, href: `/admin/musteri-panelleri/${p.id}`, tone: "amber" }); }
   }
-  for (const r of nowOn) if (daysTo(r.end_date) === 0) todo.push({ text: `${r.customer_name}: bugün tur bitiyor (${r.boat_name ?? "tekne"})`, href: "/admin/turlar", tone: "blue" });
-  for (const r of coming) if (daysTo(r.start_date) === 0) todo.push({ text: `${r.customer_name}: bugün giriş (${r.boat_name ?? "tekne"})`, href: "/admin/turlar", tone: "red" });
+  for (const r of nowOn) if (daysTo(r.end_date) === 0) todo.push({ text: `${r.customer_name}: bugün tur bitiyor (${r.boat_name ?? "yat"})`, href: "/admin/turlar", tone: "blue" });
+  for (const r of coming) if (daysTo(r.start_date) === 0) todo.push({ text: `${r.customer_name}: bugün giriş (${r.boat_name ?? "yat"})`, href: "/admin/turlar", tone: "red" });
 
   const in7 = coming.filter((r) => daysTo(r.start_date) <= 7).length;
   const out7 = upcoming.filter((r) => daysTo(r.end_date) <= 7).length;
@@ -109,7 +109,7 @@ export default async function Dashboard() {
               const p = portalOf(r); const on = r.start_date <= today;
               return (
                 <li key={r.id} className="flex flex-wrap items-center justify-between gap-2 py-3 text-sm">
-                  <span className="min-w-0"><b>{r.customer_name}</b> · {r.boat_name ?? "Tekne belirtilmedi"}<span className="block text-navy/60">{short(r.start_date)} → {short(r.end_date)}</span></span>
+                  <span className="min-w-0"><b>{r.customer_name}</b> · {r.boat_name ?? "Yat belirtilmedi"}<span className="block text-navy/60">{short(r.start_date)} → {short(r.end_date)}</span></span>
                   <span className="flex flex-wrap gap-1 text-xs font-semibold">
                     <span className={`rounded-full px-3 py-1 ${on ? "bg-turquoise text-white" : "bg-navy/10 text-navy"}`}>{on ? "Turda" : `${daysTo(r.start_date)} gün kaldı`}</span>
                     {p ? <span className={`rounded-full px-3 py-1 ${p.signed_at ? "bg-green-100 text-green-800" : "bg-amber-100 text-amber-900"}`}>{p.signed_at ? "İmzalı" : "İmzasız"}</span> : <span className="rounded-full bg-red-100 px-3 py-1 text-red-700">Panel yok</span>}
@@ -129,7 +129,7 @@ export default async function Dashboard() {
           <ul className="mt-3 divide-y divide-navy/10">
             {latest.map((r) => (
               <li key={r.id} className="flex justify-between gap-3 py-3 text-sm">
-                <span className="min-w-0">{r.customer_name}{r.source === "whatsapp" && <span className="ml-2 rounded-full bg-[#25D366]/15 px-2 py-0.5 text-xs font-semibold text-[#128C7E]">WhatsApp</span>} · {r.boat_name ?? "Tekne belirtilmedi"}</span>
+                <span className="min-w-0">{r.customer_name}{r.source === "whatsapp" && <span className="ml-2 rounded-full bg-[#25D366]/15 px-2 py-0.5 text-xs font-semibold text-[#128C7E]">WhatsApp</span>} · {r.boat_name ?? "Yat belirtilmedi"}</span>
                 <span className="shrink-0 text-navy/60">{statusLabel[r.status] ?? r.status}</span>
               </li>
             ))}
@@ -137,11 +137,11 @@ export default async function Dashboard() {
         )}
       </section>
 
-      <p className="mt-6 text-sm text-navy/60">Siteniz: {boatsPub.count ?? 0} yayında tekne ({boatsAll.count ?? 0} toplam).</p>
+      <p className="mt-6 text-sm text-navy/60">Siteniz: {boatsPub.count ?? 0} yayında yat ({boatsAll.count ?? 0} toplam).</p>
       <p className="mt-4 flex flex-wrap gap-3">
         <Link href="/admin/rezervasyonlar" className="inline-block rounded-xl bg-turquoise px-6 py-3 text-sm font-semibold text-white">Talepleri gör</Link>
         <Link href="/admin/turlar" className="inline-block rounded-xl border border-navy/15 bg-white px-6 py-3 text-sm font-semibold text-navy">Turlar</Link>
-        <Link href="/admin/tekneler" className="inline-block rounded-xl border border-navy/15 bg-white px-6 py-3 text-sm font-semibold text-navy">Tekneleri yönet</Link>
+        <Link href="/admin/tekneler" className="inline-block rounded-xl border border-navy/15 bg-white px-6 py-3 text-sm font-semibold text-navy">Yatları yönet</Link>
       </p>
     </>
   );

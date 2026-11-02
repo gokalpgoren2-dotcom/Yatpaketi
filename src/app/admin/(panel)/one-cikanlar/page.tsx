@@ -17,9 +17,9 @@ export default async function FeaturedAdmin() {
   return (
     <>
       <h1 className="font-display text-3xl">Öne çıkanların sırası</h1>
-      <p className="mt-1 text-sm text-navy/60">Ana sayfada soldan sağa bu sırayla görünür. Tekne eklemek için Tekneler listesinde "Öne çıkar"a basın. <Link href="/admin/tekneler" className="text-turquoise-dark">Tekneler →</Link></p>
+      <p className="mt-1 text-sm text-navy/60">Ana sayfada soldan sağa bu sırayla görünür. Yat eklemek için Yatlar listesinde "Öne çıkar"a basın. <Link href="/admin/tekneler" className="text-turquoise-dark">Yatlar →</Link></p>
       {sorted.length === 0 ? (
-        <p className="mt-5 rounded-2xl bg-white p-6 text-sm text-navy/70">Henüz öne çıkarılmış yayında tekne yok.</p>
+        <p className="mt-5 rounded-2xl bg-white p-6 text-sm text-navy/70">Henüz öne çıkarılmış yayında yat yok.</p>
       ) : (
         <ol className="mt-5 space-y-3">
           {sorted.map((b, i) => (

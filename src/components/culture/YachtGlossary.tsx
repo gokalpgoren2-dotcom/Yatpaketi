@@ -3,7 +3,7 @@
 import { useState } from "react";
 
 type Part = "bow" | "stern" | "port" | "starboard" | "deck" | null;
-// Sözlükteki kelimeyi teknenin bir bölümüyle eşleştirir (Türkçe ve İngilizce).
+// Sözlükteki kelimeyi yatın bir bölümüyle eşleştirir (Türkçe ve İngilizce).
 function partOf(word: string): Part {
   const w = word.toLocaleLowerCase("tr");
   if (/pruva|baş|bow/.test(w)) return "bow";
@@ -19,7 +19,7 @@ const DECK = "M150 46 C210 128 228 238 228 360 L226 490 Q224 518 198 520 L102 52
 const BOW = "M150 16 C188 63 214 110 229 156 L71 156 C86 110 112 63 150 16Z";
 const STERN = "M55 468 L245 468 L244 500 Q242 536 206 538 L94 538 Q58 536 56 500Z";
 
-// Etkileşimli sözlük: bir kelimeye dokununca teknenin ilgili bölümü yanar.
+// Etkileşimli sözlük: bir kelimeye dokununca yatın ilgili bölümü yanar.
 export function YachtGlossary({ items, hint }: { items: string[][]; hint: string }) {
   const [sel, setSel] = useState(0);
   const cur = items[sel] ?? items[0];

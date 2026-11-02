@@ -1,6 +1,6 @@
 export type Lang = "tr" | "en";
 
-// İngilizce sayfalar /en altındadır; adresler (tekne, bölge adresleri) Türkçe ile aynıdır.
+// İngilizce sayfalar /en altındadır; adresler (yat, bölge adresleri) Türkçe ile aynıdır.
 export function href(lang: Lang, path: string): string {
   if (lang === "tr") return path;
   if (path === "/") return "/en";
@@ -29,35 +29,35 @@ const tr = {
   months: ["Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"],
   days: ["Pzt", "Sal", "Çar", "Per", "Cum", "Cmt", "Paz"],
   // menü
-  navHome: "Ana Sayfa", navBoats: "Kiralık Tekneler", navAllBoats: "Tüm tekneler", navDest: "Limanlar", navAllDest: "Tüm limanlar",
+  navHome: "Ana Sayfa", navBoats: "Kiralık Yatlar", navAllBoats: "Tüm yatlar", navDest: "Limanlar", navAllDest: "Tüm limanlar",
   navGuide: "Yatpaketi Rehberi", navBlueVoyage: "Mavi Yolculuk", navBlog: "Blog", navAbout: "Hakkımızda", navServices: "Hizmetlerimiz", navContact: "İletişim",
   langGroup: "Dil seçimi", mainMenu: "Ana menü", mobileMenu: "Mobil menü", menuOpen: "Menüyü aç", menuClose: "Menüyü kapat", homeAria: "yatpaketi ana sayfa",
   // mobil çubuk
-  quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Tekneler", mbDest: "Limanlar", mbContact: "İletişim", mbFav: "Favoriler",
+  quickMenu: "Hızlı menü", mbHome: "Ana sayfa", mbBoats: "Yatlar", mbDest: "Limanlar", mbContact: "İletişim", mbFav: "Favoriler",
   // arama
-  searchAria: "Tekne arama", location: "Lokasyon", boatType: "Tekne tipi", all: "Tümü", date: "Tarih", searchBoats: "Tekneleri ara",
+  searchAria: "Yat arama", location: "Lokasyon", boatType: "Yat tipi", all: "Tümü", date: "Tarih", searchBoats: "Yatları ara",
   popular: "Popüler:", country: "Türkiye",
   // ana sayfa
   heroTitle: "Hayalinizdeki mavi yolculuğu kiralayın",
   heroSubtitle: "Gulet, motoryat, katamaran ve yelkenli seçeneklerini keşfedin, rezervasyon talebinizi iletin.",
-  byType: "Tekne tipine göre keşfedin",
-  featuredEyebrow: "Öne çıkan tekneler", featuredTitle: "Sizin için seçtiklerimiz", allBoatsBtn: "Tüm tekneler",
-  sampleHome: "Örnek içerik: Veritabanı bağlı olmadığı için örnek tekneler gösteriliyor.",
-  noBoatsHome: "Henüz yayında tekne yok. Çok yakında burada olacak.",
+  byType: "Yat tipine göre keşfedin",
+  featuredEyebrow: "Öne çıkan yatlar", featuredTitle: "Sizin için seçtiklerimiz", allBoatsBtn: "Tüm yatlar",
+  sampleHome: "Örnek içerik: Veritabanı bağlı olmadığı için örnek yatlar gösteriliyor.",
+  noBoatsHome: "Henüz yayında yat yok. Çok yakında burada olacak.",
   howEyebrow: "Nasıl çalışır?", howTitle: "Üç adımda talebinizi iletin",
   steps: [
-    ["1", "Tekneyi seçin", "Bölge, tarih, kişi sayısı ve bütçenize göre tekneleri filtreleyin."],
+    ["1", "Yatı seçin", "Bölge, tarih, kişi sayısı ve bütçenize göre yatları filtreleyin."],
     ["2", "Talebinizi iletin", "Tarih ve kişi sayınızla rezervasyon talebi oluşturun. Talep ücretsizdir."],
     ["3", "Onayı bekleyin", "Müsaitlik ve fiyat teyit edilir. Rezervasyon, onaydan sonra kesinleşir."],
   ] as string[][],
-  destEyebrow: "Limanlar", destTitle: "Popüler tekne kiralama limanları", seeAll: "Hepsini gör",
+  destEyebrow: "Limanlar", destTitle: "Popüler yat kiralama limanları", seeAll: "Hepsini gör",
   modesEyebrow: "Kiralama seçenekleri", modesTitle: "İhtiyacınıza göre planlayın",
   modes: [
     ["Günlük kiralama", "Koy turları, doğum günü ve özel organizasyonlar için."],
     ["Haftalık kiralama", "Kabinli mavi yolculuk: kaptan ve mürettebat dahil seçenekler."],
     ["Lüks yat koleksiyonu", "Üst segment yatlar, kişiye özel rota ve hizmet."],
   ] as string[][],
-  seeBoats: "Tekneleri gör →",
+  seeBoats: "Yatları gör →",
   routesEyebrow: "Mavi yolculuk", routesTitle: "Klasik rotalar",
   routes: [
     ["Göcek – 12 Ada", "7 gün", "Tersane, Cleopatra, Kapı Creek"],
@@ -66,40 +66,40 @@ const tr = {
   ] as string[][],
   whyEyebrow: "Neden yatpaketi?", whyTitle: "Güvenle seçin, rahatça tatil yapın",
   why: [
-    ["Seçilmiş filo", "Tekneleri tek tek inceleyip listeliyoruz."],
+    ["Seçilmiş filo", "Yatları tek tek inceleyip listeliyoruz."],
     ["Şeffaf süreç", "Rezervasyon talebiniz kesin rezervasyon değildir; onay sonrası netleşir."],
     ["Yerel uzmanlık", "Rota ve koy önerilerinde bölgeyi bilen ekip."],
     ["Yakın destek", "Telefon ve WhatsApp ile hızlı iletişim."],
   ] as string[][],
   blogEyebrow: "Yatpaketi Rehberi", blogTitle: "Okuyun, planlayın", allPosts: "Tüm yazılar",
-  footTag: "Türkiye’de yat ve tekne kiralama platformu.", customerLogin: "Müşteri Girişi", rights: "Tüm hakları saklıdır.",
-  // tekne kartı
+  footTag: "Türkiye’de yat ve yat kiralama platformu.", customerLogin: "Müşteri Girişi", rights: "Tüm hakları saklıdır.",
+  // yat kartı
   captained: "Mürettebatlı", askPrice: "Fiyat sorunuz", guestsN: (n: number) => `${n} misafir`, cabinsN: (n: number) => `${n} kabin`,
   perWeek: "/ hafta’dan", perDay: "/ gün’den",
   // liste sayfası
-  listEyebrow: "Kiralık Tekneler", listTitle: "Size Uygun Tekneyi Bulun",
+  listEyebrow: "Kiralık Yatlar", listTitle: "Size Uygun Yatı Bulun",
   datesNote: "Sonuçlar tarihe göre filtrelenmez. Müsaitlik, talebiniz sonrasında teyit edilir.",
-  fDest: "Liman", fType: "Tekne tipi", fGuests: "Misafir (en az)", fCabins: "Kabin (en az)", fMin: "En düşük fiyat", fMax: "En yüksek fiyat",
+  fDest: "Liman", fType: "Yat tipi", fGuests: "Misafir (en az)", fCabins: "Kabin (en az)", fMin: "En düşük fiyat", fMax: "En yüksek fiyat",
   fLength: "Uzunluk (en az, m)", fYear: "Yapım yılı (en az)", fRental: "Kiralama", fBoth: "Günlük ve haftalık", fDaily: "Günlük", fWeekly: "Haftalık",
   fCaptain: "Kaptan", fAny: "Fark etmez", fWithCaptain: "Kaptanlı", fNoCaptain: "Kaptansız", fCrew: "Mürettebat", fWithCrew: "Mürettebatlı", fNoCrew: "Mürettebatsız",
-  fSort: "Sıralama", sRec: "Önerilen", sPriceAsc: "En düşük fiyat", sPriceDesc: "En yüksek fiyat", sNew: "En yeni eklenen", sLength: "Tekne uzunluğu",
+  fSort: "Sıralama", sRec: "Önerilen", sPriceAsc: "En düşük fiyat", sPriceDesc: "En yüksek fiyat", sNew: "En yeni eklenen", sLength: "Yat uzunluğu",
   filter: "Filtrele", clear: "Temizle",
-  priceNote: "Fiyat filtresi EUR, haftalık fiyat üzerinden çalışır (günlük kiralama seçiliyse günlük fiyat). “Fiyat sorunuz” teknelerinde fiyat filtresi uygulanamaz.",
-  foundN: (n: number) => `${n} tekne bulundu`, noneYet: "Henüz yayında tekne yok.", noMatch: "Bu filtrelere uygun tekne bulunamadı. Filtreleri gevşetmeyi deneyin.",
-  // tekne sayfası
-  breadcrumb: "Sayfa yolu", sendRequest: "Talep gönder", photoN: (n: number) => `fotoğraf ${n}`, sampleBoat: "Örnek içerik: Veritabanı bağlı olmadığı için örnek tekne gösteriliyor.",
-  about: "Tekne hakkında", specs: "Teknik özellikler", notStated: "Belirtilmedi",
-  sType: "Tekne tipi", sBrand: "Marka / model", sYear: "Yapım yılı", sRefit: "Yenileme yılı", sLen: "Uzunluk", sWidth: "Genişlik", sCabins: "Kabin", sCap: "Misafir kapasitesi",
+  priceNote: "Fiyat filtresi EUR, haftalık fiyat üzerinden çalışır (günlük kiralama seçiliyse günlük fiyat). “Fiyat sorunuz” yatlarında fiyat filtresi uygulanamaz.",
+  foundN: (n: number) => `${n} yat bulundu`, noneYet: "Henüz yayında yat yok.", noMatch: "Bu filtrelere uygun yat bulunamadı. Filtreleri gevşetmeyi deneyin.",
+  // yat sayfası
+  breadcrumb: "Sayfa yolu", sendRequest: "Talep gönder", photoN: (n: number) => `fotoğraf ${n}`, sampleBoat: "Örnek içerik: Veritabanı bağlı olmadığı için örnek yat gösteriliyor.",
+  about: "Yat hakkında", specs: "Teknik özellikler", notStated: "Belirtilmedi",
+  sType: "Yat tipi", sBrand: "Marka / model", sYear: "Yapım yılı", sRefit: "Yenileme yılı", sLen: "Uzunluk", sWidth: "Genişlik", sCabins: "Kabin", sCap: "Misafir kapasitesi",
   sCrew: "Mürettebat", crewN: (n: number) => `${n} kişi`, noCrew: "Mürettebatsız", sCaptain: "Kaptan", included: "Dahil", notIncluded: "Dahil değil",
   sPort: "Kalkış limanı", sRegions: "Kiralama bölgeleri",
   equipment: "Donanımlar", toys: "Su sporları ekipmanları", availability: "Müsaitlik",
   availText: "Müsaitlik ve kesin fiyat, rezervasyon talebiniz sonrasında teyit edilir. Tarihlerinizi talep kartından iletebilirsiniz.",
-  price: "Fiyat", dailyPrice: "Günlük", requestTitle: "Rezervasyon talebi gönderin", similar: "Benzer tekneler",
+  price: "Fiyat", dailyPrice: "Günlük", requestTitle: "Rezervasyon talebi gönderin", similar: "Benzer yatlar",
   rental: "Kiralama", titleSuffix: "Kiralama",
   // talep formları
   pickDates: "Lütfen giriş ve çıkış tarihini seçin.", endBefore: "Çıkış tarihi giriş tarihinden önce olamaz.",
-  waGreeting: (b: string) => `Merhaba, ${b} teknesi için rezervasyon talebi iletmek istiyorum.`,
-  waDate: "Tarih", waGuests: "Misafir sayısı", waName: "Ad soyad", waBoat: "Tekne",
+  waGreeting: (b: string) => `Merhaba, ${b} yatı için rezervasyon talebi iletmek istiyorum.`,
+  waDate: "Tarih", waGuests: "Misafir sayısı", waName: "Ad soyad", waBoat: "Yat",
   guestCount: "Misafir sayısı", lessGuests: "Misafir sayısını azalt", moreGuests: "Misafir sayısını artır",
   yourNameOpt: "Adınız (isteğe bağlı)", sendWa: "WhatsApp ile talep gönder",
   waHelp: "Hazır mesaj WhatsApp’ta açılır, göndermeden önce düzenleyebilirsiniz. Talebiniz kesin rezervasyon değildir; müsaitlik ve fiyat teyit edilir.",
@@ -109,10 +109,10 @@ const tr = {
   guestsReq: "Misafir sayısı *", message: "Mesaj", consent: "Bilgilerimin, bu talebi yanıtlamak amacıyla yatpaketi tarafından işlenmesini kabul ediyorum.",
   sending: "Gönderiliyor…", submit: "Rezervasyon Talebi Gönder", formNote: "Talebiniz kesin rezervasyon oluşturmaz. Müsaitlik ve fiyat teyit edildikten sonra rezervasyon kesinleşir.",
   // keşfet sayfaları
-  routePick: "Rotanızı Seçin", boatsCount: (n: number) => `${n} tekne`,
-  destHero: (n: string) => `${n} Tekne Kiralama`, destBoats: (n: string) => `${n} çıkışlı tekneler`, destNone: "Bu liman için henüz tekne eklenmedi.",
+  routePick: "Rotanızı Seçin", boatsCount: (n: number) => `${n} yat`,
+  destHero: (n: string) => `${n} Yat Kiralama`, destBoats: (n: string) => `${n} çıkışlı yatlar`, destNone: "Bu liman için henüz yat eklenmedi.",
   sampleData: "Örnek içerik: Veritabanı bağlı olmadığı için örnek veri gösteriliyor.",
-  catHero: (n: string) => `${n} Kiralama`, catBoats: (n: string) => `${n} tekneleri`, catNone1: "Bu tipte henüz yayında tekne yok.", catNone2: "Tüm tekneleri", catNone3: "inceleyebilirsiniz.",
+  catHero: (n: string) => `${n} Kiralama`, catBoats: (n: string) => `${n} yatları`, catNone1: "Bu tipte henüz yayında yat yok.", catNone2: "Tüm yatları", catNone3: "inceleyebilirsiniz.",
   // takvim
   checkIn: "Giriş", checkOut: "Çıkış", applyDates: "Tamam", prevMonth: "Önceki ay", nextMonth: "Sonraki ay", pickBoth: "Giriş ve çıkış tarihini seçin", pickEnd: "çıkış tarihini seçin",
   tapEnd: "Şimdi çıkış tarihine dokunun.", tapStart: "Önce giriş, sonra çıkış tarihine dokunun.",

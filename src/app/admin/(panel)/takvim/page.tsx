@@ -18,7 +18,7 @@ const fmt = (d: string) => new Date(d + "T12:00:00").toLocaleDateString("tr-TR",
 const range = (a: string, b: string) => (a === b ? fmt(a) : `${fmt(a)} – ${fmt(b)}`);
 const shiftMonth = (ym: string, d: number) => { const [y, m] = ym.split("-").map(Number); const dt = new Date(Date.UTC(y, m - 1 + d, 1)); return `${dt.getUTCFullYear()}-${pad(dt.getUTCMonth() + 1)}`; };
 
-export default async function Calendar({ searchParams }: { searchParams: Promise<{ tekne?: string; ay?: string; error?: string; saved?: string; t?: string }> }) {
+export default async function Calendar({ searchParams }: { searchParams: Promise<{ yat?: string; ay?: string; error?: string; saved?: string; t?: string }> }) {
   const sp = await searchParams;
   const { supabase } = await requireAdmin();
   const nowIst = new Date().toLocaleDateString("en-CA", { timeZone: "Europe/Istanbul" });
@@ -30,7 +30,7 @@ export default async function Calendar({ searchParams }: { searchParams: Promise
 
   const { data: boatData, error: boatError } = await supabase.from("boats").select("id,name").order("sort_order").order("name");
   const boats = (boatData ?? []) as Boat[];
-  const boat = boats.find((b) => b.id === sp.tekne) ?? boats[0];
+  const boat = boats.find((b) => b.id === sp.yat) ?? boats[0];
 
   const [{ data: reqData }, { data: blockData }] = await Promise.all([
     supabase.from("reservation_requests").select("id,boat_id,boat_name,customer_name,start_date,end_date,status").in("status", ["confirmed", "new", "contacted", "offered"]).lte("start_date", last).gte("end_date", first),
@@ -42,7 +42,7 @@ export default async function Calendar({ searchParams }: { searchParams: Promise
   const reqFor = (b: Boat) => reqs.filter((r) => r.boat_id === b.id || (!r.boat_id && r.boat_name === b.name));
   const dayList = Array.from({ length: daysIn }, (_, i) => `${ym}-${pad(i + 1)}`);
 
-  // Her teknenin bu ayki dolu gün sayısı (onaylı + elle kapatılan).
+  // Her yatın bu ayki dolu gün sayısı (onaylı + elle kapatılan).
   const fullDays = (b: Boat) => {
     const conf = reqFor(b).filter((r) => r.status === "confirmed");
     const bl = blocks.filter((x) => x.boat_id === b.id);
@@ -71,7 +71,7 @@ export default async function Calendar({ searchParams }: { searchParams: Promise
 
   const offset = (new Date(Date.UTC(y, m - 1, 1)).getUTCDay() + 6) % 7;
   const cells: (string | null)[] = [...Array(offset).fill(null), ...dayList];
-  const q = (b: string, month: string) => `?tekne=${b}&ay=${month}`;
+  const q = (b: string, month: string) => `?yat=${b}&ay=${month}`;
 
   return (
     <>
@@ -79,13 +79,13 @@ export default async function Calendar({ searchParams }: { searchParams: Promise
       <p className="mt-1 text-sm text-navy/60">Yalnızca siz görürsünüz, sitede gösterilmez. Onayladığınız rezervasyonlar bu takvimde otomatik dolu görünür.</p>
       {sp.saved && <Notice key={"s" + sp.t} kind="ok" text="Kaydedildi." />}
       {sp.error && <Notice key={"e" + sp.t} kind="error" text={sp.error} />}
-      {boatError && <Notice kind="error" text={"Tekneler okunamadı: " + boatError.message} />}
+      {boatError && <Notice kind="error" text={"Yatlar okunamadı: " + boatError.message} />}
 
       {!boat ? (
-        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60 shadow-sm">Henüz tekne yok. Önce Tekneler bölümünden tekne ekleyin.</p>
+        <p className="mt-6 rounded-2xl bg-white p-6 text-sm text-navy/60 shadow-sm">Henüz yat yok. Önce Yatlar bölümünden yat ekleyin.</p>
       ) : (
         <>
-          <nav aria-label="Tekne seçimi" className="mt-5 flex gap-2 overflow-x-auto pb-1">
+          <nav aria-label="Yat seçimi" className="mt-5 flex gap-2 overflow-x-auto pb-1">
             {boats.map((b) => (
               <Link key={b.id} href={q(b.id, ym)} className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-medium ${b.id === boat.id ? "bg-navy text-white" : "bg-white text-navy ring-1 ring-navy/15"}`}>
                 {b.name}<span className="ml-2 text-xs opacity-70">{fullDays(b)} gün dolu</span>
@@ -115,7 +115,7 @@ export default async function Calendar({ searchParams }: { searchParams: Promise
 
           <section className="mt-5 rounded-2xl bg-white p-4 shadow-sm">
             <h2 className="font-semibold">Bu ayın kayıtları</h2>
-            {confirmed.length + myBlocks.length + pending.length === 0 && <p className="mt-2 text-sm text-navy/60">Bu ay bu tekne için kayıt yok, tamamen boş.</p>}
+            {confirmed.length + myBlocks.length + pending.length === 0 && <p className="mt-2 text-sm text-navy/60">Bu ay bu yat için kayıt yok, tamamen boş.</p>}
             <ul className="mt-2 divide-y divide-navy/10 text-sm">
               {confirmed.map((r) => (
                 <li key={r.id} className="flex items-center justify-between gap-3 py-3">

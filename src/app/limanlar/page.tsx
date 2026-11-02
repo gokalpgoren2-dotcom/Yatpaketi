@@ -3,7 +3,7 @@ import { DestinationsView } from "@/views/DestinationsView";
 
 export const metadata: Metadata = {
   title: "Limanlar",
-  description: "Bodrum, Göcek, Fethiye, Marmaris, Datça ve Kaş limanlarından tekne kiralama rotaları.",
+  description: "Bodrum, Göcek, Fethiye, Marmaris, Datça ve Kaş limanlarından yat kiralama rotaları.",
   alternates: { canonical: "/limanlar", languages: { tr: "/limanlar", en: "/en/limanlar" } },
 };
 

@@ -42,8 +42,8 @@ export default async function PanelLayout({ children }: { children: React.ReactN
     {
       title: "Site içeriği",
       items: [
-        { href: "/admin/tekneler", label: "Tekneler", icon: I.boat },
-        { href: "/admin/kategoriler", label: "Tekne Tipleri", icon: I.tag },
+        { href: "/admin/tekneler", label: "Yatlar", icon: I.boat },
+        { href: "/admin/kategoriler", label: "Yat Tipleri", icon: I.tag },
         { href: "/admin/destinasyonlar", label: "Limanlar", icon: I.pin },
         { href: "/admin/yazilar", label: "Yazılar", icon: I.doc },
         { href: "/admin/karsilastirmalar", label: "Karşılaştırmalar", icon: I.tag },

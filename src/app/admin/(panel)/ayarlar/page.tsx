@@ -29,7 +29,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <div>
           <label htmlFor="whatsapp" className={lab}>WhatsApp numarası</label>
           <input id="whatsapp" name="whatsapp" type="tel" inputMode="tel" defaultValue={formatPhone(normalizePhone(v.whatsapp ?? ""))} placeholder="0541 681 23 14" className={input} />
-          <p className="mt-1 text-xs text-navy/50">Doluysa tekne sayfalarında ve ana sayfada WhatsApp düğmesi görünür. Başında 0 ile veya ülke koduyla yazabilirsiniz.</p>
+          <p className="mt-1 text-xs text-navy/50">Doluysa yat sayfalarında ve ana sayfada WhatsApp düğmesi görünür. Başında 0 ile veya ülke koduyla yazabilirsiniz.</p>
         </div>
         <div>
           <label htmlFor="email" className={lab}>E-posta</label>

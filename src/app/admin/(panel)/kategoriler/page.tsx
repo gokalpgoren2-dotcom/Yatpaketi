@@ -13,7 +13,7 @@ export default async function List() {
   return (
     <>
       <div className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="font-display text-3xl">Tekne tipleri</h1>
+        <h1 className="font-display text-3xl">Yat tipleri</h1>
         <Link href="/admin/kategoriler/yeni" className="rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white">+ Yeni</Link>
       </div>
       <p className="mt-1 text-sm text-navy/60">Gulet, motoryat gibi tipler. Her tipin sitede kendi sayfası vardır.</p>

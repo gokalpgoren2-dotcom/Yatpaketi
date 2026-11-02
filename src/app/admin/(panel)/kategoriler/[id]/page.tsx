@@ -16,7 +16,7 @@ export default async function Edit({ params }: { params: Promise<{ id: string }>
   }
   return (
     <>
-      <p className="text-sm"><Link href="/admin/kategoriler" className="text-turquoise-dark">← Tekne tipleri</Link></p>
+      <p className="text-sm"><Link href="/admin/kategoriler" className="text-turquoise-dark">← Yat tipleri</Link></p>
       <h1 className="font-display mt-2 text-3xl">{row ? row.name_tr : "Yeni"}</h1>
       <div className="mt-5"><EntityForm table="categories" row={row} /></div>
     </>

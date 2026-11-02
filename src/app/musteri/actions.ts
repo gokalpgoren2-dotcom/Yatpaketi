@@ -52,14 +52,14 @@ export async function finishUpload(path: string): Promise<{ ok: boolean; mailed?
       const toCustomer = await sendMail({
         to: portal.email,
         subject: `İmzalı kiralama sözleşmeniz alındı – ${portal.boat_name} (${range})`,
-        text: `Merhaba,\n\n${portal.boat_name} teknesi için ${range} tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.\n\nYatpaketi`,
-        html: wrap(`<p style="margin:0 0 12px">Merhaba,</p><p style="margin:0 0 12px">İmzalı kiralama sözleşmenizi aldık. Bir kopyası ekte yer almaktadır; saklamanızı öneririz.</p>` + mailFacts([["Tekne", portal.boat_name], ["Tarih", range]]), { title: "İmzalı sözleşmeniz alındı", preheader: `${portal.boat_name} – ${range}` }),
+        text: `Merhaba,\n\n${portal.boat_name} yatı için ${range} tarihli kiralama sözleşmesinin imzalı hâlini aldık. Bir kopyası ekte yer almaktadır.\n\nYatpaketi`,
+        html: wrap(`<p style="margin:0 0 12px">Merhaba,</p><p style="margin:0 0 12px">İmzalı kiralama sözleşmenizi aldık. Bir kopyası ekte yer almaktadır; saklamanızı öneririz.</p>` + mailFacts([["Yat", portal.boat_name], ["Tarih", range]]), { title: "İmzalı sözleşmeniz alındı", preheader: `${portal.boat_name} – ${range}` }),
         attachments,
       });
       mailed = toCustomer.ok;
       const admin = adminMail();
       if (admin) {
-        const note = `${who} (${portal.email}), ${portal.boat_name} teknesinin ${range} tarihli kiralama sözleşmesini imzalayıp yükledi. İmzalı sözleşme ekte.`;
+        const note = `${who} (${portal.email}), ${portal.boat_name} yatının ${range} tarihli kiralama sözleşmesini imzalayıp yükledi. İmzalı sözleşme ekte.`;
         await sendMail({ to: admin, subject: `Sözleşme imzalandı – ${portal.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p style="margin:0 0 12px">${esc(note)}</p>`, { title: "Sözleşme imzalandı" }), attachments });
       }
     }

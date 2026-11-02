@@ -14,9 +14,9 @@ const messages: Record<string, string> = {
   email: "E-posta adresi geçersiz görünüyor.",
   dates: "Tarihleri kontrol edin: giriş bugünden önce, çıkış girişten önce olamaz ve süre en fazla 60 gün olabilir.",
   guests: "Misafir sayısı geçersiz.",
-  capacity: "Misafir sayısı bu teknenin kapasitesini aşıyor.",
+  capacity: "Misafir sayısı bu yatın kapasitesini aşıyor.",
   message: "Mesajınız çok uzun (en fazla 2000 karakter).",
-  boat: "Bu tekne artık yayında değil.",
+  boat: "Bu yat artık yayında değil.",
   rate: "Çok fazla talep gönderildi. Lütfen daha sonra tekrar deneyin.",
 };
 

@@ -11,10 +11,10 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const d = destinations.find((x) => x.slug === slug);
   if (!d) return {};
   return {
-    title: d.seoTitle || `${d.name} Tekne Kiralama`,
+    title: d.seoTitle || `${d.name} Yat Kiralama`,
     description: d.seoDescription || `${d.name} çıkışlı gulet, motoryat, katamaran ve yelkenli kiralama seçenekleri. ${d.intro.slice(0, 120)}`,
     alternates: { canonical: `/limanlar/${d.slug}`, languages: { tr: `/limanlar/${d.slug}`, en: `/en/limanlar/${d.slug}` } },
-    // Gerçek tekne yokken sayfa indekslenmez.
+    // Gerçek yat yokken sayfa indekslenmez.
     robots: boatsFor(boats, d.slug).length > 0 ? { index: false, follow: true } : { index: false, follow: false },
   };
 }

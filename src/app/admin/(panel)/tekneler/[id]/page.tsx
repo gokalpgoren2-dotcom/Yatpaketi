@@ -23,7 +23,7 @@ export default async function EditBoat({ params, searchParams }: { params: Promi
 
   return (
     <>
-      <p className="text-sm"><Link href="/admin/tekneler" className="text-turquoise-dark">← Tekneler</Link></p>
+      <p className="text-sm"><Link href="/admin/tekneler" className="text-turquoise-dark">← Yatlar</Link></p>
       <h1 className="font-display mt-2 text-3xl">{boat.data.name}</h1>
       {saved && <Notice key={"s"+t} kind="ok" text="Kaydedildi." />}
       {error && <Notice key={"e"+t} kind="error" text={error} />}
@@ -43,8 +43,8 @@ export default async function EditBoat({ params, searchParams }: { params: Promi
       </div>
 
       <details className="mt-10 rounded-2xl border border-red-200 bg-white p-5">
-        <summary className="cursor-pointer text-sm font-semibold text-red-700">Tekneyi sil</summary>
-        <p className="mt-3 text-sm text-navy/70">Bu işlem tekneyi ve tüm fotoğraflarını kalıcı olarak siler. Geri alınamaz. Sadece sitede göstermek istemiyorsanız, “Sitede yayınla” seçeneğini kapatın.</p>
+        <summary className="cursor-pointer text-sm font-semibold text-red-700">Yatı sil</summary>
+        <p className="mt-3 text-sm text-navy/70">Bu işlem yatı ve tüm fotoğraflarını kalıcı olarak siler. Geri alınamaz. Sadece sitede göstermek istemiyorsanız, “Sitede yayınla” seçeneğini kapatın.</p>
         <form action={deleteBoat} className="mt-4">
           <input type="hidden" name="id" value={id} />
           <button className="rounded-xl bg-red-700 px-5 py-3 text-sm font-semibold text-white">Evet, kalıcı olarak sil</button>

@@ -63,7 +63,7 @@ export function CancelPanel({ id }: { id: string }) {
       {err && <p role="alert" className="rounded-lg bg-white p-2 text-sm font-medium text-red-700">{err}</p>}
       <div>
         <label htmlFor={`rs-${id}`} className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">İptal sebebi *</label>
-        <textarea id={`rs-${id}`} rows={3} maxLength={1000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Örn. Müşteri tarih değiştirdi, tekne müsait değil, fiyatta anlaşılamadı" className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" />
+        <textarea id={`rs-${id}`} rows={3} maxLength={1000} value={reason} onChange={(e) => setReason(e.target.value)} placeholder="Örn. Müşteri tarih değiştirdi, yat müsait değil, fiyatta anlaşılamadı" className="w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base" />
       </div>
       <div>
         <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-navy/60">Kanıt dosyaları (isteğe bağlı)</p>

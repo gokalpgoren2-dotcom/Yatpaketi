@@ -14,12 +14,12 @@ import { CompareInsights } from "./CompareInsights";
 
 const T = {
   tr: {
-    empty: "Henüz favori tekneniz yok.", emptyText: "Tekne kartlarındaki kalbe dokunarak beğendiklerinizi buraya ekleyin, sonra yan yana karşılaştırın.", browse: "Tekneleri incele",
-    count: (n: number) => `${n} tekne karşılaştırılıyor`, clear: "Listeyi temizle", remove: "Çıkar", open: "Tekneyi gör",
+    empty: "Henüz favori yatınız yok.", emptyText: "Yat kartlarındaki kalbe dokunarak beğendiklerinizi buraya ekleyin, sonra yan yana karşılaştırın.", browse: "Yatları incele",
+    count: (n: number) => `${n} yat karşılaştırılıyor`, clear: "Listeyi temizle", remove: "Çıkar", open: "Yatı gör",
     rows: { type: "Tip", port: "Çıkış limanı", guests: "Misafir", cabins: "Kabin", length: "Boy", year: "Yıl", crew: "Mürettebat", captain: "Kaptan", price: "Fiyat", ac: "Klima", jacuzzi: "Jakuzi", offer: "Kampanya", rating: "Puan" },
     yes: "Var", no: "Yok", included: "Dahil", notIncluded: "Dahil değil", askPrice: "Fiyat sorunuz", people: "kişi",
-    ask: "Tek mesajla WhatsApp'tan sor", askNote: "Seçtiğiniz tekneler hazır bir mesaj olarak WhatsApp'ta açılır; tarihlerinizi ekleyip gönderirsiniz.",
-    msg: (list: string) => `Merhaba, aşağıdaki tekneler hakkında bilgi ve müsaitlik almak istiyorum:\n\n${list}\n\nTarihlerim: `,
+    ask: "Tek mesajla WhatsApp'tan sor", askNote: "Seçtiğiniz yatlar hazır bir mesaj olarak WhatsApp'ta açılır; tarihlerinizi ekleyip gönderirsiniz.",
+    msg: (list: string) => `Merhaba, aşağıdaki yatlar hakkında bilgi ve müsaitlik almak istiyorum:\n\n${list}\n\nTarihlerim: `,
     mail: "E-posta ile sor",
   },
   en: {
@@ -118,13 +118,13 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         return (
           <section className="mt-10" aria-label={lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
             <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
-            <p className="mt-1 text-sm text-navy/65">{lang === "en" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki tekne seçin, nasıl ayrıştıklarını görün."}</p>
+            <p className="mt-1 text-sm text-navy/65">{lang === "en" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki yat seçin, nasıl ayrıştıklarını görün."}</p>
             <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
-              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang === "en" ? "First yacht" : "Birinci tekne"}>
+              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang === "en" ? "First yacht" : "Birinci yat"}>
                 {list.filter((x) => x.slug !== sb).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
               <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang === "en" ? "vs" : "karşı"}</span>
-              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang === "en" ? "Second yacht" : "İkinci tekne"}>
+              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang === "en" ? "Second yacht" : "İkinci yat"}>
                 {list.filter((x) => x.slug !== sa).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
             </div>
@@ -138,7 +138,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         <p className="mt-2 max-w-xl text-white/75">{L.askNote}</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
           {whatsapp && <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener noreferrer" className={`${cta} bg-[#25D366] text-white hover:brightness-95`}>WhatsApp</a>}
-          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang === "en" ? "Yacht enquiry" : "Tekne bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
+          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang === "en" ? "Yacht enquiry" : "Yat bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
         </div>
       </div>
     </div>

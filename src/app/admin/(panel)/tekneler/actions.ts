@@ -29,7 +29,7 @@ export async function saveBoat(formData: FormData) {
   const id = str(formData, "id");
 
   const name = str(formData, "name");
-  if (!name) fail(id, "Tekne adı zorunlu.");
+  if (!name) fail(id, "Yat adı zorunlu.");
   const slug = slugify(str(formData, "slug") ?? name!);
   if (!slug) fail(id, "Adres (slug) oluşturulamadı.");
 
@@ -97,10 +97,10 @@ export async function saveBoat(formData: FormData) {
   let boatId = id;
   if (id) {
     const { error } = await supabase.from("boats").update(row).eq("id", id);
-    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir teknede kullanılıyor." : "Kaydedilemedi: " + error.message);
+    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : "Kaydedilemedi: " + error.message);
   } else {
     const { data, error } = await supabase.from("boats").insert(row).select("id").single();
-    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir teknede kullanılıyor." : "Kaydedilemedi: " + (error?.message ?? ""));
+    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : "Kaydedilemedi: " + (error?.message ?? ""));
     boatId = data!.id as string;
   }
 
@@ -109,7 +109,7 @@ export async function saveBoat(formData: FormData) {
   await supabase.from("boat_destinations").delete().eq("boat_id", boatId!);
   if (destIds.length > 0) {
     const { error } = await supabase.from("boat_destinations").insert(destIds.map((d) => ({ boat_id: boatId!, destination_id: d })));
-    if (error) fail(boatId, "Tekne kaydedildi ama limanlar kaydedilemedi: " + error.message);
+    if (error) fail(boatId, "Yat kaydedildi ama limanlar kaydedilemedi: " + error.message);
   }
 
   revalidatePath("/");
@@ -163,7 +163,7 @@ export async function bulkSetPublished(formData: FormData) {
   redirect(`${safeBack}${sep}bulk=${value ? "pub" : "unpub"}&n=${ids.length}`);
 }
 
-// Filtredeki (arama/durum/kategori/bilgi) tüm tekneleri yayına alır. En fazla 500 tekne.
+// Filtredeki (arama/durum/kategori/bilgi) tüm yatları yayına alır. En fazla 500 yat.
 export async function publishFiltered(formData: FormData) {
   const { supabase } = await requireAdmin();
   const back = String(formData.get("back") ?? "/admin/tekneler");

@@ -1,4 +1,4 @@
-// GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Tekneler, fiyatlar ve açıklamalar gerçek değildir.
+// GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Yatlar, fiyatlar ve açıklamalar gerçek değildir.
 
 export type Offer = { kind: "early" | "discount"; percent: number; until: string };
 
@@ -59,7 +59,7 @@ export const boats: Boat[] = [
   { slug: "ornek-katamaran-1", name: "Örnek Katamaran 1", type: "Katamaran", brand: "Örnek Cat", model: "Cat 45", year: 2021, refit: null, port: "Fethiye", destinations: ["fethiye", "gocek"], guests: 10, cabins: 5, crew: 2, length: 14, width: 7.5, captained: true, priceDaily: null, priceWeekly: 3200, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Geniş salonlu, stabil katamaran.", hue: 185, addedAt: "2026-09-18" },
   { slug: "ornek-yelkenli-1", name: "Örnek Yelkenli 1", type: "Yelkenli / Katamaran", brand: "Örnek Sail", model: "Sloop 13", year: 2016, refit: 2022, port: "Marmaris", destinations: ["marmaris"], guests: 6, cabins: 3, crew: 0, length: 13, width: 4.2, captained: false, priceDaily: null, priceWeekly: 2100, showPrice: true, currency: "EUR", equipment: ["Jeneratör", "Tender bot", "GPS"], waterSports: ["Şnorkel takımı"], description: "Örnek içerik: Kaptansız kiralanabilen yelkenli.", hue: 200, addedAt: "2026-09-25" },
   { slug: "ornek-luks-yat-1", name: "Örnek Lüks Yat 1", type: "Lüks Yat", brand: "Örnek Yachts", model: "Superyacht 35", year: 2022, refit: null, port: "Bodrum", destinations: ["bodrum", "marmaris"], guests: 10, cabins: 5, crew: 6, length: 35, width: 8, captained: true, priceDaily: null, priceWeekly: 18000, showPrice: false, currency: "EUR", equipment: [...eq, "Jakuzi", "Şef"], waterSports: [...ws, "Jet ski"], description: "Örnek içerik: Tam mürettebatlı lüks yat.", hue: 220, addedAt: "2026-10-02" },
-  { slug: "ornek-gunluk-1", name: "Örnek Günlük Tekne 1", type: "Günlük Tekneler", brand: "Örnek Tur", model: "Gulet 16", year: 2019, refit: null, port: "Göcek", destinations: ["gocek"], guests: 14, cabins: 0, crew: 2, length: 16, width: 4.8, captained: true, priceDaily: 450, priceWeekly: null, showPrice: true, currency: "EUR", equipment: ["Güneşlenme alanı", "Müzik sistemi", "Yemek servisi"], waterSports: ["Şnorkel takımı", "Deniz kanosu"], description: "Örnek içerik: Günübirlik koy turu teknesi.", hue: 178, addedAt: "2026-10-08" },
+  { slug: "ornek-gunluk-1", name: "Örnek Günlük Yat 1", type: "Günlük Yatlar", brand: "Örnek Tur", model: "Gulet 16", year: 2019, refit: null, port: "Göcek", destinations: ["gocek"], guests: 14, cabins: 0, crew: 2, length: 16, width: 4.8, captained: true, priceDaily: 450, priceWeekly: null, showPrice: true, currency: "EUR", equipment: ["Güneşlenme alanı", "Müzik sistemi", "Yemek servisi"], waterSports: ["Şnorkel takımı", "Deniz kanosu"], description: "Örnek içerik: Günübirlik koy turu yatı.", hue: 178, addedAt: "2026-10-08" },
   { slug: "ornek-trawler-1", name: "Örnek Trawler 1", type: "Trawler", brand: "Örnek Trawler", model: "Trawler 18", year: 2017, refit: 2021, port: "Marmaris", destinations: ["marmaris"], guests: 6, cabins: 3, crew: 2, length: 18, width: 5, captained: true, priceDaily: 900, priceWeekly: 5400, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Ekonomik yakıt tüketimli trawler.", hue: 170, addedAt: "2026-10-15" },
   { slug: "ornek-gulet-2", name: "Örnek Gulet 2", type: "Gulet", brand: "Örnek Tersane", model: "Bodrum 24", year: 2014, refit: 2020, port: "Bodrum", destinations: ["bodrum", "marmaris"], guests: 10, cabins: 5, crew: 3, length: 24, width: 6.5, captained: true, priceDaily: null, priceWeekly: 3800, showPrice: true, currency: "EUR", equipment: eq, waterSports: ws, description: "Örnek içerik: Geleneksel hatlı, beş kabinli gulet.", hue: 192, addedAt: "2026-10-20" },
 ];
@@ -99,7 +99,7 @@ export type Filters = {
 };
 
 // Fiyat karşılaştırması: seçilen kiralama türüne göre; seçilmediyse haftalık fiyat (yoksa günlük x 7).
-// Fiyatı gizli ("Fiyat sorunuz") tekneler fiyat filtresi açıkken listeden çıkar.
+// Fiyatı gizli ("Fiyat sorunuz") yatlar fiyat filtresi açıkken listeden çıkar.
 function comparablePrice(b: Boat, mode?: Filters["kiralama"]): number | null {
   if (!b.showPrice) return null;
   if (mode === "gunluk") return b.priceDaily;

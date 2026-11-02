@@ -109,7 +109,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{L.listEyebrow}</p>
             <h1 className="font-display mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] lg:text-6xl">{L.listTitle}</h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 lg:text-lg">
-              {en ? "Pick a port, boat type and group size; refine with price, length and crew whenever you like." : "Liman, tekne tipi ve kişi sayınızı seçin; dilerseniz fiyat, uzunluk ve mürettebatla daraltın."}
+              {en ? "Pick a port, boat type and group size; refine with price, length and crew whenever you like." : "Liman, yat tipi ve kişi sayınızı seçin; dilerseniz fiyat, uzunluk ve mürettebatla daraltın."}
             </p>
           </div>
         </section>
@@ -120,7 +120,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             {one(sp.giris) && <input type="hidden" name="giris" value={one(sp.giris)} />}
             {one(sp.cikis) && <input type="hidden" name="cikis" value={one(sp.cikis)} />}
 
-            {/* Tekne tipi: ikonlu kartlar */}
+            {/* Yat tipi: ikonlu kartlar */}
             <p className={lab}>{L.fType}</p>
             <div className="-mx-1 flex snap-x gap-2 overflow-x-auto px-1 pb-1 [scrollbar-width:none]">
               {[{ slug: "all", name: L.all, value: "" }, ...categories.map((c) => ({ slug: c.slug, name: c.name, value: c.name }))].map((c) => (
@@ -159,7 +159,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
                 </div>
               </div>
               <button type="submit" className="h-[46px] rounded-xl bg-turquoise px-7 text-sm font-semibold text-navy shadow-lg shadow-turquoise/25 transition hover:brightness-110 sm:col-span-2 lg:col-span-1">
-                {en ? "Show boats" : "Tekneleri göster"}
+                {en ? "Show boats" : "Yatları göster"}
               </button>
             </div>
 

@@ -30,16 +30,16 @@ const PHASE_OF: Record<string, number> = { talep: 0, "musaitlik-teklif": 0, "ona
 
 const UI = {
   tr: {
-    eyebrow: "Yatpaketi Rehberi", title: "Talepten iskeleye, adım adım.", lead: "Bir mesajla başlayan yolculuğunuz, limanda sizi bekleyen tekneyle devam eder. Her aşamada ne olacağını, sizden ne beklendiğini ve bizim neyi üstlendiğimizi burada bulabilirsiniz.",
+    eyebrow: "Yatpaketi Rehberi", title: "Talepten iskeleye, adım adım.", lead: "Bir mesajla başlayan yolculuğunuz, limanda sizi bekleyen yatla devam eder. Her aşamada ne olacağını, sizden ne beklendiğini ve bizim neyi üstlendiğimizi burada bulabilirsiniz.",
     start: "Adımları görün", quote: "Hemen talep gönderin", step: "Adım",
     phases: [["Rezervasyon", "Talep, teklif ve onay"], ["Hazırlık", "Detaylar ve kumanya"], ["Yolculuk", "Karşılamadan teslime"], ["Sonrası", "Anılar ve geri bildirim"]],
     when: { talep: "Şimdi", "musaitlik-teklif": "Talebinizden sonra", "onay-sozlesme": "Teklifi onayladığınızda", "detaylar-kumanya-listesi": "Yolculuktan önce", "kumanya-alimi": "Biniş öncesi", "karsilama-welcome": "1. gün", "seyir-gunleri": "Yolculuk boyunca", "donus-teslim": "Son gün", sonrasi: "Dönüşte" } as Record<string, string>,
     turum: "Turum'da takip edin",
     mock: { label: "Örnek görünüm", title: "Turum", trip: "Göcek · 7 gün", items: [["Sözleşme imzalandı", "done"], ["Yolcu listesi", "done"], ["Kumanya listesi", "now"], ["Karşılama · Göcek Marina", "next"]] as [string, string][], ready: "Hazırlık", now: "Hazırlanıyor" },
     factsTitle: "Kısaca bilmeniz gerekenler",
-    facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Tekne, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Listenize göre alınır, belgeleriyle ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
-    ctaTitle: "İlk adım sadece bir mesaj.", ctaText: "Tatil tarihinizi, kişi sayınızı ve aklınızdaki bölgeyi yazın; size uygun tekneleri ve teklifi birlikte netleştirelim.", boats: "Tekneleri inceleyin", faq: "Sık sorulan sorular",
-    wa: "Merhaba, tekne kiralamak istiyorum. Tarih ve kişi sayısı: ",
+    facts: [["Talep sizi bağlamaz", "Talep göndermek ücretsizdir; bu aşamada ödeme yapmazsınız."], ["Fiyatı ne belirler?", "Yat, sezon, rota ve süre. Teklif bu bilgilere göre netleşir."], ["Kumanya", "Listenize göre alınır, belgeleriyle ayrıca hesaplanır."], ["Esnek rota", "Kaptan, güvenliğiniz için rotayı hava durumuna göre ayarlar."]],
+    ctaTitle: "İlk adım sadece bir mesaj.", ctaText: "Tatil tarihinizi, kişi sayınızı ve aklınızdaki bölgeyi yazın; size uygun yatları ve teklifi birlikte netleştirelim.", boats: "Yatları inceleyin", faq: "Sık sorulan sorular",
+    wa: "Merhaba, yat kiralamak istiyorum. Tarih ve kişi sayısı: ",
   },
   en: {
     eyebrow: "Yatpaketi Guide", title: "From request to the quay, step by step.", lead: "Your voyage starts with a message and continues with a boat waiting for you in port. Here you'll find what happens at each stage, what we need from you and what we take care of.",

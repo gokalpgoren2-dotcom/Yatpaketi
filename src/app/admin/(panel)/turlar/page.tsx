@@ -42,7 +42,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
   const pastCount = all.filter((r) => r.end_date < today).length;
   const rows = past ? all.filter((r) => r.end_date < today) : all.filter((r) => r.end_date >= today);
 
-  // Müşteri paneli, sözleşme ve hazırlık durumu: e-posta + tekne + başlangıç tarihiyle eşleştirilir.
+  // Müşteri paneli, sözleşme ve hazırlık durumu: e-posta + yat + başlangıç tarihiyle eşleştirilir.
   const { data: pData } = await supabase.from("customer_portals").select("id,email,boat_name,tour_start,status,signed_at");
   const portals = (pData ?? []) as Portal[];
   const ids = portals.map((p) => p.id);
@@ -92,13 +92,13 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
     const nights = Math.round((toMs(r.end_date) - toMs(r.start_date)) / dayMs);
     const left = week(r.start_date);
     const when = r.start_date <= today && r.end_date >= today ? "Turda" : left > 0 ? `${left} gün kaldı` : "";
-    const newPortal = `/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email ?? "", ad: r.customer_name, tekne: r.boat_name ?? "", bas: r.start_date, bit: r.end_date }).toString()}`;
+    const newPortal = `/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email ?? "", ad: r.customer_name, yat: r.boat_name ?? "", bas: r.start_date, bit: r.end_date }).toString()}`;
     return (
       <li className="rounded-2xl bg-white p-4 shadow-sm">
         <div className="flex items-start justify-between gap-3">
           <div className="min-w-0">
             <p className="font-semibold">{r.customer_name}</p>
-            <p className="text-sm text-navy/70">{r.boat_name ?? "Tekne belirtilmedi"}</p>
+            <p className="text-sm text-navy/70">{r.boat_name ?? "Yat belirtilmedi"}</p>
           </div>
           {when && <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-semibold ${when === "Turda" ? "bg-turquoise text-white" : "bg-navy/10 text-navy"}`}>{when}</span>}
         </div>
@@ -164,7 +164,7 @@ export default async function Tours({ searchParams }: { searchParams: Promise<{ 
           <ul className="mt-2 space-y-3">{nodate.map((r) => (
             <li key={r.id} className="rounded-2xl bg-white p-4 shadow-sm">
               <p className="font-semibold">{r.customer_name}</p>
-              <p className="text-sm text-navy/70">{r.boat_name ?? "Tekne belirtilmedi"}</p>
+              <p className="text-sm text-navy/70">{r.boat_name ?? "Yat belirtilmedi"}</p>
               {r.phone && <a href={`tel:${r.phone}`} className="mt-2 inline-block rounded-full border border-navy/15 px-3 py-1 text-xs font-semibold text-turquoise-dark">{r.phone}</a>}
               <Manage id={r.id} r={r} />
             </li>

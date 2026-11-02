@@ -20,7 +20,7 @@ export async function getCurated(): Promise<Curated[]> {
 }
 export const samePair = (c: { a: string; b: string }, x: string, y: string) => (c.a === x && c.b === y) || (c.a === y && c.b === x);
 
-// ---- Otomatik değerlendirme: tekne bilgilerinden üretilir ----
+// ---- Otomatik değerlendirme: yat bilgilerinden üretilir ----
 export type Side = "a" | "b" | null;
 export type Row = { label: string; a: string; b: string; win: Side };
 export type Point = { title: string; text: string; win: Side };
@@ -102,7 +102,7 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
       ? { title: en ? "Size" : "Boyut", win: lw, text: en
           ? `${nm(lw)} is ${Math.abs(a.length - b.length).toFixed(0)} m longer (${a.length} m vs ${b.length} m), which usually means roomier decks and living areas.`
           : `${nm(lw)}, ${Math.abs(a.length - b.length).toFixed(0)} m daha uzun (${a.length} m ve ${b.length} m); bu genellikle daha geniş güverte ve yaşam alanı demek.` }
-      : { title: en ? "Size" : "Boyut", win: null, text: en ? `Both yachts are about the same size (${a.length} m and ${b.length} m).` : `İki tekne de benzer boyda (${a.length} m ve ${b.length} m).` });
+      : { title: en ? "Size" : "Boyut", win: null, text: en ? `Both yachts are about the same size (${a.length} m and ${b.length} m).` : `İki yat de benzer boyda (${a.length} m ve ${b.length} m).` });
   }
 
   // Yenilik
@@ -114,7 +114,7 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
       ? { title: en ? "Age and refit" : "Yaş ve yenileme", win: w, text: en
           ? `${neu.name} is the more recent one${refitNote(neu)}, while ${old.name}${refitNote(old)} is older. A refit brings interiors and systems up to date, so check what was renewed.`
           : `${neu.name} daha yeni${refitNote(neu)}; ${old.name}${refitNote(old)} daha eski. Refit, iç mekân ve sistemleri yeniler; neyin yenilendiğine bakmakta fayda var.` }
-      : { title: en ? "Age and refit" : "Yaş ve yenileme", win: null, text: en ? "Both yachts are equally recent." : "İki tekne de aynı yenilikte." });
+      : { title: en ? "Age and refit" : "Yaş ve yenileme", win: null, text: en ? "Both yachts are equally recent." : "İki yat de aynı yenilikte." });
   }
 
   // Kabin ve kapasite
@@ -194,7 +194,7 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
     ? (en
         ? [wins.a.length ? `${A} leads on ${lead(wins.a)}.` : "", wins.b.length ? `${B} leads on ${lead(wins.b)}.` : "", "The better choice depends on your group size, budget and the kind of voyage you want."].filter(Boolean).join(" ")
         : [wins.a.length ? `${A}; ${lead(wins.a)} konusunda önde.` : "", wins.b.length ? `${B}; ${lead(wins.b)} konusunda önde.` : "", "Hangisinin daha iyi olduğu, grubunuzun büyüklüğüne, bütçenize ve nasıl bir yolculuk istediğinize göre değişir."].filter(Boolean).join(" "))
-    : (en ? "These two yachts are very close; the choice comes down to routes, dates and personal taste." : "Bu iki tekne birbirine çok yakın; seçim rota, tarih ve kişisel zevke kalıyor.");
+    : (en ? "These two yachts are very close; the choice comes down to routes, dates and personal taste." : "Bu iki yat birbirine çok yakın; seçim rota, tarih ve kişisel zevke kalıyor.");
   void pick;
   return { points: pts, summary };
 }

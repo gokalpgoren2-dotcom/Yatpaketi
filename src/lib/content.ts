@@ -63,7 +63,7 @@ export async function getDestinations(lang: Lang = "tr"): Promise<Destination[]>
   }
 }
 
-// ---- Tekneler ----
+// ---- Yatlar ----
 
 type Row = Record<string, any>;
 
@@ -116,7 +116,7 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
 const BOAT_SELECT =
   "*, categories(name_tr,name_en), boat_destinations(destinations(slug)), boat_images(path,is_cover,sort_order)";
 
-// Yayındaki tekneler. Supabase tanımlı değilse örnek tekneler (sample: true) döner.
+// Yayındaki yatlar. Supabase tanımlı değilse örnek yatlar (sample: true) döner.
 export async function getBoats(lang: Lang = "tr"): Promise<{ boats: Boat[]; sample: boolean }> {
   if (!supabaseConfigured()) return { boats: sampleBoats, sample: true };
   try {
@@ -138,7 +138,7 @@ export type Category = { slug: string; name: string; intro: string; image: strin
 
 const toCategory = (n: string): Category => ({ slug: slugify(n), name: n, intro: "", image: null, seoTitle: "", seoDescription: "" });
 
-// Tekne tipleri. Yeni alanlar (tanıtım metni vb.) henüz eklenmediyse yalnızca ad ve adres okunur.
+// Yat tipleri. Yeni alanlar (tanıtım metni vb.) henüz eklenmediyse yalnızca ad ve adres okunur.
 export async function getCategories(lang: Lang = "tr"): Promise<Category[]> {
   if (!supabaseConfigured()) return sampleCategories.map(toCategory);
   try {

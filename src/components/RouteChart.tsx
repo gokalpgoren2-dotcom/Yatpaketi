@@ -110,7 +110,7 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
 
   const lands = [...shores.map((s) => ({ d: s.area, line: s.line, hills: s.hills, depth: s.depth })), ...isles.map((s) => ({ d: s.d, line: s.d, hills: s.hills, depth: s.depth }))];
 
-  // tekne: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
+  // yat: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
   const boat: [number, number] = pts.length > 2 ? [(pts[1][0] + pts[2][0]) / 2, (pts[1][1] + pts[2][1]) / 2] : pts.length > 1 ? [(pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2] : pts[0];
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${stops.join(" → ")}`} className="block h-full w-full">
@@ -162,7 +162,7 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
         </g>
       )}
 
-      {/* rota: teknenin bıraktığı iz */}
+      {/* rota: yatın bıraktığı iz */}
       <path d={d} fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth={compact ? 9 : 7} strokeLinecap="round" />
       <path d={d} fill="none" stroke="#fff" strokeOpacity="0.92" strokeWidth={compact ? 2.6 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" />
 

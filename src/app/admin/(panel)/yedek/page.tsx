@@ -15,7 +15,7 @@ export default async function Backup() {
       <div className="mt-6 space-y-4">
         <section className="rounded-2xl bg-white p-5 shadow-sm">
           <h2 className="font-semibold">Yalnızca veriler (JSON, küçük dosya)</h2>
-          <p className="mt-1 text-sm text-navy/60">Tekneler, rezervasyon talepleri, müşteri panelleri, hazırlık listeleri, takvim kapatmaları, yazılar ve site ayarları. Şu an: {boats} tekne, {reqs} talep, {portals} müşteri paneli.</p>
+          <p className="mt-1 text-sm text-navy/60">Yatlar, rezervasyon talepleri, müşteri panelleri, hazırlık listeleri, takvim kapatmaları, yazılar ve site ayarları. Şu an: {boats} yat, {reqs} talep, {portals} müşteri paneli.</p>
           <a href="/admin/yedek/indir" className={`${btn} mt-3 bg-navy text-white`}>Tam yedeği indir</a>
         </section>
         <section className="rounded-2xl bg-white p-5 shadow-sm ring-2 ring-turquoise/40">
@@ -31,7 +31,7 @@ export default async function Backup() {
         <section className="rounded-2xl bg-amber-50 p-5 text-sm text-amber-900 ring-1 ring-amber-200">
           <h2 className="font-semibold">Bilmeniz gerekenler</h2>
           <ul className="mt-2 list-disc space-y-1 pl-5">
-            <li>ZIP yedeğine tekne fotoğrafları dahil değildir; onlar Supabase depolamasında ayrıca durur. Belgeler (sözleşme, imzalı, iptal kanıtları) ZIP'e dahildir.</li>
+            <li>ZIP yedeğine yat fotoğrafları dahil değildir; onlar Supabase depolamasında ayrıca durur. Belgeler (sözleşme, imzalı, iptal kanıtları) ZIP'e dahildir.</li>
             <li>Yedek dosyasında müşterilerin kişisel bilgileri bulunur. Herkese açık bir yere yüklemeyin, kimseyle paylaşmayın.</li>
             <li>Müşteri giriş kodları güvenlik için yedeğe konmaz; geri yükleme gerekirse kodlar yeniden oluşturulur.</li>
           </ul>

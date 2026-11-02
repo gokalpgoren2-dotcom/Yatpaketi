@@ -43,7 +43,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
   const wa = both && contact.whatsapp
     ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(en
         ? `Hello, I'm comparing ${A.name} and ${B.name}. Could you help me choose?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nMy dates: `
-        : `Merhaba, ${A.name} ile ${B.name} teknelerini karşılaştırıyorum. Seçmeme yardımcı olur musunuz?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nTarihlerim: `)}`
+        : `Merhaba, ${A.name} ile ${B.name} yatlarını karşılaştırıyorum. Seçmeme yardımcı olur musunuz?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nTarihlerim: `)}`
     : "";
 
   return (
@@ -58,10 +58,10 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
           </div>
           <div className={`${wrap} flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between`}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Yacht comparison" : "Tekne karşılaştırma"}</p>
-              <h1 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-6xl">{en ? "Which yacht" : "Hangi tekne"}<br /><span className="text-turquoise">{en ? "is right for you?" : "size uygun?"}</span></h1>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Yacht comparison" : "Yat karşılaştırma"}</p>
+              <h1 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-6xl">{en ? "Which yacht" : "Hangi yat"}<br /><span className="text-turquoise">{en ? "is right for you?" : "size uygun?"}</span></h1>
             </div>
-            <p className="max-w-md text-white/75 lg:border-l lg:border-white/20 lg:pl-6 lg:text-lg">{en ? "Pick two yachts and see how they compare on size, age, cabins, water sports and price, with our notes." : "İki tekne seçin; boy, yaş, kabin, su sporları ve fiyat açısından nasıl ayrıştıklarını notlarımızla birlikte görün."}</p>
+            <p className="max-w-md text-white/75 lg:border-l lg:border-white/20 lg:pl-6 lg:text-lg">{en ? "Pick two yachts and see how they compare on size, age, cabins, water sports and price, with our notes." : "İki yat seçin; boy, yaş, kabin, su sporları ve fiyat açısından nasıl ayrıştıklarını notlarımızla birlikte görün."}</p>
           </div>
         </section>
 
@@ -100,8 +100,8 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                     </div>
                   </>
                 )}
-                {(featured.length === 0 || A || B) && <p className="mt-6 rounded-3xl bg-mist p-8 text-center text-navy/70">{A || B ? (en ? `${(A ?? B)!.name} is selected. Now choose the second yacht above.` : `${(A ?? B)!.name} seçildi. Şimdi yukarıdan ikinci tekneyi seçin.`) : (en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki tekne seçin.")}</p>}
-                <p className="mt-6 text-sm text-navy/60">{en ? "Tip: save yachts with the heart and compare them in " : "İpucu: Tekneleri kalple favorileyip "}<Link href={href(lang, "/favorilerim")} className="font-semibold text-turquoise-dark underline">{en ? "your saved list" : "favoriler sayfasında"}</Link>{en ? "." : " da karşılaştırabilirsiniz."}</p>
+                {(featured.length === 0 || A || B) && <p className="mt-6 rounded-3xl bg-mist p-8 text-center text-navy/70">{A || B ? (en ? `${(A ?? B)!.name} is selected. Now choose the second yacht above.` : `${(A ?? B)!.name} seçildi. Şimdi yukarıdan ikinci yatı seçin.`) : (en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki yat seçin.")}</p>}
+                <p className="mt-6 text-sm text-navy/60">{en ? "Tip: save yachts with the heart and compare them in " : "İpucu: Yatları kalple favorileyip "}<Link href={href(lang, "/favorilerim")} className="font-semibold text-turquoise-dark underline">{en ? "your saved list" : "favoriler sayfasında"}</Link>{en ? "." : " da karşılaştırabilirsiniz."}</p>
               </div>
             )}
 

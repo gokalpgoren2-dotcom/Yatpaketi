@@ -17,7 +17,7 @@ const WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 
 function Ic({ d, size = 22 }: { d: string; size?: number }) {
   return <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d={d} /></svg>;
 }
-// Teknede yaşam kartlarının ikonları (sırayla)
+// Yatta yaşam kartlarının ikonları (sırayla)
 const LIFE_IC = [
   "M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18ZM15.5 8.5l-2 5-5 2 2-5 5-2Z",
   "M12 4a2 2 0 1 0 0 4 2 2 0 0 0 0-4ZM12 8v13M5 13a7 7 0 0 0 14 0M8 11h8",
@@ -107,7 +107,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        {/* Teknede yaşam */}
+        {/* Yatta yaşam */}
         <section id="teknede-yasam" className="scroll-mt-32 py-16 lg:py-24">
           <div className={wrap}>
             <div className="max-w-3xl">
@@ -167,7 +167,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
           </div>
         </section>
 
-        {/* Sözlük: etkileşimli tekne */}
+        {/* Sözlük: etkileşimli yat */}
         <section id="denizcilik-sozlugu" className="scroll-mt-32 py-16 lg:py-24">
           <div className={wrap}>
             <div className="max-w-3xl">
@@ -176,7 +176,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
               <p className="mt-5 text-lg text-navy/70">{C.gloLead}</p>
             </div>
             <div className="mt-12">
-              <YachtGlossary items={C.glo} hint={en ? "Bow facing up · tap a word" : "Teknenin başı yukarıda · bir kelimeye dokunun"} />
+              <YachtGlossary items={C.glo} hint={en ? "Bow facing up · tap a word" : "Yatın başı yukarıda · bir kelimeye dokunun"} />
             </div>
           </div>
         </section>

@@ -94,7 +94,7 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
     return { ...m, end, show, text, f, box };
   });
 
-  // tekne: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
+  // yat: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
   const boat: [number, number] = route.length > 2 ? [(route[1][0] + route[2][0]) / 2, (route[1][1] + route[2][1]) / 2] : route.length > 1 ? [(route[0][0] + route[1][0]) / 2, (route[0][1] + route[1][1]) / 2] : route[0];
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${stops.join(" → ")}`} className="block h-full w-full">

@@ -23,7 +23,7 @@ export default async function PortalLogin({ searchParams }: { searchParams: Prom
         <div className="relative mx-auto max-w-md">
           <Link href="/" aria-label="Ana sayfa" className="inline-block rounded-xl bg-white px-3 py-2"><Logo height={32} /></Link>
           <h1 className="font-display mt-8 text-[34px] leading-tight">Müşteri Girişi</h1>
-          <p className="mt-2 text-sm leading-relaxed text-white/80">Sözleşmenizi, tur hazırlığınızı ve teknenizin konumunu buradan takip edin.</p>
+          <p className="mt-2 text-sm leading-relaxed text-white/80">Sözleşmenizi, tur hazırlığınızı ve yatınızın konumunu buradan takip edin.</p>
         </div>
       </div>
 

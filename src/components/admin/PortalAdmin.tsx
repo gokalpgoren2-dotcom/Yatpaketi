@@ -174,7 +174,7 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
       </section>
 
       <section className={card}>
-        <h2 className="font-semibold">Tekne konumu (harita)</h2>
+        <h2 className="font-semibold">Yat konumu (harita)</h2>
         <div className="mt-3">
           <LocationPicker portalId={portal.id} lat={portal.lat ?? null} lng={portal.lng ?? null} text={portal.location_text} updatedAt={portal.location_updated_at} opensAt={new Date(new Date(portal.tour_start + "T00:00:00+03:00").getTime() - 12 * 3600 * 1000).toISOString()} />
         </div>

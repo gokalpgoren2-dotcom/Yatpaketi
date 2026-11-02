@@ -102,7 +102,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
               <aside className="h-fit rounded-3xl bg-gradient-to-br from-navy to-[#0b4a66] p-7 text-white lg:sticky lg:top-28">
                 <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{en ? "Plan your trip" : "Planınızı yapalım"}</p>
                 <h2 className="font-display mt-3 text-2xl leading-snug">{en ? "Want to sail this region?" : "Bu bölgede yolculuk mu planlıyorsunuz?"}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/75">{en ? "Tell us your dates and group size, we'll suggest the right yacht and route." : "Tarihlerinizi ve kişi sayınızı yazın, size uygun tekneyi ve rotayı önerelim."}</p>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">{en ? "Tell us your dates and group size, we'll suggest the right yacht and route." : "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve rotayı önerelim."}</p>
                 <div className="mt-6 flex flex-col gap-3">
                   <Link href={href(lang, "/tekneler")} className="rounded-full bg-turquoise px-6 py-3 text-center text-sm font-semibold text-navy transition hover:brightness-110">{T.browse}</Link>
                   <Link href={href(lang, "/iletisim")} className="rounded-full px-6 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Write to us" : "Bize yazın"}</Link>

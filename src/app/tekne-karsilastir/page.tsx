@@ -3,8 +3,8 @@ import { CompareView } from "@/views/CompareView";
 
 export const dynamic = "force-dynamic";
 export const metadata: Metadata = {
-  title: "Tekne Karşılaştırma | Yatpaketi",
-  description: "İki tekneyi boy, yaş, kabin, su sporları ve fiyat açısından yan yana karşılaştırın.",
+  title: "Yat Karşılaştırma | Yatpaketi",
+  description: "İki yatı boy, yaş, kabin, su sporları ve fiyat açısından yan yana karşılaştırın.",
   alternates: { canonical: "/tekne-karsilastir", languages: { tr: "/tekne-karsilastir", en: "/en/tekne-karsilastir" } },
 };
 

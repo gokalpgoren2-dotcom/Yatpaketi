@@ -24,7 +24,7 @@ function Pill({ d, children }: { d: string; children: React.ReactNode }) {
   );
 }
 
-// Klasik rota sayfası: dalgalı başlık + hareketli rota şeması, gün gün zaman çizelgesi, uygun tekneler, diğer rotalar.
+// Klasik rota sayfası: dalgalı başlık + hareketli rota şeması, gün gün zaman çizelgesi, uygun yatlar, diğer rotalar.
 export async function RoutePage({ p, all, back, lang }: { p: Post; all: Post[]; back?: { href: string; label: string }; lang: Lang }) {
   const U = ROUTE_UI[lang];
   const R = routeInfo(p, lang);
@@ -111,7 +111,7 @@ export async function RoutePage({ p, all, back, lang }: { p: Post; all: Post[]; 
           </div>
         </section>
 
-        {/* Uygun tekneler */}
+        {/* Uygun yatlar */}
         {fit.length > 0 && (
           <section className="bg-mist py-14 lg:py-20">
             <div className={wrap}>

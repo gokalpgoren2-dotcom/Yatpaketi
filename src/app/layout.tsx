@@ -11,7 +11,7 @@ const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yatpaketi.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),
-  title: { default: "yatpaketi | Yat ve Tekne Kiralama", template: "%s | yatpaketi" },
+  title: { default: "yatpaketi | Yat ve Yat Kiralama", template: "%s | yatpaketi" },
   description:
     "Türkiye'nin en özel koylarını gulet, motoryat, katamaran ve yelkenli seçenekleriyle keşfedin. Mavi yolculuk için rezervasyon talebi oluşturun.",
   alternates: { canonical: "/" },

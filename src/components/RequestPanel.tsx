@@ -11,7 +11,7 @@ const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/
 
 type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string; lang?: Lang };
 
-// Tekne sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
+// Yat sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
 export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "tr" }: Props) {
   const L = t(lang);
   const fmt = (d: string) => new Date(d + "T00:00:00").toLocaleDateString(L.locale, { day: "numeric", month: "long", year: "numeric" });

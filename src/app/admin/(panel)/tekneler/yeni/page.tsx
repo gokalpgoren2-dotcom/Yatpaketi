@@ -14,8 +14,8 @@ export default async function NewBoat({ searchParams }: { searchParams: Promise<
   ]);
   return (
     <>
-      <p className="text-sm"><Link href="/admin/tekneler" className="text-turquoise-dark">← Tekneler</Link></p>
-      <h1 className="font-display mt-2 text-3xl">Yeni tekne</h1>
+      <p className="text-sm"><Link href="/admin/tekneler" className="text-turquoise-dark">← Yatlar</Link></p>
+      <h1 className="font-display mt-2 text-3xl">Yeni yat</h1>
       <p className="mt-1 text-sm text-navy/60">Önce bilgileri kaydedin, fotoğrafları kayıttan sonra ekleyebilirsiniz.</p>
       {error && <Notice key={"e"+t} kind="error" text={error} />}
       <div className="mt-5">

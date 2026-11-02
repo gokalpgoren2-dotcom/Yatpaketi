@@ -1,23 +1,23 @@
 // "Hizmetlerimiz" sayfası metinleri. Panelden (Sayfa Metinleri > Hizmetlerimiz) değiştirilebilir; kayıt yoksa bunlar kullanılır.
 export const SERVICES = {
   tr: {
-    title: "Tekneyi kiralarız. Yolculuğu organize ederiz.",
-    sub: "Tekne seçiminden limanda karşılanmanıza kadar, tatilinizin hazırlığını tek ekipten takip edin.",
+    title: "Yatı kiralarız. Yolculuğu organize ederiz.",
+    sub: "Yat seçiminden limanda karşılanmanıza kadar, tatilinizin hazırlığını tek ekipten takip edin.",
     listEyebrow: "Hizmetlerimiz",
     listTitle: "Beş hizmet. Tek muhatap.",
     listLead: "Her biri ayrı ayrı da, birlikte de alınabilir. Ne istediğinizi söyleyin, gerisini birlikte planlayalım.",
     items: [
-      ["Yat kiralama", "Gulet, motoryat, yelkenli ve katamaran seçeneklerinden grubunuza, tarihlerinize ve bütçenize uygun tekneyi birlikte seçiyoruz. Teknenin özelliklerini, kiralama koşullarını ve fiyata dahil olanları rezervasyondan önce açıkça paylaşıyoruz."],
-      ["Transfer", "Havalimanı, otel ya da limandan teknenin bulunduğu yere ulaşımınızı planlamanıza yardımcı oluyor, varış saatinize göre organize ediyoruz."],
-      ["İkmal", "Tur başlamadan önce teknenin ihtiyaç duyduğu yakıt, su ve gerekli malzemelerin hazır olması için tekne ekibiyle koordinasyon sağlıyoruz."],
-      ["Alışveriş", "Yiyecek, içecek ve diğer ihtiyaç listenizi bizimle paylaşın; tekne yola çıkmadan önce hazır olması için alışverişi sizin adınıza organize edelim."],
+      ["Yat kiralama", "Gulet, motoryat, yelkenli ve katamaran seçeneklerinden grubunuza, tarihlerinize ve bütçenize uygun yatı birlikte seçiyoruz. Yatın özelliklerini, kiralama koşullarını ve fiyata dahil olanları rezervasyondan önce açıkça paylaşıyoruz."],
+      ["Transfer", "Havalimanı, otel ya da limandan yatın bulunduğu yere ulaşımınızı planlamanıza yardımcı oluyor, varış saatinize göre organize ediyoruz."],
+      ["İkmal", "Tur başlamadan önce yatın ihtiyaç duyduğu yakıt, su ve gerekli malzemelerin hazır olması için yat ekibiyle koordinasyon sağlıyoruz."],
+      ["Alışveriş", "Yiyecek, içecek ve diğer ihtiyaç listenizi bizimle paylaşın; yat yola çıkmadan önce hazır olması için alışverişi sizin adınıza organize edelim."],
       ["Organizasyon", "Sizi karşılamaktan hazırlıkların koordinasyonuna kadar, yolculuğunuzun her aşamasını organize ediyoruz. Aklınıza takılan her şey için ulaşabileceğiniz tek bir muhatabınız olur."],
     ],
     allEyebrow: "Neden birlikte?",
     allTitle: "Hepsi tek yerden. Hiçbir ayrıntı gözden kaçmadan.",
-    allLead: "Tekne, ulaşım, ikmal ve alışveriş farklı kişilerle ayrı ayrı uğraşmak yerine tek bir ekiple planlanınca tatil daha sakin başlar.",
+    allLead: "Yat, ulaşım, ikmal ve alışveriş farklı kişilerle ayrı ayrı uğraşmak yerine tek bir ekiple planlanınca tatil daha sakin başlar.",
     all: [
-      ["Tek muhatap", "Tekne, transfer ve hazırlıklar için tek bir ekiple konuşursunuz."],
+      ["Tek muhatap", "Yat, transfer ve hazırlıklar için tek bir ekiple konuşursunuz."],
       ["Önceden hazır", "İkmal ve alışveriş siz gelmeden tamamlanır, tatile doğrudan başlarsınız."],
       ["Süreç boyunca takip", "Rezervasyondan tur sonuna kadar Turum sayfanızdan hazırlıkları izleyebilirsiniz."],
     ],
@@ -25,8 +25,8 @@ export const SERVICES = {
     ctaTitle: "İhtiyacınız olan hizmetleri bize yazın.",
     ctaText: "Hangi hizmetlere ihtiyacınız olduğunu, tarihlerinizi ve kişi sayınızı iletin; size uygun bir plan hazırlayalım.",
     ctaBtn1: "Bize Yazın",
-    ctaBtn2: "Tekneleri İncele",
-    meta: "Yatpaketi hizmetleri: yat kiralama, transfer, ikmal, alışveriş ve organizasyon. Tekne tatilinizin hazırlığı tek ekipten.",
+    ctaBtn2: "Yatları İncele",
+    meta: "Yatpaketi hizmetleri: yat kiralama, transfer, ikmal, alışveriş ve organizasyon. Yat tatilinizin hazırlığı tek ekipten.",
   },
   en: {
     title: "We charter the yacht. We organise the voyage.",

@@ -53,7 +53,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                 <summary className="flex cursor-pointer list-none flex-wrap items-center justify-between gap-2 p-4">
                   <span className="min-w-0">
                     <span className="block font-semibold">{r.customer_name}{r.source === "whatsapp" && <span className="ml-2 rounded-full bg-[#25D366]/15 px-2 py-0.5 align-middle text-xs font-semibold text-[#128C7E]">WhatsApp</span>}</span>
-                    <span className="block text-sm text-navy/60">{r.boat_name ?? "Tekne belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
+                    <span className="block text-sm text-navy/60">{r.boat_name ?? "Yat belirtilmedi"} · {fmt(r.start_date)} – {fmt(r.end_date)}</span>
                     {r.status === "cancelled" && r.cancel_reason && <span className="mt-1 block text-sm text-red-700">İptal sebebi: {r.cancel_reason}</span>}
                   </span>
                   <span className={`rounded-full px-3 py-1 text-xs font-semibold ${tone[r.status] ?? "bg-navy/10"}`}>{labels[r.status] ?? r.status}</span>
@@ -89,7 +89,7 @@ export default async function Requests({ searchParams }: { searchParams: Promise
                   </details>
                   {r.email && (
                     <a
-                      href={`/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email, ad: r.customer_name, tekne: r.boat_name ?? "", bas: r.start_date ?? "", bit: r.end_date ?? "" }).toString()}`}
+                      href={`/admin/musteri-panelleri/yeni?${new URLSearchParams({ email: r.email, ad: r.customer_name, yat: r.boat_name ?? "", bas: r.start_date ?? "", bit: r.end_date ?? "" }).toString()}`}
                       className="inline-block rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white"
                     >
                       Bu talep için müşteri paneli aç

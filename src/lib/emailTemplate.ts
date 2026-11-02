@@ -14,7 +14,7 @@ export const mailButton = (href: string, label: string) =>
 export const mailCode = (label: string, value: string) =>
   `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:18px 0"><tr><td style="background:#f2f7fa;border:1px solid #dbe7ee;border-radius:14px;padding:16px 18px;text-align:center"><div style="font-size:12px;letter-spacing:1px;text-transform:uppercase;color:#6b7c93">${esc2(label)}</div><div style="margin-top:6px;font-family:Menlo,Consolas,monospace;font-size:26px;font-weight:bold;letter-spacing:3px;color:${NAVY}">${esc2(value)}</div></td></tr></table>`;
 
-// Bilgi satırları (ör. tekne, tarih).
+// Bilgi satırları (ör. yat, tarih).
 export const mailFacts = (rows: [string, string][]) =>
   `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:16px 0;border-top:1px solid #e5edf2">${rows
     .map(([k, v]) => `<tr><td style="padding:10px 12px 10px 0;border-bottom:1px solid #e5edf2;font-size:13px;color:#6b7c93;white-space:nowrap">${esc2(k)}</td><td style="padding:10px 0;border-bottom:1px solid #e5edf2;font-size:15px;font-weight:bold;color:${NAVY}">${esc2(v)}</td></tr>`)

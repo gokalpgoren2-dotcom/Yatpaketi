@@ -45,7 +45,7 @@ const norm = (s: string) => s.toLocaleLowerCase("tr").replace(/ı/g, "i").replac
 type Route = { name: string; pts: Pt[]; dur: number; begin: number; kind: number };
 type Layout = { w: number; h: number; x: (lon: number) => number; y: (la: number) => number; trees: number; boat: number; font: number; routes: Route[] };
 
-// Tekneler, limanlar arasında yalnızca denizdeki rotalarda gider (boylam, enlem). Kalkış limanında belirir, varışta silinir.
+// Yatlar, limanlar arasında yalnızca denizdeki rotalarda gider (boylam, enlem). Kalkış limanında belirir, varışta silinir.
 const FETHIYE_KAS: Pt[] = [[29.08, 36.58], [29.05, 36.45], [29.12, 36.3], [29.3, 36.2], [29.5, 36.17], [29.66, 36.165], [29.75, 36.15]];
 const GOCEK_BODRUM: Pt[] = [[28.93, 36.69], [28.8, 36.58], [28.55, 36.52], [28.3, 36.52], [28.07, 36.47], [27.8, 36.5], [27.55, 36.55], [27.38, 36.62], [27.3, 36.78], [27.4, 36.88], [27.43, 36.98]];
 const BODRUM_GOCEK: Pt[] = [...GOCEK_BODRUM].reverse();
@@ -146,7 +146,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <path d={shore} fill="none" stroke="#9fe7f0" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 24 : 12} strokeLinejoin="round" strokeLinecap="round" />
       {isl.map((d, i) => <path key={"h" + i} d={d} fill="none" stroke="#7fdcea" strokeOpacity="0.35" strokeWidth={L.w > 600 ? 26 : 12} strokeLinejoin="round" />)}
 
-      {/* Süzülen tekneler: limanlar arasında, yalnızca denizdeki rotalarda */}
+      {/* Süzülen yatlar: limanlar arasında, yalnızca denizdeki rotalarda */}
       {L.routes.map((rt, i) => {
         const q = rt.pts.map(px);
         const path = `M${q[0][0].toFixed(1)} ${q[0][1].toFixed(1)} ${curve(q, false)}`;
@@ -176,7 +176,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       <text x={L.x(27.95)} y={L.y(36.15)} textAnchor="middle" fill="#fff" fillOpacity="0.75" fontSize={L.font - 2} fontStyle="italic" letterSpacing="2">{en ? "RHODES" : "RODOS"}</text>
       <text x={L.x(27.1)} y={L.y(36.7)} textAnchor="middle" fill="#fff" fillOpacity="0.7" fontSize={L.font - 3} fontStyle="italic" letterSpacing="2">KOS</text>
 
-      {/* Destinasyon tabelaları: dokununca o bölgenin tekneleri açılır */}
+      {/* Destinasyon tabelaları: dokununca o bölgenin yatları açılır */}
       {pins.map(({ d, key, pos, label }, i) => {
         const w = label.length * (L.font * 0.62) + 30 * s;
         const close = L.w > 600 && pos[0] - prevX < 130 && !prevLift;

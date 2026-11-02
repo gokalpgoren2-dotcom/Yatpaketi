@@ -59,7 +59,7 @@ export function PortalCreate({ initial }: { initial?: { email?: string; name?: s
 
   async function create() {
     setErr("");
-    if (!f.email.trim() || !f.boat.trim() || !f.start || !f.end) { setErr("E-posta, tekne ve tur tarihleri (giriş ve çıkış) zorunlu."); return; }
+    if (!f.email.trim() || !f.boat.trim() || !f.start || !f.end) { setErr("E-posta, yat ve tur tarihleri (giriş ve çıkış) zorunlu."); return; }
     if (f.end < f.start) { setErr("Bitiş tarihi başlangıçtan önce olamaz."); return; }
     setBusy(true);
     const { data, error } = await supabase.rpc("admin_create_portal", { p_email: f.email, p_name: f.name, p_boat: f.boat, p_start: f.start, p_end: f.end });
@@ -82,7 +82,7 @@ export function PortalCreate({ initial }: { initial?: { email?: string; name?: s
       {err && <p role="alert" className="rounded-xl bg-red-50 p-3 text-sm font-medium text-red-700">{err}</p>}
       <div><label htmlFor="pe" className={lab}>Müşteri e-postası *</label><input id="pe" type="email" value={f.email} onChange={set("email")} className={input} /></div>
       <div><label htmlFor="pn" className={lab}>Müşteri adı</label><input id="pn" value={f.name} onChange={set("name")} className={input} /></div>
-      <div><label htmlFor="pb" className={lab}>Tekne *</label><input id="pb" value={f.boat} onChange={set("boat")} className={input} /></div>
+      <div><label htmlFor="pb" className={lab}>Yat *</label><input id="pb" value={f.boat} onChange={set("boat")} className={input} /></div>
       <DateRangePicker label="Tur tarihleri *" start={f.start} end={f.end} allowPast onChange={(a, b) => setF({ ...f, start: a, end: b })} />
       <button type="button" onClick={create} disabled={busy} className="w-full rounded-xl bg-turquoise px-6 py-3.5 text-base font-semibold text-white disabled:opacity-60 sm:w-auto">{busy ? "Oluşturuluyor…" : "Panel aç ve kod üret"}</button>
     </div>

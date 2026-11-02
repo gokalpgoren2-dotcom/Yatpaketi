@@ -5,7 +5,7 @@ import { DateRangePicker } from "@/components/DateRangePicker";
 import { SubmitButton } from "./FormBits";
 import { addBlock } from "@/app/admin/(panel)/takvim/actions";
 
-// Rezervasyon dışında bir tekneyi elle kapatmak için (bakım, kendi kullanımınız, başka yerden gelen rezervasyon).
+// Rezervasyon dışında bir yatı elle kapatmak için (bakım, kendi kullanımınız, başka yerden gelen rezervasyon).
 export function BlockForm({ boatId, month }: { boatId: string; month: string }) {
   const [start, setStart] = useState("");
   const [end, setEnd] = useState("");

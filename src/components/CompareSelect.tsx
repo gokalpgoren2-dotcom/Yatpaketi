@@ -23,7 +23,7 @@ function Thumb({ b, className }: { b: PickBoat; className: string }) {
 
 const meta = (b: PickBoat, en: boolean) => [b.type, b.length > 0 ? `${b.length} m` : "", b.guests ? (en ? `${b.guests} guests` : `${b.guests} kişi`) : ""].filter(Boolean).join(" · ");
 
-// Tek bir tekne seçme alanı: aranabilir, fotoğraflı liste. Telefonda alttan açılan panel.
+// Tek bir yat seçme alanı: aranabilir, fotoğraflı liste. Telefonda alttan açılan panel.
 function Picker({ label, boats, value, exclude, onPick, en }: { label: string; boats: PickBoat[]; value: string; exclude: string; onPick: (s: string) => void; en: boolean }) {
   const [open, setOpen] = useState(false);
   const [q, setQ] = useState("");
@@ -62,7 +62,7 @@ function Picker({ label, boats, value, exclude, onPick, en }: { label: string; b
         )}
         <span className="min-w-0 flex-1">
           <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-navy/45">{label}</span>
-          <span className="font-display mt-0.5 block truncate text-lg font-semibold text-navy">{cur ? cur.name : en ? "Choose a yacht" : "Tekne seçin"}</span>
+          <span className="font-display mt-0.5 block truncate text-lg font-semibold text-navy">{cur ? cur.name : en ? "Choose a yacht" : "Yat seçin"}</span>
           {cur && <span className="block truncate text-xs text-navy/55">{meta(cur, en)}</span>}
         </span>
         <Ic d="M6 9l6 6 6-6" className={`mr-1 shrink-0 text-navy/40 transition ${open ? "rotate-180" : ""}`} />
@@ -80,14 +80,14 @@ function Picker({ label, boats, value, exclude, onPick, en }: { label: string; b
                   ref={search}
                   value={q}
                   onChange={(e) => setQ(e.target.value)}
-                  placeholder={en ? "Search by name, type or port" : "Tekne adı, tipi ya da liman ara"}
-                  aria-label={en ? "Search yachts" : "Tekne ara"}
+                  placeholder={en ? "Search by name, type or port" : "Yat adı, tipi ya da liman ara"}
+                  aria-label={en ? "Search yachts" : "Yat ara"}
                   className="w-full rounded-xl border border-navy/10 bg-mist py-3 pl-10 pr-3 text-base text-navy outline-none focus:border-turquoise focus:bg-white focus:ring-2 focus:ring-turquoise/25 sm:text-sm"
                 />
               </div>
             </div>
             <div role="listbox" aria-label={label} className="min-h-0 flex-1 overflow-y-auto px-2 pb-1">
-              {list.length === 0 && <p className="px-3 py-6 text-center text-sm text-navy/50">{en ? "No yacht found." : "Tekne bulunamadı."}</p>}
+              {list.length === 0 && <p className="px-3 py-6 text-center text-sm text-navy/50">{en ? "No yacht found." : "Yat bulunamadı."}</p>}
               {list.map((b) => {
                 const sel = b.slug === value;
                 return (
@@ -131,16 +131,16 @@ export function CompareSelect({ boats, a, b, lang }: { boats: PickBoat[]; a: str
   return (
     <div>
       <div className="grid items-center gap-3 md:grid-cols-[1fr_auto_1fr]">
-        <Picker label={en ? "First yacht" : "Birinci tekne"} boats={boats} value={x} exclude={y} onPick={setX} en={en} />
+        <Picker label={en ? "First yacht" : "Birinci yat"} boats={boats} value={x} exclude={y} onPick={setX} en={en} />
         <div className="relative flex items-center justify-center md:px-1">
           <span className="absolute inset-x-0 top-1/2 h-px bg-navy/10 md:hidden" aria-hidden />
           <span className="relative flex h-11 w-11 items-center justify-center rounded-full bg-navy text-xs font-bold uppercase tracking-widest text-turquoise shadow-lg shadow-navy/20 ring-4 ring-white">vs</span>
         </div>
-        <Picker label={en ? "Second yacht" : "İkinci tekne"} boats={boats} value={y} exclude={x} onPick={setY} en={en} />
+        <Picker label={en ? "Second yacht" : "İkinci yat"} boats={boats} value={y} exclude={x} onPick={setY} en={en} />
       </div>
       <div className="mt-5 flex flex-col items-stretch gap-3 sm:flex-row sm:items-center sm:justify-between">
         <p className="text-sm text-navy/55">
-          {ready ? (same ? (en ? "The comparison is shown below." : "Karşılaştırma aşağıda.") : (en ? "Ready. Tap compare to see the result." : "Hazır. Sonucu görmek için Karşılaştır'a dokunun.")) : en ? "Choose two yachts to compare." : "Karşılaştırmak için iki tekne seçin."}
+          {ready ? (same ? (en ? "The comparison is shown below." : "Karşılaştırma aşağıda.") : (en ? "Ready. Tap compare to see the result." : "Hazır. Sonucu görmek için Karşılaştır'a dokunun.")) : en ? "Choose two yachts to compare." : "Karşılaştırmak için iki yat seçin."}
         </p>
         <button
           type="button"

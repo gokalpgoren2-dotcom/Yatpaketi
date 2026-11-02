@@ -35,7 +35,7 @@ export function CompareAdmin({ initial, boats }: { initial: Curated[]; boats: Bo
     <div className="space-y-5" aria-live="polite">
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
       <div className="rounded-2xl bg-white p-5 shadow-sm">
-        <p className="text-sm text-navy/65">Ziyaretçi herhangi iki tekneyi karşılaştırabilir; boy, yaş, kabin, su sporları ve fiyat farkları <b>otomatik</b> yazılır. Burada belirli iki tekne için kendi yorumunuzu ekleyebilirsiniz; o ikili karşılaştırılınca “Yatpaketi'nin yorumu” kutusunda görünür. “Sık karşılaştırılanlar”da göstermek için kutuyu işaretleyin.</p>
+        <p className="text-sm text-navy/65">Ziyaretçi herhangi iki yatı karşılaştırabilir; boy, yaş, kabin, su sporları ve fiyat farkları <b>otomatik</b> yazılır. Burada belirli iki yat için kendi yorumunuzu ekleyebilirsiniz; o ikili karşılaştırılınca “Yatpaketi'nin yorumu” kutusunda görünür. “Sık karşılaştırılanlar”da göstermek için kutuyu işaretleyin.</p>
       </div>
       <ul className="space-y-3">
         {items.map((c, i) => (
@@ -47,9 +47,9 @@ export function CompareAdmin({ initial, boats }: { initial: Curated[]; boats: Bo
               </summary>
               <div className="space-y-4 border-t border-navy/10 p-5">
                 <div className="grid gap-4 sm:grid-cols-2">
-                  <div><label className={lab}>Birinci tekne</label>
+                  <div><label className={lab}>Birinci yat</label>
                     <select className={input} value={c.a} onChange={(e) => set(i, { a: e.target.value })}><option value="">Seçin</option>{boats.filter((b) => b.slug !== c.b).map((b) => <option key={b.slug} value={b.slug}>{b.name}</option>)}</select></div>
-                  <div><label className={lab}>İkinci tekne</label>
+                  <div><label className={lab}>İkinci yat</label>
                     <select className={input} value={c.b} onChange={(e) => set(i, { b: e.target.value })}><option value="">Seçin</option>{boats.filter((b) => b.slug !== c.a).map((b) => <option key={b.slug} value={b.slug}>{b.name}</option>)}</select></div>
                 </div>
                 <div><label className={lab}>Yorumunuz (Türkçe)</label>

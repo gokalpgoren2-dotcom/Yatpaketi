@@ -34,7 +34,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Temel bilgiler</h2>
-        <Field id="name" title="Tekne adı *"><input id="name" name="name" required defaultValue={boat?.name ?? ""} className={input} /></Field>
+        <Field id="name" title="Yat adı *"><input id="name" name="name" required defaultValue={boat?.name ?? ""} className={input} /></Field>
         <Field id="slug" title="Adres (slug)" hint="Boş bırakırsanız addan otomatik oluşur. Örnek: /tekneler/ornek-gulet">
           <input id="slug" name="slug" defaultValue={boat?.slug ?? ""} className={input} />
         </Field>
@@ -98,7 +98,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">Yayın ve SEO</h2>
         <label className="flex items-center gap-3 text-sm"><input type="checkbox" name="is_published" defaultChecked={boat?.is_published ?? false} className="h-5 w-5" /> Sitede yayınla</label>
-        <label className="flex items-center gap-3 text-sm"><input type="checkbox" name="is_featured" defaultChecked={boat?.is_featured ?? false} className="h-5 w-5" /> Öne çıkan tekne</label>
+        <label className="flex items-center gap-3 text-sm"><input type="checkbox" name="is_featured" defaultChecked={boat?.is_featured ?? false} className="h-5 w-5" /> Öne çıkan yat</label>
         <Num name="sort_order" title="Sıra (küçük sayı önce gelir)" boat={boat} />
         <Field id="seo_title" title="SEO başlığı"><input id="seo_title" name="seo_title" defaultValue={boat?.seo_title ?? ""} className={input} /></Field>
         <Field id="seo_description" title="SEO açıklaması"><textarea id="seo_description" name="seo_description" rows={2} defaultValue={boat?.seo_description ?? ""} className={input} /></Field>
@@ -119,7 +119,7 @@ function EquipmentAndToys({ boat }: { boat: Row | null }) {
     <>
       <fieldset>
         <legend className={label}>Donanımlar</legend>
-        <p className="mb-2 text-xs text-navy/50">Teknede olanları işaretleyin, istersen yanına ayrıntı yazın.</p>
+        <p className="mb-2 text-xs text-navy/50">Yatta olanları işaretleyin, istersen yanına ayrıntı yazın.</p>
         <div className="grid gap-2 sm:grid-cols-2">
           {EQUIPMENT.map((e) => {
             const cur = eq.find((x) => x.name === e.name);
@@ -143,7 +143,7 @@ function EquipmentAndToys({ boat }: { boat: Row | null }) {
 
       <fieldset>
         <legend className={label}>Su oyuncakları</legend>
-        <p className="mb-2 text-xs text-navy/50">Teknede olanları işaretleyin, kaç adet olduğunu yazın (boş bırakırsanız adet gösterilmez).</p>
+        <p className="mb-2 text-xs text-navy/50">Yatta olanları işaretleyin, kaç adet olduğunu yazın (boş bırakırsanız adet gösterilmez).</p>
         <div className="grid gap-2 sm:grid-cols-2">
           {WATER_TOYS.map((w) => {
             const cur = toys.find((x) => x.name === w);

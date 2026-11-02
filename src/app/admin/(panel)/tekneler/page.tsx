@@ -49,16 +49,16 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
   return (
     <>
       <div className="flex items-center justify-between gap-3">
-        <h1 className="font-display text-3xl">Tekneler</h1>
-        <Link href="/admin/tekneler/yeni" className="rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white">Yeni tekne</Link>
+        <h1 className="font-display text-3xl">Yatlar</h1>
+        <Link href="/admin/tekneler/yeni" className="rounded-xl bg-turquoise px-5 py-3 text-sm font-semibold text-white">Yeni yat</Link>
       </div>
-      {bulk === "pub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} tekne yayına alındı.</p>}
-      {bulk === "unpub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} tekne yayından kaldırıldı.</p>}
+      {bulk === "pub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} yat yayına alındı.</p>}
+      {bulk === "unpub" && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">{n} yat yayından kaldırıldı.</p>}
       {bulk === "onay" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Onay kutusunu işaretlemeden toplu yayınlanmaz.</p>}
-      {bulk === "none" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Önce listeden tekne seçin.</p>}
+      {bulk === "none" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Önce listeden yat seçin.</p>}
       {bulk === "err" && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">İşlem yapılamadı.</p>}
       <form method="get" className="mt-4 flex flex-wrap gap-2 rounded-2xl bg-white p-3 shadow-sm">
-        <input name="q" defaultValue={q} placeholder="Tekne adı ara" className="min-w-0 flex-1 rounded-lg border border-navy/15 px-3 py-2.5 text-sm" />
+        <input name="q" defaultValue={q} placeholder="Yat adı ara" className="min-w-0 flex-1 rounded-lg border border-navy/15 px-3 py-2.5 text-sm" />
         <select name="durum" defaultValue={durum ?? ""} className="rounded-lg border border-navy/15 px-3 py-2.5 text-sm">
           <option value="">Hepsi</option><option value="taslak">Taslak</option><option value="yayinda">Yayında</option>
         </select>
@@ -75,15 +75,15 @@ export default async function BoatsAdmin({ searchParams }: { searchParams: Promi
         <form action={publishFiltered} className="mt-3 flex flex-wrap items-center gap-3 rounded-2xl bg-white p-3 shadow-sm">
           <input type="hidden" name="back" value={qs(1)} />
           <input type="hidden" name="q" value={q} /><input type="hidden" name="kat" value={kat ?? ""} /><input type="hidden" name="bilgi" value={bilgi ?? ""} />
-          <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="onay" value="evet" /> Bu filtredeki <b>tüm taslak tekneleri</b> yayına almak istiyorum</label>
+          <label className="flex items-center gap-2 text-sm"><input type="checkbox" name="onay" value="evet" /> Bu filtredeki <b>tüm taslak yatları</b> yayına almak istiyorum</label>
           <button className="rounded-lg bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">Filtredekilerin hepsini yayınla</button>
         </form>
       )}
-      <p className="mt-3 text-sm text-navy/70">{total} tekne · sayfa {page}/{pages}</p>
-      {deleted && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">Tekne silindi.</p>}
+      <p className="mt-3 text-sm text-navy/70">{total} yat · sayfa {page}/{pages}</p>
+      {deleted && <p role="status" className="mt-4 rounded-xl bg-white p-4 text-sm text-green-800">Yat silindi.</p>}
       {error && <p role="alert" className="mt-4 rounded-xl bg-white p-4 text-sm text-red-700">Liste alınamadı: {error.message}. SQL şemasını çalıştırdınız mı?</p>}
       {!error && rows.length === 0 && (
-        <p className="mt-6 rounded-2xl bg-white p-8 text-center text-navy/70">Henüz tekne yok. “Yeni tekne” ile ilk tekneyi ekleyin.</p>
+        <p className="mt-6 rounded-2xl bg-white p-8 text-center text-navy/70">Henüz yat yok. “Yeni yat” ile ilk yatı ekleyin.</p>
       )}
       <form id="bulkform" action={bulkSetPublished}>
       <input type="hidden" name="back" value={qs(page)} />

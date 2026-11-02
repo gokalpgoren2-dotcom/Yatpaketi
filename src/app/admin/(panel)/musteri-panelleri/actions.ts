@@ -52,10 +52,10 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
   const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
   const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
   const who = String(p.customer_name || p.email);
-  const text = `${hello}\n\n${p.boat_name} teknesi için ${range} tarihli kiralama sözleşmeniz ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
+  const text = `${hello}\n\n${p.boat_name} yatı için ${range} tarihli kiralama sözleşmeniz ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
   const html = wrap(
     `<p style="margin:0 0 12px">${esc(hello)}</p><p style="margin:0 0 12px">Kiralama sözleşmeniz ekte yer almaktadır. Lütfen inceleyip imzalayın, ardından imzalı hâlini müşteri panelinizden yükleyin.</p>` +
-      mailFacts([["Tekne", String(p.boat_name)], ["Tarih", range]]) + mailButton(`${base}/musteri`, "Müşteri paneline git"),
+      mailFacts([["Yat", String(p.boat_name)], ["Tarih", range]]) + mailButton(`${base}/musteri`, "Müşteri paneline git"),
     { title: "Kiralama sözleşmeniz", preheader: `${p.boat_name} – ${range}` },
   );
   const attachments = [{ filename: `sozlesme.${ext}`, content: buf }];
@@ -63,7 +63,7 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
   if (!r.ok) return { ok: false, message: "Müşteriye e-posta gönderilemedi (" + r.message + ")." };
   const copy = adminMail();
   if (copy) {
-    const note = `${who} (${p.email}) için ${p.boat_name} teknesinin ${range} tarihli kiralama sözleşmesi hazırlandı ve müşteriye gönderildi. Sözleşme ekte.`;
+    const note = `${who} (${p.email}) için ${p.boat_name} yatının ${range} tarihli kiralama sözleşmesi hazırlandı ve müşteriye gönderildi. Sözleşme ekte.`;
     await sendMail({ to: copy, subject: `Sözleşme gönderildi – ${p.boat_name} (${range}) – ${who}`, text: note, html: wrap(`<p style="margin:0 0 12px">${esc(note)}</p>`, { title: "Sözleşme gönderildi" }), attachments });
   }
   await supabase.from("customer_portals").update({ contract_emailed_at: new Date().toISOString() }).eq("id", portalId);
@@ -72,10 +72,10 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
 
 const SENTENCES: Record<string, { short: string; line: string }> = {
   "Sözleşme imzalandı": { short: "Sözleşmeniz imzalandı", line: "Sözleşmeniz imzalı olarak kaydedildi." },
-  "Tekne temizliği tamamlandı": { short: "Tekne temizliği tamamlandı", line: "Teknenizin temizliği tamamlandı." },
+  "Yat temizliği tamamlandı": { short: "Yat temizliği tamamlandı", line: "Yatınızın temizliği tamamlandı." },
   "Alışveriş / ikmal yapıldı": { short: "Alışveriş ve ikmal yapıldı", line: "Turunuz için alışveriş ve ikmal yapıldı." },
-  "Yakıt ve su dolumu yapıldı": { short: "Yakıt ve su dolumu yapıldı", line: "Teknenin yakıt ve su dolumu yapıldı." },
-  "Teknik kontrol yapıldı": { short: "Teknik kontrol yapıldı", line: "Teknenin teknik kontrolü yapıldı." },
+  "Yakıt ve su dolumu yapıldı": { short: "Yakıt ve su dolumu yapıldı", line: "Yatın yakıt ve su dolumu yapıldı." },
+  "Teknik kontrol yapıldı": { short: "Teknik kontrol yapıldı", line: "Yatın teknik kontrolü yapıldı." },
   "Kaptan ve mürettebat hazır": { short: "Kaptan ve mürettebat hazır", line: "Kaptanınız ve mürettebatınız hazır." },
 };
 
@@ -100,11 +100,11 @@ export async function notifyChecklistDone(portalId: string, itemId: string): Pro
   const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
   const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
-  const text = `${hello}\n\n${p.boat_name} teknesi için ${range} tarihli turunuzun hazırlığıyla ilgili bir güncelleme:\n\n${sent.line}\n\nHazırlık durumu: ${list.length} maddeden ${done} tanesi tamamlandı.${left.length ? "\nKalan: " + left.join(", ") + "." : "\nTüm hazırlıklar tamamlandı."}\n\nDetaylar için müşteri panelinize girebilirsiniz: ${base}/musteri\n\nYatpaketi`;
+  const text = `${hello}\n\n${p.boat_name} yatı için ${range} tarihli turunuzun hazırlığıyla ilgili bir güncelleme:\n\n${sent.line}\n\nHazırlık durumu: ${list.length} maddeden ${done} tanesi tamamlandı.${left.length ? "\nKalan: " + left.join(", ") + "." : "\nTüm hazırlıklar tamamlandı."}\n\nDetaylar için müşteri panelinize girebilirsiniz: ${base}/musteri\n\nYatpaketi`;
   const html = wrap(
     `<p style="margin:0 0 12px">${esc(hello)}</p><p style="margin:0 0 12px">Turunuzun hazırlığıyla ilgili bir güncelleme:</p>` +
       `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:14px 0"><tr><td style="background:#e8f7ee;border:1px solid #bfe8cf;border-radius:14px;padding:16px 18px;font-size:17px;font-weight:bold;color:#14633a">✓ ${esc(sent.line)}</td></tr></table>` +
-      mailFacts([["Tekne", String(p.boat_name)], ["Tarih", range], ["Hazırlık", `${list.length} maddeden ${done} tanesi tamamlandı`]]) +
+      mailFacts([["Yat", String(p.boat_name)], ["Tarih", range], ["Hazırlık", `${list.length} maddeden ${done} tanesi tamamlandı`]]) +
       (left.length ? `<p style="margin:0 0 12px;font-size:14px;color:#6b7c93">Kalan: ${esc(left.join(", "))}.</p>` : `<p style="margin:0 0 12px"><b>Tüm hazırlıklar tamamlandı.</b></p>`) +
       mailButton(`${base}/musteri`, "Müşteri panelime git"),
     { title: "Tur hazırlığı güncellendi", preheader: sent.line },

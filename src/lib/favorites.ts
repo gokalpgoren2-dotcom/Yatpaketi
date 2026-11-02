@@ -2,7 +2,7 @@
 
 import { useEffect, useState, useSyncExternalStore } from "react";
 
-// Favori tekneler yalnızca ziyaretçinin kendi tarayıcısında saklanır (hesap gerekmez).
+// Favori yatlar yalnızca ziyaretçinin kendi tarayıcısında saklanır (hesap gerekmez).
 const KEY = "yp_favs";
 const EVT = "yp-favs";
 const MAX = 12;
@@ -44,7 +44,7 @@ export function toggleFavorite(slug: string) {
   if (adding) window.dispatchEvent(new Event(ADDED));
 }
 
-// Bir tekne favoriye eklenince birkaç saniye true olur: kalbin yanında küçük bir yönlendirme balonu göstermek için.
+// Bir yat favoriye eklenince birkaç saniye true olur: kalbin yanında küçük bir yönlendirme balonu göstermek için.
 const ADDED = "yp-fav-added";
 export function useFavHint(ms = 6000): [boolean, () => void] {
   const [on, setOn] = useState(false);

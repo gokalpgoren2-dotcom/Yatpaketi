@@ -41,7 +41,7 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
     <div className="space-y-5" aria-live="polite">
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-4 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800 ring-1 ring-green-200" : "bg-red-50 text-red-700 ring-1 ring-red-200"}`}>{msg.text}</p>}
       <div className="rounded-2xl bg-white p-5 shadow-sm">
-        <p className="text-sm text-navy/65">Türü, yüzdeyi ve tekneleri seçin. Seçilen teknelerin fotoğrafının sağ üstünde (Mürettebatlı etiketinin altında) ve tekne sayfasında indirim etiketi görünür. Bitiş günü geçince etiket kendiliğinden kalkar.</p>
+        <p className="text-sm text-navy/65">Türü, yüzdeyi ve yatları seçin. Seçilen yatların fotoğrafının sağ üstünde (Mürettebatlı etiketinin altında) ve yat sayfasında indirim etiketi görünür. Bitiş günü geçince etiket kendiliğinden kalkar.</p>
       </div>
 
             <ul className="space-y-3">
@@ -57,7 +57,7 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
                     {isLive(c) ? "Yayında" : c.active ? "Süresi doldu" : "Kapalı"}
                   </span>
                   <span className="mt-1 block font-medium">{label}</span>
-                  <span className="block text-xs text-navy/50">{c.boats.length === 0 ? "Tüm tekneler" : `${c.boats.length} tekne`}{c.until ? ` · Bitiş: ${c.until}` : " · Süresiz"}</span>
+                  <span className="block text-xs text-navy/50">{c.boats.length === 0 ? "Tüm yatlar" : `${c.boats.length} yat`}{c.until ? ` · Bitiş: ${c.until}` : " · Süresiz"}</span>
                 </summary>
                 <div className="space-y-6 border-t border-navy/10 p-5">
                   <label className="flex items-center gap-3 text-base font-medium">
@@ -89,14 +89,14 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
                   </fieldset>
 
                   <fieldset>
-                    <legend className={lab}>3. Hangi tekneler?</legend>
+                    <legend className={lab}>3. Hangi yatlar?</legend>
                     <label className="mb-2 flex items-center gap-3 rounded-xl bg-mist px-4 py-3 font-medium">
                       <input type="checkbox" checked={c.boats.length === 0} onChange={() => set(i, { boats: [] })} className="h-5 w-5 accent-[#1bb4c4]" />
-                      Tüm tekneler
+                      Tüm yatlar
                     </label>
-                    <input type="search" value={q[c.id] ?? ""} onChange={(e) => setQ((m) => ({ ...m, [c.id]: e.target.value }))} placeholder="Tekne adı yazın, listede bulun" aria-label="Tekne ara" className={`${input} mb-2`} />
+                    <input type="search" value={q[c.id] ?? ""} onChange={(e) => setQ((m) => ({ ...m, [c.id]: e.target.value }))} placeholder="Yat adı yazın, listede bulun" aria-label="Yat ara" className={`${input} mb-2`} />
                     {c.boats.length > 0 && <p className="mb-2 text-xs font-semibold text-turquoise-dark">Seçili: {boats.filter((b) => c.boats.includes(b.slug)).map((b) => b.name).join(", ")}</p>}
-                    {boats.length === 0 ? <p className="text-sm text-navy/50">Henüz yayında tekne yok.</p> : (
+                    {boats.length === 0 ? <p className="text-sm text-navy/50">Henüz yayında yat yok.</p> : (
                       <ul className="max-h-72 space-y-1 overflow-y-auto rounded-xl border border-navy/10 p-2">
                         {boats.filter((b) => b.name.toLocaleLowerCase("tr").includes((q[c.id] ?? "").trim().toLocaleLowerCase("tr"))).map((b) => (
                           <li key={b.slug}>
@@ -106,10 +106,10 @@ export function CampaignEditor({ initial, boats }: { initial: Campaign[]; boats:
                             </label>
                           </li>
                         ))}
-                        {boats.filter((b) => b.name.toLocaleLowerCase("tr").includes((q[c.id] ?? "").trim().toLocaleLowerCase("tr"))).length === 0 && <li className="px-3 py-2 text-sm text-navy/50">Eşleşen tekne yok.</li>}
+                        {boats.filter((b) => b.name.toLocaleLowerCase("tr").includes((q[c.id] ?? "").trim().toLocaleLowerCase("tr"))).length === 0 && <li className="px-3 py-2 text-sm text-navy/50">Eşleşen yat yok.</li>}
                       </ul>
                     )}
-                    <p className="mt-1 text-xs text-navy/50">Tek tekne seçerseniz kartın düğmesi doğrudan o teknenin sayfasına gider.</p>
+                    <p className="mt-1 text-xs text-navy/50">Tek yat seçerseniz kartın düğmesi doğrudan o yatın sayfasına gider.</p>
                   </fieldset>
 
                   <div>

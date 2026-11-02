@@ -27,7 +27,7 @@ function loadLeaflet(): Promise<any> {
 
 type Props = { portalId: string; lat: number | null; lng: number | null; text: string | null; updatedAt: string | null; opensAt: string };
 
-// Tekne konumunu haritada dokunarak ya da koordinat/harita bağlantısı yapıştırarak işaretler.
+// Yat konumunu haritada dokunarak ya da koordinat/harita bağlantısı yapıştırarak işaretler.
 export function LocationPicker({ portalId, lat, lng, text, updatedAt, opensAt }: Props) {
   const supabase = createClient();
   const router = useRouter();
@@ -100,7 +100,7 @@ export function LocationPicker({ portalId, lat, lng, text, updatedAt, opensAt }:
       <p className="text-sm text-navy/70">Müşteri bu konumu <b>{opens}</b> tarihinden itibaren (tura 12 saat kala) görür. Öncesinde hiçbir konum bilgisi müşteriye gönderilmez.</p>
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-3 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-700"}`}>{msg.text}</p>}
       {mapErr ? <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{mapErr}. Koordinatı aşağıdaki kutuya yapıştırarak da girebilirsiniz.</p> : <div ref={box} className="h-72 w-full overflow-hidden rounded-xl bg-mist" aria-label="Konum haritası" />}
-      <p className="text-xs text-navy/55">Haritada teknenin olduğu yere dokunun. Yakınlaştırmak için iki parmakla büyütün.</p>
+      <p className="text-xs text-navy/55">Haritada yatın olduğu yere dokunun. Yakınlaştırmak için iki parmakla büyütün.</p>
       <div className="flex gap-2">
         <input value={paste} onChange={(e) => setPaste(e.target.value)} placeholder="Koordinat ya da harita bağlantısı yapıştırın" className={field} />
         <button type="button" onClick={applyPaste} className="shrink-0 rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold">Uygula</button>
