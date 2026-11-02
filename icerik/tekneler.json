@@ -1,0 +1,4 @@
+{
+  "_aciklama": "Sohbetten gönderilen tekne fotoğrafları ve ayarları. Fotoğraflar public/tekneler/<tekne-adresi>/ klasöründe durur (01.jpg, 02.jpg... sırası = sitedeki sıra, 01 kapak). Site her yayınlandığında bu liste veritabanına bir kez işlenir; aynı kayıt değişmedikçe tekrar işlenmez, panelden yaptığınız değişiklikler ezilmez.",
+  "queen-atlantis": { "yayinla": true, "one_cikar": true, "one_cikan_sira": 2 }
+}
