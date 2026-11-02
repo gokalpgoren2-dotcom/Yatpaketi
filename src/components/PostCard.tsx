@@ -9,28 +9,41 @@ import { regionMapFor } from "@/lib/region-maps";
 const base: Record<PostKind, string> = { guide: "/rehber", blog: "/blog", page: "", destination: "/destinasyonlar", route: "/rotalar", package: "/tur-paketleri", process: "/kiralama-sureci" };
 export const postHref = (p: Pick<Post, "kind" | "slug">, lang: Lang = "tr") => href(lang, p.kind === "process" ? base.process : `${base[p.kind]}/${p.slug}`);
 
+const KIND: Record<PostKind, [string, string]> = {
+  guide: ["Rehber", "Guide"], blog: ["Blog", "Blog"], page: ["Sayfa", "Page"], destination: ["Destinasyon", "Destination"],
+  route: ["Klasik rota", "Classic route"], package: ["Tur paketi", "Tour package"], process: ["Kiralama süreci", "Charter process"],
+};
+export const kindLabel = (k: PostKind, lang: Lang) => KIND[k][lang === "en" ? 1 : 0];
+
+// Yazının görseli: bölge haritası > kapak fotoğrafı > hazır çizim > renkli yer tutucu. Üst öğe "relative" olmalı.
+export function PostThumb({ p, i = 0, sizes }: { p: Post; i?: number; sizes: string }) {
+  const map = regionMapFor(p.kind, p.slug);
+  const cls = "transition duration-700 group-hover:scale-105";
+  if (map) {
+    // eslint-disable-next-line @next/next/no-img-element
+    return <img src={map} alt={p.title} loading="lazy" className={`absolute inset-0 h-full w-full bg-[#05204a] object-cover ${cls}`} />;
+  }
+  if (p.cover) return <Photo src={p.cover} alt={p.title} sizes={sizes} className={`object-cover ${cls}`} />;
+  if (hasGuideArt(p.kind, p.slug)) return <GuideArt slug={p.slug} className={`absolute inset-0 h-full w-full ${cls}`} />;
+  return <div className="absolute inset-0"><Placeholder hue={185 + (i % 5) * 12} className={`h-full w-full ${cls}`} label={false} /></div>;
+}
+
 export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?: Lang }) {
-  const map = regionMapFor(p.kind, p.slug); // bölge haritası varsa kapak odur
+  const map = regionMapFor(p.kind, p.slug);
   return (
-    <Link href={postHref(p, lang)} className="group block overflow-hidden rounded-3xl bg-white ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-navy/15">
-      <div className={`relative overflow-hidden ${map ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
-        {map ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={map} alt={p.title} loading="lazy" className="h-full w-full bg-[#05204a] object-cover transition duration-500 group-hover:scale-105" />
-        ) : p.cover ? (
-          <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" className="object-cover transition duration-500 group-hover:scale-105" />
-        ) : hasGuideArt(p.kind, p.slug) ? (
-          <GuideArt slug={p.slug} className="h-full w-full transition duration-500 group-hover:scale-105" />
-        ) : (
-          <Placeholder hue={185 + (i % 5) * 12} className="h-full w-full transition duration-500 group-hover:scale-105" label={false} />
-        )}
+    <Link href={postHref(p, lang)} className="group flex h-full flex-col rounded-[1.75rem] bg-white p-2.5 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
+      <div className={`relative overflow-hidden rounded-[1.35rem] bg-mist ${map ? "aspect-[4/3]" : "aspect-[16/10]"}`}>
+        <PostThumb p={p} i={i} sizes="(min-width:1024px) 33vw, (min-width:640px) 50vw, 100vw" />
       </div>
-      <div className="p-5">
-        <h3 className="font-semibold text-navy">{p.title}</h3>
-        {p.excerpt && <p className="mt-2 line-clamp-3 text-sm leading-relaxed text-navy/65">{p.excerpt}</p>}
-        <p className="mt-3 text-sm font-semibold text-turquoise-dark">{lang === "en" ? "Read →" : "Oku →"}</p>
+      <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+        <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{kindLabel(p.kind, lang)}</p>
+        <h3 className="font-display mt-1.5 text-xl font-semibold leading-snug text-navy">{p.title}</h3>
+        {p.excerpt && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-navy/60">{p.excerpt}</p>}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+          <span className="text-sm font-semibold text-navy/70 transition group-hover:text-turquoise-dark">{lang === "en" ? "Read" : "Oku"}</span>
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist text-navy transition group-hover:bg-turquoise group-hover:text-white" aria-hidden>→</span>
+        </div>
       </div>
     </Link>
   );
 }
-

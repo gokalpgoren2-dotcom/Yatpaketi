@@ -9,12 +9,18 @@ export async function InstagramSection() {
   return (
     <section className="py-14 lg:py-20">
       <div className="mx-auto max-w-7xl px-5 lg:px-8">
-        <div className="mb-8 flex flex-wrap items-end justify-between gap-3">
+        <div className="mb-8 flex flex-wrap items-end justify-between gap-4 lg:mb-12">
           <div>
-            <p className="mb-3 text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark">Instagram</p>
-            <h2 className="font-display text-3xl font-medium leading-tight text-navy lg:text-5xl">{stories.length > 0 ? "Şimdi denizde" : "Son paylaşımlar"}</h2>
+            <p className="flex items-center gap-2 text-xs font-semibold uppercase tracking-[0.28em] text-turquoise-dark">
+              {stories.length > 0 && <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-60" /><span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" /></span>}
+              Instagram
+            </p>
+            <h2 className="font-display mt-3 text-3xl font-semibold leading-tight text-navy lg:text-5xl">{stories.length > 0 ? "Şimdi denizde" : "Son paylaşımlar"}</h2>
           </div>
-          <a href={`https://www.instagram.com/${user}/`} target="_blank" rel="noopener noreferrer" className="rounded-full px-5 py-2.5 text-sm font-semibold text-navy ring-1 ring-navy/15 transition hover:ring-turquoise">@{user} →</a>
+          <a href={`https://www.instagram.com/${user}/`} target="_blank" rel="noopener noreferrer" className="group flex items-center gap-3 rounded-full py-2 pl-5 pr-2 text-sm font-semibold text-navy ring-1 ring-navy/15 transition hover:ring-turquoise">
+            @{user}
+            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-navy text-white transition group-hover:translate-x-0.5 group-hover:bg-turquoise" aria-hidden>→</span>
+          </a>
         </div>
         {stories.length > 0 && <StoryViewer items={stories} user={user} />}
         {posts.length > 0 && (

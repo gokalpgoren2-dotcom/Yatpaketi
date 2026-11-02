@@ -13,7 +13,13 @@ import { getContact } from "@/lib/content";
 import { formatPhone } from "@/lib/phone";
 import { getNavInfo, type Post } from "@/lib/posts";
 import { gt } from "@/lib/guide-text";
-import { PostCard, postHref } from "./PostCard";
+import { PostCard, PostThumb, kindLabel, postHref } from "./PostCard";
+import { RouteChart } from "./RouteChart";
+import { RouteCard } from "./RouteList";
+import { CountUp } from "./CountUp";
+import { ROUTE_UI, toCard } from "@/lib/routes";
+import { regionMapFor } from "@/lib/region-maps";
+import { getAbout } from "@/lib/site-texts";
 import { href, t, type Lang } from "@/lib/i18n";
 
 function Heading({ eyebrow, title, id, action, dark = false }: { eyebrow: string; title: string; id?: string; action?: { href: string; label: string }; dark?: boolean }) {
@@ -241,21 +247,176 @@ export function WhyUs({ lang = "tr" }: { lang?: Lang }) {
   );
 }
 
+// Ana sayfa: Yatpaketi Rehberi, dergi düzeni (solda öne çıkan yazı, sağda liste).
 export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
   const L = t(lang);
   if (lang === "en") return null;
   if (items.length === 0) return null;
+  const [first, ...rest] = items;
+  const list = rest.slice(0, 4);
   return (
     <section className="py-14 lg:py-24" id="blog">
       <div className={wrap}>
         <Heading eyebrow={L.blogEyebrow} title={L.blogTitle} action={{ href: "/rehber", label: L.allPosts }} />
-        <Scroller className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
-          {items.map((p, i) => (
-            <div key={p.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[calc((100%-3rem)/3)]">
-              <PostCard p={p} i={i} />
+        <div className="grid gap-5 lg:grid-cols-12 lg:gap-6">
+          <Link href={postHref(first, lang)} className="group relative isolate flex min-h-[26rem] flex-col justify-end overflow-hidden rounded-[2rem] text-white shadow-xl shadow-navy/10 lg:col-span-7 lg:min-h-[34rem]">
+            <div className="absolute inset-0 -z-10"><PostThumb p={first} sizes="(min-width:1024px) 58vw, 100vw" /></div>
+            <div className="absolute inset-0 -z-10 bg-gradient-to-t from-navy via-navy/40 to-transparent" />
+            <div className="p-6 lg:p-10">
+              <span className="inline-block rounded-full bg-turquoise px-3 py-1 text-[11px] font-bold uppercase tracking-wider text-navy">{kindLabel(first.kind, lang)}</span>
+              <h3 className="font-display mt-4 max-w-xl text-3xl font-semibold leading-tight lg:text-4xl">{first.title}</h3>
+              {first.excerpt && <p className="mt-3 line-clamp-2 max-w-xl text-white/80">{first.excerpt}</p>}
+              <span className="mt-6 inline-flex items-center gap-3 text-sm font-semibold">
+                Okumaya başlayın
+                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-navy transition group-hover:translate-x-1 group-hover:bg-turquoise" aria-hidden>→</span>
+              </span>
             </div>
-          ))}
-        </Scroller>
+          </Link>
+          <ul className="flex flex-col gap-3 lg:col-span-5">
+            {list.map((p, i) => (
+              <li key={p.slug} className="flex-1">
+                <Link href={postHref(p, lang)} className="group flex h-full items-center gap-4 rounded-[1.5rem] bg-white p-2.5 pr-4 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
+                  <div className="relative aspect-square w-24 shrink-0 overflow-hidden rounded-[1.1rem] bg-mist sm:w-28"><PostThumb p={p} i={i + 1} sizes="112px" /></div>
+                  <div className="min-w-0 flex-1 py-1">
+                    <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{kindLabel(p.kind, lang)}</p>
+                    <h3 className="font-display mt-1 line-clamp-2 text-lg font-semibold leading-snug text-navy">{p.title}</h3>
+                    {p.excerpt && <p className="mt-1 line-clamp-1 text-sm text-navy/55">{p.excerpt}</p>}
+                  </div>
+                  <span className="hidden h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist text-navy transition group-hover:bg-turquoise group-hover:text-white sm:flex" aria-hidden>→</span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+// Ana sayfa: klasik rotalar vitrini (hareketli rota şeması, rota kartları, bölgeler).
+export function RoutesShowcase({ routes, regions, lang = "tr" }: { routes: Post[]; regions: Post[]; lang?: Lang }) {
+  if (routes.length === 0) return null;
+  const en = lang === "en";
+  const cards = routes.map((r) => toCard(r, lang));
+  const feature = cards.find((c) => c.slug === "bodrum-gocek") ?? cards.find((c) => !c.loop) ?? cards[0];
+  const ports = new Set(cards.map((c) => c.from)).size;
+  const others = cards.filter((c) => c.slug !== feature.slug).slice(0, 6);
+  const U = ROUTE_UI[lang];
+  return (
+    <section className="relative isolate overflow-hidden pb-28 pt-24 text-white lg:pb-36 lg:pt-32" style={{ background: "linear-gradient(160deg, #05204a 0%, #06264b 45%, #0b4a6e 80%, #0d6a86 100%)" }}>
+      <svg className="absolute left-0 top-0 -z-10 h-10 w-full rotate-180" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#f7f9fa" /></svg>
+      <div className="absolute inset-x-0 bottom-0 -z-10 h-28 overflow-hidden" aria-hidden>
+        <svg className="wave-a absolute bottom-0 left-0 h-28 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(150)} fill="rgba(255,255,255,0.06)" /></svg>
+        <svg className="wave-b absolute bottom-0 left-0 h-20 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(220)} fill="rgba(255,255,255,0.09)" /></svg>
+        <svg className="absolute bottom-0 left-0 h-10 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#ffffff" /></svg>
+      </div>
+      <div className={wrap}>
+        <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
+          <div>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Classic routes" : "Klasik rotalar"}</p>
+            <h2 className="font-display mt-3 text-4xl font-semibold leading-[1.05] lg:text-6xl">{en ? "Your voyage, already charted." : "Rotanız hazır, sadece yelken açın."}</h2>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/75">{en ? "Tried-and-tested blue voyage routes, planned day by day: which cove, which evening, which harbour." : "Denenmiş mavi yolculuk rotaları, gün gün planlanmış: hangi gün hangi koy, hangi akşam hangi liman."}</p>
+            <ul className="mt-8 flex gap-10">
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">{cards.length}</span><span className="text-sm text-white/65">{en ? "routes" : "rota"}</span></li>
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">{ports}</span><span className="text-sm text-white/65">{en ? "departure ports" : "kalkış limanı"}</span></li>
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">7</span><span className="text-sm text-white/65">{en ? "days each" : "günlük program"}</span></li>
+            </ul>
+            <Link href={href(lang, "/rotalar")} className="group mt-10 inline-flex items-center gap-3 rounded-full bg-turquoise py-2 pl-6 pr-2 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">
+              {en ? "Explore all routes" : "Tüm rotaları keşfedin"}
+              <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white transition group-hover:translate-x-0.5" aria-hidden>→</span>
+            </Link>
+          </div>
+          <Link href={feature.href} className="group relative block">
+            <div className="absolute -inset-8 -z-10 rounded-[3rem] bg-turquoise/25 blur-3xl" aria-hidden />
+            <div className="aspect-[600/340] overflow-hidden rounded-[2rem] shadow-2xl shadow-black/40 ring-1 ring-white/15 transition duration-500 group-hover:-translate-y-1">
+              <RouteChart id={`home-${feature.slug}`} stops={feature.chart} loop={feature.loop} label={U.chartLabel} />
+            </div>
+            <div className="absolute -bottom-5 left-5 right-5 flex items-center justify-between gap-3 rounded-2xl bg-white p-3 pl-5 text-navy shadow-xl lg:left-8 lg:right-auto lg:min-w-[22rem]">
+              <div className="min-w-0">
+                <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{U.days(feature.days)} · {feature.loop ? U.loop : U.oneway}</p>
+                <p className="truncate font-display text-lg font-semibold">{feature.title}</p>
+              </div>
+              <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-navy text-white transition group-hover:bg-turquoise" aria-hidden>→</span>
+            </div>
+          </Link>
+        </div>
+
+        {others.length > 0 && (
+          <div className="mt-20">
+            <Scroller className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
+              {others.map((r) => <div key={r.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[calc((100%-3rem)/3)]"><RouteCard r={r} lang={lang} /></div>)}
+            </Scroller>
+          </div>
+        )}
+
+        {regions.length > 0 && (
+          <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:gap-8">
+            <p className="shrink-0 text-xs font-semibold uppercase tracking-[0.28em] text-turquoise">{en ? "Destinations" : "Destinasyonlar"}</p>
+            <div className="no-scrollbar -mx-5 flex gap-2.5 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:px-0">
+              {regions.map((r) => {
+                const map = regionMapFor("destination", r.slug);
+                return (
+                  <Link key={r.slug} href={href(lang, `/destinasyonlar/${r.slug}`)} className="group flex shrink-0 items-center gap-2.5 rounded-full bg-white/[0.07] py-1.5 pl-1.5 pr-4 text-sm font-semibold ring-1 ring-white/15 transition hover:bg-white hover:text-navy">
+                    <span className="relative h-8 w-8 overflow-hidden rounded-full bg-navy ring-1 ring-white/20">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      {map && <img src={map} alt="" loading="lazy" className="h-full w-full object-cover" />}
+                    </span>
+                    {r.title}
+                  </Link>
+                );
+              })}
+            </div>
+          </div>
+        )}
+      </div>
+    </section>
+  );
+}
+
+// Ana sayfa kapanışı: büyük çağrı, WhatsApp, güven rakamları.
+export async function FinalCta({ lang = "tr" }: { lang?: Lang }) {
+  const en = lang === "en";
+  const [c, about] = await Promise.all([getContact(), getAbout()]);
+  const stats = ((about[lang].stats ?? []) as string[][]).slice(0, 2);
+  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}?text=${encodeURIComponent(en ? "Hello, I'd like to charter a boat. Dates and group size: " : "Merhaba, tekne kiralamak istiyorum. Tarih ve kişi sayısı: ")}` : href(lang, "/iletisim");
+  return (
+    <section className="pb-20 pt-6 lg:pb-28">
+      <div className={wrap}>
+        <div className="relative isolate overflow-hidden rounded-[2.5rem] px-7 py-14 text-white lg:px-16 lg:py-20" style={{ background: "linear-gradient(135deg, #06264b 0%, #0b4a6e 55%, #0d6a86 100%)" }}>
+          <div className="absolute -right-24 -top-24 -z-10 h-96 w-96 rounded-full bg-turquoise/25 blur-3xl" aria-hidden />
+          <svg className="boat-bob absolute -right-6 bottom-6 -z-10 h-64 w-64 text-white/[0.07] lg:right-10 lg:h-80 lg:w-80" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 3v13l7-1L12 3ZM11 6v9H6l5-9ZM4 17h16l-2 3H6l-2-3Z" /></svg>
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-24 overflow-hidden opacity-70" aria-hidden>
+            <svg className="wave-a absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(160)} fill="rgba(127,220,230,0.16)" /></svg>
+            <svg className="wave-c absolute bottom-0 left-0 h-14 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(240)} fill="rgba(6,38,75,0.35)" /></svg>
+          </div>
+          <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
+            <div>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Ready when you are" : "Hazır olduğunuzda"}</p>
+              <h2 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-7xl">{en ? <>The first step is<br /><span className="text-turquoise">just a message.</span></> : <>İlk adım<br /><span className="text-turquoise">sadece bir mesaj.</span></>}</h2>
+              <p className="mt-6 max-w-xl text-lg text-white/75">{en ? "Tell us your dates, group size and the region you dream of. We'll find the right boat and route, and stay with you until you're back on shore." : "Tarihinizi, kişi sayınızı ve hayalinizdeki bölgeyi yazın. Size uygun tekneyi ve rotayı bulalım, kıyıya dönene kadar yanınızda olalım."}</p>
+              <div className="mt-9 flex flex-wrap gap-3">
+                <a href={wa} target={c.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="flex items-center gap-2.5 rounded-full bg-turquoise px-7 py-4 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">
+                  <Ic d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" size={18} />{en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
+                </a>
+                <Link href={href(lang, "/tekneler")} className="rounded-full px-7 py-4 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Browse boats" : "Tekneleri inceleyin"}</Link>
+              </div>
+            </div>
+            <div className="space-y-3">
+              {stats.map(([v, l]) => (
+                <div key={l} className="flex items-center gap-5 rounded-3xl bg-white/[0.07] p-5 ring-1 ring-white/10 backdrop-blur">
+                  <CountUp value={v} className="font-display w-24 shrink-0 text-4xl font-semibold text-turquoise lg:text-5xl" />
+                  <span className="text-sm leading-snug text-white/75">{l}</span>
+                </div>
+              ))}
+              {(c.phone || c.email) && (
+                <div className="flex flex-col gap-1 rounded-3xl bg-white/[0.07] p-5 text-sm ring-1 ring-white/10 backdrop-blur">
+                  {c.phone && <a href={`tel:+${c.phone}`} className="font-semibold hover:text-turquoise">{formatPhone(c.phone)}</a>}
+                  {c.email && <a href={`mailto:${c.email}`} className="text-white/70 hover:text-turquoise">{c.email}</a>}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
       </div>
     </section>
   );
