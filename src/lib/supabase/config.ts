@@ -14,5 +14,6 @@ export function supabaseOrigin() {
 
 export function publicImageUrl(path: string | null | undefined) {
   if (!path) return null;
+  if (path.startsWith("/") || path.startsWith("http")) return path; // sitenin kendi klasöründeki fotoğraflar (ör. /tekneler/...)
   return `${supabaseOrigin()}/storage/v1/object/public/media/${path}`;
 }

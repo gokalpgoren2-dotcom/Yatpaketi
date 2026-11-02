@@ -98,7 +98,7 @@ export function PhotoManager({ boatId, initial }: { boatId: string; initial: Img
 
   const remove = (img: Img) =>
     run(async () => {
-      await supabase.storage.from("media").remove([img.path]);
+      if (!img.path.startsWith("/")) await supabase.storage.from("media").remove([img.path]);
       const r = await supabase.from("boat_images").delete().eq("id", img.id);
       if (!r.error && img.is_cover) {
         const { data } = await supabase.from("boat_images").select("id").eq("boat_id", boatId).order("sort_order").limit(1);
@@ -124,7 +124,7 @@ export function PhotoManager({ boatId, initial }: { boatId: string; initial: Img
             <li key={img.id} className="overflow-hidden rounded-xl border border-navy/10">
               <div className="relative aspect-[4/3] bg-mist">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={BASE + img.path} alt="" className="h-full w-full object-cover" />
+                <img src={img.path.startsWith("/") ? img.path : BASE + img.path} alt="" className="h-full w-full object-cover" />
                 {img.is_cover && <span className="absolute left-2 top-2 rounded-full bg-turquoise px-2.5 py-1 text-xs font-semibold text-white">Kapak</span>}
               </div>
               <div className="flex flex-wrap gap-1.5 p-2">
