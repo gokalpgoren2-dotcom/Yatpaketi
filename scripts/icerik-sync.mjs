@@ -2,7 +2,6 @@
 // Her kayıt yalnızca değiştiğinde bir kez uygulanır (site_texts: icerik_sync). Hata olursa yayını durdurmaz, sadece uyarı yazar.
 import { readFileSync, readdirSync, existsSync } from "node:fs";
 import { createHash } from "node:crypto";
-import { createClient } from "@supabase/supabase-js";
 
 const log = (...a) => console.log("[icerik-sync]", ...a);
 
@@ -11,6 +10,7 @@ async function main() {
   if (!url || !key) return log("SUPABASE_SERVICE_ROLE_KEY yok, atlandı.");
   if (!existsSync("icerik/tekneler.json")) return log("icerik/tekneler.json yok, atlandı.");
   const list = JSON.parse(readFileSync("icerik/tekneler.json", "utf8"));
+  const { createClient } = await import("@supabase/supabase-js");
   const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
 
   const { data: st } = await db.from("site_texts").select("data").eq("key", "icerik_sync").maybeSingle();
