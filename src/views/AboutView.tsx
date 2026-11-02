@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { CountUp } from "@/components/CountUp";
 import { getAbout } from "@/lib/site-texts";
-import { getCategories, getDestinations } from "@/lib/content";
+import { getBoats, getCategories, getDestinations } from "@/lib/content";
 import { href, type Lang } from "@/lib/i18n";
 
 const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-turquoise-dark";
@@ -24,11 +24,16 @@ const STEP_IC = ["M4 5h16v11H8l-4 4V5ZM8 9h8M8 12h5", "M12 3v13l7-1L12 3ZM11 6v9
 const RESP_IC = ["M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12ZM12 15a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z", "M12 3l8 4v5c0 5-3.5 8-8 9-4.5-1-8-4-8-9V7l8-4ZM9 12l2 2 4-4", "M3 15a4 4 0 0 0 4 4h10a4 4 0 0 0 0-8 6 6 0 0 0-11.5 1.5A3.5 3.5 0 0 0 3 15Z"];
 
 export async function AboutView({ lang }: { lang: Lang }) {
-  const [about, cats, dests] = await Promise.all([getAbout(), getCategories(lang), getDestinations(lang)]);
+  const [about, cats, dests, { boats }] = await Promise.all([getAbout(), getCategories(lang), getDestinations(lang), getBoats(lang)]);
   const A = about[lang];
   const en = lang === "en";
   const [t1, ...t2] = A.title.split(/(?<=\.)\s+/);
-  const stats = (A.stats ?? []) as string[][];
+  // Rakamlar: {tekne} ve {liman} yerine yayındaki tekne ve liman sayısı. Eski kayıtta "kurucu ortak / destinasyon bölgesi" kaldıysa onlar da sayıya çevrilir.
+  const stats = ((A.stats ?? []) as string[][]).map(([v, l]) => {
+    if (v.includes("{tekne}") || /kurucu ortak|founding partner/i.test(l)) return [String(boats.length), v.includes("{tekne}") ? l : en ? "boats in our portfolio" : "portföyümüzdeki tekne"];
+    if (v.includes("{liman}") || /destinasyon bölgesi|destination region/i.test(l)) return [String(dests.length), v.includes("{liman}") ? l : en ? "ports" : "liman"];
+    return [v, l];
+  });
   const edu = (A.edu ?? []) as string[];
   return (
     <>

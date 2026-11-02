@@ -3,7 +3,8 @@ export const ABOUT = {
   tr: {
     title: "Denizden gelen birikim. Birlikte kurulan güven.",
     sub: "Denizcilik mirasını, mesleki eğitimi ve turizm işletmeciliği birikimini aynı hizmet anlayışında buluşturan iki ortak.",
-    stats: [["100+", "yıllık aile denizcilik birikimi"], ["60", "yıllık yatçılık tecrübesi"], ["2", "kurucu ortak"], ["6", "destinasyon bölgesi"]],
+    // {tekne} ve {liman} yerine sitedeki yayındaki tekne ve liman sayısı otomatik yazılır.
+    stats: [["100+", "yıllık aile denizcilik birikimi"], ["60", "yıllık yatçılık tecrübesi"], ["{tekne}", "portföyümüzdeki tekne"], ["{liman}", "liman"]],
     edu: ["Denizcilik lisesi", "Deniz Ulaştırma ve İşletme ön lisansı", "Deniz Ulaştırma ve İşletme Mühendisliği", "Gemicilikten kaptanlığa saha deneyimi"],
     storyEyebrow: "Hikâyemiz",
     storyTitle: "Kökleri denizde. Odağında misafirleri.",
@@ -49,7 +50,7 @@ export const ABOUT = {
   en: {
     title: "Experience from the sea. Trust built together.",
     sub: "Two partners who bring maritime heritage, professional training and tourism management into one approach to service.",
-    stats: [["100+", "years of family maritime heritage"], ["60", "years of yachting experience"], ["2", "founding partners"], ["6", "destination regions"]],
+    stats: [["100+", "years of family maritime heritage"], ["60", "years of yachting experience"], ["{tekne}", "boats in our portfolio"], ["{liman}", "ports"]],
     edu: ["Maritime vocational high school", "Associate degree in Maritime Transportation and Management", "Maritime Transportation and Management Engineering", "Field experience from seafaring to captaincy"],
     storyEyebrow: "Our story",
     storyTitle: "Rooted in the sea. Focused on our guests.",

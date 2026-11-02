@@ -35,7 +35,7 @@ export const CULTURE_FIELDS: Field[] = [
 export const ABOUT_FIELDS: Field[] = [
   { key: "title", label: "Sayfa başlığı (iki cümle: ikincisi turkuaz görünür)", kind: "line" },
   { key: "sub", label: "Başlığın yanındaki cümle", kind: "long" },
-  { key: "stats", label: "Başlıktaki rakamlar", kind: "pairs", labels: ["Rakam (ör. 100+)", "Açıklama"] },
+  { key: "stats", label: "Başlıktaki rakamlar ({tekne} yazarsanız yayındaki tekne sayısı, {liman} yazarsanız liman sayısı otomatik gelir)", kind: "pairs", labels: ["Rakam (ör. 100+ ya da {tekne})", "Açıklama"] },
   { key: "edu", label: "Uzmanlık kartı: eğitim basamakları", kind: "paras" },
   { key: "storyEyebrow", label: "Hikâyemiz: küçük üst yazı", kind: "line" },
   { key: "storyTitle", label: "Hikâyemiz: başlık", kind: "line" },
