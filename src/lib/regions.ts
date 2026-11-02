@@ -162,7 +162,7 @@ const TR: Record<string, RegionText> = {
     explore: [
       ["Bozukkale", "Antik Loryma'nın surları", "Koyun üzerindeki antik kale kalıntıları, kısa bir yürüyüşle görülebilir. Tepeden bakınca koyun manzarası çok etkileyicidir."],
       ["Selimiye Köyü", "Taş evler ve begonviller", "Kıyıdan köyün içine uzanan sokaklarda akşamüstü bir yürüyüş, günün en güzel anlarından biri olabilir."],
-      ["Gulet tersaneleri", "Ahşabın ustalığı", "Bozburun'da geleneksel ahşap teknelerin nasıl yapıldığını görmek, mavi yolculuk kültürünü yakından tanımanın en güzel yolu."],
+      ["Dirsekbükü", "Dirsek gibi kıvrılan bir koy", "Adını dirsek gibi kıvrılan şeklinden alan bu uzun ve dar koy, çamlarla çevrili sakin suyuyla bölgenin en korunaklı demirleme yerlerinden biri. Kalabalıktan uzak bir gece için birebir."],
     ],
     noteEyebrow: "Huzur arayanlar için",
     noteTitle: "Sakin bir rota",
@@ -369,7 +369,7 @@ const EN: Record<string, RegionText> = {
     explore: [
       ["Bozukkale", "The walls of ancient Loryma", "The ruins of the ancient fortress above the cove can be reached with a short walk. The view of the cove from the top is stunning."],
       ["Selimiye Village", "Stone houses and bougainvillea", "A late-afternoon walk through the streets leading from the shore into the village can be one of the best moments of the day."],
-      ["Gulet boatyards", "The craft of wood", "Seeing how traditional wooden boats are built in Bozburun is the best way to get to know blue voyage culture up close."],
+      ["Dirsekbükü", "A cove shaped like an elbow", "Named after its elbow-like bend, this long, narrow cove with calm water and pine-covered shores is one of the region's most sheltered anchorages. Perfect for a quiet night away from the crowds."],
     ],
     noteEyebrow: "For those seeking peace",
     noteTitle: "A quiet route",
