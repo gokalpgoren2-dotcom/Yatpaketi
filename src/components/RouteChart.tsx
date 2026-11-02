@@ -1,4 +1,6 @@
-// Rota şeması: sade bir deniz haritası. Girintili kıyılar ve karada yükselti çizgileri, denizde derinlik çizgileri,
+import { GeoChart, hasGeo } from "./GeoChart";
+
+// Yedek şema (coğrafi güzergâhı tanımlı olmayan rotalar için): sade bir deniz haritası. Girintili kıyılar ve karada yükselti çizgileri, denizde derinlik çizgileri,
 // kıyı dibinde sığ su, ince pusula; durak adları beyaz yazıyla, kalkış ve varış limanları lacivert etiketle. Rota boyunca gulet ilerler.
 // Gerçek harita değildir, rotanın akışını gösterir. Dönüş rotaları bir adanın çevresinde, tek yön rotalar iki kıyı arasında çizilir.
 type P = [number, number];
@@ -80,7 +82,7 @@ const GULET = (
   </g>
 );
 
-export function RouteChart({ id, stops, loop, compact = false, label }: { id: string; stops: string[]; loop: boolean; compact?: boolean; label: string }) {
+function SchematicChart({ id, stops, loop, compact = false, label }: { id: string; stops: string[]; loop: boolean; compact?: boolean; label: string }) {
   const closed = loop && stops.length > 2;
   const pts = points(stops.length, closed);
   const d = smooth(pts, closed);
@@ -215,4 +217,10 @@ export function RouteChart({ id, stops, loop, compact = false, label }: { id: st
       <rect width={W} height={H} fill={`url(#${g}-vig)`} pointerEvents="none" />
     </svg>
   );
+}
+
+// Rota haritası: güzergâhı tanımlı rotalarda gerçek kıyıya sadık harita, diğerlerinde şema.
+export function RouteChart(props: { id: string; stops: string[]; loop: boolean; compact?: boolean; label: string }) {
+  const slug = props.id.replace(/^(c-|home-|hero-)/, "");
+  return hasGeo(slug) ? <GeoChart {...props} slug={slug} /> : <SchematicChart {...props} />;
 }
