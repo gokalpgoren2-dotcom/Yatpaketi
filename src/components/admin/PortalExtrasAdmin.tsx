@@ -27,6 +27,7 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
   const [note, setNote] = useState("");
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [wipeMsg, setWipeMsg] = useState<{ ok: boolean; text: string } | null>(null);
 
   const p = prefs ?? {};
   const has = prefs && Object.keys(prefs).length > 0;
@@ -63,6 +64,27 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
     router.refresh();
   }
 
+  // Alan kaplamasın diye misafir bilgilerini silme (veritabanından tamamen kaldırılır)
+  async function wipe(what: "guests" | "prefs" | "menus" | "all") {
+    const label = { guests: "misafir listesi", prefs: "misafir tercihleri", menus: "menü seçimi", all: "tüm misafir bilgileri (liste, tercihler, menü seçimi ve alışveriş listeleri)" }[what];
+    if (!confirm(`Bu müşterinin ${label} kalıcı olarak silinsin mi? Bu işlem geri alınamaz.`)) return;
+    setBusy(true); setWipeMsg(null);
+    const errs: string[] = [];
+    const run = async (q: PromiseLike<{ error: { message: string } | null }>) => { const r = await q; if (r.error) errs.push(r.error.message); };
+    if (what === "guests" || what === "all") await run(supabase.from("portal_guests").delete().eq("portal_id", portalId));
+    if (what === "prefs" || what === "all") await run(supabase.from("portal_prefs").delete().eq("portal_id", portalId));
+    if (what === "menus" || what === "all") await run(supabase.from("portal_menu_choices").delete().eq("portal_id", portalId));
+    if (what === "all") {
+      const paths = files.map((f) => f.path).filter(Boolean) as string[];
+      if (paths.length) await supabase.storage.from("portal-files").remove(paths);
+      await run(supabase.from("portal_files").delete().eq("portal_id", portalId));
+    }
+    setBusy(false);
+    setWipeMsg(errs.length ? { ok: false, text: "Silinemedi: " + errs.join(", ") } : { ok: true, text: "Silindi." });
+    router.refresh();
+  }
+  const wipeBtn = (what: "guests" | "prefs" | "menus", show: boolean) => show ? <button type="button" onClick={() => wipe(what)} disabled={busy} className="rounded-xl border border-red-200 px-3 py-2 text-xs font-semibold text-red-600 disabled:opacity-50">Sil</button> : null;
+
   async function remove(f: AdminFile) {
     if (!confirm(`"${f.title}" silinsin mi?`)) return;
     if (f.path) await supabase.storage.from("portal-files").remove([f.path]);
@@ -73,11 +95,19 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
 
   return (
     <div className="space-y-5">
+      <div className="flex flex-wrap items-center justify-between gap-3 rounded-2xl bg-white p-4 shadow-sm">
+        <p className="text-sm text-navy/70">Misafirin girdiği bilgiler size e-postayla da gelir. İşiniz bitince buradan silebilirsiniz.</p>
+        <button type="button" onClick={() => wipe("all")} disabled={busy} className="rounded-xl bg-red-600 px-4 py-2.5 text-sm font-semibold text-white disabled:opacity-50">Tüm misafir bilgilerini sil</button>
+      </div>
+      {wipeMsg && <p role="status" className={`rounded-xl px-4 py-3 text-sm ${wipeMsg.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700"}`}>{wipeMsg.text}</p>}
       {/* Misafir listesi */}
       <section className={card}>
         <div className="flex flex-wrap items-center justify-between gap-3">
           <h2 className={h2}>Misafir listesi (transit log)</h2>
-          {guests.length > 0 && <button type="button" onClick={csv} className="rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white">Excel/CSV indir</button>}
+          <div className="flex gap-2">
+            {guests.length > 0 && <button type="button" onClick={csv} className="rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white">Excel/CSV indir</button>}
+            {wipeBtn("guests", guests.length > 0)}
+          </div>
         </div>
         {guestsAt && <p className="mt-1 text-xs text-navy/50">Son güncelleme: {stamp(guestsAt)}</p>}
         <p className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${kvkkInfoAt ? "bg-emerald-100 text-emerald-800" : "bg-navy/10 text-navy/60"}`}>{kvkkInfoAt ? `KVKK aydınlatma onayı: ${stamp(kvkkInfoAt)}` : "KVKK aydınlatma onayı yok"}</p>
@@ -97,7 +127,7 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
 
       {/* Tercihler */}
       <section className={card}>
-        <h2 className={h2}>Misafir tercihleri</h2>
+        <div className="flex items-center justify-between gap-3"><h2 className={h2}>Misafir tercihleri</h2>{wipeBtn("prefs", Boolean(has))}</div>
         {prefsAt && <p className="mt-1 text-xs text-navy/50">Son güncelleme: {stamp(prefsAt)}</p>}
         {kvkkHealthAt && <p className="mt-2 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Sağlık verisi açık rızası: {stamp(kvkkHealthAt)}</p>}
         {!has ? <p className="mt-3 text-sm text-navy/60">Müşteri henüz tercihlerini girmedi.</p> : (
@@ -115,7 +145,7 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
 
       {/* Menü seçimi */}
       <section className={card}>
-        <h2 className={h2}>Seçilen menüler</h2>
+        <div className="flex items-center justify-between gap-3"><h2 className={h2}>Seçilen menüler</h2>{wipeBtn("menus", menus.length > 0)}</div>
         {menus.length === 0 ? <p className="mt-3 text-sm text-navy/60">Henüz menü seçilmedi. Menüleri <a href="/admin/menuler" className="font-semibold text-turquoise-dark underline">Menüler</a> sayfasından ekleyebilirsiniz.</p> : (
           <ul className="mt-3 flex flex-wrap gap-2">{menus.map((m) => <li key={m} className="rounded-full bg-turquoise/15 px-3 py-1.5 text-sm font-semibold text-navy">{m}</li>)}</ul>
         )}

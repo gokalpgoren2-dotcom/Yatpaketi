@@ -88,7 +88,8 @@ export async function submitPortalReview(name: string, rating: number, body: str
 
 // ---- Turum: misafir tercihleri, misafir listesi, menü seçimi ----
 
-async function notifyAdmin(subject: string, body: string) {
+// Yöneticiye e-posta: misafirin girdiği bilgilerin tamamı (rows) ve düz metin özeti
+async function notifyAdmin(subject: string, body: string, rows: [string, string][] = [], extraHtml = "", extraText = "") {
   try {
     const admin = adminMail();
     if (!admin) return;
@@ -97,9 +98,16 @@ async function notifyAdmin(subject: string, body: string) {
     const who = p.customer_name || p.email;
     const range = `${fmtDate(p.tour_start)} – ${fmtDate(p.tour_end)}`;
     const note = `${who} (${p.email}), ${p.boat_name} – ${range}: ${body}`;
-    await sendMail({ to: admin, subject: `${subject} – ${p.boat_name} – ${who}`, text: note + "\n\nAyrıntılar: Yönetim > Müşteri Panelleri", html: wrap(`<p style="margin:0 0 12px">${esc(note)}</p><p style="margin:0">Ayrıntılar: Yönetim › Müşteri Panelleri</p>`, { title: subject }) });
+    const text = [note, ...rows.map(([k, v]) => `${k}: ${v}`), extraText, "Ayrıntılar: Yönetim > Müşteri Panelleri"].filter(Boolean).join("\n\n");
+    const html = wrap(`<p style="margin:0 0 12px">${esc(note)}</p>${rows.length ? mailFacts(rows) : ""}${extraHtml}<p style="margin:16px 0 0;color:#6b7c93;font-size:13px">Bu bilgiler Yönetim › Müşteri Panelleri sayfasında da görünür ve oradan silinebilir.</p>`, { title: subject });
+    await sendMail({ to: admin, subject: `${subject} – ${p.boat_name} – ${who}`, text, html });
   } catch { /* e-posta gitmese de kayıt geçerlidir */ }
 }
+
+const MARKET_NAMES: Record<string, string> = { macrocenter: "Macrocenter", carrefoursa: "CarrefourSA", migros: "Migros", metro: "Metro" };
+const SERVICE_NAMES: Record<string, string> = { samimi: "Samimi", profesyonel: "Profesyonel", dengeli: "Dengeli" };
+const yn = (has?: boolean, text?: string) => (has ? `Var${text?.trim() ? ": " + text.trim() : ""}` : has === false ? "Yok" : "-");
+const dTr = (d?: string | null) => (d ? fmtDate(d) : "");
 
 export async function savePrefs(prefs: Prefs, healthConsent = false): Promise<{ ok: boolean; error?: string }> {
   const token = await getPortalToken();
@@ -112,7 +120,17 @@ export async function savePrefs(prefs: Prefs, healthConsent = false): Promise<{ 
   }
   const { data, error } = await portalDb().rpc("portal_prefs_save", { p_token: token, p_data: prefs });
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
-  await notifyAdmin("Misafir tercihleri güncellendi", "misafir tercihlerini kaydetti.");
+  const acts = (prefs.activities ?? []).filter((a) => a !== "Diğer");
+  if (prefs.activities?.includes("Diğer")) acts.push(`Diğer: ${prefs.activitiesOther?.trim() || "-"}`);
+  await notifyAdmin("Misafir tercihleri", "misafir tercihlerini kaydetti.", [
+    ["Market", MARKET_NAMES[prefs.market ?? ""] ?? "-"],
+    ["Alerji", yn(prefs.allergy?.has, prefs.allergy?.text)],
+    ["Kronik hastalık", yn(prefs.chronic?.has, prefs.chronic?.text)],
+    ["Özel gün", prefs.celebration?.has ? [prefs.celebration.type, dTr(prefs.celebration.date), prefs.celebration.note].filter(Boolean).join(" · ") || "Var" : prefs.celebration?.has === false ? "Yok" : "-"],
+    ["Hizmet tarzı", SERVICE_NAMES[prefs.service ?? ""] ?? "-"],
+    ["Aktiviteler", acts.join(", ") || "-"],
+    ["Not", prefs.notes?.trim() || "-"],
+  ]);
   return { ok: true };
 }
 
@@ -124,7 +142,14 @@ export async function saveGuests(guests: Guest[], consent = false): Promise<{ ok
   if (k.error || k.data !== true) return { ok: false, error: "Onayınız kaydedilemedi. Lütfen tekrar deneyin." };
   const { data, error } = await portalDb().rpc("portal_guests_save", { p_token: token, p_guests: guests });
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen bilgileri kontrol edip tekrar deneyin." };
-  await notifyAdmin("Misafir listesi güncellendi", `misafir listesini kaydetti (${guests.filter((g) => g.full_name.trim()).length} kişi).`);
+  const list = guests.filter((g) => g.full_name.trim());
+  const td = "padding:8px 10px 8px 0;border-bottom:1px solid #e5edf2;font-size:13px;color:#06264b;vertical-align:top";
+  const th = "padding:8px 10px 8px 0;border-bottom:1px solid #e5edf2;font-size:12px;color:#6b7c93;text-align:left";
+  const table = `<table role="presentation" cellpadding="0" cellspacing="0" width="100%" style="margin:16px 0"><tr><th style="${th}">#</th><th style="${th}">Ad soyad</th><th style="${th}">Uyruk</th><th style="${th}">Doğum</th><th style="${th}">Cinsiyet</th><th style="${th}">Belge</th><th style="${th}">Telefon</th></tr>${list
+    .map((g, i) => `<tr><td style="${td}">${i + 1}</td><td style="${td};font-weight:bold">${esc(g.full_name)}</td><td style="${td}">${esc(g.nationality ?? "")}</td><td style="${td}">${esc(dTr(g.birth_date))}</td><td style="${td}">${esc(g.gender ?? "")}</td><td style="${td}">${esc(`${g.doc_type ?? ""} ${g.doc_no ?? ""}`.trim())}</td><td style="${td}">${esc(g.phone ?? "")}</td></tr>`)
+    .join("")}</table>`;
+  const plain = list.map((g, i) => `${i + 1}) ${g.full_name} – ${g.nationality ?? ""} – ${dTr(g.birth_date)} – ${g.gender ?? ""} – ${g.doc_type ?? ""} ${g.doc_no ?? ""} – ${g.phone ?? ""}`).join("\n");
+  await notifyAdmin("Misafir listesi (transit log)", `misafir listesini kaydetti (${list.length} kişi).`, [], table, plain);
   return { ok: true };
 }
 
@@ -133,7 +158,13 @@ export async function saveMenus(ids: string[]): Promise<{ ok: boolean; error?: s
   if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
   const { data, error } = await portalDb().rpc("portal_menus_save", { p_token: token, p_ids: ids });
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
-  await notifyAdmin("Menü seçimi güncellendi", `${ids.length} menü seçti.`);
+  let names = "";
+  try {
+    const ex = await portalDb().rpc("portal_extras_get", { p_token: token });
+    const menus = ((ex.data as { menus?: { id: string; title: string }[] } | null)?.menus ?? []).filter((m) => ids.includes(m.id)).map((m) => m.title);
+    names = menus.join(", ");
+  } catch { /* adlar alınamazsa yalnızca sayı yazılır */ }
+  await notifyAdmin("Menü seçimi", `${ids.length} menü seçti.`, [["Seçilen menüler", names || (ids.length ? `${ids.length} menü` : "Seçim yok")]]);
   return { ok: true };
 }
 
