@@ -64,7 +64,12 @@ export default async function PortalHome() {
   if (extras) {
     await Promise.all([
       ...extras.menus.map(async (m) => { const u = await signFile(m.file_path); if (u) menuUrls[m.id] = u; }),
-      ...extras.files.map(async (f) => { const u = await signFile(f.path); if (u) fileUrls[f.id] = u; }),
+      ...extras.files.map(async (f) => {
+        // Excel tarayıcıda açılmaz: indirme bağlantısı verilir
+        const ext = (f.path ?? "").split(".").pop()?.toLowerCase() ?? "";
+        const u = await signFile(f.path, ["xlsx", "xls", "csv"].includes(ext) ? `alisveris-listesi.${ext}` : undefined);
+        if (u) fileUrls[f.id] = u;
+      }),
     ]);
   }
 
@@ -279,7 +284,14 @@ export default async function PortalHome() {
                           </div>
                         </div>
                         {f.note && <p className="mt-3 whitespace-pre-line rounded-xl bg-white p-3.5 text-sm leading-relaxed text-navy/80 ring-1 ring-navy/5">{f.note}</p>}
-                        {fileUrls[f.id] && <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-3 inline-block text-sm font-semibold text-turquoise-dark underline underline-offset-4">Listeyi aç</a>}
+                        {fileUrls[f.id] && (() => {
+                          const xl = /\.(xlsx|xls|csv)$/i.test(f.path ?? "");
+                          return (
+                            <a href={fileUrls[f.id]} target="_blank" rel="noopener" className="mt-3 inline-flex items-center gap-2 rounded-xl bg-white px-4 py-2.5 text-sm font-semibold text-navy ring-1 ring-navy/10 transition hover:ring-turquoise">
+                              <Ic d={ICON.doc} size={16} />{xl ? "Listeyi indir (Excel)" : "Listeyi aç (PDF)"}
+                            </a>
+                          );
+                        })()}
                         {!over && <ShoppingAnswer id={f.id} approvedAt={f.approved_at} changeAt={f.change_requested_at} note={f.customer_note} />}
                       </li>
                     ))}

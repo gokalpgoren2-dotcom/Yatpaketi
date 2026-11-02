@@ -50,7 +50,9 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
     if (f) {
       const ext = (f.name.split(".").pop() ?? "pdf").toLowerCase();
       path = `alisveris/${portalId}/${crypto.randomUUID()}.${ext}`;
-      const up = await supabase.storage.from("portal-files").upload(path, f, { contentType: f.type || undefined });
+      const MIME: Record<string, string> = { pdf: "application/pdf", xlsx: "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", xls: "application/vnd.ms-excel", csv: "text/csv", jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png" };
+      if (!MIME[ext]) { setBusy(false); setMsg({ ok: false, text: "Yalnızca Excel (xlsx, xls, csv), PDF ya da fotoğraf yükleyebilirsiniz." }); return; }
+      const up = await supabase.storage.from("portal-files").upload(path, f, { contentType: MIME[ext] });
       if (up.error) { setBusy(false); setMsg({ ok: false, text: "Dosya yüklenemedi: " + up.error.message }); return; }
     }
     const { error } = await supabase.from("portal_files").insert({ portal_id: portalId, kind: "shopping", title: title.trim(), note: note.trim() || null, path });
@@ -125,7 +127,9 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
         <p className="mt-1 text-sm text-navy/60">Alışveriş listesini ekleyin; müşteri Turum&apos;da onaylar ya da değişiklik ister. Onaydan sonra alışveriş yapılır.</p>
         <div className="mt-4 grid gap-3 sm:grid-cols-2">
           <input value={title} onChange={(e) => setTitle(e.target.value)} placeholder="Başlık (ör. 1. hafta alışveriş listesi)" className={input} />
-          <input ref={fileRef} type="file" accept="application/pdf,image/*" className="text-sm" />
+          <label className="text-sm text-navy/70">Dosya: Excel (xlsx, xls, csv) veya PDF
+            <input ref={fileRef} type="file" accept=".xlsx,.xls,.csv,.pdf,application/pdf,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel,text/csv,image/jpeg,image/png" className="mt-1 block text-sm" />
+          </label>
           <textarea value={note} onChange={(e) => setNote(e.target.value)} rows={3} placeholder="Listeyi yazın (her satıra bir ürün) ya da dosya yükleyin" className={`${input} sm:col-span-2`} />
         </div>
         {msg && <p role="status" className={`mt-3 rounded-xl px-4 py-3 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700"}`}>{msg.text}</p>}
