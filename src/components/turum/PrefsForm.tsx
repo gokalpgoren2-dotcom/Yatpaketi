@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { savePrefs } from "@/app/musteri/actions";
-import { ACTIVITIES, CELEBRATIONS, MARKETS, SERVICES, type Prefs } from "@/lib/turum";
+import { ACTIVITIES, CELEBRATIONS, KVKK_HEALTH_CONSENT, MARKETS, SERVICES, type Prefs } from "@/lib/turum";
+import { KvkkBox } from "./KvkkBox";
 
 const lab = "text-sm font-semibold text-navy";
 const hint = "mt-0.5 text-xs leading-relaxed text-navy/55";
@@ -18,7 +19,8 @@ function YesNo({ value, onChange }: { value?: boolean; onChange: (v: boolean) =>
   );
 }
 
-export function PrefsForm({ initial, tourStart, tourEnd }: { initial: Prefs; tourStart: string; tourEnd: string }) {
+export function PrefsForm({ initial, tourStart, tourEnd, consented, email }: { initial: Prefs; tourStart: string; tourEnd: string; consented: boolean; email: string }) {
+  const [consent, setConsent] = useState(consented);
   const [p, setP] = useState<Prefs>(initial ?? {});
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -26,9 +28,11 @@ export function PrefsForm({ initial, tourStart, tourEnd }: { initial: Prefs; tou
   const acts = p.activities ?? [];
   const toggleAct = (a: string) => set({ activities: acts.includes(a) ? acts.filter((x) => x !== a) : [...acts, a] });
 
+  const health = Boolean(p.allergy?.has || p.chronic?.has);
   async function submit() {
+    if (health && !consent) { setMsg({ ok: false, text: "Sağlık bilgilerini kaydedebilmemiz için açık rıza kutusunu işaretleyin." }); return; }
     setBusy(true);
-    const r = await savePrefs(p).catch(() => ({ ok: false, error: "Bağlantı hatası. Lütfen tekrar deneyin." }));
+    const r = await savePrefs(p, consent).catch(() => ({ ok: false, error: "Bağlantı hatası. Lütfen tekrar deneyin." }));
     setBusy(false);
     setMsg(r.ok ? { ok: true, text: "Tercihleriniz kaydedildi. Ekibimiz hazırlıkları buna göre yapacak." } : { ok: false, text: r.error ?? "Kaydedilemedi." });
   }
@@ -59,6 +63,8 @@ export function PrefsForm({ initial, tourStart, tourEnd }: { initial: Prefs; tou
           {p.chronic?.has && <textarea rows={2} value={p.chronic?.text ?? ""} onChange={(e) => set({ chronic: { ...p.chronic, has: true, text: e.target.value } })} placeholder="Kimde, hangi durum? Varsa kullanılan ilaçlar" className={field} />}
         </div>
       </div>
+
+      {health && <KvkkBox checked={consent} onChange={(v) => { setConsent(v); setMsg(null); }} label={KVKK_HEALTH_CONSENT} email={email} />}
 
       {/* Kutlama */}
       <div>

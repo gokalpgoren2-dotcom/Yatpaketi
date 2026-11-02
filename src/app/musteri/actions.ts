@@ -101,18 +101,27 @@ async function notifyAdmin(subject: string, body: string) {
   } catch { /* e-posta gitmese de kayıt geçerlidir */ }
 }
 
-export async function savePrefs(prefs: Prefs): Promise<{ ok: boolean; error?: string }> {
+export async function savePrefs(prefs: Prefs, healthConsent = false): Promise<{ ok: boolean; error?: string }> {
   const token = await getPortalToken();
   if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  const health = Boolean(prefs.allergy?.has || prefs.chronic?.has);
+  if (health && !healthConsent) return { ok: false, error: "Sağlık bilgilerini kaydedebilmemiz için açık rıza kutusunu işaretleyin." };
+  if (health) {
+    const k = await portalDb().rpc("portal_kvkk", { p_token: token, p_kind: "health" });
+    if (k.error || k.data !== true) return { ok: false, error: "Onayınız kaydedilemedi. Lütfen tekrar deneyin." };
+  }
   const { data, error } = await portalDb().rpc("portal_prefs_save", { p_token: token, p_data: prefs });
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
   await notifyAdmin("Misafir tercihleri güncellendi", "misafir tercihlerini kaydetti.");
   return { ok: true };
 }
 
-export async function saveGuests(guests: Guest[]): Promise<{ ok: boolean; error?: string }> {
+export async function saveGuests(guests: Guest[], consent = false): Promise<{ ok: boolean; error?: string }> {
   const token = await getPortalToken();
   if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
+  if (!consent) return { ok: false, error: "Devam etmek için KVKK aydınlatma metnini onaylayın." };
+  const k = await portalDb().rpc("portal_kvkk", { p_token: token, p_kind: "info" });
+  if (k.error || k.data !== true) return { ok: false, error: "Onayınız kaydedilemedi. Lütfen tekrar deneyin." };
   const { data, error } = await portalDb().rpc("portal_guests_save", { p_token: token, p_guests: guests });
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen bilgileri kontrol edip tekrar deneyin." };
   await notifyAdmin("Misafir listesi güncellendi", `misafir listesini kaydetti (${guests.filter((g) => g.full_name.trim()).length} kişi).`);

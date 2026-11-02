@@ -30,6 +30,8 @@ export default async function PortalDetail({ params }: { params: Promise<{ id: s
     supabase.from("portal_files").select("id,kind,title,note,path,created_at").eq("portal_id", id).order("created_at", { ascending: false }),
     supabase.from("customer_portals").select("guests_updated_at").eq("id", id).maybeSingle(),
   ]);
+  const kv = await supabase.from("customer_portals").select("kvkk_info_at,kvkk_health_at").eq("id", id).maybeSingle();
+  const kvkk = (kv.data ?? {}) as { kvkk_info_at?: string | null; kvkk_health_at?: string | null };
   const extrasReady = !gs.error && !fl.error;
   const fileStore = supabase.storage.from("portal-files");
   const files: AdminFile[] = await Promise.all(((fl.data ?? []) as Omit<AdminFile, "url">[]).map(async (f) => ({ ...f, url: f.path ? (await fileStore.createSignedUrl(f.path, 900)).data?.signedUrl ?? null : null })));
@@ -46,7 +48,7 @@ export default async function PortalDetail({ params }: { params: Promise<{ id: s
             portalId={id} boat={String(data.boat_name)}
             prefs={(pr.data?.data as Prefs | undefined) ?? null} prefsAt={(pr.data?.updated_at as string | undefined) ?? null}
             guests={(gs.data ?? []) as Guest[]} guestsAt={((gu.data as { guests_updated_at?: string } | null)?.guests_updated_at) ?? null}
-            menus={menuTitles} files={files}
+            menus={menuTitles} files={files} kvkkInfoAt={kvkk.kvkk_info_at ?? null} kvkkHealthAt={kvkk.kvkk_health_at ?? null}
           />
         </div>
       ) : (

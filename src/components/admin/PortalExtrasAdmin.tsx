@@ -17,8 +17,8 @@ function Row({ k, v }: { k: string; v?: React.ReactNode }) {
   return <div className="grid gap-1 border-t border-navy/10 py-2.5 sm:grid-cols-[11rem_1fr]"><dt className="text-sm font-semibold text-navy/55">{k}</dt><dd className="whitespace-pre-line text-sm text-navy">{v}</dd></div>;
 }
 
-export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, guestsAt, menus, files }: {
-  portalId: string; boat: string; prefs: Prefs | null; prefsAt: string | null; guests: Guest[]; guestsAt: string | null; menus: string[]; files: AdminFile[];
+export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, guestsAt, menus, files, kvkkInfoAt, kvkkHealthAt }: {
+  portalId: string; boat: string; prefs: Prefs | null; prefsAt: string | null; guests: Guest[]; guestsAt: string | null; menus: string[]; files: AdminFile[]; kvkkInfoAt: string | null; kvkkHealthAt: string | null;
 }) {
   const supabase = createClient();
   const router = useRouter();
@@ -79,6 +79,7 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
           {guests.length > 0 && <button type="button" onClick={csv} className="rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white">Excel/CSV indir</button>}
         </div>
         {guestsAt && <p className="mt-1 text-xs text-navy/50">Son güncelleme: {stamp(guestsAt)}</p>}
+        <p className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${kvkkInfoAt ? "bg-emerald-100 text-emerald-800" : "bg-navy/10 text-navy/60"}`}>{kvkkInfoAt ? `KVKK aydınlatma onayı: ${stamp(kvkkInfoAt)}` : "KVKK aydınlatma onayı yok"}</p>
         {guests.length === 0 ? <p className="mt-3 text-sm text-navy/60">Müşteri henüz misafir listesini girmedi.</p> : (
           <div className="mt-4 overflow-x-auto">
             <table className="w-full min-w-[40rem] text-left text-sm">
@@ -97,6 +98,7 @@ export function PortalExtrasAdmin({ portalId, boat, prefs, prefsAt, guests, gues
       <section className={card}>
         <h2 className={h2}>Misafir tercihleri</h2>
         {prefsAt && <p className="mt-1 text-xs text-navy/50">Son güncelleme: {stamp(prefsAt)}</p>}
+        {kvkkHealthAt && <p className="mt-2 inline-block rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">Sağlık verisi açık rızası: {stamp(kvkkHealthAt)}</p>}
         {!has ? <p className="mt-3 text-sm text-navy/60">Müşteri henüz tercihlerini girmedi.</p> : (
           <dl className="mt-3">
             <Row k="Market" v={MARKETS.find(([v]) => v === p.market)?.[1]} />

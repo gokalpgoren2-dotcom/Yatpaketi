@@ -69,9 +69,11 @@ export default async function PortalHome() {
 
   // Ekibe ulaşma düğmesi için site ayarlarındaki WhatsApp numarası (herkese açık ayar).
   let whatsapp = "";
+  let contactEmail = "";
   try {
     const { data } = await db.from("site_settings").select("value").eq("key", "contact").maybeSingle();
     whatsapp = normalizePhone(String((data?.value as { whatsapp?: string } | null)?.whatsapp ?? ""));
+    contactEmail = String((data?.value as { email?: string } | null)?.email ?? "").trim();
   } catch { /* numara yoksa düğme gösterilmez */ }
 
   const today = istanbulToday();
@@ -227,16 +229,16 @@ export default async function PortalHome() {
             {fold("misafirler", ICON.users, "Misafir listesi", guestsN ? chip(true, `${guestsN} kişi`) : chip(false, "Bekleniyor"), guestsN === 0, (
               <>
                 <div className="rounded-2xl bg-turquoise/10 p-4 text-sm leading-relaxed text-navy ring-1 ring-turquoise/25">
-                  <b>Neden gerekli?</b> Yatın tur öncesi limandan çıkış yapabilmesi için tüm misafirlerin bilgileri <b>transit log</b> kaydına girilmelidir. Lütfen yatta bulunacak herkesi, kimlik veya pasaportundaki bilgilerle, turdan en az 3 gün önce ekleyin. Bilgileriniz yalnızca bu kayıt için kullanılır.
+                  <b>Neden gerekli?</b> Yatın tur öncesi limandan çıkış yapabilmesi için tüm misafirlerin bilgileri <b>transit log</b> kaydına girilmelidir. Lütfen yatta bulunacak herkesi, kimlik veya pasaportundaki bilgilerle, turdan en az 3 gün önce ekleyin. Bilgileriniz KVKK kapsamında yalnızca bu amaçla kullanılır.
                 </div>
-                <GuestsForm initial={extras.guests} />
+                <GuestsForm initial={extras.guests} consented={Boolean(extras.kvkk_info_at)} email={contactEmail} />
               </>
             ), "Transit log için gerekli")}
 
             {fold("tercihler", ICON.heart, "Misafir tercihleri", prefsDone ? chip(true, "Kaydedildi") : chip(false, "Bekleniyor"), !prefsDone, (
               <>
                 <p className="text-sm leading-relaxed text-navy/70">Size en uygun turu hazırlayabilmemiz için birkaç tercihinizi öğrenmek istiyoruz. İstediğiniz zaman değiştirebilirsiniz.</p>
-                <PrefsForm initial={extras.prefs} tourStart={p.tour_start} tourEnd={p.tour_end} />
+                <PrefsForm initial={extras.prefs} tourStart={p.tour_start} tourEnd={p.tour_end} consented={Boolean(extras.kvkk_health_at)} email={contactEmail} />
               </>
             ), "Market, sağlık, kutlama, hizmet tarzı, aktiviteler")}
 

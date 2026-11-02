@@ -2,13 +2,15 @@
 
 import { useState } from "react";
 import { saveGuests } from "@/app/musteri/actions";
-import type { Guest } from "@/lib/turum";
+import { KVKK_GUEST_CONSENT, type Guest } from "@/lib/turum";
+import { KvkkBox } from "./KvkkBox";
 
 const field = "w-full rounded-xl border border-navy/10 bg-white px-3 py-2.5 text-base text-navy outline-none transition focus:border-turquoise focus:ring-2 focus:ring-turquoise/25 sm:text-sm";
 const lab = "block text-[0.7rem] font-semibold uppercase tracking-[0.12em] text-navy/50";
 const empty = (): Guest => ({ full_name: "", gender: "", birth_date: "", nationality: "", doc_type: "Pasaport", doc_no: "", phone: "" });
 
-export function GuestsForm({ initial }: { initial: Guest[] }) {
+export function GuestsForm({ initial, consented, email }: { initial: Guest[]; consented: boolean; email: string }) {
+  const [consent, setConsent] = useState(consented);
   const [list, setList] = useState<Guest[]>(initial.length ? initial.map((g) => ({ ...empty(), ...g })) : [empty()]);
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
@@ -20,8 +22,9 @@ export function GuestsForm({ initial }: { initial: Guest[] }) {
       setMsg({ ok: false, text: "Transit log için her misafirin uyruğu, doğum tarihi ve kimlik/pasaport numarası gerekli." });
       return;
     }
+    if (!consent) { setMsg({ ok: false, text: "Kaydetmek için KVKK aydınlatma metnini onaylayın." }); return; }
     setBusy(true);
-    const r = await saveGuests(filled).catch(() => ({ ok: false, error: "Bağlantı hatası. Lütfen tekrar deneyin." }));
+    const r = await saveGuests(filled, consent).catch(() => ({ ok: false, error: "Bağlantı hatası. Lütfen tekrar deneyin." }));
     setBusy(false);
     setMsg(r.ok ? { ok: true, text: `${filled.length} misafir kaydedildi. Teşekkür ederiz.` } : { ok: false, text: r.error ?? "Kaydedilemedi." });
   }
@@ -63,6 +66,7 @@ export function GuestsForm({ initial }: { initial: Guest[] }) {
           + Misafir ekle
         </button>
       )}
+      <div className="mt-4"><KvkkBox checked={consent} onChange={(v) => { setConsent(v); setMsg(null); }} label={KVKK_GUEST_CONSENT} email={email} /></div>
       {msg && <p role="status" className={`mt-4 rounded-xl px-4 py-3 text-sm ${msg.ok ? "bg-emerald-50 text-emerald-800" : "bg-red-50 text-red-700"}`}>{msg.text}</p>}
       <button type="button" onClick={submit} disabled={busy} className="mt-4 w-full rounded-xl bg-navy px-5 py-3.5 text-base font-semibold text-white transition hover:bg-navy-soft disabled:opacity-60 sm:w-auto">
         {busy ? "Kaydediliyor…" : "Misafir listesini kaydet"}
