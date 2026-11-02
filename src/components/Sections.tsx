@@ -1,3 +1,4 @@
+import { SocialLinks } from "./SocialLinks";
 import { Scroller } from "./Scroller";
 import { Photo } from "./Photo";
 import { ContactBubble } from "./ContactBubble";
@@ -459,6 +460,7 @@ export async function Footer({ lang = "tr" }: { lang?: Lang } = {}) {
               {c.email && <a href={`mailto:${c.email}`} className="break-all hover:text-white">{c.email}</a>}
             </p>
           )}
+          <div className="mt-5"><SocialLinks c={c} /></div>
         </div>
         <div className="grid grid-cols-2 gap-x-12 gap-y-2 md:gap-x-16">
           {[explore, company].map((col, k) => (

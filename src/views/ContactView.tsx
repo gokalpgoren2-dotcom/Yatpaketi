@@ -1,3 +1,4 @@
+import { SocialLinks, socialList } from "@/components/SocialLinks";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { ContactForm } from "@/components/ContactForm";
@@ -69,6 +70,13 @@ export async function ContactView({ lang }: { lang: Lang }) {
                     <p className="mt-1 text-sm text-navy/65">{L.mailSub}</p>
                     <p className="mt-3 break-all text-sm font-semibold text-turquoise-dark">{c.email}</p>
                   </a>
+                )}
+                {socialList(c).length > 0 && (
+                  <div className={card}>
+                    <p className="font-display text-xl font-bold text-navy">{lang === "en" ? "Follow us" : "Bizi takip edin"}</p>
+                    <p className="mt-1 mb-4 text-sm text-navy/65">{lang === "en" ? "Life on board, new yachts and the coves we love." : "Yat hayatından kareler, yeni yatlar ve sevdiğimiz koylar."}</p>
+                    <SocialLinks c={c} tone="dark" labels />
+                  </div>
                 )}
                 <div className={`${card} overflow-hidden !p-0`}>
                   <div className="p-6 pb-4">

@@ -23,7 +23,18 @@ export async function saveContact(formData: FormData) {
   if (whatsapp && (whatsapp.length < 10 || whatsapp.length > 15)) back("error", "WhatsApp numarası geçersiz. Örnek: 0541 681 23 14");
   if (email && !/^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email)) back("error", "E-posta adresi geçersiz görünüyor.");
 
-  const { error } = await supabase.from("site_settings").upsert({ key: "contact", value: { phone, whatsapp, email }, updated_at: new Date().toISOString() });
+  // Sosyal medya: kullanıcı adı ya da tam adres yazılabilir
+  const social = (raw: FormDataEntryValue | null, base: string) => {
+    const v = String(raw ?? "").trim();
+    if (!v) return "";
+    if (/^https?:\/\//i.test(v)) return v;
+    if (/^(www\.)?[a-z0-9-]+\.[a-z]{2,}\//i.test(v)) return "https://" + v;
+    return base + v.replace(/^@/, "") + "/";
+  };
+  const instagram = social(formData.get("instagram"), "https://www.instagram.com/");
+  const tiktok = social(formData.get("tiktok"), "https://www.tiktok.com/@");
+  const linkedin = social(formData.get("linkedin"), "https://www.linkedin.com/company/");
+  const { error } = await supabase.from("site_settings").upsert({ key: "contact", value: { phone, whatsapp, email, instagram, tiktok, linkedin }, updated_at: new Date().toISOString() });
   if (error) back("error", "Kaydedilemedi: " + error.message);
   revalidatePath("/", "layout");
   back("saved");

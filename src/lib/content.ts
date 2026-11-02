@@ -162,15 +162,19 @@ export async function getCategoryNames(lang: Lang = "tr"): Promise<string[]> {
 }
 
 // ---- İletişim ayarları (Panel > Ayarlar) ----
-export type Contact = { phone: string; whatsapp: string; email: string };
+export type Contact = { phone: string; whatsapp: string; email: string; instagram: string; tiktok: string; linkedin: string };
 
 export async function getContact(): Promise<Contact> {
-  const empty = { phone: "", whatsapp: "", email: "" };
+  const empty = { phone: "", whatsapp: "", email: "", instagram: "https://www.instagram.com/yatpaketi/", tiktok: "", linkedin: "" };
   if (!supabaseConfigured()) return empty;
   try {
     const { data } = await db().from("site_settings").select("value").eq("key", "contact").maybeSingle();
     const v = (data?.value ?? {}) as Partial<Contact>;
-    return { phone: normalizePhone(v.phone ?? ""), whatsapp: normalizePhone(v.whatsapp ?? ""), email: v.email ?? "" };
+    return {
+      phone: normalizePhone(v.phone ?? ""), whatsapp: normalizePhone(v.whatsapp ?? ""), email: v.email ?? "",
+      // Instagram adresi girilmediyse markanın hesabı gösterilir
+      instagram: v.instagram || empty.instagram, tiktok: v.tiktok ?? "", linkedin: v.linkedin ?? "",
+    };
   } catch {
     return empty;
   }

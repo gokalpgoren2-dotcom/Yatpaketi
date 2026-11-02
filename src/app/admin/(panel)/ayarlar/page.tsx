@@ -14,7 +14,7 @@ export default async function Settings({ searchParams }: { searchParams: Promise
   const { error, saved, t, mail } = await searchParams;
   const { supabase } = await requireAdmin();
   const { data } = await supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle();
-  const v = (data?.value ?? {}) as { phone?: string; whatsapp?: string; email?: string };
+  const v = (data?.value ?? {}) as { phone?: string; whatsapp?: string; email?: string; instagram?: string; tiktok?: string; linkedin?: string };
   const ig = await igStatus();
   const pt = await supabase.from("private_settings").select("key").limit(1);
   const igTable = !pt.error;
@@ -38,6 +38,20 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <div>
           <label htmlFor="email" className={lab}>E-posta</label>
           <input id="email" name="email" type="email" defaultValue={v.email ?? ""} className={input} />
+        </div>
+        <h2 className="pt-3 font-semibold">Sosyal medya</h2>
+        <p className="-mt-2 text-xs text-navy/50">Kullanıcı adını (ör. yatpaketi) ya da sayfanın tam adresini yazabilirsiniz. Boş bırakılan sitede görünmez. Sitenin alt kısmında ve İletişim sayfasında çıkar.</p>
+        <div>
+          <label htmlFor="instagram" className={lab}>Instagram</label>
+          <input id="instagram" name="instagram" defaultValue={v.instagram ?? "https://www.instagram.com/yatpaketi/"} placeholder="yatpaketi" className={input} />
+        </div>
+        <div>
+          <label htmlFor="tiktok" className={lab}>TikTok</label>
+          <input id="tiktok" name="tiktok" defaultValue={v.tiktok ?? ""} placeholder="yatpaketi" className={input} />
+        </div>
+        <div>
+          <label htmlFor="linkedin" className={lab}>LinkedIn</label>
+          <input id="linkedin" name="linkedin" defaultValue={v.linkedin ?? ""} placeholder="https://www.linkedin.com/company/yatpaketi/" className={input} />
         </div>
         <SubmitButton>Kaydet</SubmitButton>
       </form>
