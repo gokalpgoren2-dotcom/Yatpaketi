@@ -4,7 +4,7 @@ import { Footer } from "./Sections";
 import { Photo } from "./Photo";
 import { PostCard } from "./PostCard";
 import { Scroller } from "./Scroller";
-import { MapZoom } from "./MapZoom";
+import { MapHero } from "./MapZoom";
 import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
 import { REGION_UI, type RegionText } from "@/lib/regions";
@@ -34,22 +34,29 @@ export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R
   const introPhoto = photos[0] ?? p.cover;
   const explorePhotos = photos.slice(1, 1 + R.explore.length);
   const gallery = photos.slice(1 + R.explore.length);
+  const head = (
+    <>
+      {back && <Link href={back.href} className="text-sm text-white/80 hover:text-white">← {back.label}</Link>}
+      <h1 className="font-display mt-3 max-w-3xl text-4xl font-semibold leading-tight lg:text-6xl">{p.title}</h1>
+      {p.excerpt && <p className="mt-3 max-w-2xl text-lg text-white/85">{p.excerpt}</p>}
+    </>
+  );
   return (
     <>
       <Header lang={lang} />
       <main>
-        {/* Başlık bandı */}
-        <section className="relative isolate overflow-hidden bg-navy pb-12 pt-28 text-white lg:pb-16 lg:pt-36">
-          {p.cover && (
-            <div className="absolute inset-0 -z-10 opacity-30"><Photo src={p.cover} alt="" priority sizes="100vw" className="object-cover" /></div>
-          )}
-          <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy via-navy/85 to-navy/50" />
-          <div className={wrap}>
-            {back && <Link href={back.href} className="text-sm text-white/75 hover:text-white">← {back.label}</Link>}
-            <h1 className="font-display mt-3 text-4xl font-semibold leading-tight lg:text-6xl">{p.title}</h1>
-            {p.excerpt && <p className="mt-3 max-w-2xl text-lg text-white/80">{p.excerpt}</p>}
-          </div>
-        </section>
+        {/* Başlık: bölge haritası (tıklayınca büyür) */}
+        {map ? (
+          <MapHero src={map} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} open={lang === "en" ? "Enlarge map" : "Haritayı büyüt"} close={lang === "en" ? "Close" : "Kapat"}>
+            {head}
+          </MapHero>
+        ) : (
+          <section className="relative isolate overflow-hidden bg-navy pb-12 pt-28 text-white lg:pb-16 lg:pt-36">
+            {p.cover && <div className="absolute inset-0 -z-10 opacity-30"><Photo src={p.cover} alt="" priority sizes="100vw" className="object-cover" /></div>}
+            <div className="absolute inset-0 -z-10 bg-gradient-to-r from-navy via-navy/85 to-navy/50" />
+            <div className={wrap}>{head}</div>
+          </section>
+        )}
 
         {/* Giriş */}
         <section className="py-14 lg:py-24">
@@ -65,10 +72,7 @@ export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R
               </a>
             </div>
             <div className="relative aspect-[4/3] overflow-hidden rounded-3xl bg-mist shadow-xl shadow-navy/10">
-              {introPhoto ? <Photo src={introPhoto} alt={p.title} sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" /> : map ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={map} alt={p.title} className="h-full w-full object-cover" />
-              ) : <Sea label={p.title} />}
+              {introPhoto ? <Photo src={introPhoto} alt={p.title} sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" /> : <Sea label={p.title} />}
             </div>
           </div>
         </section>
@@ -121,21 +125,6 @@ export function RegionPage({ p, R, photos, map, more, back, lang }: { p: Post; R
             </aside>
           </div>
         </section>
-
-        {/* Harita */}
-        {map && (
-          <section className="pb-14 lg:pb-24">
-            <div className={`${wrap} grid items-center gap-10 lg:grid-cols-[1fr_1.15fr] lg:gap-16`}>
-              <div>
-                <p className={eyebrow}>{R.mapEyebrow}</p>
-                <h2 className={h2}>{R.mapTitle}</h2>
-                <p className="mt-5 leading-relaxed text-navy/65">{R.mapText}</p>
-                <p className="mt-4 text-xs text-navy/45">{U.mapNote}</p>
-              </div>
-              <MapZoom src={map} title={p.title} label={`Yatpaketi / ${T.destinations}`} alt={lang === "en" ? `${p.title} map` : `${p.title} haritası`} open={lang === "en" ? "Enlarge map" : "Haritayı büyüt"} close={lang === "en" ? "Close" : "Kapat"} />
-            </div>
-          </section>
-        )}
 
         {/* Galeri */}
         {gallery.length > 0 && (
