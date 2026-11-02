@@ -174,6 +174,8 @@ export async function answerShopping(id: string, ok: boolean, note: string): Pro
   if (!token) return { ok: false, error: "Oturum süresi doldu. Lütfen yeniden giriş yapın." };
   if (!ok && !note.trim()) return { ok: false, error: "Neyin değişmesini istediğinizi yazın." };
   const { data, error } = await portalDb().rpc("portal_file_answer", { p_token: token, p_id: id, p_ok: ok, p_note: note });
+  if (error) console.error("portal_file_answer", error.code, error.message);
+  if (error?.code === "PGRST202" || error?.code === "42883" || error?.code === "42703") return { ok: false, error: "Sistem güncellemesi tamamlanmamış (turum-alisveris.sql). Lütfen ekibimize haber verin." };
   if (error || data !== true) return { ok: false, error: "Kaydedilemedi. Lütfen tekrar deneyin." };
   await notifyAdmin(ok ? "Alışveriş listesi onaylandı" : "Alışveriş listesinde değişiklik istendi", ok ? `alışveriş listesini onayladı.${note.trim() ? " Not: " + note.trim() : ""}` : `alışveriş listesinde değişiklik istedi: ${note.trim()}`);
   return { ok: true };
