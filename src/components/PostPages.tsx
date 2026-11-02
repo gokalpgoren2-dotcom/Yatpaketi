@@ -13,6 +13,8 @@ import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
 import { Scroller } from "./Scroller";
 import { getDestPhotos } from "@/lib/site-texts";
+import { regionText } from "@/lib/regions";
+import { RegionPage } from "./RegionPage";
 
 export async function ListPage({ kind, eyebrow, title, intro, empty, lang = "tr" }: { kind: PostKind; eyebrow: string; title: string; intro: string; empty: string; lang?: Lang }) {
   const posts = await getPosts(kind, undefined, lang);
@@ -57,6 +59,8 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
   const more = kind === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
   if (kind === "destination") {
     const photos = await getDestPhotos(slug);
+    const R = regionText(slug, lang);
+    if (R) return <RegionPage p={p} R={R} photos={photos} map={map} more={more} back={back} lang={lang} />;
     const en = lang === "en";
     const eyebrow = "text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark";
     return (
