@@ -3,7 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Sections";
 import { BoatCard } from "@/components/BoatCard";
 import { BoatIcon } from "@/components/BoatIcon";
-import { AutoSubmitSelect } from "@/components/AutoSubmitSelect";
+import { FancySelect } from "@/components/FancySelect";
 import { filterBoats, type Filters } from "@/lib/data";
 import { getBoats, getCategories, getDestinations } from "@/lib/content";
 import { href, t, type Lang } from "@/lib/i18n";
@@ -138,14 +138,11 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <div className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_auto] lg:items-end">
               <div>
                 <label className={lab} htmlFor="destinasyon">{L.fDest}</label>
-                <div className="relative">
-                  <Ic d={PATHS.pin} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-turquoise-dark" />
-                  <select id="destinasyon" name="destinasyon" defaultValue={f.destinasyon ?? ""} className={`${field} pl-10 pr-9`}>
-                    <option value="">{en ? "All ports" : "Tüm limanlar"}</option>
-                    {destinations.map((d) => <option key={d.slug} value={d.slug}>{d.name}</option>)}
-                  </select>
-                  <Ic d={PATHS.chev} className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-navy/40" />
-                </div>
+                <FancySelect
+                  id="destinasyon" name="destinasyon" title={L.fDest} defaultValue={f.destinasyon ?? ""}
+                  icon={<Ic d={PATHS.pin} />}
+                  options={[{ value: "", label: en ? "All ports" : "Tüm limanlar", note: String(all.length) }, ...destinations.map((d) => ({ value: d.slug, label: d.name, note: String(all.filter((b) => b.destinations.includes(d.slug)).length) }))]}
+                />
               </div>
               <div>
                 <label className={lab} htmlFor="misafir">{L.fGuests}</label>
@@ -237,16 +234,13 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
               ))}
               {active.length > 1 && <Link href={base} className="text-xs font-semibold text-navy/50 underline-offset-4 hover:text-navy hover:underline">{en ? "Clear all" : "Tümünü temizle"}</Link>}
             </div>
-            <label className="flex shrink-0 items-center gap-2 text-sm text-navy/60">
-              {L.fSort}
-              <span className="relative">
-                <AutoSubmitSelect form="boat-filter" name="sirala" defaultValue={f.sirala ?? ""} className="appearance-none rounded-full border border-navy/10 bg-white py-2 pl-4 pr-9 text-sm font-semibold text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/25">
-                  <option value="">{L.sRec}</option><option value="fiyat-artan">{L.sPriceAsc}</option><option value="fiyat-azalan">{L.sPriceDesc}</option>
-                  <option value="yeni">{L.sNew}</option><option value="uzunluk">{L.sLength}</option>
-                </AutoSubmitSelect>
-                <Ic d={PATHS.chev} className="pointer-events-none absolute right-3 top-1/2 h-4 w-4 -translate-y-1/2 text-navy/40" />
-              </span>
-            </label>
+            <div className="flex shrink-0 items-center gap-2 text-sm text-navy/60">
+              <span>{L.fSort}</span>
+              <FancySelect
+                compact autoSubmit form="boat-filter" name="sirala" title={L.fSort} defaultValue={f.sirala ?? ""}
+                options={[{ value: "", label: L.sRec }, { value: "fiyat-artan", label: L.sPriceAsc }, { value: "fiyat-azalan", label: L.sPriceDesc }, { value: "yeni", label: L.sNew }, { value: "uzunluk", label: L.sLength }]}
+              />
+            </div>
           </div>
 
           {list.length > 0 ? (
