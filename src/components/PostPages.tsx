@@ -15,9 +15,11 @@ import { Scroller } from "./Scroller";
 import { getDestPhotos } from "@/lib/site-texts";
 import { regionText } from "@/lib/regions";
 import { RegionPage } from "./RegionPage";
+import { RoutePage, RoutesIndex } from "./RoutePage";
 
 export async function ListPage({ kind, eyebrow, title, intro, empty, lang = "tr" }: { kind: PostKind; eyebrow: string; title: string; intro: string; empty: string; lang?: Lang }) {
   const posts = await getPosts(kind, undefined, lang);
+  if (kind === "route") return <RoutesIndex posts={posts} eyebrow={eyebrow} title={title} intro={intro} empty={empty} lang={lang} />;
   return (
     <>
       <Header lang={lang} />
@@ -55,6 +57,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
     if (lang === "en") redirect(back ? back.href : "/en");
     notFound();
   }
+  if (kind === "route") return <RoutePage p={p} all={await getPosts("route", undefined, lang)} back={back} lang={lang} />;
   const map = regionMapFor(kind, slug);
   const more = kind === "page" ? [] : (await getPosts(kind, undefined, lang)).filter((x) => x.slug !== slug).slice(0, 3);
   if (kind === "destination") {
@@ -160,7 +163,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
         )}
         {more.length > 0 && (
           <section className="mt-14">
-            <h2 className="font-display text-2xl text-navy">{kind === "route" ? T.moreRoutes : kind === "package" ? T.morePackages : T.morePosts}</h2>
+            <h2 className="font-display text-2xl text-navy">{kind === "package" ? T.morePackages : T.morePosts}</h2>
             <div className="mt-5 grid gap-5 sm:grid-cols-2">{more.map((m, i) => <PostCard key={m.slug} p={m} i={i} lang={lang} />)}</div>
           </section>
         )}

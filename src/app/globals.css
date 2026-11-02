@@ -80,3 +80,10 @@ body {
   .pk-drift, .pk-sway, .pk-pin { animation: none !important; }
   .pk-drift { transform: translateX(300px); }
 }
+
+/* Klasik rota şeması */
+@keyframes route-dash { to { stroke-dashoffset: -110; } }
+@keyframes route-pulse { 0%, 100% { transform: scale(1); opacity: 0.9; } 50% { transform: scale(1.6); opacity: 0.25; } }
+.route-dash { animation: route-dash 6s linear infinite; }
+.route-pulse { animation: route-pulse 2.6s ease-in-out infinite; }
+@media (prefers-reduced-motion: reduce) { .route-dash, .route-pulse { animation: none; } }
