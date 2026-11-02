@@ -151,7 +151,30 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "bozburun-bodrum": { from: "Bozburun", to: "Bodrum", port: "bozburun", stops: ["Bozburun", "Sömbeki", "Datça", "Knidos", "Gökova", "Karaada", "Bodrum"] },
+  "bozburun-bodrum": {
+    from: "Bozburun", to: "Bodrum", port: "bozburun",
+    stops: ["Bozburun", "Datça", "Palamutbükü", "Tuzla Koyu", "İngiliz Limanı", "Kissebükü", "Bodrum"],
+    days: {
+      tr: [
+        "Tekne yapımıyla ünlü Bozburun'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam sakin bir koyda.",
+        "Datça'da yüzme, akşam Eski Datça'nın taş sokaklarında yürüyüş ve yemek.",
+        "Uzun çakıl plajı ve kıyıdaki balık lokantalarıyla bilinen koyda yüzme ve akşam yemeği.",
+        "Gökova körfezinin rüzgârdan korunaklı, berrak sulu koyunda yüzme ve dinlenme.",
+        "Ormanla çevrili, savaş yıllarında İngiliz botlarının saklandığı söylenen korunaklı koyda yüzme.",
+        "Antik kalıntıların arasında, çam ormanının denize indiği sakin koyda son akşam.",
+        "Bodrum'a varış, kalenin gölgesinde son kahvaltı ve teslim.",
+      ],
+      en: [
+        "Welcome in Bozburun, famous for its boatbuilding; settling into the cabins and provisioning; first evening in a quiet cove.",
+        "Swimming in Datça; an evening stroll and dinner in the stone streets of Old Datça.",
+        "Swimming and dinner in the bay known for its long pebble beach and seaside fish restaurants.",
+        "Swimming and rest in a sheltered, clear-water cove of the Gulf of Gökova.",
+        "Swimming in the forest-fringed, sheltered cove where British boats are said to have hidden during the war.",
+        "Last evening in a calm cove among ancient ruins, where the pine forest meets the sea.",
+        "Arrival in Bodrum, last breakfast in the shadow of the castle and hand-over.",
+      ],
+    },
+  },
   "bozburun-hisaronu-korfezi": { from: "Bozburun", to: "Bozburun", port: "bozburun", stops: ["Bozburun", "Sömbeki", "Selimiye", "Söğüt", "Orhaniye", "Serbest gün", "Bozburun"] },
   "bodrum-datca-hisaronu-korfezi": { from: "Bodrum", to: "Hisarönü", port: "bodrum", stops: ["Bodrum", "Karaada", "Datça", "Knidos", "Orhaniye", "Selimiye", "Hisarönü"] },
   "bodrum-yunan-adalari": { from: "Bodrum", to: "Bodrum", port: "bodrum", greek: true, stops: ["Bodrum", "Karaada", "Kos", "Kos", "Dönüş", "Gümüşlük", "Bodrum"] },
@@ -163,7 +186,7 @@ const META: Record<string, Meta> = {
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
