@@ -343,11 +343,34 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "bodrum-gocek": { from: "Bodrum", to: "Göcek", port: "bodrum", stops: ["Bodrum", "Knidos", "Datça", "Marmaris", "Ekincik", "Tersane Adası", "Göcek"] },
+  "bodrum-gocek": {
+    from: "Bodrum", to: "Göcek", port: "bodrum",
+    stops: ["Bodrum", "Palamutbükü", "Kargı Koyu", "Söğüt", "Bozukkale", "Tersane Adası", "Göcek"],
+    days: {
+      tr: [
+        "Bodrum'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam kalenin karşısında.",
+        "Uzun çakıl plajı ve kıyıdaki balık lokantalarıyla bilinen koyda yüzme ve akşam yemeği.",
+        "Datça'nın hemen yanındaki berrak sulu koyda yüzme, akşam Eski Datça'nın taş sokaklarında yürüyüş.",
+        "Sakin bir köy koyunda yüzme, kıyıda yerel bir sofrada akşam yemeği.",
+        "Antik Loryma kalesinin yükseldiği korunaklı koyda yüzme ve kale kalıntılarına yürüyüş.",
+        "Uzun bir seyir gününün ardından, eski tersane kalıntılarıyla bilinen adada yüzme ve kıyıda kısa bir yürüyüş.",
+        "Göcek'e varış, son kahvaltı ve teslim.",
+      ],
+      en: [
+        "Welcome in Bodrum, settling into the cabins and provisioning; first evening facing the castle.",
+        "Swimming and dinner in the bay known for its long pebble beach and seaside fish restaurants.",
+        "Swimming in a clear-water cove right next to Datça; an evening stroll in the stone streets of Old Datça.",
+        "Swimming in a quiet village cove and dinner at a local table ashore.",
+        "Swimming in the sheltered cove below the ancient fortress of Loryma, with a walk up to the ruins.",
+        "After a long sailing day, swimming and a short walk ashore on the island known for its old shipyard ruins.",
+        "Arrival in Göcek, last breakfast and hand-over.",
+      ],
+    },
+  },
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Orak Adası": "Orak Island", "Çökertme": "Cokertme", "Cennet Koyu": "Cennet Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Kargı Koyu": "Kargi Bay", "Orak Adası": "Orak Island", "Çökertme": "Cokertme", "Cennet Koyu": "Cennet Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
