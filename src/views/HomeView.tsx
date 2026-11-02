@@ -5,6 +5,7 @@ import { getBoats, getCategories, getDestinations, getHome } from "@/lib/content
 import { getPosts } from "@/lib/posts";
 import { getFeaturedOrder } from "@/lib/site-texts";
 import { InstagramSection } from "@/components/InstagramSection";
+import { InstagramStoriesBar } from "@/components/InstagramStoriesBar";
 import type { Lang } from "@/lib/i18n";
 
 export async function HomeView({ lang }: { lang: Lang }) {
@@ -20,6 +21,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
       <Header lang={lang} />
       <main>
         <Hero home={home} destinations={dests} categories={cats} lang={lang} />
+        <InstagramStoriesBar lang={lang} />
         <FeaturedBoats items={shown} sample={sample} cats={cats} lang={lang} />
         <Destinations items={dests} lang={lang} />
         <RoutesShowcase routes={routes} regions={regions} lang={lang} />

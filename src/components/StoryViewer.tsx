@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import type { IgItem } from "@/lib/instagram";
 
 // Story kartları: dokununca tam ekran, ileri/geri ve kapat.
-export function StoryViewer({ items, user }: { items: IgItem[]; user: string }) {
+export function StoryViewer({ items, user, variant = "cards" }: { items: IgItem[]; user: string; variant?: "cards" | "circles" }) {
   const [open, setOpen] = useState<number | null>(null);
   useEffect(() => {
     if (open === null) return;
@@ -20,6 +20,21 @@ export function StoryViewer({ items, user }: { items: IgItem[]; user: string }) 
   const cur = open === null ? null : items[open];
   return (
     <>
+      {variant === "circles" ? (
+        <>
+          {items.map((s, i) => (
+            <button key={s.id} type="button" onClick={() => setOpen(i)} aria-label={`Story ${i + 1}`} className="group flex shrink-0 flex-col items-center gap-1.5">
+              <span className="rounded-full bg-gradient-to-tr from-[#f9a03f] via-[#e8453c] to-[#c13584] p-[2.5px]">
+                <span className="block h-[68px] w-[68px] overflow-hidden rounded-full bg-navy ring-[3px] ring-white sm:h-[76px] sm:w-[76px]">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={s.thumb} alt="" loading="lazy" className="h-full w-full object-cover transition duration-500 group-hover:scale-110" />
+                </span>
+              </span>
+              <span className="text-[11px] text-navy/60">{new Date(s.time).toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}</span>
+            </button>
+          ))}
+        </>
+      ) : (
       <div className="no-scrollbar -mx-5 flex gap-3 overflow-x-auto px-5 pb-2 lg:mx-0 lg:px-0">
         {items.map((s, i) => (
           <button key={s.id} type="button" onClick={() => setOpen(i)} aria-label={`Story ${i + 1}`} className="group shrink-0 rounded-[1.4rem] bg-gradient-to-tr from-[#f9a03f] via-[#e8453c] to-[#c13584] p-[3px]">
@@ -30,6 +45,7 @@ export function StoryViewer({ items, user }: { items: IgItem[]; user: string }) 
           </button>
         ))}
       </div>
+      )}
       {cur && open !== null && (
         <div className="fixed inset-0 z-[80] flex items-center justify-center bg-black/90 p-3" onClick={() => setOpen(null)} role="dialog" aria-modal="true">
           <div className="relative h-full max-h-[88vh] w-full max-w-sm overflow-hidden rounded-3xl bg-black" onClick={(e) => e.stopPropagation()}>

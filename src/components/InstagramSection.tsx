@@ -3,7 +3,8 @@ import { StoryViewer } from "./StoryViewer";
 
 // Ana sayfa: Instagram'daki güncel story'ler (yayındayken) ve son paylaşımlar. Erişim anahtarı yoksa görünmez.
 export async function InstagramSection() {
-  const [stories, posts] = await Promise.all([getStories(), getPosts()]);
+  const [stories, posts] = await Promise.all([Promise.resolve([] as Awaited<ReturnType<typeof getStories>>), getPosts()]);
+  // Story'ler artık ana sayfanın üstündeki yuvarlak şeritte; burada yalnızca son paylaşımlar.
   if (stories.length === 0 && posts.length === 0) return null;
   const user = igUser();
   return (
