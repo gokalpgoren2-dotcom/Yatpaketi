@@ -60,7 +60,6 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
   const d = smooth(route, false, 1);
   const g = `gc-${id}`;
   const fs = compact ? 17 : 12.5;
-  const dur = `${Math.max(16, stops.length * 3.2)}s`;
 
   // duraklar (aynı yer iki kez geçerse tek işaret)
   const seen = new Set<string>();
@@ -95,6 +94,8 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
     return { ...m, end, show, text, f, box };
   });
 
+  // tekne: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
+  const boat: [number, number] = route.length > 2 ? [(route[1][0] + route[2][0]) / 2, (route[1][1] + route[2][1]) / 2] : route.length > 1 ? [(route[0][0] + route[1][0]) / 2, (route[0][1] + route[1][1]) / 2] : route[0];
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${stops.join(" → ")}`} className="block h-full w-full">
       <defs>
@@ -111,8 +112,6 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
           <stop offset="0.6" stopColor="#05223f" stopOpacity="0" />
           <stop offset="1" stopColor="#05223f" stopOpacity="0.32" />
         </radialGradient>
-        <filter id={`${g}-soft`} x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="6" /></filter>
-        <filter id={`${g}-sh`} x="-20%" y="-20%" width="140%" height="150%"><feDropShadow dx="0" dy="2.5" stdDeviation="2.5" floodColor="#05223f" floodOpacity="0.35" /></filter>
       </defs>
 
       <rect width={W} height={H} fill={`url(#${g}-sea)`} />
@@ -125,26 +124,25 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
         </g>
       ))}
       {/* kıyı dibinde sığ su */}
-      <g filter={`url(#${g}-soft)`}>
-        <path d={coastLine} fill="none" stroke="#7fe0ea" strokeOpacity="0.6" strokeWidth={Math.min(22, 8 + zoom * 3)} strokeLinejoin="round" />
-        {isles.map((p, j) => <path key={j} d={p} fill="none" stroke="#7fe0ea" strokeOpacity="0.6" strokeWidth={Math.min(16, 6 + zoom * 2)} strokeLinejoin="round" />)}
+      <g>
+        <path d={coastLine} fill="none" stroke="#7fe0ea" strokeOpacity="0.38" strokeWidth={Math.min(22, 8 + zoom * 3)} strokeLinejoin="round" />
+        {isles.map((p, j) => <path key={j} d={p} fill="none" stroke="#7fe0ea" strokeOpacity="0.38" strokeWidth={Math.min(16, 6 + zoom * 2)} strokeLinejoin="round" />)}
       </g>
 
       {/* kara */}
-      <g filter={`url(#${g}-sh)`}>
+      <g>
         <path d={land} fill={`url(#${g}-land)`} stroke="#eadcb4" strokeWidth="2" strokeLinejoin="round" />
         {isles.map((p, j) => <path key={j} d={p} fill={`url(#${g}-land)`} stroke="#eadcb4" strokeWidth="1.6" strokeLinejoin="round" />)}
       </g>
 
       {/* rota */}
       <path d={d} fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth={compact ? 8 : 6} strokeLinecap="round" strokeLinejoin="round" />
-      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.95" strokeWidth={compact ? 2.4 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" className="route-dash" />
+      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.95" strokeWidth={compact ? 2.4 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" />
 
       {/* gulet */}
-      <g>
-        <animateMotion dur={dur} repeatCount="indefinite" path={d} />
+      <g transform={`translate(${boat[0].toFixed(1)} ${boat[1].toFixed(1)})`}>
         <ellipse cx="0" cy="3" rx={compact ? 24 : 18} ry="2" fill="#fff" fillOpacity="0.4" />
-        <g transform={`scale(${compact ? 0.3 : 0.24}) translate(-80 -118)`} filter={`url(#${g}-sh)`}><g className="pk-sway">{GULET}</g></g>
+        <g transform={`scale(${compact ? 0.3 : 0.24}) translate(-80 -118)`}>{GULET}</g>
       </g>
 
       {/* duraklar ve adları */}
@@ -153,7 +151,7 @@ export function GeoChart({ id, slug, stops, loop, compact = false, label }: { id
           <circle cx={xy[0]} cy={xy[1]} r={end ? (compact ? 8 : 6.5) : compact ? 5 : 4} fill="#fff" fillOpacity={end ? 0.3 : 0.9} />
           <circle cx={xy[0]} cy={xy[1]} r={end ? (compact ? 4.6 : 3.8) : compact ? 2.2 : 1.8} fill={end ? "#0b3a6a" : "#127fa6"} stroke={end ? "#fff" : "none"} strokeWidth="1.6" />
           {show && end && (
-            <g filter={`url(#${g}-sh)`}>
+            <g>
               <rect x={box.x} y={box.y} width={box.w} height={box.h} rx={box.h / 2} fill="#0b3a6a" />
               <circle cx={box.x + f * 1.15} cy={box.y + box.h / 2} r={f * 0.28} fill={name === startName ? "#1bb4c4" : "#fff"} />
               <text x={box.x + box.w / 2 + f * 0.55} y={box.y + box.h / 2 + f * 0.36} textAnchor="middle" fontSize={f} fontWeight="700" letterSpacing={f * 0.12} fill="#fff">{text}</text>

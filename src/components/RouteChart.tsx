@@ -95,7 +95,6 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
   const isles = closed
     ? [island(r, W / 2, H / 2 + 6, 108, 46), island(r, 26, 22, 74, 46), island(r, W - 22, H - 18, 80, 48)]
     : [island(r, mid[0] + 44, mid[1] < H / 2 ? 236 : 116, 22, 11)];
-  const dur = `${Math.max(14, stops.length * 3)}s`;
 
   // tabela yönü: tepedeki durak üstte, çukurdaki altta; uçtaki tabela komşusuna çok yakınsa ters yöne geçer
   const sides = pts.map(([, y], i) => {
@@ -111,6 +110,8 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
 
   const lands = [...shores.map((s) => ({ d: s.area, line: s.line, hills: s.hills, depth: s.depth })), ...isles.map((s) => ({ d: s.d, line: s.d, hills: s.hills, depth: s.depth }))];
 
+  // tekne: güzergâhın başında, 2. ile 3. nokta arasında sabit durur (animasyon yok, telefonu yormaz)
+  const boat: [number, number] = pts.length > 2 ? [(pts[1][0] + pts[2][0]) / 2, (pts[1][1] + pts[2][1]) / 2] : pts.length > 1 ? [(pts[0][0] + pts[1][0]) / 2, (pts[0][1] + pts[1][1]) / 2] : pts[0];
   return (
     <svg viewBox={`0 0 ${W} ${H}`} role="img" aria-label={`${label}: ${stops.join(" → ")}`} className="block h-full w-full">
       <defs>
@@ -127,8 +128,6 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
           <stop offset="0.6" stopColor="#05223f" stopOpacity="0" />
           <stop offset="1" stopColor="#05223f" stopOpacity="0.35" />
         </radialGradient>
-        <filter id={`${g}-soft`} x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation="7" /></filter>
-        <filter id={`${g}-sh`} x="-10%" y="-10%" width="120%" height="130%"><feDropShadow dx="0" dy="3" stdDeviation="3" floodColor="#05223f" floodOpacity="0.35" /></filter>
       </defs>
 
       <rect width={W} height={H} fill={`url(#${g}-sea)`} />
@@ -138,13 +137,13 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
         <path key={`dp${i}-${k}`} d={dd} fill="none" stroke="#fff" strokeOpacity={0.14 - k * 0.035} strokeWidth="1" strokeDasharray={k ? "2 5" : undefined} />
       )))}
       {/* kıyı dibinde sığ su */}
-      <g filter={`url(#${g}-soft)`}>
+      <g>
         {lands.map((l, i) => <path key={"sh" + i} d={l.line} fill="none" stroke="#7fe0ea" strokeOpacity="0.55" strokeWidth="20" strokeLinejoin="round" />)}
       </g>
 
       {/* kara: kumsal kenarı, eğimli yeşil, yükselti çizgileri */}
       {lands.map((l, i) => (
-        <g key={"ld" + i} filter={`url(#${g}-sh)`}>
+        <g key={"ld" + i}>
           <path d={l.d} fill={`url(#${g}-land)`} stroke="#eadcb4" strokeWidth="2.4" strokeLinejoin="round" />
         </g>
       ))}
@@ -165,14 +164,13 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
 
       {/* rota: teknenin bıraktığı iz */}
       <path d={d} fill="none" stroke="#fff" strokeOpacity="0.16" strokeWidth={compact ? 9 : 7} strokeLinecap="round" />
-      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.92" strokeWidth={compact ? 2.6 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" className="route-dash" />
+      <path d={d} fill="none" stroke="#fff" strokeOpacity="0.92" strokeWidth={compact ? 2.6 : 1.8} strokeDasharray={compact ? "9 9" : "7 7"} strokeLinecap="round" />
 
       {/* gulet */}
       {stops.length > 1 && (
-        <g>
-          <animateMotion dur={dur} repeatCount="indefinite" path={d} />
+        <g transform={`translate(${boat[0].toFixed(1)} ${boat[1].toFixed(1)})`}>
           <ellipse cx="0" cy="3" rx={compact ? 26 : 19} ry="2" fill="#fff" fillOpacity="0.4" />
-          <g transform={`scale(${compact ? 0.32 : 0.26}) translate(-80 -118)`} filter={`url(#${g}-sh)`}><g className="pk-sway">{GULET}</g></g>
+          <g transform={`scale(${compact ? 0.32 : 0.26}) translate(-80 -118)`}>{GULET}</g>
         </g>
       )}
 
@@ -193,7 +191,7 @@ function SchematicChart({ id, stops, loop, compact = false, label }: { id: strin
               <circle cx={x} cy={y} r={compact ? 9 : 7} fill="#fff" fillOpacity="0.25" />
               <circle cx={x} cy={y} r={compact ? 5 : 4} fill="#0b3a6a" stroke="#fff" strokeWidth="1.8" />
               {show && (
-                <g filter={`url(#${g}-sh)`}>
+                <g>
                   <rect x={bx - w / 2} y={y + dy - ef * 1.1} width={w} height={ef * 2.2} rx={ef * 1.1} fill="#0b3a6a" />
                   <circle cx={bx - w / 2 + ef * 1.15} cy={y + dy} r={ef * 0.28} fill={i === 0 ? "#1bb4c4" : "#ffffff"} />
                   <text x={bx + ef * 0.55} y={y + dy + ef * 0.36} textAnchor="middle" fontSize={ef} fontWeight="700" letterSpacing={ef * 0.12} fill="#fff">{up}</text>
