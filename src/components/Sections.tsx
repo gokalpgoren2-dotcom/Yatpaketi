@@ -216,9 +216,13 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
     <section className="py-14 lg:py-20" id="blog">
       <div className={wrap}>
         <Heading eyebrow={L.blogEyebrow} title={L.blogTitle} action={{ href: "/rehber", label: L.allPosts }} />
-        <div className="grid gap-4 md:grid-cols-3 lg:gap-6">
-          {items.map((p, i) => <PostCard key={p.slug} p={p} i={i} />)}
-        </div>
+        <Scroller className="no-scrollbar -mx-5 flex snap-x snap-mandatory gap-5 overflow-x-auto px-5 pb-4 lg:mx-0 lg:gap-6 lg:px-0">
+          {items.map((p, i) => (
+            <div key={p.slug} className="w-[82%] shrink-0 snap-start sm:w-[46%] lg:w-[calc((100%-3rem)/3)]">
+              <PostCard p={p} i={i} />
+            </div>
+          ))}
+        </Scroller>
       </div>
     </section>
   );
