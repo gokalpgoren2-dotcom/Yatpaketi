@@ -10,6 +10,7 @@ import { href, type Lang } from "@/lib/i18n";
 import type { Post } from "@/lib/posts";
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
+const WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
 
 // Rehber / blog yazısı sayfası: kapaklı başlık, okuma çubuğu, içindekiler, okunaklı metin, paylaş, teklif kutusu, diğer yazılar.
 export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Post[]; back?: { href: string; label: string }; lang: Lang }) {
@@ -41,33 +42,46 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
       <Header lang={lang} />
       <ReadProgress />
       <main>
-        {/* Başlık: beyaz zemin, ortada başlık, altında geniş kapak */}
-        <section className="pt-28 lg:pt-36">
-          <div className="mx-auto max-w-3xl px-5 text-center lg:px-8">
-            <p className="flex flex-wrap items-center justify-center gap-2 text-sm text-navy/50">
-              {back && <Link href={back.href} className="transition hover:text-turquoise-dark">← {back.label}</Link>}
-              {back && !isPage && <span className="text-navy/25">/</span>}
-              {!isPage && <span className="font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{kindLabel(p.kind, lang)}</span>}
-            </p>
-            <h1 className="font-display mt-5 text-[2.4rem] leading-[1.08] text-navy lg:text-[3.6rem]">{p.title}</h1>
-            {p.excerpt && <p className="mx-auto mt-5 max-w-2xl text-lg font-light leading-relaxed text-navy/60 lg:text-xl">{p.excerpt}</p>}
-            <p className="mt-6 flex flex-wrap items-center justify-center gap-x-3 gap-y-1 text-sm text-navy/45">
-              <span>{L.min}</span>
-              {toc.length > 1 && <><span aria-hidden>·</span><span>{L.parts}</span></>}
-              {date && !isPage && <><span aria-hidden>·</span><span>{date}</span></>}
-            </p>
+        {/* Başlık: diğer sayfalarla aynı dalgalı lacivert alan; sağda kapak görseli */}
+        <section className="relative isolate overflow-hidden pb-24 pt-28 text-white lg:pb-28 lg:pt-36" style={{ background: "linear-gradient(160deg, #05204a 0%, #06264b 45%, #0b4a6e 80%, #0d6a86 100%)" }}>
+          <div className="absolute inset-x-0 bottom-0 -z-10 h-28 overflow-hidden" aria-hidden>
+            <svg className="wave-a absolute bottom-0 left-0 h-28 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={WAVE(150)} fill="rgba(255,255,255,0.08)" /></svg>
+            <svg className="wave-b absolute bottom-0 left-0 h-20 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={WAVE(220)} fill="rgba(255,255,255,0.12)" /></svg>
+            <svg className="absolute bottom-0 left-0 h-10 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#ffffff" /></svg>
           </div>
-          <div className="mx-auto mt-10 max-w-6xl px-5 lg:mt-14 lg:px-8">
-            <div className="relative aspect-[16/9] overflow-hidden rounded-[2rem] bg-mist shadow-2xl shadow-navy/10 sm:aspect-[21/9]">
-              <PostThumb p={p} sizes="(min-width:1152px) 1152px, 100vw" />
+          <div className={`${wrap} grid items-center gap-10 lg:grid-cols-[1.15fr_1fr] lg:gap-14`}>
+            <div>
+              <p className="flex flex-wrap items-center gap-2 text-sm text-white/60">
+                {back && <Link href={back.href} className="transition hover:text-white">← {back.label}</Link>}
+              </p>
+              {!isPage && <p className="mt-5 text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{kindLabel(p.kind, lang)}</p>}
+              <h1 className="font-display mt-3 text-[2rem] leading-[1.12] lg:text-[2.75rem]">{p.title}</h1>
+              {p.excerpt && <p className="mt-4 max-w-xl text-base font-light leading-relaxed text-white/75 lg:text-[1.05rem]">{p.excerpt}</p>}
+              <ul className="mt-6 flex flex-wrap gap-2 text-[13px]">
+                <li className="flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-white/15 backdrop-blur">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><circle cx="12" cy="12" r="9" /><path d="M12 7v5l3 2" /></svg>{L.min}
+                </li>
+                {toc.length > 1 && <li className="flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-white/15 backdrop-blur">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M4 6h16M4 12h16M4 18h10" /></svg>{L.parts}
+                </li>}
+                {date && !isPage && <li className="flex items-center gap-2 rounded-full bg-white/10 px-3.5 py-1.5 ring-1 ring-white/15 backdrop-blur">
+                  <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#7fdce6" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M4 6h16v14H4zM8 3v4M16 3v4M4 10h16" /></svg>{date}
+                </li>}
+              </ul>
+            </div>
+            <div className="relative">
+              <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-turquoise/20 blur-3xl" aria-hidden />
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-navy shadow-2xl shadow-black/40 ring-1 ring-white/15">
+                <PostThumb p={p} sizes="(min-width:1024px) 45vw, 100vw" />
+              </div>
             </div>
           </div>
         </section>
 
         {/* Metin + yan sütun */}
-        <section className="pb-16 pt-12 lg:pb-24 lg:pt-16">
+        <section className="pb-16 pt-6 lg:pb-24 lg:pt-10">
           <div className={`${wrap} grid gap-12 lg:grid-cols-[minmax(0,1fr)_17rem] lg:gap-16`}>
-            <article id="yazi" className="mx-auto w-full max-w-[44rem] lg:mx-0 lg:ml-auto">
+            <article id="yazi" className="mx-auto w-full max-w-[42rem] lg:mx-0 lg:ml-auto">
               {toc.length > 1 && (
                 <details className="mb-8 rounded-3xl bg-mist p-5 lg:hidden">
                   <summary className="cursor-pointer text-sm font-semibold text-navy">{L.toc} ({toc.length})</summary>
@@ -84,8 +98,8 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
                 <div className="relative isolate mt-12 overflow-hidden rounded-[2rem] p-7 text-white lg:p-10" style={{ background: "linear-gradient(135deg, #06264b 0%, #0b4a6e 60%, #0d6a86 100%)" }}>
                   <svg className="absolute -bottom-8 -right-8 -z-10 h-48 w-48 text-white/[0.06]" viewBox="0 0 24 24" fill="currentColor" aria-hidden><path d="M12 3v13l7-1L12 3ZM11 6v9H6l5-9ZM4 17h16l-2 3H6l-2-3Z" /></svg>
                   <p className="text-xs font-semibold uppercase tracking-[0.28em] text-turquoise">{L.ctaEyebrow}</p>
-                  <h2 className="font-display mt-3 text-2xl font-semibold lg:text-3xl">{L.ctaTitle}</h2>
-                  <p className="mt-3 text-white/75">{L.ctaText}</p>
+                  <h2 className="font-display mt-3 text-xl lg:text-2xl">{L.ctaTitle}</h2>
+                  <p className="mt-2.5 text-[0.95rem] font-light text-white/75">{L.ctaText}</p>
                   <div className="mt-6 flex flex-wrap gap-3">
                     <a href={wa} target={contact.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="rounded-full bg-turquoise px-6 py-3 text-sm font-semibold text-navy transition hover:brightness-110">{L.wa}</a>
                     <Link href={href(lang, "/tekneler")} className="rounded-full px-6 py-3 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{L.boats}</Link>

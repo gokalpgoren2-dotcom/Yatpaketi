@@ -34,16 +34,16 @@ export function RichText({ text, article = false }: { text: string; article?: bo
     let firstP = true;
     let h2n = 0;
     return (
-      <div className="space-y-6 text-[1.06rem] font-light leading-[1.9] text-[#3d5470] lg:text-[1.125rem] [&_strong]:font-semibold [&_strong]:text-navy">
+      <div className="space-y-5 text-[0.97rem] font-[350] leading-[1.85] text-[#476079] lg:text-[1.02rem] [&_strong]:font-semibold [&_strong]:text-navy">
         {blocks.map((b, i) => {
-          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="scroll-mt-28 pt-2 text-xl font-semibold text-navy lg:text-[1.35rem]">{b.slice(4)}</h3>;
+          if (b.startsWith("### ")) return <h3 key={i} id={headingId(b.slice(4))} className="scroll-mt-28 pt-1 text-[1.08rem] font-semibold text-navy lg:text-[1.15rem]">{b.slice(4)}</h3>;
           if (b.startsWith("## ")) {
             const t = b.slice(3).trim();
             h2n++;
             return (
-              <h2 key={i} id={headingId(t)} className="scroll-mt-28 pt-8">
-                <span className="block text-xs font-semibold tracking-[0.3em] text-turquoise-dark">{String(h2n).padStart(2, "0")}</span>
-                <span className="font-display mt-2 block text-[1.65rem] leading-tight text-navy lg:text-[2rem]">{t}</span>
+              <h2 key={i} id={headingId(t)} className="scroll-mt-28 pt-6">
+                <span className="block text-[11px] font-semibold tracking-[0.3em] text-turquoise-dark">{String(h2n).padStart(2, "0")}</span>
+                <span className="font-display mt-1.5 block text-[1.3rem] leading-tight text-navy lg:text-[1.55rem]">{t}</span>
               </h2>
             );
           }
@@ -53,7 +53,7 @@ export function RichText({ text, article = false }: { text: string; article?: bo
               <ul key={i} className="space-y-3 border-l-2 border-turquoise/30 pl-5">
                 {lines.map((l, j) => (
                   <li key={j} className="relative">
-                    <span className="absolute -left-[1.6rem] top-[0.85em] h-2 w-2 -translate-y-1/2 rounded-full bg-turquoise ring-4 ring-white" aria-hidden />
+                    <span className="absolute -left-[1.55rem] top-[0.9em] h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-turquoise ring-4 ring-white" aria-hidden />
                     <Inline text={l.trim().slice(2)} />
                   </li>
                 ))}
@@ -62,7 +62,7 @@ export function RichText({ text, article = false }: { text: string; article?: bo
           }
           if (firstP) {
             firstP = false;
-            return <p key={i} className="whitespace-pre-line text-[1.25rem] leading-[1.75] text-[#2c4562] first-letter:float-left first-letter:mr-2.5 first-letter:mt-1 first-letter:font-display first-letter:text-[3.6rem] first-letter:leading-[0.85] first-letter:text-turquoise-dark lg:text-[1.375rem]"><Inline text={b} /></p>;
+            return <p key={i} className="whitespace-pre-line text-[1.06rem] leading-[1.8] text-[#34506d] first-letter:float-left first-letter:mr-2 first-letter:mt-1 first-letter:font-display first-letter:text-[2.6rem] first-letter:leading-[0.85] first-letter:text-turquoise-dark lg:text-[1.12rem]"><Inline text={b} /></p>;
           }
           return <p key={i} className="whitespace-pre-line"><Inline text={b} /></p>;
         })}
