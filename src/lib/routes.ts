@@ -319,12 +319,35 @@ const META: Record<string, Meta> = {
       ],
     },
   },
-  "bodrum-gokova-korfezi-rotasi": { from: "Bodrum", to: "Bodrum", port: "bodrum", stops: ["Bodrum", "Karaada", "Gökova", "Sedir Adası", "Akyaka", "Serbest gün", "Bodrum"] },
+  "bodrum-gokova-korfezi-rotasi": {
+    from: "Bodrum", to: "Bodrum", port: "bodrum",
+    stops: ["Bodrum", "Orak Adası", "Çökertme", "Söğüt", "İngiliz Limanı", "Tuzla Koyu", "Yedi Adalar"],
+    days: {
+      tr: [
+        "Bodrum'da karşılama, kabinlere yerleşme ve kumanya; ilk akşam kalenin karşısında.",
+        "Turkuaz suyu ve kayalık kıyılarıyla bilinen adada yüzme ve şnorkel.",
+        "Gökova'nın kuzey kıyısındaki sakin köy koyunda yüzme, akşam kıyıdaki lokantada yemek.",
+        "Gökova'nın doğusundaki yeşil, sakin köy koyunda yüzme ve köy sofrasında akşam yemeği.",
+        "Ormanla çevrili, savaş yıllarında İngiliz botlarının saklandığı söylenen korunaklı koyda yüzme.",
+        "Gökova körfezinin rüzgârdan korunaklı, berrak sulu koyunda yüzme ve dinlenme.",
+        "Çam ormanının denize indiği adacıklar arasında son yüzme; ardından Bodrum'a dönüş ve teslim.",
+      ],
+      en: [
+        "Welcome in Bodrum, settling into the cabins and provisioning; first evening facing the castle.",
+        "Swimming and snorkelling at the island known for its turquoise water and rocky shores.",
+        "Swimming in a quiet village cove on the northern shore of Gökova, and dinner at the restaurant ashore.",
+        "Swimming in a green, quiet village cove in eastern Gökova, and dinner at a village table.",
+        "Swimming in the forest-fringed, sheltered cove where British boats are said to have hidden during the war.",
+        "Swimming and rest in a sheltered, clear-water cove of the Gulf of Gökova.",
+        "A last swim among small islets where the pine forest meets the sea; then back to Bodrum for hand-over.",
+      ],
+    },
+  },
   "bodrum-gocek": { from: "Bodrum", to: "Göcek", port: "bodrum", stops: ["Bodrum", "Knidos", "Datça", "Marmaris", "Ekincik", "Tersane Adası", "Göcek"] },
 };
 
 const EN_NAMES: Record<string, string> = {
-  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Cennet Koyu": "Cennet Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
+  "Yassıcalar / Zeytin Adası": "Yassıca / Zeytin Island", "Akvaryum Koyu": "Aquarium Bay", "Hamam Koyu": "Hamam Bay", "Orak Adası": "Orak Island", "Çökertme": "Cokertme", "Cennet Koyu": "Cennet Bay", "Kalimnos": "Kalymnos", "Dirsekbükü": "Dirsekbuku", "Bencik Koyu": "Bencik Bay", "Palamutbükü": "Palamutbuku", "Tuzla Koyu": "Tuzla Bay", "İngiliz Limanı": "English Harbour", "Kissebükü": "Kissebuku", "Sömbeki Koyu": "Sombeki Bay", "Kadırga Koyu": "Kadirga Bay", "Ağalimanı Koyu": "Agalimani Bay", "Serçe Limanı": "Serce Harbour", "Turunç Pınarı": "Turunc Pinari", "Katrancı Adası": "Katranci Island", "Göcek Adası": "Gocek Island", "Kızılada": "Kizilada",
   "Seyir günü": "Sailing day", "Serbest gün": "Free day", "Dönüş": "Return", "Tersane Adası": "Tersane Island", "Gemiler Adası": "Gemiler Island",
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
