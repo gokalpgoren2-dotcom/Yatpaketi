@@ -22,7 +22,7 @@ export function CompareInsights({ A, B, note, points, summary, lang }: { A: Boat
             <article key={p.title} className="rounded-2xl bg-white p-5 ring-1 ring-navy/10">
               <div className="flex items-center justify-between gap-3">
                 <h3 className="font-display text-lg font-bold text-navy">{p.title}</h3>
-                {p.win && <span className="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-800">{(p.win === "a" ? A : B).name}</span>}
+                {p.win && <span className="rounded-full bg-turquoise/15 px-3 py-1 text-xs font-semibold text-turquoise-dark">{(p.win === "a" ? A : B).name}</span>}
               </div>
               <p className="mt-2 leading-relaxed text-navy/75">{p.text}</p>
             </article>
