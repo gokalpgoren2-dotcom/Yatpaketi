@@ -68,31 +68,27 @@ function Waves() {
   );
 }
 
-// Bölge kartı (liste ve "diğer bölgeler" için): harita kapak, durak etiketleri.
-export function RegionCard({ p, lang, big = false }: { p: Post; lang: Lang; big?: boolean }) {
+// Bölge kartı (liste ve "diğer bölgeler" için): harita olduğu gibi üstte, sade beyaz gövde.
+export function RegionCard({ p, lang }: { p: Post; lang: Lang }) {
   const R = regionText(p.slug, lang);
   const map = regionMapFor("destination", p.slug);
   const U = REGION_UI[lang];
   return (
-    <Link href={href(lang, `/destinasyonlar/${p.slug}`)} className="group relative flex h-full flex-col overflow-hidden rounded-[1.75rem] bg-navy text-white shadow-lg shadow-navy/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-navy/25">
-      <div className={`relative overflow-hidden ${big ? "aspect-[16/10]" : "aspect-[4/3]"}`}>
+    <Link href={href(lang, `/destinasyonlar/${p.slug}`)} className="group flex h-full flex-col rounded-[1.75rem] bg-white p-2.5 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
+      <div className="relative aspect-[4/3] overflow-hidden rounded-[1.35rem] bg-navy">
         {map ? (
           // eslint-disable-next-line @next/next/no-img-element
-          <img src={map} alt={p.title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-105" />
-        ) : p.cover ? <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-105" /> : <Sea label={p.title} />}
-        <div className="absolute inset-0 bg-gradient-to-t from-navy via-navy/20 to-transparent" />
-        {R && <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-[11px] font-bold text-navy shadow">{U.stopsCount(R.stops.length)}</span>}
+          <img src={map} alt={p.title} loading="lazy" className="h-full w-full object-cover transition duration-700 group-hover:scale-[1.03]" />
+        ) : p.cover ? <Photo src={p.cover} alt={p.title} sizes="(min-width:1024px) 33vw, 100vw" className="object-cover transition duration-700 group-hover:scale-[1.03]" /> : <Sea label={p.title} />}
       </div>
-      <div className="relative -mt-16 flex flex-1 flex-col p-5 lg:p-6">
-        {R && <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise">{R.introEyebrow}</p>}
-        <h3 className={`font-display mt-1.5 font-semibold leading-tight ${big ? "text-3xl lg:text-4xl" : "text-2xl"}`}>{p.title}</h3>
-        {p.excerpt && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-white/70">{p.excerpt}</p>}
-        {R && (
-          <ul className="mt-4 flex flex-wrap gap-1.5">
-            {R.stops.slice(0, big ? 5 : 3).map(([n]) => <li key={n} className="rounded-full bg-white/10 px-2.5 py-1 text-xs font-medium text-white/85 ring-1 ring-white/10">{n}</li>)}
-          </ul>
-        )}
-        <p className="mt-auto pt-5 text-sm font-semibold text-turquoise">{U.explore} <span className="inline-block transition group-hover:translate-x-1">→</span></p>
+      <div className="flex flex-1 flex-col px-3 pb-3 pt-5">
+        {R && <p className="text-[11px] font-semibold uppercase tracking-[0.2em] text-turquoise-dark">{R.introEyebrow}</p>}
+        <h3 className="font-display mt-1.5 text-xl font-semibold leading-snug text-navy">{p.title}</h3>
+        {p.excerpt && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-navy/60">{p.excerpt}</p>}
+        <div className="mt-auto flex items-center justify-between gap-3 pt-5">
+          {R && <span className="text-xs font-semibold text-navy/45">{U.stopsCount(R.stops.length)} · {U.exploreCount(R.explore.length)}</span>}
+          <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist text-navy transition group-hover:bg-turquoise group-hover:text-white" aria-hidden>→</span>
+        </div>
       </div>
     </Link>
   );
@@ -329,33 +325,33 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
 export function RegionsIndex({ posts, eyebrow: eb, title, intro, empty, lang }: { posts: Post[]; eyebrow: string; title: string; intro: string; empty: string; lang: Lang }) {
   const U = REGION_UI[lang];
   const stops = posts.reduce((n, p) => n + (regionText(p.slug, lang)?.stops.length ?? 0), 0);
-  const [first, ...rest] = posts;
   return (
     <>
       <Header lang={lang} />
       <main>
-        <section className="relative isolate overflow-hidden pb-24 pt-28 text-white lg:pb-28 lg:pt-36" style={NAVY_BG}>
+        <section className="relative isolate overflow-hidden pb-20 pt-28 text-white lg:pb-24 lg:pt-32" style={NAVY_BG}>
           <Waves />
-          <div className={wrap}>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{eb}</p>
-            <h1 className="font-display mt-3 max-w-4xl text-4xl font-semibold leading-[1.05] lg:text-7xl">{title}</h1>
-            <p className="mt-5 max-w-2xl text-lg text-white/80">{intro}</p>
+          <div className={`${wrap} flex flex-col gap-8 lg:flex-row lg:items-end lg:justify-between`}>
+            <div className="max-w-2xl">
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{eb}</p>
+              <h1 className="font-display mt-3 text-4xl font-semibold leading-tight lg:text-5xl">{title}</h1>
+              <p className="mt-4 text-white/75 lg:text-lg">{intro}</p>
+            </div>
             {posts.length > 0 && (
-              <ul className="mt-10 flex flex-wrap gap-10">
-                <li><span className="font-display block text-5xl font-semibold text-turquoise">{posts.length}</span><span className="text-sm text-white/70">{U.regions}</span></li>
-                {stops > 0 && <li><span className="font-display block text-5xl font-semibold text-turquoise">{stops}</span><span className="text-sm text-white/70">{U.stopsLabel}</span></li>}
+              <ul className="flex shrink-0 gap-8 lg:pb-1">
+                <li><span className="font-display block text-3xl font-semibold text-turquoise">{posts.length}</span><span className="text-sm text-white/65">{U.regions}</span></li>
+                {stops > 0 && <li><span className="font-display block text-3xl font-semibold text-turquoise">{stops}</span><span className="text-sm text-white/65">{U.stopsLabel}</span></li>}
               </ul>
             )}
           </div>
         </section>
-        <section className="pb-20 pt-4 lg:pt-8">
+        <section className="pb-20 pt-6 lg:pt-10">
           <div className={wrap}>
             {posts.length === 0 ? (
               <p className="rounded-3xl bg-mist p-8 text-center text-navy/70">{empty}</p>
             ) : (
-              <div className="grid gap-5 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
-                {first && <div className="md:col-span-2 lg:row-span-2"><RegionCard p={first} lang={lang} big /></div>}
-                {rest.map((p) => <RegionCard key={p.slug} p={p} lang={lang} />)}
+              <div className="grid gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6">
+                {posts.map((p) => <RegionCard key={p.slug} p={p} lang={lang} />)}
               </div>
             )}
           </div>
