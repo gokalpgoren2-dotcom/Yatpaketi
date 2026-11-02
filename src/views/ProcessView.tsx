@@ -81,7 +81,7 @@ function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
         </div>
         <h3 className="font-display mt-5 text-2xl font-semibold leading-snug text-navy lg:text-[1.7rem]">{s.title}</h3>
         {s.excerpt && <p className="mt-2 text-lg font-medium leading-relaxed text-turquoise-dark">{s.excerpt}</p>}
-        {s.content && <div className="mt-4 text-[15px] leading-relaxed text-navy/70"><RichText text={s.content} /></div>}
+        {s.content && <div className="mt-4 text-[15px] leading-relaxed text-navy/70 [&_h2]:!mt-5 [&_h2]:!pt-0 [&_h2]:!font-sans [&_h2]:!text-[0.72rem] [&_h2]:!font-semibold [&_h2]:!uppercase [&_h2]:!tracking-[0.16em] [&_h2]:!text-turquoise-dark [&_h3]:!mt-4 [&_h3]:!pt-0 [&_h3]:!font-sans [&_h3]:!text-[15px] [&_h3]:!font-semibold [&_h3]:!text-navy"><RichText text={s.content} /></div>}
         {turum && (
           <Link href="/musteri" className="mt-5 inline-flex items-center gap-2 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white transition hover:bg-turquoise-dark">
             <Ic d={BOX} size={16} />{U.turum} →
