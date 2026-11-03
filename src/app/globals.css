@@ -87,3 +87,10 @@ body {
 .route-dash { animation: route-dash 6s linear infinite; }
 .route-pulse { animation: route-pulse 2.6s ease-in-out infinite; }
 @media (prefers-reduced-motion: reduce) { .route-dash, .route-pulse { animation: none; } }
+
+/* Fotoğraflar: telefonda uzun basınca "Kaydet" menüsü çıkmasın, sürüklenemesin */
+img, video {
+  -webkit-touch-callout: none;
+  -webkit-user-drag: none;
+  user-select: none;
+}

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Inter, Urbanist } from "next/font/google";
 import "./globals.css";
 import { MobileBar } from "@/components/MobileBar";
+import { PhotoGuard } from "@/components/PhotoGuard";
 
 // Tüm başlıklar için Gilroy Bold'a en yakın ücretsiz font.
 const headline = Urbanist({ subsets: ["latin", "latin-ext"], weight: ["500", "600", "700", "800"], variable: "--font-urbanist" });
@@ -26,6 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body className="pb-16 lg:pb-0">
         {children}
         <MobileBar />
+        <PhotoGuard />
       </body>
     </html>
   );
