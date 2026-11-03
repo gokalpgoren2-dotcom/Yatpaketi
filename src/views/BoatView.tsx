@@ -69,14 +69,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
 
         <div className="mt-10 grid gap-10 lg:grid-cols-[2fr_1fr]">
           <div>
-            {b.description && (
-              <>
-                <h2 className="font-display text-2xl text-navy">{L.about}</h2>
-                <p className="mt-3 whitespace-pre-line leading-relaxed text-navy/70">{b.description}</p>
-              </>
-            )}
-
-            <h2 className="font-display mt-10 text-2xl text-navy">{L.specs}</h2>
+            <h2 className="font-display text-2xl text-navy">{L.specs}</h2>
             <dl className="mt-3 grid gap-x-10 sm:grid-cols-2">
               <Spec k={L.sType} v={b.type || L.notStated} />
               <Spec k={L.sBrand} v={`${b.brand} ${b.model}`.trim() || L.notStated} />
@@ -111,6 +104,13 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
 
             <h2 className="font-display mt-10 text-2xl text-navy">{L.availability}</h2>
             <p className="mt-3 rounded-2xl bg-mist p-5 text-sm text-navy/70">{L.availText}</p>
+
+            {b.description && (
+              <>
+                <h2 className="font-display mt-10 text-2xl text-navy">{L.about}</h2>
+                <p className="mt-3 whitespace-pre-line leading-relaxed text-navy/70">{b.description}</p>
+              </>
+            )}
           </div>
 
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
