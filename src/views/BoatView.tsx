@@ -51,10 +51,6 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           <FavButton slug={b.slug} name={b.name} lang={lang} label className="rounded-full border border-navy/20 px-4 py-2 text-navy hover:border-[#e8453c]" />
           <Link href={`${href(lang, "/tekne-karsilastir")}?a=${b.slug}`} className="inline-flex items-center rounded-full bg-turquoise/10 px-4 py-2 text-sm font-semibold text-turquoise-dark hover:bg-turquoise/20">{lang === "en" ? "Compare with another yacht →" : "Başka yatla karşılaştır →"}</Link>
         </div>
-        <div className="mt-4 flex flex-wrap items-center gap-3 lg:hidden">
-          <span className={`rounded-full px-4 py-2 text-sm font-semibold ${price ? "bg-navy text-white" : "bg-mist text-turquoise-dark"}`}>{price ?? L.askPrice}</span>
-          <a href="#talep" className="rounded-full bg-turquoise px-5 py-2 text-sm font-semibold text-white">{L.sendRequest}</a>
-        </div>
 
         {gallery.length > 0 ? (
           <BoatGallery images={gallery} name={b.name} lang={lang} badge={b.offer ? <span className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-[#e8453c] px-4 py-1.5 text-sm font-bold text-white shadow">{offerLabel(b.offer, lang)}</span> : undefined} />
@@ -67,7 +63,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           </div>
         )}
 
-        <div className="mt-10 grid gap-10 lg:grid-cols-[2fr_1fr]">
+        <div className="mt-6 grid gap-8 lg:mt-10 lg:grid-cols-[2fr_1fr] lg:gap-10">
           <div>
             <h2 className="font-display text-2xl text-navy">{L.specs}</h2>
             <dl className="mt-3 grid gap-x-10 sm:grid-cols-2">
@@ -137,7 +133,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             )}
           </div>
 
-          <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
+          <aside id="talep" className="order-first h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-5 shadow-xl shadow-navy/5 sm:p-6 lg:order-none lg:sticky lg:top-28">
             {(() => {
               const from = minDaily(b);
               const pct = b.offer?.percent ?? 0;
