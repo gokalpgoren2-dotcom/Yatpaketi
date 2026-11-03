@@ -26,7 +26,7 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
   const acRaw = b.equipment.find((e) => /^klima|air.?cond/i.test(parseEquipment(e).name));
   const acDetail = acRaw ? parseEquipment(acRaw).detail.toLocaleLowerCase("tr") : "";
   const acHours = acDetail.match(/(\d{1,2})\s*saat/)?.[1];
-  const ac = !acRaw ? (en ? "No" : "Yok") : /24\s*saat|7\s*\/\s*24|tam gün/.test(acDetail) ? "7/24" : acHours ? (en ? `${acHours} h/day` : `${acHours} sa/gün`) : (en ? "Yes" : "Var");
+  const ac = !acRaw ? "–" : /24\s*saat|7\s*\/\s*24|tam gün/.test(acDetail) ? "7/24" : acHours ? (en ? `${acHours} h/day` : `${acHours} sa/gün`) : (en ? "Yes" : "Var");
   const specs: [React.ReactNode, string, string][] = [
     [<IconLength key="l" />, en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
     [<IconCabins key="c" />, en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],

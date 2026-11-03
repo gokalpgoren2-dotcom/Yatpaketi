@@ -5,6 +5,54 @@ import { createHash } from "node:crypto";
 
 const log = (...a) => console.log("[icerik-sync]", ...a);
 
+// Uzaktaki fotoğrafları indirir: filigranlı kopya herkese açık "media" deposuna (sitede görünür),
+// filigransız kopya gizli "brosur-foto" deposuna (yalnızca tanıtım PDF'i) yüklenir.
+async function remotePhotos(db, slug, boatId, urls) {
+  let sharp;
+  try { sharp = (await import("sharp")).default; } catch { log(slug, "sharp yok, uzak fotoğraflar atlandı."); return 0; }
+  const mark = readFileSync("scripts/filigran.png");
+  await db.storage.createBucket("brosur-foto", { public: false }).catch(() => null);
+  const paths = [];
+  let k = 0;
+  for (const u of urls.slice(0, 30)) {
+    try {
+      const r = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0 yatpaketi-icerik" } });
+      if (!r.ok) { log(slug, "indirilemedi", r.status, u); continue; }
+      const raw = Buffer.from(await r.arrayBuffer());
+      const base = sharp(raw).rotate().resize({ width: 1920, height: 1920, fit: "inside", withoutEnlargement: true });
+      const img = await base.jpeg({ quality: 88 }).toBuffer();
+      const meta = await sharp(img).metadata();
+      const mw = Math.round((meta.width ?? 1200) * 0.42);
+      const overlay = await sharp(mark).resize({ width: mw }).png().toBuffer();
+      const marked = await sharp(img).composite([{ input: overlay, gravity: "center" }]).jpeg({ quality: 86 }).toBuffer();
+      k++;
+      const name = String(k).padStart(2, "0") + ".jpg";
+      const path = `tekneler/${slug}/${name}`;
+      const up = await db.storage.from("media").upload(path, marked, { contentType: "image/jpeg", upsert: true });
+      if (up.error) { log(slug, "yüklenemedi", up.error.message); k--; continue; }
+      paths.push(path);
+      if (k <= 13) {
+        const clean = await sharp(img).resize({ width: 1400, withoutEnlargement: true }).jpeg({ quality: 82 }).toBuffer();
+        await db.storage.from("brosur-foto").upload(`${slug}/${name}`, clean, { contentType: "image/jpeg", upsert: true });
+      }
+    } catch (e) {
+      log(slug, "fotoğraf hatası", e?.message ?? e);
+    }
+  }
+  if (paths.length < 5) { log(slug, `uzaktan yalnızca ${paths.length} fotoğraf alınabildi, broşürdeki fotoğraflar kalıyor.`); return paths.length; }
+  // Yeterli fotoğraf geldiyse broşürden alınan geçici fotoğraflar kaldırılır, yenileri sırayla eklenir
+  await db.from("boat_images").delete().eq("boat_id", boatId).like("path", `/tekneler/${slug}/%`);
+  await db.from("boat_images").delete().eq("boat_id", boatId).like("path", `tekneler/${slug}/%`);
+  await db.from("boat_images").update({ is_cover: false }).eq("boat_id", boatId);
+  await db.from("boat_images").insert(paths.map((p, i) => ({ boat_id: boatId, path: p, alt: slug, is_cover: i === 0, sort_order: i })));
+  // fazladan kalan eski broşür fotoğrafları
+  const { data: old } = await db.storage.from("brosur-foto").list(slug, { limit: 100 });
+  const extra = (old ?? []).map((f) => f.name).filter((n) => Number(n.slice(0, 2)) > Math.min(paths.length, 13));
+  if (extra.length) await db.storage.from("brosur-foto").remove(extra.map((n) => `${slug}/${n}`));
+  log(slug, `${paths.length} fotoğraf uzaktan alındı.`);
+  return paths.length;
+}
+
 async function main() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return log("SUPABASE_SERVICE_ROLE_KEY yok, atlandı.");
@@ -71,6 +119,8 @@ async function main() {
       for (let i = 0; i < paths.length; i++) if (have.has(paths[i])) await db.from("boat_images").update({ sort_order: i, is_cover: i === 0 }).eq("boat_id", boat.id).eq("path", paths[i]);
       log(slug, `${add.length} yeni fotoğraf, toplam ${paths.length}.`);
     }
+
+    if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) await remotePhotos(db, slug, boat.id, cfg.foto_url);
 
     const upd = {};
     if (typeof cfg.yayinla === "boolean") upd.is_published = cfg.yayinla;
