@@ -13,6 +13,7 @@ import { FavButton } from "@/components/FavButton";
 import { RatingLine, ReviewSection } from "@/components/Reviews";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
+import { BoatGallery } from "@/components/BoatGallery";
 import { href, t, type Lang } from "@/lib/i18n";
 import { localizeEquipment, localizeToy } from "@/lib/boatOptions";
 
@@ -56,23 +57,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         </div>
 
         {gallery.length > 0 ? (
-          <div className="mt-8 space-y-3">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-mist lg:aspect-[16/8]">
-              <Photo src={gallery[0]} alt={b.name} priority sizes="(min-width:1280px) 1200px, 100vw" className="object-cover" />
-              {b.offer && <span className="absolute right-3 top-3 rounded-full bg-[#e8453c] px-4 py-1.5 text-sm font-bold text-white shadow">{offerLabel(b.offer, lang)}</span>}
-            </div>
-            {gallery.length > 1 && (
-              <ul className="grid grid-cols-3 gap-3 sm:grid-cols-4 lg:grid-cols-6">
-                {gallery.slice(1).map((src, i) => (
-                  <li key={src}>
-                    <a href={src} target="_blank" rel="noopener" className="relative block aspect-[4/3] overflow-hidden rounded-xl bg-mist">
-                      <Photo src={src} alt={`${b.name} ${L.photoN(i + 2)}`} sizes="(min-width:1024px) 16vw, 33vw" className="object-cover transition hover:scale-105" />
-                    </a>
-                  </li>
-                ))}
-              </ul>
-            )}
-          </div>
+          <BoatGallery images={gallery} name={b.name} lang={lang} badge={b.offer ? <span className="pointer-events-none absolute left-3 top-3 z-10 rounded-full bg-[#e8453c] px-4 py-1.5 text-sm font-bold text-white shadow">{offerLabel(b.offer, lang)}</span> : undefined} />
         ) : (
           <div className="mt-8 grid gap-3 lg:grid-cols-[2fr_1fr]">
             <Placeholder hue={b.hue} className="aspect-[16/10] rounded-2xl" />
