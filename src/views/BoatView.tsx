@@ -14,6 +14,7 @@ import { RatingLine, ReviewSection } from "@/components/Reviews";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
 import { BoatGallery } from "@/components/BoatGallery";
+import { parseEquipment } from "@/lib/boatOptions";
 import { href, t, type Lang } from "@/lib/i18n";
 import { localizeEquipment, localizeToy } from "@/lib/boatOptions";
 
@@ -65,6 +66,50 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
 
         <div className="mt-6 grid gap-8 lg:mt-10 lg:grid-cols-[2fr_1fr] lg:gap-10">
           <div>
+            {/* Öne çıkan özellikler: telefonda fotoğrafların hemen altında */}
+            {(() => {
+              const en = lang === "en";
+              const acRaw = b.equipment.find((e) => /^klima|air.?cond/i.test(parseEquipment(e).name));
+              const acD = acRaw ? parseEquipment(acRaw).detail.toLocaleLowerCase("tr") : "";
+              const acH = acD.match(/(\d{1,2})\s*saat/)?.[1];
+              const ac = !acRaw ? (en ? "No" : "Yok") : /24\s*saat|7\s*\/\s*24|tam gün/.test(acD) ? "7/24" : acH ? (en ? `${acH} h/day` : `${acH} sa/gün`) : (en ? "Yes" : "Var");
+              const items: [string, string][] = [
+                [en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
+                [en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],
+                [en ? "Guests" : "Misafir", String(b.guests)],
+                [en ? "Crew" : "Personel", b.crew > 0 ? String(b.crew) : "–"],
+                [en ? "Built/Refit" : "Yapım/Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
+                [en ? "A/C" : "Klima", ac],
+              ];
+              return (
+                <ul className="mb-8 grid grid-cols-3 gap-2 sm:grid-cols-6">
+                  {items.map(([k, v]) => (
+                    <li key={k} className="rounded-2xl bg-mist px-2 py-3 text-center ring-1 ring-navy/5">
+                      <span className="block text-[15px] font-semibold leading-tight text-navy">{v}</span>
+                      <span className="mt-0.5 block text-[10px] uppercase tracking-wide text-navy/45">{k}</span>
+                    </li>
+                  ))}
+                </ul>
+              );
+            })()}
+
+            {/* Telefonda kısa fiyat özeti: ayrıntılar ve tarih seçimi aşağıdaki kutuda */}
+            <a href="#talep" className={`mb-8 flex items-center justify-between gap-3 rounded-2xl p-4 ring-1 lg:hidden ${b.offer && minDaily(b) != null ? "bg-[#fff1ee] ring-[#e8453c]/20" : "bg-white ring-navy/10 shadow-sm"}`}>
+              <span>
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-navy/45">{lang === "en" ? "Daily from" : "Günlük, başlayan"}</span>
+                {minDaily(b) != null ? (
+                  <span className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
+                    <span className={`font-display text-2xl font-semibold ${b.offer ? "text-[#c0332b]" : "text-navy"}`}>{money(off(minDaily(b)!, b.offer?.percent), b.currency, lang)}</span>
+                    {b.offer && <span className="text-xs text-navy/45 line-through">{money(minDaily(b)!, b.currency, lang)}</span>}
+                    {vatNote(b, lang) && <span className="text-xs font-semibold text-navy/55">{vatNote(b, lang)}</span>}
+                  </span>
+                ) : (
+                  <span className="mt-0.5 block text-lg font-semibold text-turquoise-dark">{L.askPrice}</span>
+                )}
+              </span>
+              <span className="shrink-0 rounded-full bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">{lang === "en" ? "Get price ↓" : "Fiyat hesapla ↓"}</span>
+            </a>
+
             <h2 className="font-display text-2xl text-navy">{L.specs}</h2>
             <dl className="mt-3 grid gap-x-10 sm:grid-cols-2">
               <Spec k={L.sType} v={b.type || L.notStated} />
@@ -133,7 +178,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             )}
           </div>
 
-          <aside id="talep" className="order-first h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-5 shadow-xl shadow-navy/5 sm:p-6 lg:order-none lg:sticky lg:top-28">
+          <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-5 shadow-xl shadow-navy/5 sm:p-6 lg:sticky lg:top-28">
             {(() => {
               const from = minDaily(b);
               const pct = b.offer?.percent ?? 0;
