@@ -2,13 +2,14 @@
 // kapak, yat hakkında + teknik özellikler, fiyatlar + dahil/hariç, fotoğraf galerisi.
 import { PDFDocument, rgb, StandardFonts, pushGraphicsState, popGraphicsState, rectangle, clip, endPath, type PDFFont, type PDFImage, type PDFPage } from "pdf-lib";
 import type { Boat } from "./data";
-import { dailyFor, weeklyFor, SEASON_MONTHS, monthName, money, off, apaText, minDaily } from "./pricing";
+import { dailyFor, weeklyFor, SEASON_MONTHS, monthName, money, off, apaText } from "./pricing";
 
 type Contact = { phone: string; whatsapp: string; email: string; instagram: string };
 export type BrochureAssets = {
   fonts?: { light: Uint8Array; regular: Uint8Array; medium: Uint8Array; bold: Uint8Array } | null;
   fontkit?: unknown;
-  logo?: Uint8Array | null;
+  logo?: Uint8Array | null; // saydam, renkli (iç sayfalar)
+  logoWhite?: Uint8Array | null; // saydam, beyaz (kapak)
   photos: Uint8Array[]; // kapak ilk sırada
 };
 
@@ -49,6 +50,8 @@ export async function buildBrochure(b: Boat, contact: Contact, a: BrochureAssets
   }
   let logo: PDFImage | null = null;
   try { if (a.logo) logo = await pdf.embedPng(a.logo); } catch { logo = null; }
+  let logoW: PDFImage | null = null;
+  try { if (a.logoWhite) logoW = await pdf.embedPng(a.logoWhite); } catch { logoW = null; }
 
   // ---- yardımcılar ----
   const text = (pg: PDFPage, s: string, x: number, y: number, size: number, font: PDFFont, color = INK) => pg.drawText(T(s), { x, y, size, font, color });
@@ -79,7 +82,7 @@ export async function buildBrochure(b: Boat, contact: Contact, a: BrochureAssets
   const footer = (pg: PDFPage) => {
     pageNo++;
     pg.drawLine({ start: { x: M, y: 40 }, end: { x: W - M, y: 40 }, thickness: 0.6, color: LINE });
-    const parts = ["yatpaketi.com", contact.phone, contact.email].filter(Boolean).join("   ·   ");
+    const parts = "yatpaketi.com";
     text(pg, parts, M, 24, 8, R, MUTED);
     const n = String(pageNo);
     text(pg, n, W - M - width(n, 8, R), 24, 8, R, MUTED);
@@ -105,7 +108,6 @@ export async function buildBrochure(b: Boat, contact: Contact, a: BrochureAssets
     [en ? "Built / Refit" : "Yapım / Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
   ];
   const pct = b.offer?.percent ?? 0;
-  const from = b.showPrice ? minDaily(b) : null;
 
   // ================= 1) KAPAK =================
   {
@@ -113,11 +115,12 @@ export async function buildBrochure(b: Boat, contact: Contact, a: BrochureAssets
     const photoH = H * 0.62;
     if (imgs[0]) cover(pg, imgs[0], 0, H - photoH, W, photoH);
     else pg.drawRectangle({ x: 0, y: H - photoH, width: W, height: photoH, color: NAVY2 });
-    // üstte logo için beyaz şerit
-    if (logo) {
-      const h = 26, w = (logo.width / logo.height) * h;
-      pg.drawRectangle({ x: M - 12, y: H - 34 - h - 10, width: w + 24, height: h + 20, color: WHITE, opacity: 0.92 });
-      pg.drawImage(logo, { x: M, y: H - 34 - h, width: w, height: h });
+    // üstte saydam beyaz logo; okunabilsin diye fotoğrafın üstüne hafif koyu geçiş
+    for (let i = 0; i < 12; i++) pg.drawRectangle({ x: 0, y: H - (i + 1) * 10, width: W, height: 10, color: NAVY, opacity: 0.32 * (1 - i / 12) });
+    const lg = logoW ?? logo;
+    if (lg) {
+      const h = 28, w = (lg.width / lg.height) * h;
+      pg.drawImage(lg, { x: M, y: H - 34 - h, width: w, height: h });
     }
     // alt lacivert bölüm
     pg.drawRectangle({ x: 0, y: 0, width: W, height: H - photoH, color: NAVY });
@@ -139,20 +142,10 @@ export async function buildBrochure(b: Boat, contact: Contact, a: BrochureAssets
       text(pg, v, x + (bw - width(v, vs, B)) / 2, y - 27, vs, B, WHITE);
       text(pg, k.toLocaleUpperCase(en ? "en" : "tr"), x + (bw - width(k.toLocaleUpperCase(en ? "en" : "tr"), 7, Md)) / 2, y - 44, 7, Md, hex("#8fb3cf"));
     });
-    y -= bh + 34;
-    if (from != null) {
-      const now = pct ? off(from, pct) : from;
-      const label = en ? "Daily from" : "Günlük, başlayan";
-      text(pg, label, M, y, 9, R, hex("#b8c7d8"));
-      const p = money(now, b.currency, lang);
-      text(pg, p, M, y - 26, 22, B, pct ? hex("#ff8a80") : WHITE);
-      const tail = `${en ? " / day" : " / gün"}${b.vatMode === "excluded" ? (en ? `  +${b.vatRate}% VAT` : `  +%${b.vatRate} KDV`) : b.vatMode === "included" ? (en ? "  VAT incl." : "  KDV dahil") : ""}`;
-      text(pg, tail, M + width(p, 22, B) + 2, y - 26, 10, R, hex("#b8c7d8"));
-      if (pct) text(pg, `-%${pct}  ·  ${money(from, b.currency, lang)}`, M, y - 44, 9, R, hex("#ff8a80"));
-    }
+    y -= bh + 40;
     const site = "yatpaketi.com";
-    text(pg, site, W - M - width(site, 12, B), y - 26, 12, B, TURQ);
-    if (contact.phone) text(pg, contact.phone, W - M - width(contact.phone, 9.5, R), y - 44, 9.5, R, hex("#b8c7d8"));
+    pg.drawLine({ start: { x: M, y: y + 8 }, end: { x: W - M, y: y + 8 }, thickness: 0.6, color: hex("#1d4a7a") });
+    text(pg, site, M, y - 14, 12, B, TURQ);
     pageNo++;
   }
 

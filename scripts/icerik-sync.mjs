@@ -34,11 +34,30 @@ async function main() {
     const dir = `public/tekneler/${slug}`;
     const files = existsSync(dir) ? readdirSync(dir).filter((f) => /\.(jpe?g|png|webp)$/i.test(f)).sort() : [];
     const paths = files.map((f) => `/tekneler/${slug}/${f}`);
-    const hash = createHash("sha1").update(JSON.stringify({ cfg, paths })).digest("hex");
+    const cdir = `icerik/temiz/${slug}`;
+    const clean = existsSync(cdir) ? readdirSync(cdir).filter((f) => /\.jpe?g$/i.test(f)).sort() : [];
+    const hash = createHash("sha1").update(JSON.stringify({ cfg, paths, clean })).digest("hex");
     if (done[slug] === hash) { log(slug, "değişmemiş, atlandı."); continue; }
 
-    const { data: boat, error: be } = await db.from("boats").select("id").eq("slug", slug).maybeSingle();
+    let { data: boat, error: be } = await db.from("boats").select("id").eq("slug", slug).maybeSingle();
+    // Listede olmayan yat: "ad" verildiyse taslak olarak oluşturulur
+    if (!be && !boat && cfg.ad) {
+      const ins = await db.from("boats").insert({ slug, name: cfg.ad, is_published: false }).select("id").single();
+      if (ins.error) log(slug, "oluşturulamadı: " + ins.error.message);
+      else { boat = ins.data; log(slug, "yeni yat oluşturuldu (taslak)."); }
+    }
     if (be || !boat) { log(slug, "tekne bulunamadı, atlandı."); continue; }
+
+    // Broşür için filigransız fotoğraflar: gizli depoya yüklenir (sitede görünmez)
+    if (clean.length) {
+      await db.storage.createBucket("brosur-foto", { public: false }).catch(() => null);
+      let n = 0;
+      for (const f of clean) {
+        const { error } = await db.storage.from("brosur-foto").upload(`${slug}/${f}`, readFileSync(`${cdir}/${f}`), { contentType: "image/jpeg", upsert: true });
+        if (!error) n++;
+      }
+      log(slug, `broşür fotoğrafları: ${n}/${clean.length} yüklendi.`);
+    }
 
     if (paths.length) {
       const { data: imgs } = await db.from("boat_images").select("id,path,sort_order").eq("boat_id", boat.id);

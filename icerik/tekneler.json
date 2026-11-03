@@ -42,5 +42,78 @@
         "Balık tutma ekipmanı"
       ]
     }
+  },
+  "angels": {
+    "ad": "Angels",
+    "brosur": true,
+    "bilgi": {
+      "tip": "luks-yat",
+      "brand": "Arcadia",
+      "year": 2025,
+      "length_m": 31.5,
+      "width_m": 7.6,
+      "cabins": 6,
+      "guests": 12,
+      "crew": 6,
+      "captain_included": true,
+      "description_tr": "Angels, 2025 yılında suya inen 31,5 metrelik bir Arcadia lüks motoryattır. Geniş cam yüzeyleri, aydınlık iç mekânları ve modern tasarımıyla 12 misafiri konforla ağırlar. Üst güvertedeki güneşlenme salonu, kapalı sky lounge ve kıç güvertedeki yemek alanı, günün her saati için ayrı bir yaşam alanı sunar.\n\nYatta 6 kabin bulunur: ana güvertede king size yataklı bir sahip süiti, tam genişlikte queen size yataklı bir VIP çift kişilik kabin, iskele ve sancak tarafında queen size yataklı iki çift kişilik kabin ve iki twin kabin. Tüm kabinlerde özel banyo, klima ve Smart TV vardır. Altı kişilik mürettebat ayrı bölümde kalır.\n\nSaatte 11 deniz mili seyir hızına ve 3.000 deniz mili menzile sahip Angels'ta klima 24 saat çalışır. 2×300 HP motorlu 10,7 m Technohull tender, ikinci bir 90 HP tender, Sea-Doo jet ski, 2 Seabob, e-foil, kanolar, 4 paddle board, su kayakları, monoski, wakeboard, şişme tüpler, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır.",
+      "description_en": "Angels is a 31.5-metre Arcadia luxury motor yacht launched in 2025. With expansive glazing, bright interiors and contemporary design, she hosts 12 guests in comfort. The upper-deck sun lounge, enclosed sky lounge and aft-deck dining area offer distinct living spaces for every time of day.\n\nShe has 6 cabins: a main-deck owner's suite with a king-size bed, a full-beam VIP double with a queen-size bed, port and starboard doubles with queen-size beds and two twin cabins. All cabins have en-suite bathrooms, air conditioning and a smart TV. The crew of six stay in separate quarters.\n\nCruising at 11 knots with a 3,000 nm range, Angels has 24-hour air conditioning. A 10.7 m Technohull tender with 2×300 hp engines, a second 90 hp tender, a Sea-Doo jet ski, 2 Seabobs, an e-foil, canoes, 4 paddle boards, water skis, a monoski, a wakeboard, towable tubes, snorkelling and fishing gear are available to guests.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Tender — 10,7 m Technohull, 2×300 HP, 12 kişilik",
+        "Tender — 4,90 m, 90 HP, 8 kişilik",
+        "Jeneratör — 2× Mase 65 kW ve 1× Mase 25 kW",
+        "Su yapıcı — Saatte 350 litre",
+        "Wi-Fi — Yunanistan'da Starlink",
+        "Eğlence sistemi — Salonda ve tüm kabinlerde Smart TV, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Jet ski",
+        "Seabob ×2",
+        "E-foil",
+        "Kano ×2",
+        "Paddle board ×4",
+        "Su kayağı ×2",
+        "Monoski",
+        "Wakeboard",
+        "Muz (banana) botu ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ]
+    }
+  },
+  "lady-freya": {
+    "brosur": true,
+    "bilgi": {
+      "tip": "gulet",
+      "brand": "Orion Shipyards",
+      "year": 2008,
+      "refit_year": 2023,
+      "length_m": 22.8,
+      "width_m": 6.1,
+      "cabins": 4,
+      "guests": 8,
+      "crew": 3,
+      "captain_included": true,
+      "description_tr": "Lady Freya, 2023 yılında yenilenen 22,8 metrelik, ahşap işçiliğiyle öne çıkan klasik bir yelkenli gulettir. Yelkenleriyle gerçek bir seyir keyfi sunan yat, 8 misafir için sıcak ve samimi bir atmosfere sahiptir. Baş güvertedeki oturma ve güneşlenme alanları ile kıç güvertedeki gölgelikli yemek ve dinlenme alanı, günün büyük bölümünü açık havada geçirmeyi sağlar.\n\nYatta 4 kabin bulunur: kıçta ve başta queen size yataklı iki master kabin ile iskele ve sancak tarafında iki çift kişilik kabin. Tüm kabinlerde özel banyo ve klima vardır. Klimalı salonda açık mutfak ve 8 kişilik yemek alanı yer alır. Kaptan ve 2 kişilik mürettebat baştaki ayrı bölümde kalır.\n\nSaatte 9 deniz mili seyir hızına sahip Lady Freya'da klima 24 saat çalışır. 70 HP motorlu tender, kanolar, paddle board'lar, su kayakları, monoski, wakeboard, ringolar, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır.",
+      "description_en": "Lady Freya is a 22.8-metre classic sailing gulet with fine woodwork, refitted in 2023. Offering genuine sailing under canvas, she has a warm, intimate atmosphere for 8 guests. The forward seating and sunbathing areas and the shaded aft dining and lounge area let guests spend most of the day outdoors.\n\nShe has 4 cabins: aft and forward master cabins with queen-size beds and port and starboard double cabins. All cabins have en-suite bathrooms and air conditioning. The air-conditioned saloon features an open galley and dining for 8. The captain and 2 crew stay in a separate forward crew quarter.\n\nCruising at 9 knots, Lady Freya has 24-hour air conditioning. A tender with a 70 hp outboard, canoes, paddle boards, water skis, a monoski, a wakeboard, ringos, snorkelling and fishing gear are available to guests.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Tender — 4,20 m, 70 HP, 8 kişilik",
+        "Jeneratör — Onan 17,5 kW ve Albo Marine 14 kW",
+        "Wi-Fi",
+        "Eğlence sistemi — Salonda ve kıç güvertede uydu TV, DVD/CD, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Kano ×2",
+        "Paddle board ×2",
+        "Su kayağı ×2",
+        "Monoski",
+        "Wakeboard",
+        "Ringo ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ]
+    }
   }
 }
