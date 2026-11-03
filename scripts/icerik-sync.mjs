@@ -57,6 +57,16 @@ async function main() {
     if (typeof cfg.yayinla === "boolean") upd.is_published = cfg.yayinla;
     if (typeof cfg.one_cikar === "boolean") upd.is_featured = cfg.one_cikar;
     if (Object.keys(upd).length) await db.from("boats").update(upd).eq("id", boat.id);
+    // Yat bilgileri (broşürden çıkarılanlar): sütun adlarıyla doğrudan yazılır; "tip" yat tipinin adresidir (gulet, motoryat…)
+    if (cfg.bilgi && typeof cfg.bilgi === "object") {
+      const { tip, ...cols } = cfg.bilgi;
+      if (tip) {
+        const { data: c } = await db.from("categories").select("id").eq("slug", tip).maybeSingle();
+        if (c) cols.category_id = c.id;
+      }
+      const { error } = await db.from("boats").update(cols).eq("id", boat.id);
+      log(slug, error ? "bilgiler yazılamadı: " + error.message : "bilgiler güncellendi.");
+    }
     // Tanıtım PDF'i: site tarafından otomatik üretilen /brosur/<adres>.pdf bağlanır (ayrı güncelleme: sütun yoksa diğerleri etkilenmez)
     if (cfg.brosur === true) {
       const { error } = await db.from("boats").update({ brochure_path: `/brosur/${slug}.pdf` }).eq("id", boat.id);

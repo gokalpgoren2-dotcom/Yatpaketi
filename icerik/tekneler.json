@@ -1,4 +1,46 @@
 {
   "_aciklama": "Sohbetten gönderilen tekne fotoğrafları ve ayarları. Fotoğraflar public/tekneler/<tekne-adresi>/ klasöründe durur (01.jpg, 02.jpg... sırası = sitedeki sıra, 01 kapak). Site her yayınlandığında bu liste veritabanına bir kez işlenir; aynı kayıt değişmedikçe tekrar işlenmez, panelden yaptığınız değişiklikler ezilmez.",
-  "queen-atlantis": { "yayinla": true, "one_cikar": true, "one_cikan_sira": 2, "brosur": true }
+  "queen-atlantis": {
+    "yayinla": true,
+    "one_cikar": true,
+    "one_cikan_sira": 2,
+    "brosur": true
+  },
+  "caneren": {
+    "brosur": true,
+    "bilgi": {
+      "tip": "motoryat",
+      "brand": "Mengi Yay Tersanesi",
+      "year": 1996,
+      "refit_year": 2025,
+      "length_m": 27.3,
+      "width_m": 6.6,
+      "cabins": 4,
+      "guests": 8,
+      "crew": 4,
+      "captain_included": true,
+      "home_port": "Bodrum",
+      "description_tr": "Caneren, 2025 yılında baştan sona yenilenen, 27 metrelik klasik bir motoryattır. Mengi Yay Tersanesi imzalı yat, flybridge'i, geniş güneşlenme alanları ve 8 misafire göre tasarlanmış ferah iç mekânıyla aileler ve arkadaş grupları için konforlu bir mavi yolculuk sunar.\n\nYatta 4 kabin bulunur: king size yataklı bir master kabin (kasa dahil), biri queen size biri king size yataklı ve giyinme odalı iki VIP çift kişilik kabin ve pullman yataklı bir twin kabin. Tüm kabinlerde özel banyo ve klima vardır. Klimalı salonda TV, bar, oturma köşesi ve 8 kişilik yemek alanı yer alır; kıç güvertede gölgelik altında açık havada yemek masası ve geniş oturma alanı bulunur.\n\nSaatte 10 deniz mili seyir hızına sahip olan Caneren'de klima 24 saat çalışır. 50 HP motorlu tender, kanolar, paddle board'lar, su kayakları, wakeboard, ringo, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır. Kaptan ve 3 kişilik mürettebat, ayrı mürettebat bölümünde kalır.",
+      "description_en": "Caneren is a 27-metre classic motor yacht, fully refitted in 2025. Built by Mengi Yay Shipyard, she offers a flybridge, generous sunbathing areas and a spacious interior designed for 8 guests, making her a comfortable choice for families and groups of friends.\n\nShe has 4 cabins: a master cabin with a king-size bed and safe, two VIP double cabins (one queen-size, one king-size with a dressing room) and a twin cabin with a pullman bed. All cabins have en-suite bathrooms and air conditioning. The air-conditioned saloon features a TV, bar, lounge and dining area for 8; the shaded aft deck offers alfresco dining and a large seating area.\n\nCruising at 10 knots, Caneren has 24-hour air conditioning. A tender with a 50 hp outboard, canoes, paddle boards, water skis, a wakeboard, ringos, snorkelling and fishing gear are available to guests. The captain and 3 crew stay in separate crew quarters.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Flybridge",
+        "Tender — 3,60 m, 50 HP, 6 kişilik",
+        "Jeneratör — Kohler 27 kW ve Onan 17,5 kW",
+        "Su yapıcı — Saatte 140 litre",
+        "Wi-Fi",
+        "Eğlence sistemi — IPTV (salon, kıç güverte, master kabin), DVD/CD, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Kano ×2",
+        "Paddle board ×2",
+        "Su kayağı ×2",
+        "Wakeboard",
+        "Monoski",
+        "Ringo ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ]
+    }
+  }
 }
