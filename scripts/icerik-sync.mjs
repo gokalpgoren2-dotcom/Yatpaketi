@@ -57,6 +57,11 @@ async function main() {
     if (typeof cfg.yayinla === "boolean") upd.is_published = cfg.yayinla;
     if (typeof cfg.one_cikar === "boolean") upd.is_featured = cfg.one_cikar;
     if (Object.keys(upd).length) await db.from("boats").update(upd).eq("id", boat.id);
+    // Tanıtım PDF'i: site tarafından otomatik üretilen /brosur/<adres>.pdf bağlanır (ayrı güncelleme: sütun yoksa diğerleri etkilenmez)
+    if (cfg.brosur === true) {
+      const { error } = await db.from("boats").update({ brochure_path: `/brosur/${slug}.pdf` }).eq("id", boat.id);
+      log(slug, error ? "broşür bağlanamadı: " + error.message : "broşür bağlandı.");
+    }
 
     if (Number.isInteger(cfg.one_cikan_sira) && cfg.one_cikan_sira > 0) {
       const { data: f } = await db.from("site_texts").select("data").eq("key", "featured").maybeSingle();

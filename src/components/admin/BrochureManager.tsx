@@ -25,7 +25,7 @@ export function BrochureManager({ boatId, slug, initial }: { boatId: string; slu
     if (up.error) { setBusy(false); setMsg({ ok: false, text: up.error.message.includes("mime") ? "PDF yüklenemedi. Önce Supabase'de yat-brosur.sql dosyasını çalıştırın." : "Yüklenemedi: " + up.error.message }); return; }
     const { error } = await supabase.from("boats").update({ brochure_path: p }).eq("id", boatId);
     if (error) { setBusy(false); setMsg({ ok: false, text: error.message.includes("brochure_path") ? "Önce Supabase'de yat-brosur.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message }); return; }
-    if (path) await supabase.storage.from("media").remove([path]);
+    if (path && !path.startsWith("/")) await supabase.storage.from("media").remove([path]);
     setPath(p); setBusy(false); if (ref.current) ref.current.value = "";
     setMsg({ ok: true, text: "Tanıtım PDF'i yüklendi. Yat sayfasında indirilebilir." });
     router.refresh();
@@ -34,7 +34,7 @@ export function BrochureManager({ boatId, slug, initial }: { boatId: string; slu
   async function remove() {
     if (!path || !confirm("Tanıtım PDF'i silinsin mi?")) return;
     setBusy(true);
-    await supabase.storage.from("media").remove([path]);
+    if (!path.startsWith("/")) await supabase.storage.from("media").remove([path]);
     const { error } = await supabase.from("boats").update({ brochure_path: null }).eq("id", boatId);
     setBusy(false);
     if (error) { setMsg({ ok: false, text: "Silinemedi: " + error.message }); return; }
@@ -48,7 +48,7 @@ export function BrochureManager({ boatId, slug, initial }: { boatId: string; slu
       <p className="text-sm text-navy/60">Yüklediğiniz PDF yat sayfasında &quot;Tanıtım dosyasını indir&quot; düğmesiyle misafirlere sunulur. En çok 25 MB.</p>
       {path && (
         <div className="flex flex-wrap items-center gap-3 rounded-xl bg-mist p-3 text-sm">
-          <span className="font-semibold text-navy">Yüklü PDF var</span>
+          <span className="font-semibold text-navy">{path.startsWith("/brosur/") ? "Otomatik oluşturulan PDF (yat bilgileri değişince kendiliğinden güncellenir)" : "Yüklü PDF var"}</span>
           <a href={publicImageUrl(path) ?? "#"} target="_blank" rel="noopener" className="font-semibold text-turquoise-dark">Aç</a>
           <button type="button" onClick={remove} disabled={busy} className="ml-auto text-sm font-semibold text-red-600">Sil</button>
         </div>
