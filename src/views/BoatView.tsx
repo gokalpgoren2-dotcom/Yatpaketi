@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { SEASONS, dailyFor, money, monthName } from "@/lib/pricing";
+import { SEASONS, dailyFor, minDaily, money, monthName } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -129,25 +129,50 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           </div>
 
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
-            <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{L.price}</p>
-            <p className={`mt-1 text-2xl font-semibold ${price ? "text-navy" : "text-turquoise-dark"}`}>{price ?? L.askPrice}</p>
+            {(() => {
+              const from = minDaily(b);
+              return from != null ? (
+                <div>
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{lang === "en" ? "Daily price" : "Günlük fiyat"}</p>
+                  <p className="mt-1 flex items-baseline gap-2">
+                    <span className="font-display text-4xl font-semibold leading-none text-navy">{money(from, b.currency, lang)}</span>
+                    <span className="text-sm text-navy/55">{lang === "en" ? "/ day from" : "’den başlayan"}</span>
+                  </p>
+                </div>
+              ) : (
+                <div>
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{L.price}</p>
+                  <p className="mt-1 text-2xl font-semibold text-turquoise-dark">{L.askPrice}</p>
+                </div>
+              );
+            })()}
             {b.offer && <p className="mt-2 inline-block rounded-xl bg-[#e8453c]/10 px-3 py-2 text-sm font-semibold text-[#c0332b]">{offerLabel(b.offer, lang)}{offerUntil(b.offer, lang) && <span className="block text-xs font-medium opacity-80">{offerUntil(b.offer, lang)}</span>}</p>}
             {/* Sezona göre günlük fiyatlar */}
             {price && (
-              <div className="mt-4 space-y-2">
-                {SEASONS.map((se) => {
-                  const rows = se.months.map((m) => [m, dailyFor(b, m)] as const).filter(([, v]) => v != null);
-                  if (!rows.length) return null;
-                  return (
-                    <div key={se.key} className="rounded-2xl bg-mist p-3">
-                      <p className={`text-[0.7rem] font-semibold uppercase tracking-[0.14em] ${se.key === "high" ? "text-[#c0332b]" : se.key === "mid" ? "text-amber-700" : "text-turquoise-dark"}`}>{lang === "en" ? se.en : se.tr}</p>
-                      <ul className="mt-1 space-y-0.5 text-sm">
-                        {rows.map(([m, v]) => <li key={m} className="flex justify-between gap-3 text-navy/75"><span>{monthName(m, lang)}</span><span className="font-semibold tabular-nums text-navy">{money(v!, b.currency, lang)} <span className="font-normal text-navy/50">/ {lang === "en" ? "day" : "gün"}</span></span></li>)}
-                      </ul>
-                    </div>
-                  );
-                })}
-                <p className="text-xs text-navy/50">{lang === "en" ? "Pick your dates below to see the total." : "Toplam tutarı görmek için aşağıdan tarih seçin."}</p>
+              <div className="mt-5">
+                <div className="grid grid-cols-3 gap-2">
+                  {SEASONS.map((se) => {
+                    const rows = se.months.map((m) => [m, dailyFor(b, m)] as const).filter(([, v]) => v != null);
+                    const tone = se.key === "high" ? "from-[#ffe9e5] to-white text-[#c0332b]" : se.key === "mid" ? "from-amber-50 to-white text-amber-700" : "from-turquoise/10 to-white text-turquoise-dark";
+                    return (
+                      <div key={se.key} className={`rounded-2xl bg-gradient-to-b p-3 ring-1 ring-navy/5 ${tone}`}>
+                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em]">{lang === "en" ? se.en : se.tr}</p>
+                        <ul className="mt-2 space-y-1.5">
+                          {se.months.map((m) => {
+                            const v = rows.find(([x]) => x === m)?.[1];
+                            return (
+                              <li key={m}>
+                                <span className="block text-[11px] leading-tight text-navy/50">{monthName(m, lang)}</span>
+                                <span className="block text-sm font-semibold leading-tight tabular-nums text-navy">{v != null ? money(v, b.currency, lang) : "–"}</span>
+                              </li>
+                            );
+                          })}
+                        </ul>
+                      </div>
+                    );
+                  })}
+                </div>
+                <p className="mt-2 text-xs text-navy/50">{lang === "en" ? "Prices are per day. Pick your dates below to see the total." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
               </div>
             )}
             <div className="mt-6 border-t border-navy/10 pt-6">

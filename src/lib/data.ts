@@ -1,6 +1,6 @@
 // GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Yatlar, fiyatlar ve açıklamalar gerçek değildir.
 
-import { minDaily } from "./pricing";
+import { minDaily, money } from "./pricing";
 
 export type Offer = { kind: "early" | "discount"; percent: number; until: string };
 
@@ -87,7 +87,7 @@ export function boatsFor(list: Boat[], destSlug: string) {
 export function priceLabel(b: Boat, lang: "tr" | "en" = "tr"): string | null {
   const v = minDaily(b);
   if (v == null) return null;
-  return `${v.toLocaleString(lang === "en" ? "en-GB" : "tr-TR")} ${b.currency} ${lang === "en" ? "/ day from" : "/ gün’den"}`;
+  return lang === "en" ? `from ${money(v, b.currency, lang)} / day` : `${money(v, b.currency, lang)}’den / gün`;
 }
 
 // ---- Filtreleme ----

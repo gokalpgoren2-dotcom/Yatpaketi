@@ -88,7 +88,7 @@ const tr = {
   foundN: (n: number) => `${n} yat bulundu`, noneYet: "Henüz yayında yat yok.", noMatch: "Bu filtrelere uygun yat bulunamadı. Filtreleri gevşetmeyi deneyin.",
   // yat sayfası
   breadcrumb: "Sayfa yolu", sendRequest: "Talep gönder", photoN: (n: number) => `fotoğraf ${n}`, sampleBoat: "Örnek içerik: Veritabanı bağlı olmadığı için örnek yat gösteriliyor.",
-  about: "Yat hakkında", specs: "Teknik özellikler", notStated: "Belirtilmedi",
+  about: "Yat hakkında", specs: "Teknik özellikler", notStated: "–",
   sType: "Yat tipi", sBrand: "Marka / model", sYear: "Yapım yılı", sRefit: "Yenileme yılı", sLen: "Uzunluk", sWidth: "Genişlik", sCabins: "Kabin", sCap: "Misafir kapasitesi",
   sCrew: "Mürettebat", crewN: (n: number) => `${n} kişi`, noCrew: "Mürettebatsız", sCaptain: "Kaptan", included: "Dahil", notIncluded: "Dahil değil",
   sPort: "Kalkış limanı", sRegions: "Kiralama bölgeleri",
@@ -177,7 +177,7 @@ const en: typeof tr = {
   priceNote: "The price filter works in EUR on the yacht's lowest daily price. It cannot be applied to “Ask for price” yachts.",
   foundN: (n) => `${n} ${n === 1 ? "boat" : "boats"} found`, noneYet: "No boats are listed yet.", noMatch: "No boats match these filters. Try loosening the filters.",
   breadcrumb: "Breadcrumb", sendRequest: "Send request", photoN: (n) => `photo ${n}`, sampleBoat: "Sample content: a sample boat is shown because the database is not connected.",
-  about: "About this boat", specs: "Specifications", notStated: "Not specified",
+  about: "About this boat", specs: "Specifications", notStated: "–",
   sType: "Boat type", sBrand: "Make / model", sYear: "Year built", sRefit: "Refit year", sLen: "Length", sWidth: "Beam", sCabins: "Cabins", sCap: "Guest capacity",
   sCrew: "Crew", crewN: (n) => `${n} ${n === 1 ? "person" : "people"}`, noCrew: "No crew", sCaptain: "Captain", included: "Included", notIncluded: "Not included",
   sPort: "Departure port", sRegions: "Charter regions",

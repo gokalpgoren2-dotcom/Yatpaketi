@@ -59,4 +59,8 @@ export function quote(b: Priced, start: string, end: string): Quote | null {
   return { ok: true, nights, total, parts };
 }
 
-export const money = (v: number, cur: string, lang: "tr" | "en" = "tr") => `${v.toLocaleString(lang === "en" ? "en-GB" : "tr-TR")} ${cur}`;
+const SYM: Record<string, string> = { EUR: "€", USD: "$", TRY: "₺" };
+export const sym = (cur: string) => SYM[cur] ?? cur;
+// 1.000 € (TR) / €1,000 (EN)
+export const money = (v: number, cur: string, lang: "tr" | "en" = "tr") =>
+  lang === "en" ? `${sym(cur)}${v.toLocaleString("en-GB")}` : `${v.toLocaleString("tr-TR")} ${sym(cur)}`;
