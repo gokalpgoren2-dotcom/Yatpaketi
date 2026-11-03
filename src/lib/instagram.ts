@@ -15,26 +15,48 @@ type Saved = { token?: string; refreshed_at?: string; username?: string; ig_id?:
 const FB = "https://graph.facebook.com/v21.0";
 const isFb = (t: string) => t.startsWith("EAA");
 
-async function fbIgAccount(t: string): Promise<{ id?: string; username?: string; message?: string }> {
-  const tries = [
-    `${FB}/me/accounts?fields=instagram_business_account{id,username}&limit=50&access_token=${encodeURIComponent(t)}`,
-    `${FB}/me/assigned_pages?fields=instagram_business_account{id,username}&limit=50&access_token=${encodeURIComponent(t)}`,
-  ];
+async function fbIgAccount(t: string, manualId?: string): Promise<{ id?: string; username?: string; message?: string }> {
+  const k = encodeURIComponent(t);
   let message: string | undefined;
-  for (const u of tries) {
+  const get = async (u: string) => {
     try {
       const r = await fetch(u, { cache: "no-store" });
-      const j = (await r.json()) as { data?: { instagram_business_account?: { id: string; username?: string } }[]; error?: { message?: string } };
+      const j = (await r.json()) as Record<string, unknown> & { error?: { message?: string } };
       if (j.error?.message) message = j.error.message;
-      const want = igUser().toLowerCase();
-      const all = (j.data ?? []).map((p) => p.instagram_business_account).filter(Boolean) as { id: string; username?: string }[];
-      const hit = all.find((a) => a.username?.toLowerCase() === want) ?? all[0];
-      if (hit) return hit;
+      return r.ok ? j : null;
     } catch (e) {
       message = e instanceof Error ? e.message : message;
+      return null;
+    }
+  };
+  // 1) Yönetimde elle girilen hesap kimliği
+  if (manualId) {
+    const j = await get(`${FB}/${manualId}?fields=id,username&access_token=${k}`);
+    if (j?.id) return { id: String(j.id), username: j.username as string | undefined };
+  }
+  // 2) Anahtar doğrudan Instagram hesabına aitse
+  for (const u of [`${FB}/me?fields=id,username&access_token=${k}`, `https://graph.instagram.com/v21.0/me?fields=user_id,username&access_token=${k}`]) {
+    const j = await get(u);
+    if (j?.username) return { id: String(j.user_id ?? j.id), username: j.username as string };
+  }
+  // 3) Facebook sayfası ya da işletme portföyü üzerinden
+  const want = igUser().toLowerCase();
+  type Acc = { id: string; username?: string };
+  const pick = (all: Acc[]) => all.find((a) => a.username?.toLowerCase() === want) ?? all[0];
+  for (const edge of ["accounts", "assigned_pages"]) {
+    const j = await get(`${FB}/me/${edge}?fields=instagram_business_account{id,username}&limit=50&access_token=${k}`);
+    const all = ((j?.data as { instagram_business_account?: Acc }[]) ?? []).map((p) => p.instagram_business_account).filter(Boolean) as Acc[];
+    if (all.length) return pick(all);
+  }
+  const bz = await get(`${FB}/me/businesses?fields=id&limit=20&access_token=${k}`);
+  for (const b of (bz?.data as { id: string }[]) ?? []) {
+    for (const edge of ["instagram_business_accounts", "owned_instagram_accounts", "instagram_accounts"]) {
+      const j = await get(`${FB}/${b.id}/${edge}?fields=id,username&limit=50&access_token=${k}`);
+      const all = ((j?.data as Acc[]) ?? []).filter((a) => a.id);
+      if (all.length) return pick(all);
     }
   }
-  return { message: message ?? "Anahtara bağlı Instagram işletme hesabı bulunamadı." };
+  return { message: message ? `${message} — Instagram hesap kimliğini (ID) de girip tekrar deneyin.` : "Anahtara bağlı Instagram hesabı bulunamadı. Instagram hesap kimliğini (ID) de girip tekrar deneyin." };
 }
 
 function serviceDb() {
@@ -107,9 +129,9 @@ export const getStories = () => list("stories");
 export const getPosts = () => list("media");
 
 // Yönetim > Ayarlar için: anahtarı dener, hesabı döndürür.
-export async function igCheck(token: string): Promise<{ ok: boolean; username?: string; igId?: string; message?: string }> {
+export async function igCheck(token: string, manualId?: string): Promise<{ ok: boolean; username?: string; igId?: string; message?: string }> {
   if (isFb(token)) {
-    const a = await fbIgAccount(token);
+    const a = await fbIgAccount(token, manualId);
     return a.id ? { ok: true, username: a.username, igId: a.id } : { ok: false, message: a.message };
   }
   try {

@@ -71,7 +71,12 @@ export default async function Settings({ searchParams }: { searchParams: Promise
         <form action={saveInstagram} className="mt-4 space-y-3">
           <div>
             <label htmlFor="ig_token" className={lab}>{ig.connected ? "Yeni erişim anahtarı (değiştirmek için)" : "Instagram erişim anahtarı"}</label>
-            <input id="ig_token" name="ig_token" type="password" autoComplete="off" placeholder="IGAA… ile başlayan uzun anahtar" className={input} />
+            <input id="ig_token" name="ig_token" type="password" autoComplete="off" placeholder="EAA… ya da IGAA… ile başlayan uzun anahtar" className={input} />
+          </div>
+          <div>
+            <label htmlFor="ig_id" className={lab}>Instagram hesap kimliği (ID) — isteğe bağlı</label>
+            <input id="ig_id" name="ig_id" inputMode="numeric" autoComplete="off" placeholder="Örn. 17841400000000000" className={input} />
+            <p className="mt-1 text-xs text-navy/55">Meta geliştirici sayfasında, &quot;Generate access tokens&quot; bölümünde hesap adının altında yazan uzun sayı. Anahtar tek başına kabul edilmezse bunu da girin.</p>
           </div>
           <SubmitButton>Instagram&apos;ı bağla</SubmitButton>
         </form>

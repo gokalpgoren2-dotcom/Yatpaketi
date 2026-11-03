@@ -67,7 +67,8 @@ export async function saveInstagram(formData: FormData) {
   const { supabase } = await requireAdmin();
   const token = String(formData.get("ig_token") ?? "").replace(/\s+/g, "");
   if (!token) back("error", "Instagram erişim anahtarını yapıştırın.");
-  const c = await igCheck(token);
+  const igId = String(formData.get("ig_id") ?? "").replace(/\D+/g, "");
+  const c = await igCheck(token, igId || undefined);
   if (!c.ok) back("error", "Instagram bu anahtarı kabul etmedi: " + (c.message ?? "") + " Anahtarı yeniden kopyalayıp deneyin.");
   const { error } = await supabase.from("private_settings").upsert({ key: "instagram", value: { token, username: c.username, ig_id: c.igId, refreshed_at: new Date().toISOString() }, updated_at: new Date().toISOString() });
   if (error) back("error", error.message.includes("private_settings") ? "Önce Supabase'de instagram.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message);
