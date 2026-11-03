@@ -122,20 +122,6 @@
   "ece-berrak": {
     "yayinla": true,
     "brosur": true,
-    "foto_url": [
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-241209-134830-5924.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-241209-134830-2514.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-241209-134935-4097.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-241209-134830-2653.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-241209-134912-1814.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-241209-134932-9116.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-241209-134935-6648.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-241209-135228-9544.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-241209-134526-9449.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/2-241209-134526-3831.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/3-241209-134526-9162.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/4-241209-134526-8692.jpg"
-    ],
     "bilgi": {
       "tip": "gulet",
       "brand": "Fethiye Tersanesi",
@@ -171,21 +157,11 @@
       ],
       "home_port": "Marmaris"
     },
-    "yerel_foto_kalsin": true
+    "sadece_yerel_foto": true
   },
   "canaria": {
     "yayinla": true,
     "brosur": true,
-    "foto_url": [
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-230912-140503-8448.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/5-230912-140535-9646.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-230912-140503-0775.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-230912-140504-8080.png",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-230912-141307-8553.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/2-230912-141308-4818.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/3-230912-141308-5152.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/4-230912-141312-0897.jpg"
-    ],
     "bilgi": {
       "tip": "gulet",
       "brand": "Bodrum Tersanesi",
@@ -221,25 +197,11 @@
       ],
       "home_port": "Bodrum"
     },
-    "yerel_foto_kalsin": true
+    "sadece_yerel_foto": true
   },
   "berrak-su": {
     "yayinla": true,
     "brosur": true,
-    "foto_url": [
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-250618-125736-7974.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-250618-125736-2180.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-250618-125852-2048.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-250618-125735-7516.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-250618-130050-3716.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-250618-130202-1237.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-250618-130219-0953.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-250618-130219-1315.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-250618-125312-3232.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-250618-125328-2016.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/2-250618-125328-2651.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/3-250618-125328-1893.jpg"
-    ],
     "bilgi": {
       "tip": "gulet",
       "brand": "Fethiye Tersanesi",
@@ -270,24 +232,11 @@
       ],
       "home_port": "Marmaris"
     },
-    "yerel_foto_kalsin": true
+    "sadece_yerel_foto": true
   },
   "amazon-solo": {
     "yayinla": true,
     "brosur": true,
-    "foto_url": [
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-230410-184354-9220.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-230414-111553-6620.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-230522-104251-7858.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-230414-111553-6931.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/1-230522-104342-7793.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/2-230522-104342-9880.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/yacht/3-230522-104342-4451.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-230116-234743-8283.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/2-230116-234743-9242.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-230331-140235-4834.jpg",
-      "https://cdn.medgulets.com/fit-in/2048x0/filters:quality%2880%29:format%28webp%29/room/1-230116-234808-9568.jpg"
-    ],
     "bilgi": {
       "tip": "gulet",
       "brand": "Çoban Tersanesi",
@@ -313,6 +262,6 @@
       ],
       "home_port": "Göcek"
     },
-    "yerel_foto_kalsin": true
+    "sadece_yerel_foto": true
   }
 }

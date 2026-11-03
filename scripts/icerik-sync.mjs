@@ -112,6 +112,17 @@ async function main() {
       log(slug, `broşür fotoğrafları: ${n}/${clean.length} yüklendi.`);
     }
 
+    // Yalnızca sohbetten gönderilen (yerel) fotoğraflar kalsın: uzaktan indirilenler silinir
+    if (cfg.sadece_yerel_foto === true) {
+      await db.from("boat_images").delete().eq("boat_id", boat.id).like("path", `tekneler/${slug}/%`);
+      const { data: st } = await db.storage.from("media").list(`tekneler/${slug}`, { limit: 100 });
+      if (st?.length) await db.storage.from("media").remove(st.map((f) => `tekneler/${slug}/${f.name}`));
+      const { data: bf } = await db.storage.from("brosur-foto").list(slug, { limit: 100 });
+      const extra = (bf ?? []).map((f) => f.name).filter((n) => !clean.includes(n));
+      if (extra.length) await db.storage.from("brosur-foto").remove(extra.map((n) => `${slug}/${n}`));
+      log(slug, "uzaktan alınan fotoğraflar kaldırıldı.");
+    }
+
     if (paths.length) {
       const { data: imgs } = await db.from("boat_images").select("id,path,sort_order").eq("boat_id", boat.id);
       const have = new Set((imgs ?? []).map((r) => r.path));
