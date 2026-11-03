@@ -1,0 +1,17 @@
+{
+  "_aciklama": "Yayında (build) veritabanına eklenen limanlar. Aynı adresli liman zaten varsa dokunulmaz; sonrasında Yönetim > Limanlar'dan düzenlenebilir.",
+  "istanbul": {
+    "name_tr": "İstanbul", "name_en": "Istanbul",
+    "blurb_tr": "Boğaz'da yat turu, gün batımı ve özel organizasyonlar", "blurb_en": "Bosphorus yacht tours, sunsets and private events",
+    "intro_tr": "İstanbul'da yat kiralama; Boğaz'ın iki yakası, yalılar, köprüler ve Adalar eşliğinde saatlik ya da günlük turlar, gün batımı gezileri, doğum günü, evlilik teklifi ve kurumsal organizasyonlar için idealdir.",
+    "intro_en": "Yacht charter in Istanbul is ideal for hourly or daily tours along both shores of the Bosphorus, past waterside mansions, bridges and the Princes' Islands, as well as sunset cruises, birthdays, proposals and corporate events.",
+    "sort_order": 20
+  },
+  "yunan-adalari": {
+    "name_tr": "Yunan Adaları", "name_en": "Greek Islands",
+    "blurb_tr": "Rodos, Symi, Kos, Kalimnos, Patmos ve Dodekanez adaları", "blurb_en": "Rhodes, Symi, Kos, Kalymnos, Patmos and the Dodecanese",
+    "intro_tr": "Bodrum, Marmaris ve Datça'dan kısa bir seyirle ulaşılan Yunan adaları; Rodos'un şövalyeler kenti, Symi'nin renkli limanı, Kos, Kalimnos, Leros ve Patmos ile mavi yolculuğa farklı bir kültür katar. Pasaport ve giriş-çıkış işlemlerinde ekibimiz size yol gösterir.",
+    "intro_en": "Just a short sail from Bodrum, Marmaris and Datça, the Greek islands add a different culture to your blue cruise: the knights' town of Rhodes, the colourful harbour of Symi, Kos, Kalymnos, Leros and Patmos. Our team guides you through passport and entry-exit formalities.",
+    "sort_order": 21
+  }
+}

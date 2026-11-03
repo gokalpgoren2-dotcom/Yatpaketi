@@ -8,10 +8,23 @@ const log = (...a) => console.log("[icerik-sync]", ...a);
 async function main() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return log("SUPABASE_SERVICE_ROLE_KEY yok, atlandı.");
-  if (!existsSync("icerik/tekneler.json")) return log("icerik/tekneler.json yok, atlandı.");
-  const list = JSON.parse(readFileSync("icerik/tekneler.json", "utf8"));
   const { createClient } = await import("@supabase/supabase-js");
   const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
+
+  // Limanlar: yalnızca eksik olanlar eklenir, var olanlara (panelde düzenlenmiş olabilir) dokunulmaz.
+  if (existsSync("icerik/limanlar.json")) {
+    const ports = JSON.parse(readFileSync("icerik/limanlar.json", "utf8"));
+    for (const [slug, p] of Object.entries(ports)) {
+      if (slug.startsWith("_")) continue;
+      const { data: ex } = await db.from("destinations").select("id").eq("slug", slug).maybeSingle();
+      if (ex) { log("liman", slug, "zaten var."); continue; }
+      const { error } = await db.from("destinations").insert({ slug, is_published: true, ...p });
+      log("liman", slug, error ? "eklenemedi: " + error.message : "eklendi.");
+    }
+  }
+
+  if (!existsSync("icerik/tekneler.json")) return log("icerik/tekneler.json yok, atlandı.");
+  const list = JSON.parse(readFileSync("icerik/tekneler.json", "utf8"));
 
   const { data: st } = await db.from("site_texts").select("data").eq("key", "icerik_sync").maybeSingle();
   const done = { ...(st?.data ?? {}) };
