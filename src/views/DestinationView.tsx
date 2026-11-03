@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { PortArt } from "@/components/PortArt";
 import { RichText } from "@/components/RichText";
-import { IstanbulBosphorus } from "@/components/IstanbulBosphorus";
+import { IstanbulSkyline } from "@/components/IstanbulSkyline";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
 import { getReviews } from "@/lib/reviews";
@@ -33,9 +33,10 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
             <p className="mt-2 max-w-2xl text-white/85">{d.blurb}</p>
           </div>
         </section>
-        <div className="mx-auto max-w-7xl px-5 lg:px-8">
+        <div className="relative isolate mx-auto max-w-7xl px-5 lg:px-8">
+          {/* İstanbul: arka planda soluk Boğaz çizimi */}
+          {d.slug === "istanbul" && <IstanbulSkyline className="pointer-events-none absolute inset-x-0 top-2 -z-10 h-auto w-full text-navy opacity-[0.07] lg:top-0" />}
           {d.intro && <div className="mt-8 max-w-3xl"><RichText text={d.intro} /></div>}
-          {d.slug === "istanbul" && <IstanbulBosphorus lang={lang} />}
           {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleData}</p>}
           <div className="mt-10 flex items-end justify-between">
             <h2 className="font-display text-2xl text-navy">{L.destBoats(d.name)}</h2>
