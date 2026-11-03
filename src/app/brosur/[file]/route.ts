@@ -46,7 +46,7 @@ export async function GET(req: Request, { params }: { params: Promise<{ file: st
     bytes(abs("/logo-saydam.png")), bytes(abs("/logo-beyaz.png")), cleanPhotos(slug),
   ]);
   // filigransız kopyası yoksa sitedeki fotoğraflar kullanılır
-  const photos = clean.length ? clean : await Promise.all((boat.images ?? []).slice(0, 13).map((p) => bytes(abs(p))));
+  const photos: (Uint8Array | null)[] = clean.length ? clean : await Promise.all((boat.images ?? []).slice(0, 13).map((p) => bytes(abs(p))));
   let fontkit: unknown = null;
   try { fontkit = (await import("@pdf-lib/fontkit")).default; } catch { fontkit = null; }
   const fonts = light && regular && medium && bold ? { light, regular, medium, bold } : null;
