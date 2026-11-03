@@ -48,25 +48,6 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
           <Placeholder hue={b.hue} className="h-full w-full transition duration-500 group-hover:scale-105" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy/55 via-transparent to-transparent" />
-        {/* Fiyat: fotoğrafın sağ alt köşesi */}
-        <div className={`absolute bottom-2.5 right-2.5 rounded-xl px-2.5 py-1.5 text-right shadow-md backdrop-blur sm:bottom-3 sm:right-3 sm:rounded-2xl sm:px-3.5 sm:py-2 ${from != null && pct ? "bg-[#e8453c]/95 text-white" : "bg-white/95 text-navy"}`}>
-          {from == null ? (
-            <p className="text-xs font-semibold text-turquoise-dark sm:text-sm">{L.askPrice}</p>
-          ) : pct ? (
-            <>
-              <p className="flex items-center justify-end gap-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-white/85 sm:gap-1.5 sm:text-[10px]">
-                <span className="rounded-full bg-white px-1.5 py-px text-[9px] font-bold tracking-normal text-[#c0332b] sm:text-[10px]">−%{pct}</span>
-                <span className="normal-case tracking-normal line-through opacity-80">{money(from, b.currency, lang)}</span>
-              </p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[10px] text-white/85 sm:text-[11px]">{en ? "/ day" : "/ gün"}{b.vatMode === "excluded" ? " +KDV" : ""}</span></p>
-            </>
-          ) : (
-            <>
-              <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-navy/50 sm:block">{en ? "Daily from" : "Günlük, başlayan"}</p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(from, b.currency, lang)}</span> <span className="text-[10px] text-navy/55 sm:text-[11px]">{en ? "/ day" : "/ gün"}{b.vatMode === "excluded" ? (en ? " +VAT" : " +KDV") : ""}</span></p>
-            </>
-          )}
-        </div>
         {b.type && <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-navy">{b.type}</span>}
         <div className="absolute right-3 top-3 flex flex-col items-end gap-1.5">
           {b.captained && <span className="inline-flex items-center gap-1.5 rounded-full bg-turquoise px-3 py-1 text-xs font-semibold text-white"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="12" cy="7" r="3" /><path d="M12 10v11M5 14c0 3.9 3 7 7 7s7-3.100 7-7M8 13H5m14 0h-3" /></svg>{L.captained}</span>}
@@ -74,8 +55,32 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
         </div>
       </div>
       <article className="p-5">
-        <h3 className="text-lg font-bold text-navy">{b.name}</h3>
-        {b.port && <p className="mt-0.5 text-sm text-navy/55">{b.port}</p>}
+        {/* Ad ve liman solda, fiyat tam karşısında sağda */}
+        <div className="flex items-start justify-between gap-3">
+          <div className="min-w-0">
+            <h3 className="truncate text-lg font-bold text-navy">{b.name}</h3>
+            {b.port && <p className="mt-0.5 text-sm text-navy/55">{b.port}</p>}
+          </div>
+          <div className="shrink-0 text-right">
+            {from == null ? (
+              <p className="pt-1 text-sm font-semibold text-turquoise-dark">{L.askPrice}</p>
+            ) : pct ? (
+              <>
+                <p className="leading-tight"><span className="font-display text-lg font-semibold text-[#e8453c]">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
+                <p className="mt-0.5 flex items-center justify-end gap-1.5 text-[11px] text-navy/50">
+                  <span className="rounded-full bg-[#e8453c] px-1.5 py-px text-[10px] font-bold text-white">−%{pct}</span>
+                  <span className="line-through">{money(from, b.currency, lang)}</span>
+                  {b.vatMode === "excluded" && <span>{en ? "+VAT" : "+KDV"}</span>}
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="leading-tight"><span className="font-display text-lg font-semibold text-navy">{money(from, b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
+                <p className="mt-0.5 text-[11px] text-navy/50">{en ? "from" : "başlayan"}{b.vatMode === "excluded" ? (en ? " · +VAT" : " · +KDV") : ""}</p>
+              </>
+            )}
+          </div>
+        </div>
         {b.rating && <RatingLine rating={b.rating} lang={lang} className="mt-1.5" />}
         {/* Altı özellik kutusu: boy, kabin, misafir, personel, yapım yılı (refit), klima */}
         <ul className="mt-4 grid grid-cols-3 gap-1.5">
