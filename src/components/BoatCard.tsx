@@ -48,6 +48,25 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
           <Placeholder hue={b.hue} className="h-full w-full transition duration-500 group-hover:scale-105" />
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy/55 via-transparent to-transparent" />
+        {/* Fiyat: fotoğrafın sağ alt köşesi */}
+        <div className={`absolute bottom-3 right-3 rounded-2xl px-3.5 py-2 text-right shadow-lg backdrop-blur ${from != null && pct ? "bg-[#e8453c]/95 text-white" : "bg-white/95 text-navy"}`}>
+          {from == null ? (
+            <p className="text-sm font-semibold text-turquoise-dark">{L.askPrice}</p>
+          ) : pct ? (
+            <>
+              <p className="flex items-center justify-end gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85">
+                <span className="rounded-full bg-white px-1.5 py-px text-[10px] font-bold tracking-normal text-[#c0332b]">−%{pct}</span>
+                <span className="normal-case tracking-normal line-through opacity-80">{money(from, b.currency, lang)}</span>
+              </p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-xl font-semibold">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[11px] text-white/85">{en ? "/ day" : "/ gün"}</span></p>
+            </>
+          ) : (
+            <>
+              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-navy/50">{en ? "Daily from" : "Günlük, başlayan"}</p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-xl font-semibold">{money(from, b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
+            </>
+          )}
+        </div>
         {b.type && <span className="absolute left-3 top-3 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-navy">{b.type}</span>}
         <div className="absolute right-3 top-3 flex flex-col items-end gap-1.5">
           {b.captained && <span className="inline-flex items-center gap-1.5 rounded-full bg-turquoise px-3 py-1 text-xs font-semibold text-white"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><circle cx="12" cy="7" r="3" /><path d="M12 10v11M5 14c0 3.9 3 7 7 7s7-3.100 7-7M8 13H5m14 0h-3" /></svg>{L.captained}</span>}
@@ -68,37 +87,6 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
             </li>
           ))}
         </ul>
-        {/* Fiyat satırı */}
-        <div className="mt-4 flex items-end justify-between gap-3 border-t border-navy/10 pt-4">
-          {from != null ? (
-            pct ? (
-              <div>
-                <p className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-[0.16em] text-[#c0332b]">
-                  <span className="rounded-full bg-[#e8453c] px-2 py-0.5 text-[11px] font-bold tracking-normal text-white">−%{pct}</span>
-                  {en ? "Daily" : "Günlük"} <span className="font-medium normal-case tracking-normal text-navy/40 line-through">{money(from, b.currency, lang)}</span>
-                </p>
-                <p className="mt-1 flex items-baseline gap-1.5">
-                  <span className="font-display text-2xl font-semibold leading-none text-[#c0332b]">{money(off(from, pct), b.currency, lang)}</span>
-                  <span className="text-xs text-navy/50">{en ? "/ day" : "’den başlayan"}</span>
-                </p>
-              </div>
-            ) : (
-              <div>
-                <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-navy/45">{en ? "Daily from" : "Günlük"}</p>
-                <p className="mt-0.5 flex items-baseline gap-1.5">
-                  <span className="font-display text-2xl font-semibold leading-none text-navy">{money(from, b.currency, lang)}</span>
-                  <span className="text-xs text-navy/50">{en ? "/ day" : "’den başlayan"}</span>
-                </p>
-              </div>
-            )
-          ) : (
-            <div>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.16em] text-navy/45">{en ? "Price" : "Fiyat"}</p>
-              <p className="mt-0.5 text-base font-semibold text-turquoise-dark">{L.askPrice}</p>
-            </div>
-          )}
-          <span className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-white transition group-hover:bg-turquoise ${pct ? "bg-[#e8453c]" : "bg-navy"}`} aria-hidden>→</span>
-        </div>
       </article>
     </Link>
     <FavButton slug={b.slug} name={b.name} lang={lang} className="absolute left-3 top-12 h-10 w-10 rounded-full bg-white/95 text-navy shadow hover:text-[#e8453c]" />
