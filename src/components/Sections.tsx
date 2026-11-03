@@ -151,7 +151,7 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
               <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
               <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 font-display text-xs font-semibold text-navy shadow backdrop-blur">{String(i + 1).padStart(2, "0")}</span>
               <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquoise">{L.country}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquoise">{d.slug.includes("yunan") ? (lang === "en" ? "Greece" : "Yunanistan") : L.country}</p>
                 <h3 className="font-display mt-1 text-3xl font-semibold">{d.name}</h3>
                 <div className="mt-1 flex items-end justify-between gap-3">
                   <p className="line-clamp-2 text-sm text-white/80">{d.blurb}</p>
