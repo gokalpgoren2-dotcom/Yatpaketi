@@ -102,6 +102,10 @@ export async function saveBoat(formData: FormData) {
     price_daily: pd,
     price_weekly: pw,
     monthly_prices: monthly,
+    included: lines(formData, "included").slice(0, 40),
+    excluded: lines(formData, "excluded").slice(0, 40),
+    vat_mode: ["included", "excluded"].includes(String(formData.get("vat_mode"))) ? String(formData.get("vat_mode")) : "none",
+    vat_rate: Math.min(100, Math.max(0, num(formData, "vat_rate") ?? 20)) || 20,
     is_published: formData.get("is_published") === "on",
     is_featured: formData.get("is_featured") === "on",
     sort_order: sort,
@@ -112,10 +116,10 @@ export async function saveBoat(formData: FormData) {
   let boatId = id;
   if (id) {
     const { error } = await supabase.from("boats").update(row).eq("id", id);
-    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : error.message.includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message);
+    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : error.message.includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : /included|excluded|vat_/.test(error.message) ? "Önce Supabase'de yat-dahil-kdv.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message);
   } else {
     const { data, error } = await supabase.from("boats").insert(row).select("id").single();
-    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : (error?.message ?? "").includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : "Kaydedilemedi: " + (error?.message ?? ""));
+    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : (error?.message ?? "").includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : /included|excluded|vat_/.test(error?.message ?? "") ? "Önce Supabase'de yat-dahil-kdv.sql dosyasını çalıştırın." : "Kaydedilemedi: " + (error?.message ?? ""));
     boatId = data!.id as string;
   }
 

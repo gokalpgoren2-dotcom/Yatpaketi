@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off, weeklyFor } from "@/lib/pricing";
+import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off, vatNote, weeklyFor } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -85,6 +85,30 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
               <Spec k={L.sRegions} v={regions.map((r) => r.name).join(", ") || L.notStated} />
             </dl>
 
+            {((b.included?.length ?? 0) > 0 || (b.excluded?.length ?? 0) > 0) && (
+              <>
+                <h2 className="font-display mt-10 text-2xl text-navy">{lang === "en" ? "What's included" : "Fiyata dahil olanlar"}</h2>
+                <div className="mt-4 grid gap-4 sm:grid-cols-2">
+                  {(b.included?.length ?? 0) > 0 && (
+                    <div className="rounded-2xl bg-emerald-50/60 p-5 ring-1 ring-emerald-100">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{lang === "en" ? "Included" : "Dahil"}</p>
+                      <ul className="mt-3 space-y-2">
+                        {b.included!.map((x) => <li key={x} className="flex items-start gap-2.5 text-sm text-navy"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>{x}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                  {(b.excluded?.length ?? 0) > 0 && (
+                    <div className="rounded-2xl bg-mist p-5 ring-1 ring-navy/5">
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy/55">{lang === "en" ? "Not included" : "Dahil değil"}</p>
+                      <ul className="mt-3 space-y-2">
+                        {b.excluded!.map((x) => <li key={x} className="flex items-start gap-2.5 text-sm text-navy/75"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy/15 text-navy/60"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg></span>{x}</li>)}
+                      </ul>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
             {b.equipment.length > 0 && (
               <>
                 <h2 className="font-display mt-10 text-2xl text-navy">{L.equipment}</h2>
@@ -146,6 +170,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                 </div>
               );
             })()}
+            {vatNote(b, lang) && <p className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${b.vatMode === "excluded" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}`}>{vatNote(b, lang)}</p>}
             {/* Aylara göre günlük fiyatlar */}
             {price && (() => {
               const pct = b.offer?.percent ?? 0;
@@ -178,7 +203,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             })()}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0 }} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0, vatMode: b.vatMode, vatRate: b.vatRate }} />
             </div>
           </aside>
         </div>

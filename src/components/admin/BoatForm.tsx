@@ -1,6 +1,7 @@
 import { saveBoat } from "@/app/admin/(panel)/tekneler/actions";
 import { SubmitButton } from "./FormBits";
 import { SeasonPrices } from "./SeasonPrices";
+import { PriceTerms } from "./PriceTerms";
 import { WATER_TOYS, EQUIPMENT, parseToy, parseEquipment } from "@/lib/boatOptions";
 
 type Row = Record<string, any>;
@@ -92,6 +93,11 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
           </Field>
         </div>
         <SeasonPrices initial={(boat?.monthly_prices as Record<string, number>) ?? (boat?.price_daily ? Object.fromEntries([4, 5, 6, 7, 8, 9, 10, 11].map((m) => [m, Number(boat.price_daily)])) : {})} />
+      </section>
+
+      <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
+        <h2 className="font-semibold">KDV ve fiyata dahil olanlar</h2>
+        <PriceTerms included={(boat?.included as string[]) ?? []} excluded={(boat?.excluded as string[]) ?? []} vatMode={(boat?.vat_mode as string) ?? "none"} vatRate={Number(boat?.vat_rate ?? 20)} />
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">

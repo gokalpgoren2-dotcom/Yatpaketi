@@ -26,6 +26,10 @@ export type Boat = {
   priceWeekly: number | null;
   monthly?: Partial<Record<number, number>>; // ay (4–11) -> günlük fiyat
   weekly?: Partial<Record<number, number>>; // ay (4–11) -> haftalık fiyat (farklıysa)
+  included?: string[]; // fiyata dahil olanlar
+  excluded?: string[]; // fiyata dahil olmayanlar
+  vatMode?: "none" | "included" | "excluded"; // KDV dahil / hariç
+  vatRate?: number; // KDV oranı (%)
   showPrice: boolean; // false => "Fiyat sorunuz"
   currency: "EUR" | "TRY" | "USD";
   equipment: string[];

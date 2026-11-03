@@ -81,3 +81,10 @@ export const sym = (cur: string) => SYM[cur] ?? cur;
 // 1.000 € (TR) / €1,000 (EN)
 export const money = (v: number, cur: string, lang: "tr" | "en" = "tr") =>
   lang === "en" ? `${sym(cur)}${v.toLocaleString("en-GB")}` : `${v.toLocaleString("tr-TR")} ${sym(cur)}`;
+
+// KDV notu (fiyatın yanında)
+export function vatNote(b: { vatMode?: string; vatRate?: number }, lang: "tr" | "en" = "tr"): string {
+  if (b.vatMode === "included") return lang === "en" ? "VAT included" : "KDV dahil";
+  if (b.vatMode === "excluded") return lang === "en" ? `+${b.vatRate ?? 20}% VAT` : `+%${b.vatRate ?? 20} KDV`;
+  return "";
+}

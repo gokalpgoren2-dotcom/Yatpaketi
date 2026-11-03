@@ -58,12 +58,12 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
                 <span className="rounded-full bg-white px-1.5 py-px text-[9px] font-bold tracking-normal text-[#c0332b] sm:text-[10px]">−%{pct}</span>
                 <span className="normal-case tracking-normal line-through opacity-80">{money(from, b.currency, lang)}</span>
               </p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[10px] text-white/85 sm:text-[11px]">{en ? "/ day" : "/ gün"}</span></p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[10px] text-white/85 sm:text-[11px]">{en ? "/ day" : "/ gün"}{b.vatMode === "excluded" ? " +KDV" : ""}</span></p>
             </>
           ) : (
             <>
               <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-navy/50 sm:block">{en ? "Daily from" : "Günlük, başlayan"}</p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(from, b.currency, lang)}</span> <span className="text-[10px] text-navy/55 sm:text-[11px]">{en ? "/ day" : "/ gün"}</span></p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(from, b.currency, lang)}</span> <span className="text-[10px] text-navy/55 sm:text-[11px]">{en ? "/ day" : "/ gün"}{b.vatMode === "excluded" ? (en ? " +VAT" : " +KDV") : ""}</span></p>
             </>
           )}
         </div>
