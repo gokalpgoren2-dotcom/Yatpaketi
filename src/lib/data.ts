@@ -1,5 +1,7 @@
 // GEÇİCİ ÖRNEK VERİ. Aşama 3'te Supabase'den okunacak. Yatlar, fiyatlar ve açıklamalar gerçek değildir.
 
+import { minDaily } from "./pricing";
+
 export type Offer = { kind: "early" | "discount"; percent: number; until: string };
 
 export type Boat = {
@@ -22,6 +24,7 @@ export type Boat = {
   captained: boolean; // kaptan dahil
   priceDaily: number | null;
   priceWeekly: number | null;
+  monthly?: Partial<Record<number, number>>; // ay (4–11) -> günlük fiyat
   showPrice: boolean; // false => "Fiyat sorunuz"
   currency: "EUR" | "TRY" | "USD";
   equipment: string[];
@@ -80,15 +83,11 @@ export function boatsFor(list: Boat[], destSlug: string) {
   return list.filter((b) => b.destinations.includes(destSlug));
 }
 
-// Fiyat gösterimi: showPrice false ise null döner ("Fiyat sorunuz").
+// Fiyat gösterimi (vitrin): en düşük günlük fiyat. showPrice false ya da fiyat yoksa null ("Fiyat sorunuz").
 export function priceLabel(b: Boat, lang: "tr" | "en" = "tr"): string | null {
-  if (!b.showPrice) return null;
-  const n = (v: number) => v.toLocaleString(lang === "en" ? "en-GB" : "tr-TR");
-  const w = lang === "en" ? "/ week from" : "/ hafta’dan";
-  const d = lang === "en" ? "/ day from" : "/ gün’den";
-  if (b.priceWeekly) return `${n(b.priceWeekly)} ${b.currency} ${w}`;
-  if (b.priceDaily) return `${n(b.priceDaily)} ${b.currency} ${d}`;
-  return null;
+  const v = minDaily(b);
+  if (v == null) return null;
+  return `${v.toLocaleString(lang === "en" ? "en-GB" : "tr-TR")} ${b.currency} ${lang === "en" ? "/ day from" : "/ gün’den"}`;
 }
 
 // ---- Filtreleme ----
@@ -100,11 +99,9 @@ export type Filters = {
 
 // Fiyat karşılaştırması: seçilen kiralama türüne göre; seçilmediyse haftalık fiyat (yoksa günlük x 7).
 // Fiyatı gizli ("Fiyat sorunuz") yatlar fiyat filtresi açıkken listeden çıkar.
-function comparablePrice(b: Boat, mode?: Filters["kiralama"]): number | null {
-  if (!b.showPrice) return null;
-  if (mode === "gunluk") return b.priceDaily;
-  if (mode === "haftalik") return b.priceWeekly;
-  return b.priceWeekly ?? (b.priceDaily ? b.priceDaily * 7 : null);
+// Filtre ve sıralama için: en düşük günlük fiyat
+function comparablePrice(b: Boat): number | null {
+  return minDaily(b);
 }
 
 export function filterBoats(all: Boat[], f: Filters): Boat[] {
@@ -119,17 +116,15 @@ export function filterBoats(all: Boat[], f: Filters): Boat[] {
     if (f.kaptan === "kaptansiz" && b.captained) return false;
     if (f.murettebat === "var" && b.crew === 0) return false;
     if (f.murettebat === "yok" && b.crew > 0) return false;
-    if (f.kiralama === "gunluk" && !b.priceDaily) return false;
-    if (f.kiralama === "haftalik" && !b.priceWeekly) return false;
     if (f.min !== undefined || f.max !== undefined) {
-      const p = comparablePrice(b, f.kiralama);
+      const p = comparablePrice(b);
       if (p === null) return false;
       if (f.min !== undefined && p < f.min) return false;
       if (f.max !== undefined && p > f.max) return false;
     }
     return true;
   });
-  const price = (b: Boat) => comparablePrice(b, f.kiralama) ?? Number.POSITIVE_INFINITY;
+  const price = (b: Boat) => comparablePrice(b) ?? Number.POSITIVE_INFINITY;
   switch (f.sirala) {
     case "fiyat-artan": list = [...list].sort((a, b) => price(a) - price(b)); break;
     case "fiyat-azalan": list = [...list].sort((a, b) => (price(b) === Infinity ? -1 : price(b)) - (price(a) === Infinity ? -1 : price(a))); break;

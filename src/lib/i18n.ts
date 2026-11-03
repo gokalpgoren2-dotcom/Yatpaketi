@@ -84,7 +84,7 @@ const tr = {
   fCaptain: "Kaptan", fAny: "Fark etmez", fWithCaptain: "Kaptanlı", fNoCaptain: "Kaptansız", fCrew: "Mürettebat", fWithCrew: "Mürettebatlı", fNoCrew: "Mürettebatsız",
   fSort: "Sıralama", sRec: "Önerilen", sPriceAsc: "En düşük fiyat", sPriceDesc: "En yüksek fiyat", sNew: "En yeni eklenen", sLength: "Yat uzunluğu",
   filter: "Filtrele", clear: "Temizle",
-  priceNote: "Fiyat filtresi EUR, haftalık fiyat üzerinden çalışır (günlük kiralama seçiliyse günlük fiyat). “Fiyat sorunuz” yatlarında fiyat filtresi uygulanamaz.",
+  priceNote: "Fiyat filtresi EUR olarak, yatın en düşük günlük fiyatı üzerinden çalışır. “Fiyat sorunuz” yatlarında fiyat filtresi uygulanamaz.",
   foundN: (n: number) => `${n} yat bulundu`, noneYet: "Henüz yayında yat yok.", noMatch: "Bu filtrelere uygun yat bulunamadı. Filtreleri gevşetmeyi deneyin.",
   // yat sayfası
   breadcrumb: "Sayfa yolu", sendRequest: "Talep gönder", photoN: (n: number) => `fotoğraf ${n}`, sampleBoat: "Örnek içerik: Veritabanı bağlı olmadığı için örnek yat gösteriliyor.",
@@ -174,7 +174,7 @@ const en: typeof tr = {
   fCaptain: "Captain", fAny: "Any", fWithCaptain: "With captain", fNoCaptain: "Without captain", fCrew: "Crew", fWithCrew: "Crewed", fNoCrew: "No crew",
   fSort: "Sort by", sRec: "Recommended", sPriceAsc: "Lowest price", sPriceDesc: "Highest price", sNew: "Newest", sLength: "Boat length",
   filter: "Filter", clear: "Clear",
-  priceNote: "The price filter works in EUR on the weekly price (or the daily price if daily charter is selected). It cannot be applied to “Ask for price” boats.",
+  priceNote: "The price filter works in EUR on the yacht's lowest daily price. It cannot be applied to “Ask for price” yachts.",
   foundN: (n) => `${n} ${n === 1 ? "boat" : "boats"} found`, noneYet: "No boats are listed yet.", noMatch: "No boats match these filters. Try loosening the filters.",
   breadcrumb: "Breadcrumb", sendRequest: "Send request", photoN: (n) => `photo ${n}`, sampleBoat: "Sample content: a sample boat is shown because the database is not connected.",
   about: "About this boat", specs: "Specifications", notStated: "Not specified",

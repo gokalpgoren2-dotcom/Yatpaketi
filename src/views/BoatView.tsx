@@ -6,6 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
+import { SEASONS, dailyFor, money, monthName } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -131,12 +132,27 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{L.price}</p>
             <p className={`mt-1 text-2xl font-semibold ${price ? "text-navy" : "text-turquoise-dark"}`}>{price ?? L.askPrice}</p>
             {b.offer && <p className="mt-2 inline-block rounded-xl bg-[#e8453c]/10 px-3 py-2 text-sm font-semibold text-[#c0332b]">{offerLabel(b.offer, lang)}{offerUntil(b.offer, lang) && <span className="block text-xs font-medium opacity-80">{offerUntil(b.offer, lang)}</span>}</p>}
-            {b.showPrice && b.priceDaily && b.priceWeekly && (
-              <p className="mt-1 text-sm text-navy/60">{L.dailyPrice}: {b.priceDaily.toLocaleString(L.locale)} {b.currency}</p>
+            {/* Sezona göre günlük fiyatlar */}
+            {price && (
+              <div className="mt-4 space-y-2">
+                {SEASONS.map((se) => {
+                  const rows = se.months.map((m) => [m, dailyFor(b, m)] as const).filter(([, v]) => v != null);
+                  if (!rows.length) return null;
+                  return (
+                    <div key={se.key} className="rounded-2xl bg-mist p-3">
+                      <p className={`text-[0.7rem] font-semibold uppercase tracking-[0.14em] ${se.key === "high" ? "text-[#c0332b]" : se.key === "mid" ? "text-amber-700" : "text-turquoise-dark"}`}>{lang === "en" ? se.en : se.tr}</p>
+                      <ul className="mt-1 space-y-0.5 text-sm">
+                        {rows.map(([m, v]) => <li key={m} className="flex justify-between gap-3 text-navy/75"><span>{monthName(m, lang)}</span><span className="font-semibold tabular-nums text-navy">{money(v!, b.currency, lang)} <span className="font-normal text-navy/50">/ {lang === "en" ? "day" : "gün"}</span></span></li>)}
+                      </ul>
+                    </div>
+                  );
+                })}
+                <p className="text-xs text-navy/50">{lang === "en" ? "Pick your dates below to see the total." : "Toplam tutarı görmek için aşağıdan tarih seçin."}</p>
+              </div>
             )}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, currency: b.currency }} />
             </div>
           </aside>
         </div>

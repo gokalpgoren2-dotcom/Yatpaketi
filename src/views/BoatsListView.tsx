@@ -89,10 +89,9 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
   if (f.min !== undefined || f.max !== undefined) active.push([`${f.min !== undefined ? eur(f.min) : "€0"} – ${f.max !== undefined ? eur(f.max) : "∞"}`, ["min", "max"]]);
   if (f.uzunluk) active.push([`${f.uzunluk}+ m`, "uzunluk"]);
   if (f.yil) active.push([en ? `Built ${f.yil}+` : `${f.yil} ve sonrası`, "yil"]);
-  if (f.kiralama) active.push([f.kiralama === "gunluk" ? L.fDaily : L.fWeekly, "kiralama"]);
   if (f.kaptan) active.push([f.kaptan === "kaptanli" ? L.fWithCaptain : L.fNoCaptain, "kaptan"]);
   if (f.murettebat) active.push([f.murettebat === "var" ? L.fWithCrew : L.fNoCrew, "murettebat"]);
-  const moreCount = [f.kabin, f.min ?? f.max, f.uzunluk, f.yil, f.kiralama, f.kaptan, f.murettebat].filter((x) => x !== undefined).length;
+  const moreCount = [f.kabin, f.min ?? f.max, f.uzunluk, f.yil, f.kaptan, f.murettebat].filter((x) => x !== undefined).length;
 
   return (
     <div lang={lang}>
@@ -174,7 +173,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
 
               <div className="mt-5 grid gap-x-8 gap-y-6 lg:grid-cols-2">
                 <div>
-                  <p className={lab}>{en ? "Price range (EUR)" : "Fiyat aralığı (EUR)"}</p>
+                  <p className={lab}>{en ? "Daily price (EUR)" : "Günlük fiyat (EUR)"}</p>
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
                       <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-navy/40">€</span>
@@ -197,10 +196,6 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
                     <label className={lab} htmlFor="yil">{L.fYear}</label>
                     <input id="yil" name="yil" type="number" min={1990} inputMode="numeric" placeholder={en ? "e.g. 2015" : "örn. 2015"} defaultValue={f.yil ?? ""} className={field} />
                   </div>
-                </div>
-                <div>
-                  <p className={lab}>{L.fRental}</p>
-                  <Pills name="kiralama" value={f.kiralama} options={[["", L.fBoth], ["gunluk", L.fDaily], ["haftalik", L.fWeekly]]} />
                 </div>
                 <div>
                   <p className={lab}>{L.fCaptain}</p>

@@ -1,3 +1,4 @@
+import { minDaily } from "./pricing";
 import { createClient } from "@supabase/supabase-js";
 import { supabaseConfigured } from "./supabase/config";
 import type { Boat } from "./data";
@@ -59,7 +60,7 @@ const join = (l: string[], en: boolean) => (l.length <= 1 ? l.join("") : l.slice
 const pick = (n: Side, a: string, b: string) => (n === "a" ? a : n === "b" ? b : "");
 const higher = (x: number, y: number, minGap = 0): Side => (x - y > minGap ? "a" : y - x > minGap ? "b" : null);
 const lower = (x: number, y: number): Side => (x < y ? "a" : y < x ? "b" : null);
-const perWeek = (b: Boat) => (b.showPrice && b.priceWeekly ? b.priceWeekly : null);
+const perWeek = (b: Boat) => minDaily(b); // en düşük günlük fiyat
 
 export function compareRows(a: Boat, b: Boat, lang: Lang, priceText: (x: Boat) => string | null, askPrice: string): Row[] {
   const en = lang === "en";
@@ -175,8 +176,8 @@ export function buildPoints(a: Boat, b: Boat, lang: Lang): { points: Point[]; su
     const per = (x: Boat, p: number) => Math.round(p / Math.max(1, x.guests));
     const fmt = (n: number) => n.toLocaleString(en ? "en-GB" : "tr-TR");
     pts.push({ title: en ? "Price" : "Fiyat", win: w, text: en
-      ? `${A} starts at ${fmt(pa)} ${a.currency}/week and ${B} at ${fmt(pb)} ${b.currency}/week. Per guest that is about ${fmt(per(a, pa))} vs ${fmt(per(b, pb))} ${a.currency}.`
-      : `${A} haftalık ${fmt(pa)} ${a.currency}’dan, ${B} ${fmt(pb)} ${b.currency}’dan başlıyor. Kişi başı yaklaşık ${fmt(per(a, pa))} ve ${fmt(per(b, pb))} ${a.currency}.` });
+      ? `${A} starts at ${fmt(pa)} ${a.currency}/day and ${B} at ${fmt(pb)} ${b.currency}/day. Per guest per day that is about ${fmt(per(a, pa))} vs ${fmt(per(b, pb))} ${a.currency}.`
+      : `${A} günlük ${fmt(pa)} ${a.currency}’dan, ${B} ${fmt(pb)} ${b.currency}’dan başlıyor. Kişi başı günlük yaklaşık ${fmt(per(a, pa))} ve ${fmt(per(b, pb))} ${a.currency}.` });
   }
 
   // Puan

@@ -5,14 +5,16 @@ import { ReservationForm } from "./ReservationForm";
 import { DateRangePicker } from "./DateRangePicker";
 import { recordWhatsapp } from "@/app/tekneler/[slug]/talep";
 import { href as pathFor, t, type Lang } from "@/lib/i18n";
+import { money, monthName, quote, type Monthly } from "@/lib/pricing";
 
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string; lang?: Lang };
+export type Pricing = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly; currency: string };
+type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string; lang?: Lang; pricing?: Pricing };
 
 // Yat sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
-export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "tr" }: Props) {
+export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "tr", pricing }: Props) {
   const L = t(lang);
   const fmt = (d: string) => new Date(d + "T00:00:00").toLocaleDateString(L.locale, { day: "numeric", month: "long", year: "numeric" });
   const [start, setStart] = useState("");
@@ -20,6 +22,29 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
   const [guests, setGuests] = useState(Math.min(2, maxGuests));
   const [name, setName] = useState("");
   const [error, setError] = useState("");
+
+  const en = lang === "en";
+  const q = pricing && start && end ? quote(pricing, start, end) : null;
+  const priceBox = q && pricing ? (
+    q.ok ? (
+      <div className="rounded-2xl bg-turquoise/10 p-4 ring-1 ring-turquoise/25">
+        <ul className="space-y-1 text-sm text-navy/75">
+          {q.parts.map((p, i) => (
+            <li key={i} className="flex justify-between gap-3"><span>{monthName(p.month, lang)} · {p.nights} {en ? (p.nights === 1 ? "night" : "nights") : "gece"} × {money(p.daily, pricing.currency, lang)}</span><span className="tabular-nums">{money(p.daily * p.nights, pricing.currency, lang)}</span></li>
+          ))}
+        </ul>
+        <p className="mt-2 flex items-baseline justify-between gap-3 border-t border-turquoise/25 pt-2 text-navy">
+          <span className="text-sm font-semibold">{en ? `Total · ${q.nights} nights` : `Toplam · ${q.nights} gece`}</span>
+          <span className="text-xl font-bold tabular-nums">{money(q.total, pricing.currency, lang)}</span>
+        </p>
+        <p className="mt-1 text-xs text-navy/55">{en ? "Check-out day is not charged. Provisions and extras are not included." : "Çıkış günü ücrete dahil değildir. Kumanya ve ekstralar dahil değildir."}</p>
+      </div>
+    ) : (
+      <p className="rounded-2xl bg-mist p-4 text-sm text-navy/70 ring-1 ring-navy/5">
+        {en ? `No price is listed for ${q.missing.map((m) => monthName(m, lang)).join(", ")}. Message us for a quote.` : `${q.missing.map((m) => monthName(m, lang)).join(", ")} için fiyat girilmemiş. Fiyat için bize yazın.`}
+      </p>
+    )
+  ) : null;
 
   if (!whatsapp) return <ReservationForm boatSlug={boatSlug} boatName={boatName} maxGuests={maxGuests} lang={lang} />;
 
@@ -32,6 +57,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
       `${L.waGuests}: ${guests}`,
     ];
     if (name.trim()) lines.push(`${L.waName}: ${name.trim()}`);
+    if (q && q.ok && pricing) lines.push(en ? `Estimated price: ${money(q.total, pricing.currency, lang)} (${q.nights} nights)` : `Tahmini tutar: ${money(q.total, pricing.currency, lang)} (${q.nights} gece)`);
     lines.push("", `${L.waBoat}: ${url}`);
     return lines.join("\n");
   }
@@ -54,6 +80,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
   return (
     <div className="space-y-4">
       <DateRangePicker lang={lang} start={start} end={end} onChange={(a, b) => { setStart(a); setEnd(b); setError(""); }} />
+      {priceBox}
 
       <div className="flex items-center justify-between rounded-xl border border-navy/15 px-4 py-2.5">
         <span className="text-sm font-medium text-navy">{L.guestCount}</span>

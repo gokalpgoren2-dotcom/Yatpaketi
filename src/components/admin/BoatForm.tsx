@@ -1,5 +1,6 @@
 import { saveBoat } from "@/app/admin/(panel)/tekneler/actions";
 import { SubmitButton } from "./FormBits";
+import { SeasonPrices } from "./SeasonPrices";
 import { WATER_TOYS, EQUIPMENT, parseToy, parseEquipment } from "@/lib/boatOptions";
 
 type Row = Record<string, any>;
@@ -89,10 +90,8 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
               <option value="EUR">EUR</option><option value="TRY">TRY</option><option value="USD">USD</option>
             </select>
           </Field>
-          <Num name="price_daily" title="Günlük fiyat" boat={boat} step="0.01" />
-          <Num name="price_weekly" title="Haftalık fiyat" boat={boat} step="0.01" />
         </div>
-        <p className="text-xs text-navy/50">Sezonluk fiyatlar sonraki aşamada eklenecek.</p>
+        <SeasonPrices initial={(boat?.monthly_prices as Record<string, number>) ?? (boat?.price_daily ? Object.fromEntries([4, 5, 6, 7, 8, 9, 10, 11].map((m) => [m, Number(boat.price_daily)])) : {})} />
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">

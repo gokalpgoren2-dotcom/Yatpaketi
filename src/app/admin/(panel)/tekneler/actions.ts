@@ -40,8 +40,15 @@ export async function saveBoat(formData: FormData) {
   const cabins = num(formData, "cabins") ?? 0;
   const guests = num(formData, "guests") ?? 1;
   const crew = num(formData, "crew") ?? 0;
-  const pd = num(formData, "price_daily");
-  const pw = num(formData, "price_weekly");
+  // Aylık günlük fiyatlar (Nisan–Kasım)
+  const monthly: Record<string, number> = {};
+  for (const m of [4, 5, 6, 7, 8, 9, 10, 11]) {
+    const v = num(formData, `mp_${m}`);
+    if (v !== null && !Number.isNaN(v) && v > 0) monthly[String(m)] = v;
+  }
+  const mvals = Object.values(monthly);
+  const pd = mvals.length ? Math.min(...mvals) : null; // vitrin/eski kod için en düşük günlük fiyat
+  const pw = null;
   const sort = num(formData, "sort_order") ?? 0;
   const nums = [year, refit, length, width, cabins, guests, crew, pd, pw, sort];
   if (nums.some((n) => n !== null && Number.isNaN(n))) fail(id, "Sayı alanlarında geçersiz değer var.");
@@ -87,6 +94,7 @@ export async function saveBoat(formData: FormData) {
     currency,
     price_daily: pd,
     price_weekly: pw,
+    monthly_prices: monthly,
     is_published: formData.get("is_published") === "on",
     is_featured: formData.get("is_featured") === "on",
     sort_order: sort,
@@ -97,10 +105,10 @@ export async function saveBoat(formData: FormData) {
   let boatId = id;
   if (id) {
     const { error } = await supabase.from("boats").update(row).eq("id", id);
-    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : "Kaydedilemedi: " + error.message);
+    if (error) fail(id, error.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : error.message.includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : "Kaydedilemedi: " + error.message);
   } else {
     const { data, error } = await supabase.from("boats").insert(row).select("id").single();
-    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : "Kaydedilemedi: " + (error?.message ?? ""));
+    if (error || !data) fail(null, error?.code === "23505" ? "Bu adres (slug) başka bir yatta kullanılıyor." : (error?.message ?? "").includes("monthly_prices") ? "Önce Supabase'de aylik-fiyat.sql dosyasını çalıştırın." : "Kaydedilemedi: " + (error?.message ?? ""));
     boatId = data!.id as string;
   }
 
