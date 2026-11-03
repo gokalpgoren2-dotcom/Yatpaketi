@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { SEASONS, dailyFor, minDaily, money, monthName } from "@/lib/pricing";
+import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -116,7 +116,27 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           <aside id="talep" className="h-fit scroll-mt-24 rounded-3xl border border-navy/10 bg-white p-6 shadow-xl shadow-navy/5 lg:sticky lg:top-28">
             {(() => {
               const from = minDaily(b);
-              return from != null ? (
+              const pct = b.offer?.percent ?? 0;
+              if (from == null) return (
+                <div>
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{L.price}</p>
+                  <p className="mt-1 text-2xl font-semibold text-turquoise-dark">{L.askPrice}</p>
+                </div>
+              );
+              return pct ? (
+                <div className="-m-2 rounded-2xl bg-gradient-to-br from-[#fff1ee] to-white p-4 ring-1 ring-[#e8453c]/20">
+                  <p className="flex flex-wrap items-center gap-2">
+                    <span className="rounded-full bg-[#e8453c] px-3 py-1 text-sm font-bold text-white shadow">{offerLabel(b.offer!, lang)}</span>
+                  </p>
+                  <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#c0332b]">{lang === "en" ? "Discounted daily price" : "İndirimli günlük fiyat"}</p>
+                  <p className="mt-1 flex flex-wrap items-baseline gap-x-2">
+                    <span className="font-display text-4xl font-semibold leading-none text-[#c0332b]">{money(off(from, pct), b.currency, lang)}</span>
+                    <span className="text-sm text-navy/55">{lang === "en" ? "/ day from" : "’den başlayan"}</span>
+                  </p>
+                  <p className="mt-1 text-sm text-navy/45"><span className="line-through">{money(from, b.currency, lang)}</span> {lang === "en" ? "regular price" : "normal fiyat"}</p>
+                  {offerUntil(b.offer!, lang) && <p className="mt-2 text-xs font-semibold text-[#c0332b]">{offerUntil(b.offer!, lang)}</p>}
+                </div>
+              ) : (
                 <div>
                   <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{lang === "en" ? "Daily price" : "Günlük fiyat"}</p>
                   <p className="mt-1 flex items-baseline gap-2">
@@ -124,45 +144,40 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                     <span className="text-sm text-navy/55">{lang === "en" ? "/ day from" : "’den başlayan"}</span>
                   </p>
                 </div>
-              ) : (
-                <div>
-                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{L.price}</p>
-                  <p className="mt-1 text-2xl font-semibold text-turquoise-dark">{L.askPrice}</p>
+              );
+            })()}
+            {/* Aylara göre günlük fiyatlar */}
+            {price && (() => {
+              const pct = b.offer?.percent ?? 0;
+              return (
+                <div className="mt-5">
+                  <ul className="grid grid-cols-2 gap-2">
+                    {SEASON_MONTHS.map((m) => {
+                      const v = dailyFor(b, m);
+                      return (
+                        <li key={m} className={`rounded-xl px-3 py-2 ring-1 ${pct && v != null ? "bg-[#fff1ee] ring-[#e8453c]/15" : "bg-mist ring-navy/5"}`}>
+                          <span className="block text-[11px] leading-tight text-navy/50">{monthName(m, lang)}</span>
+                          {v == null ? (
+                            <span className="block text-sm font-semibold text-navy/40">–</span>
+                          ) : pct ? (
+                            <span className="flex items-baseline gap-1.5">
+                              <span className="text-sm font-bold tabular-nums text-[#c0332b]">{money(off(v, pct), b.currency, lang)}</span>
+                              <span className="text-[11px] tabular-nums text-navy/40 line-through">{money(v, b.currency, lang)}</span>
+                            </span>
+                          ) : (
+                            <span className="block text-sm font-semibold tabular-nums text-navy">{money(v, b.currency, lang)}</span>
+                          )}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <p className="mt-2 text-xs text-navy/50">{lang === "en" ? "Prices are per day. Pick your dates below to see the total." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
                 </div>
               );
             })()}
-            {b.offer && <p className="mt-2 inline-block rounded-xl bg-[#e8453c]/10 px-3 py-2 text-sm font-semibold text-[#c0332b]">{offerLabel(b.offer, lang)}{offerUntil(b.offer, lang) && <span className="block text-xs font-medium opacity-80">{offerUntil(b.offer, lang)}</span>}</p>}
-            {/* Sezona göre günlük fiyatlar */}
-            {price && (
-              <div className="mt-5">
-                <div className="grid grid-cols-3 gap-2">
-                  {SEASONS.map((se) => {
-                    const rows = se.months.map((m) => [m, dailyFor(b, m)] as const).filter(([, v]) => v != null);
-                    const tone = se.key === "high" ? "from-[#ffe9e5] to-white text-[#c0332b]" : se.key === "mid" ? "from-amber-50 to-white text-amber-700" : "from-turquoise/10 to-white text-turquoise-dark";
-                    return (
-                      <div key={se.key} className={`rounded-2xl bg-gradient-to-b p-3 ring-1 ring-navy/5 ${tone}`}>
-                        <p className="text-[0.62rem] font-bold uppercase tracking-[0.14em]">{lang === "en" ? se.en : se.tr}</p>
-                        <ul className="mt-2 space-y-1.5">
-                          {se.months.map((m) => {
-                            const v = rows.find(([x]) => x === m)?.[1];
-                            return (
-                              <li key={m}>
-                                <span className="block text-[11px] leading-tight text-navy/50">{monthName(m, lang)}</span>
-                                <span className="block text-sm font-semibold leading-tight tabular-nums text-navy">{v != null ? money(v, b.currency, lang) : "–"}</span>
-                              </li>
-                            );
-                          })}
-                        </ul>
-                      </div>
-                    );
-                  })}
-                </div>
-                <p className="mt-2 text-xs text-navy/50">{lang === "en" ? "Prices are per day. Pick your dates below to see the total." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
-              </div>
-            )}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, currency: b.currency }} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, currency: b.currency, percent: b.offer?.percent ?? 0 }} />
             </div>
           </aside>
         </div>

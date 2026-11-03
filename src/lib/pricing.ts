@@ -32,6 +32,9 @@ export function minDaily(b: Priced): number | null {
   return vals.length ? Math.min(...vals) : null;
 }
 
+// Geçerli kampanya indirimi (yüzde) uygulanmış fiyat
+export const off = (v: number, pct?: number | null) => (pct && pct > 0 ? Math.round(v * (1 - pct / 100)) : v);
+
 export type Quote = { ok: true; nights: number; total: number; parts: { month: number; nights: number; daily: number }[] } | { ok: false; nights: number; missing: number[] };
 
 // Giriş gününden çıkış gününe kadar her gece için o ayın günlük fiyatı. Çıkış günü hesaba katılmaz.

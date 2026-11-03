@@ -24,10 +24,6 @@ export function BoatGallery({ images, name, badge, lang = "tr" }: { images: stri
     const k = Math.round(el.scrollLeft / el.clientWidth);
     if (k !== i && k >= 0 && k < n) setI(k);
   };
-  const tapNav = (e: React.MouseEvent<HTMLButtonElement>) => {
-    const r = e.currentTarget.getBoundingClientRect();
-    show(e.clientX - r.left < r.width / 2 ? i - 1 : i + 1);
-  };
   const touch = useRef<number | null>(null);
   const thumbs = useRef<HTMLUListElement>(null);
   const en = lang === "en";
@@ -72,10 +68,10 @@ export function BoatGallery({ images, name, badge, lang = "tr" }: { images: stri
   return (
     <div className="mt-8 space-y-3">
       <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-mist lg:aspect-[16/8]">
-        {/* Parmakla kaydırılan şerit; fotoğrafın sağına dokununca ileri, soluna dokununca geri */}
+        {/* Parmakla kaydırılan şerit; fotoğrafa dokununca tam ekran açılır */}
         <div ref={track} onScroll={onScroll} className="no-scrollbar flex h-full w-full snap-x snap-mandatory overflow-x-auto scroll-smooth">
           {images.map((src, k) => (
-            <button key={src} type="button" onClick={(e) => tapNav(e)} className="relative h-full w-full shrink-0 snap-center" aria-label={`${en ? "Photo" : "Fotoğraf"} ${k + 1}`}>
+            <button key={src} type="button" onClick={() => setFull(true)} className="relative h-full w-full shrink-0 cursor-zoom-in snap-center" aria-label={`${en ? "Photo" : "Fotoğraf"} ${k + 1}`}>
               {Math.abs(k - i) <= 2 || k === 0 ? <Photo src={src} alt={`${name} ${k + 1}`} priority={k === 0} sizes="(min-width:1280px) 1200px, 100vw" className="object-cover" /> : null}
             </button>
           ))}
@@ -109,7 +105,7 @@ export function BoatGallery({ images, name, badge, lang = "tr" }: { images: stri
       {full && (
         <div className="fixed inset-0 z-[90] flex flex-col bg-black/95" role="dialog" aria-modal="true" aria-label={name}>
           <div className="flex items-center justify-between px-4 py-3 text-white">
-            <span className="text-sm text-white/70">{i + 1} / {n}</span>
+            <span className="text-sm text-white/70">{i + 1} / {n} · {en ? "Swipe or tap left/right" : "Kaydırın ya da sağa/sola dokunun"}</span>
             <button type="button" onClick={() => setFull(false)} className="flex h-11 w-11 items-center justify-center rounded-full bg-white/10 text-2xl" aria-label={en ? "Close" : "Kapat"}>×</button>
           </div>
           <div className="relative flex-1" {...swipe} onClick={(e) => { const r = e.currentTarget.getBoundingClientRect(); if ((e.target as HTMLElement).closest("button")) return; go(e.clientX - r.left < r.width / 2 ? -1 : 1); }}>
