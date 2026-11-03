@@ -41,7 +41,8 @@
         "Şnorkel ekipmanı",
         "Balık tutma ekipmanı"
       ]
-    }
+    },
+    "yayinla": true
   },
   "angels": {
     "ad": "Angels",
@@ -80,7 +81,8 @@
         "Şnorkel ekipmanı",
         "Balık tutma ekipmanı"
       ]
-    }
+    },
+    "yayinla": true
   },
   "lady-freya": {
     "brosur": true,
@@ -114,6 +116,7 @@
         "Şnorkel ekipmanı",
         "Balık tutma ekipmanı"
       ]
-    }
+    },
+    "yayinla": true
   }
 }
