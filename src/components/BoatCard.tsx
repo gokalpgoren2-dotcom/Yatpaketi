@@ -49,21 +49,21 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
         )}
         <div className="absolute inset-0 bg-gradient-to-t from-navy/55 via-transparent to-transparent" />
         {/* Fiyat: fotoğrafın sağ alt köşesi */}
-        <div className={`absolute bottom-3 right-3 rounded-2xl px-3.5 py-2 text-right shadow-lg backdrop-blur ${from != null && pct ? "bg-[#e8453c]/95 text-white" : "bg-white/95 text-navy"}`}>
+        <div className={`absolute bottom-2.5 right-2.5 rounded-xl px-2.5 py-1.5 text-right shadow-md backdrop-blur sm:bottom-3 sm:right-3 sm:rounded-2xl sm:px-3.5 sm:py-2 ${from != null && pct ? "bg-[#e8453c]/95 text-white" : "bg-white/95 text-navy"}`}>
           {from == null ? (
-            <p className="text-sm font-semibold text-turquoise-dark">{L.askPrice}</p>
+            <p className="text-xs font-semibold text-turquoise-dark sm:text-sm">{L.askPrice}</p>
           ) : pct ? (
             <>
-              <p className="flex items-center justify-end gap-1.5 text-[10px] font-semibold uppercase tracking-[0.14em] text-white/85">
-                <span className="rounded-full bg-white px-1.5 py-px text-[10px] font-bold tracking-normal text-[#c0332b]">−%{pct}</span>
+              <p className="flex items-center justify-end gap-1 text-[9px] font-semibold uppercase tracking-[0.1em] text-white/85 sm:gap-1.5 sm:text-[10px]">
+                <span className="rounded-full bg-white px-1.5 py-px text-[9px] font-bold tracking-normal text-[#c0332b] sm:text-[10px]">−%{pct}</span>
                 <span className="normal-case tracking-normal line-through opacity-80">{money(from, b.currency, lang)}</span>
               </p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-xl font-semibold">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[11px] text-white/85">{en ? "/ day" : "/ gün"}</span></p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[10px] text-white/85 sm:text-[11px]">{en ? "/ day" : "/ gün"}</span></p>
             </>
           ) : (
             <>
-              <p className="text-[10px] font-semibold uppercase tracking-[0.14em] text-navy/50">{en ? "Daily from" : "Günlük, başlayan"}</p>
-              <p className="mt-0.5 leading-none"><span className="font-display text-xl font-semibold">{money(from, b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
+              <p className="hidden text-[10px] font-semibold uppercase tracking-[0.14em] text-navy/50 sm:block">{en ? "Daily from" : "Günlük, başlayan"}</p>
+              <p className="mt-0.5 leading-none"><span className="font-display text-base font-semibold sm:text-xl">{money(from, b.currency, lang)}</span> <span className="text-[10px] text-navy/55 sm:text-[11px]">{en ? "/ day" : "/ gün"}</span></p>
             </>
           )}
         </div>
