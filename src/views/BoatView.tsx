@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off } from "@/lib/pricing";
+import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off, weeklyFor } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -167,17 +167,18 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                           ) : (
                             <span className="block text-sm font-semibold tabular-nums text-navy">{money(v, b.currency, lang)}</span>
                           )}
+                          {weeklyFor(b, m) != null && <span className="mt-0.5 block text-[11px] leading-tight text-navy/55">{lang === "en" ? "Week" : "Haftalık"}: <b className={`tabular-nums ${pct ? "text-[#c0332b]" : "text-navy"}`}>{money(off(weeklyFor(b, m)!, pct), b.currency, lang)}</b></span>}
                         </li>
                       );
                     })}
                   </ul>
-                  <p className="mt-2 text-xs text-navy/50">{lang === "en" ? "Prices are per day. Pick your dates below to see the total." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
+                  <p className="mt-2 text-xs text-navy/50">{lang === "en" ? SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Daily prices; weekly rates apply for 7 nights or more. Pick your dates below for the total." : "Prices are per day. Pick your dates below to see the total." : SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Günlük fiyatlar; 7 gece ve üzerinde haftalık fiyat uygulanır. Toplam için aşağıdan tarih seçin." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
                 </div>
               );
             })()}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, currency: b.currency, percent: b.offer?.percent ?? 0 }} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0 }} />
             </div>
           </aside>
         </div>

@@ -47,6 +47,13 @@ export async function saveBoat(formData: FormData) {
     if (v !== null && !Number.isNaN(v) && v > 0) monthly[String(m)] = v;
   }
   const mvals = Object.values(monthly);
+  // Haftalık fiyat farklıysa (kutu işaretli) her ay için haftalık fiyat: "w4".."w11"
+  if (formData.get("weekly_on") === "on") {
+    for (const m of [4, 5, 6, 7, 8, 9, 10, 11]) {
+      const v = num(formData, `mpw_${m}`);
+      if (v !== null && !Number.isNaN(v) && v > 0) monthly[`w${m}`] = v;
+    }
+  }
   const pd = mvals.length ? Math.min(...mvals) : null; // vitrin/eski kod için en düşük günlük fiyat
   const pw = null;
   const sort = num(formData, "sort_order") ?? 0;

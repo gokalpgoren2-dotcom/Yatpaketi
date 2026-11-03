@@ -25,6 +25,7 @@ export type Boat = {
   priceDaily: number | null;
   priceWeekly: number | null;
   monthly?: Partial<Record<number, number>>; // ay (4–11) -> günlük fiyat
+  weekly?: Partial<Record<number, number>>; // ay (4–11) -> haftalık fiyat (farklıysa)
   showPrice: boolean; // false => "Fiyat sorunuz"
   currency: "EUR" | "TRY" | "USD";
   equipment: string[];

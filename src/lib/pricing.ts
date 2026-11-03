@@ -15,7 +15,7 @@ const MONTHS_TR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "
 const MONTHS_EN = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 export const monthName = (m: number, lang: "tr" | "en" = "tr") => (lang === "en" ? MONTHS_EN : MONTHS_TR)[m] ?? "";
 
-type Priced = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly };
+type Priced = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly; weekly?: Monthly };
 
 // Aylık fiyat girilmişse onu, hiç girilmemişse (eski kayıt) tek günlük fiyatı sezon aylarında kullanır.
 export function dailyFor(b: Priced, month: number): number | null {
@@ -24,6 +24,14 @@ export function dailyFor(b: Priced, month: number): number | null {
   if (Object.keys(m).length) return m[month] && m[month]! > 0 ? m[month]! : null;
   return b.priceDaily && b.priceDaily > 0 ? b.priceDaily : null;
 }
+
+// Bazı yatlarda haftalık fiyat günlüğün 7 katı değildir: girilmişse 7 gece ve üzeri konaklamada kullanılır.
+export function weeklyFor(b: Priced, month: number): number | null {
+  if (!b.showPrice || !SEASON_MONTHS.includes(month)) return null;
+  const w = b.weekly?.[month];
+  return w && w > 0 ? w : null;
+}
+export const hasWeekly = (b: Priced) => SEASON_MONTHS.some((m) => weeklyFor(b, m) != null);
 
 // Vitrinde gösterilen: en düşük günlük fiyat
 export function minDaily(b: Priced): number | null {
@@ -35,31 +43,37 @@ export function minDaily(b: Priced): number | null {
 // Geçerli kampanya indirimi (yüzde) uygulanmış fiyat
 export const off = (v: number, pct?: number | null) => (pct && pct > 0 ? Math.round(v * (1 - pct / 100)) : v);
 
-export type Quote = { ok: true; nights: number; total: number; parts: { month: number; nights: number; daily: number }[] } | { ok: false; nights: number; missing: number[] };
+export type Quote = { ok: true; nights: number; total: number; weekly: boolean; parts: { month: number; nights: number; daily: number; sub: number }[] } | { ok: false; nights: number; missing: number[] };
 
 // Giriş gününden çıkış gününe kadar her gece için o ayın günlük fiyatı. Çıkış günü hesaba katılmaz.
 export function quote(b: Priced, start: string, end: string): Quote | null {
   if (!start || !end || end <= start) return null;
   const d = new Date(start + "T12:00:00Z");
   const last = new Date(end + "T12:00:00Z");
-  const parts: { month: number; nights: number; daily: number }[] = [];
+  const parts: { month: number; nights: number; daily: number; sub: number }[] = [];
   const missing = new Set<number>();
   let nights = 0, total = 0;
+  // 7 gece ve üzeri: haftalık fiyatı girilmiş aylarda gecelik = haftalık / 7
+  const span = Math.round((last.getTime() - d.getTime()) / 86400000);
+  const useWeekly = span >= 7 && hasWeekly(b);
+  let usedWeekly = false;
   while (d < last && nights < 400) {
     const month = d.getUTCMonth() + 1;
-    const p = dailyFor(b, month);
+    const w = useWeekly ? weeklyFor(b, month) : null;
+    if (w != null) usedWeekly = true;
+    const p = w != null ? w / 7 : dailyFor(b, month);
     if (p == null) missing.add(month);
     else {
       total += p;
       const prev = parts[parts.length - 1];
-      if (prev && prev.month === month && prev.daily === p) prev.nights++;
-      else parts.push({ month, nights: 1, daily: p });
+      if (prev && prev.month === month && prev.daily === p) { prev.nights++; prev.sub += p; }
+      else parts.push({ month, nights: 1, daily: p, sub: p });
     }
     nights++;
     d.setUTCDate(d.getUTCDate() + 1);
   }
   if (missing.size) return { ok: false, nights, missing: [...missing] };
-  return { ok: true, nights, total, parts };
+  return { ok: true, nights, total: Math.round(total), weekly: usedWeekly, parts: parts.map((x) => ({ ...x, daily: Math.round(x.daily), sub: Math.round(x.sub) })) };
 }
 
 const SYM: Record<string, string> = { EUR: "€", USD: "$", TRY: "₺" };

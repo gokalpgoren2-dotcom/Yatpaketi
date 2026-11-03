@@ -100,7 +100,9 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
     captained: Boolean(r.captain_included),
     priceDaily: r.price_daily == null ? null : Number(r.price_daily),
     priceWeekly: r.price_weekly == null ? null : Number(r.price_weekly),
-    monthly: Object.fromEntries(Object.entries((r.monthly_prices ?? {}) as Record<string, unknown>).map(([k, v]) => [Number(k), Number(v)]).filter(([k, v]) => k >= 1 && k <= 12 && v > 0)),
+    // monthly_prices: {"4": günlük, ..., "w4": haftalık, ...}
+    monthly: Object.fromEntries(Object.entries((r.monthly_prices ?? {}) as Record<string, unknown>).filter(([k]) => !k.startsWith("w")).map(([k, v]) => [Number(k), Number(v)]).filter(([k, v]) => k >= 1 && k <= 12 && v > 0)),
+    weekly: Object.fromEntries(Object.entries((r.monthly_prices ?? {}) as Record<string, unknown>).filter(([k]) => k.startsWith("w")).map(([k, v]) => [Number(k.slice(1)), Number(v)]).filter(([k, v]) => k >= 1 && k <= 12 && v > 0)),
     showPrice: r.price_mode !== "ask",
     currency: r.currency ?? "EUR",
     equipment: r.equipment ?? [],
