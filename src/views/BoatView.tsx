@@ -93,6 +93,12 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
               );
             })()}
 
+            {b.brochure && (
+              <a href={b.brochure} target="_blank" rel="noopener" download className="-mt-4 mb-8 flex items-center justify-center gap-2 rounded-2xl border border-navy/15 px-4 py-3 text-sm font-semibold text-navy lg:hidden">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 3h7l5 5v13H7zM14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" /></svg>
+                {lang === "en" ? "Download yacht brochure (PDF)" : "Tanıtım dosyasını indir (PDF)"}
+              </a>
+            )}
             {/* Telefonda kısa fiyat özeti: ayrıntılar ve tarih seçimi aşağıdaki kutuda */}
             <a href="#talep" className={`mb-8 flex items-center justify-between gap-3 rounded-2xl p-4 ring-1 lg:hidden ${b.offer && minDaily(b) != null ? "bg-[#fff1ee] ring-[#e8453c]/20" : "bg-white ring-navy/10 shadow-sm"}`}>
               <span>
@@ -242,6 +248,13 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                 </div>
               );
             })()}
+            {b.brochure && (
+              <a href={b.brochure} target="_blank" rel="noopener" download className="mt-5 flex items-center gap-3 rounded-2xl bg-navy px-4 py-3.5 text-white transition hover:bg-navy-soft">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-turquoise"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 3h7l5 5v13H7zM14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" /></svg></span>
+                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{lang === "en" ? "Download yacht brochure" : "Tanıtım dosyasını indir"}</span><span className="block text-xs text-white/60">PDF</span></span>
+                <span aria-hidden>↓</span>
+              </a>
+            )}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
               <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0, vatMode: b.vatMode, vatRate: b.vatRate }} />

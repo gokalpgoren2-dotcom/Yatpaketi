@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { requireAdmin } from "@/lib/admin";
 import { BoatForm } from "@/components/admin/BoatForm";
 import { PhotoManager } from "@/components/admin/PhotoManager";
+import { BrochureManager } from "@/components/admin/BrochureManager";
 import { Notice } from "@/components/admin/FormBits";
 import { deleteBoat } from "../actions";
 
@@ -32,6 +33,8 @@ export default async function EditBoat({ params, searchParams }: { params: Promi
         <h2 className="font-semibold">Fotoğraflar</h2>
         <PhotoManager boatId={id} initial={(imgs.data ?? []) as { id: string; path: string; is_cover: boolean; sort_order: number }[]} />
       </section>
+
+      <div className="mt-6"><BrochureManager boatId={id} slug={String(boat.data.slug ?? "")} initial={(boat.data.brochure_path as string | null) ?? null} /></div>
 
       <div className="mt-6">
         <BoatForm

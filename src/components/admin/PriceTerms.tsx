@@ -3,8 +3,9 @@
 import { useState } from "react";
 
 const SUGGEST = [
-  "Kaptan ve mürettebat", "Yakıt", "Liman ve marina ücretleri", "Kumanya (yiyecek ve içecek)", "Transit log",
-  "Final temizlik", "Nevresim ve havlu", "Su sporları ekipmanı", "Jeneratör", "Klima", "Transfer", "Mürettebat bahşişi", "Yunan adaları giriş-çıkış ücretleri",
+  "Kaptan ve mürettebat", "Günlük 4 saatlik seyir yakıtı ücreti", "Bot benzini ücreti", "Motorlu su sporları benzin ücreti",
+  "Kamu limanları ücretleri", "Özel marina ücretleri", "Kumanya (yiyecek ve içecek)", "Transit log", "Final temizlik",
+  "Nevresim ve havlu", "Su sporları ekipmanı", "Jeneratör", "Klima", "%10 mürettebat bahşişi", "Yurt dışı şehirlerindeki tüm harcamalar",
 ];
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 
