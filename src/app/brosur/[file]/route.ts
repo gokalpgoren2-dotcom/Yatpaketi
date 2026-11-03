@@ -11,7 +11,7 @@ async function cleanPhotos(slug: string): Promise<Uint8Array[]> {
     const db = createClient(url, key, { auth: { persistSession: false, autoRefreshToken: false } });
     const { data } = await db.storage.from("brosur-foto").list(slug, { limit: 40, sortBy: { column: "name", order: "asc" } });
     const names = (data ?? []).map((f) => f.name).filter((n) => /\.jpe?g$/i.test(n)).sort().slice(0, 13);
-    const out = await Promise.all(names.map(async (n) => {
+    const out = await Promise.all(names.map(async (n): Promise<Uint8Array | null> => {
       const r = await db.storage.from("brosur-foto").download(`${slug}/${n}`);
       return r.data ? new Uint8Array(await r.data.arrayBuffer()) : null;
     }));
