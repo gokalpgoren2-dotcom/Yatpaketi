@@ -7,7 +7,7 @@ const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-b
 
 // Nisan–Kasım her ay için günlük fiyat. Sezon kutusuna yazıp "Aylara uygula" deyince o sezonun aylarını doldurur.
 export function SeasonPrices({ initial }: { initial: Record<string, number> }) {
-  const init = Object.entries(initial ?? {});
+  const init = Object.entries(initial ?? {}).filter(([k]) => /^w?\d+$/.test(k));
   const [vals, setVals] = useState<Record<number, string>>(() => Object.fromEntries(init.filter(([k]) => !k.startsWith("w")).map(([k, v]) => [Number(k), String(v)])));
   const [wvals, setW] = useState<Record<number, string>>(() => Object.fromEntries(init.filter(([k]) => k.startsWith("w")).map(([k, v]) => [Number(k.slice(1)), String(v)])));
   const [weeklyOn, setWeeklyOn] = useState(init.some(([k]) => k.startsWith("w")));

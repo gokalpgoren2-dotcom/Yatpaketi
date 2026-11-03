@@ -10,7 +10,7 @@ import { money, monthName, off, quote, type Monthly } from "@/lib/pricing";
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 const lab = "mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60";
 
-export type Pricing = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly; weekly?: Monthly; currency: string; percent?: number; vatMode?: "none" | "included" | "excluded"; vatRate?: number };
+export type Pricing = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly; weekly?: Monthly; currency: string; percent?: number; vatMode?: "none" | "included" | "excluded"; vatRate?: number; apa?: number };
 type Props = { boatSlug: string; boatName: string; maxGuests: number; whatsapp: string; lang?: Lang; pricing?: Pricing };
 
 // Yat sayfasındaki talep alanı: ana yol WhatsApp (hazır mesajla), ikinci yol form.
@@ -46,6 +46,9 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
             <p className="flex justify-between gap-3 text-navy/70"><span>{en ? `VAT (${pricing.vatRate ?? 20}%)` : `KDV (%${pricing.vatRate ?? 20})`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.vatRate ?? 20) / 100), pricing.currency, lang)}</span></p>
             <p className="flex justify-between gap-3 font-semibold text-navy"><span>{en ? "Total incl. VAT" : "KDV dahil toplam"}</span><span className="tabular-nums">{money(Math.round(totalNow * (1 + (pricing.vatRate ?? 20) / 100)), pricing.currency, lang)}</span></p>
           </div>
+        )}
+        {(pricing.apa ?? 0) > 0 && (
+          <p className="mt-2 flex justify-between gap-3 border-t border-navy/10 pt-2 text-sm text-amber-900"><span>{en ? `APA (${pricing.apa}%, advance for expenses)` : `APA (%${pricing.apa}, masraflar için ön ödeme)`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.apa ?? 0) / 100), pricing.currency, lang)}</span></p>
         )}
         {pricing.vatMode === "included" && <p className="mt-1 text-xs font-semibold text-emerald-700">{en ? "VAT included." : "KDV dahildir."}</p>}
         {q.weekly && <p className="mt-1 text-xs font-semibold text-turquoise-dark">{en ? "Weekly rate applied (7+ nights)." : "7 gece ve üzeri: haftalık fiyat uygulandı."}</p>}

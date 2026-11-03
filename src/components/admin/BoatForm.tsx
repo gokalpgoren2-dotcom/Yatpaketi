@@ -97,7 +97,7 @@ export function BoatForm({ boat, categories, destinations, selected }: { boat: R
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">KDV ve fiyata dahil olanlar</h2>
-        <PriceTerms included={(boat?.included as string[]) ?? []} excluded={(boat?.excluded as string[]) ?? []} vatMode={(boat?.vat_mode as string) ?? "none"} vatRate={Number(boat?.vat_rate ?? 20)} />
+        <PriceTerms included={(boat?.included as string[]) ?? []} excluded={(boat?.excluded as string[]) ?? []} vatMode={(boat?.vat_mode as string) ?? "none"} vatRate={Number(boat?.vat_rate ?? 20)} apa={Number((boat?.monthly_prices as Record<string, number> | undefined)?.apa ?? 0)} />
       </section>
 
       <section className="space-y-4 rounded-2xl bg-white p-5 shadow-sm">

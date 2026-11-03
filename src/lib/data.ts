@@ -31,6 +31,7 @@ export type Boat = {
   vatMode?: "none" | "included" | "excluded"; // KDV dahil / hariç
   vatRate?: number; // KDV oranı (%)
   brochure?: string | null; // yat tanıtım PDF adresi
+  apa?: number; // APA yüzdesi (20/30/40), yoksa 0
   showPrice: boolean; // false => "Fiyat sorunuz"
   currency: "EUR" | "TRY" | "USD";
   equipment: string[];

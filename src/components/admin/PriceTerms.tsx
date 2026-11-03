@@ -10,7 +10,8 @@ const SUGGEST = [
 const input = "w-full rounded-xl border border-navy/15 bg-white px-3 py-3 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 
 // Fiyata dahil olanlar / olmayanlar ve KDV
-export function PriceTerms({ included, excluded, vatMode, vatRate }: { included: string[]; excluded: string[]; vatMode: string; vatRate: number }) {
+export function PriceTerms({ included, excluded, vatMode, vatRate, apa: apaInit = 0 }: { included: string[]; excluded: string[]; vatMode: string; vatRate: number; apa?: number }) {
+  const [apa, setApa] = useState(apaInit);
   const [inc, setInc] = useState(included.join("\n"));
   const [exc, setExc] = useState(excluded.join("\n"));
   const [mode, setMode] = useState(vatMode || "none");
@@ -35,6 +36,17 @@ export function PriceTerms({ included, excluded, vatMode, vatRate }: { included:
           )}
         </div>
         <p className="mt-1 text-xs text-navy/50">KDV hariçse misafir tarih seçtiğinde KDV ayrıca hesaplanıp KDV dahil toplam gösterilir. Vitrinde fiyatın yanında &quot;+KDV&quot; yazar.</p>
+      </div>
+
+      <div>
+        <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-navy/60">APA</p>
+        <input type="hidden" name="apa" value={apa || ""} />
+        <div className="flex flex-wrap gap-2">
+          {[0, 20, 30, 40].map((v) => (
+            <button key={v} type="button" onClick={() => setApa(v)} className={`rounded-xl border px-4 py-2.5 text-sm font-semibold ${apa === v ? "border-navy bg-navy text-white" : "border-navy/15 bg-white text-navy"}`}>{v ? `%${v}` : "Yok"}</button>
+          ))}
+        </div>
+        <p className="mt-1 text-xs text-navy/50">Seçerseniz yat sayfasında fiyatın altında &quot;+%30 APA&quot; ve kısa açıklaması görünür; tarih seçilince APA tutarı ayrıca hesaplanır.</p>
       </div>
 
       <div className="grid gap-4 sm:grid-cols-2">

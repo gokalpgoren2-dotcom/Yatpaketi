@@ -6,7 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { Photo } from "@/components/Photo";
 import { priceLabel } from "@/lib/data";
-import { SEASON_MONTHS, dailyFor, minDaily, money, monthName, off, vatNote, weeklyFor } from "@/lib/pricing";
+import { SEASON_MONTHS, apaText, dailyFor, minDaily, money, monthName, off, vatNote, weeklyFor } from "@/lib/pricing";
 import { offerLabel, offerUntil } from "@/lib/campaigns";
 import { getReviews } from "@/lib/reviews";
 import { FavButton } from "@/components/FavButton";
@@ -108,6 +108,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                     <span className={`font-display text-2xl font-semibold ${b.offer ? "text-[#c0332b]" : "text-navy"}`}>{money(off(minDaily(b)!, b.offer?.percent), b.currency, lang)}</span>
                     {b.offer && <span className="text-xs text-navy/45 line-through">{money(minDaily(b)!, b.currency, lang)}</span>}
                     {vatNote(b, lang) && <span className="text-xs font-semibold text-navy/55">{vatNote(b, lang)}</span>}
+                    {(b.apa ?? 0) > 0 && <span className="text-xs font-semibold text-amber-800">+%{b.apa} APA</span>}
                   </span>
                 ) : (
                   <span className="mt-0.5 block text-lg font-semibold text-turquoise-dark">{L.askPrice}</span>
@@ -217,6 +218,12 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                 </div>
               );
             })()}
+            {(b.apa ?? 0) > 0 && minDaily(b) != null && (
+              <div className="mt-3 rounded-xl bg-amber-50 px-3 py-2 ring-1 ring-amber-200/70">
+                <p className="text-sm font-semibold text-amber-900">+%{b.apa} APA</p>
+                <p className="mt-0.5 text-[11px] leading-snug text-amber-900/70">{apaText(b.apa!, lang)}</p>
+              </div>
+            )}
             {vatNote(b, lang) && <p className={`mt-2 inline-block rounded-full px-3 py-1 text-xs font-semibold ${b.vatMode === "excluded" ? "bg-amber-100 text-amber-800" : "bg-emerald-100 text-emerald-800"}`}>{vatNote(b, lang)}</p>}
             {/* Aylara göre günlük fiyatlar */}
             {price && (() => {
@@ -257,7 +264,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             )}
             <div className="mt-6 border-t border-navy/10 pt-6">
               <h2 className="mb-4 text-lg font-semibold text-navy">{L.requestTitle}</h2>
-              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0, vatMode: b.vatMode, vatRate: b.vatRate }} />
+              <RequestPanel boatSlug={b.slug} boatName={b.name} maxGuests={Math.max(b.guests, 1)} whatsapp={contact.whatsapp} lang={lang} pricing={{ showPrice: b.showPrice, priceDaily: b.priceDaily, monthly: b.monthly, weekly: b.weekly, currency: b.currency, percent: b.offer?.percent ?? 0, vatMode: b.vatMode, vatRate: b.vatRate, apa: b.apa ?? 0 }} />
             </div>
           </aside>
         </div>

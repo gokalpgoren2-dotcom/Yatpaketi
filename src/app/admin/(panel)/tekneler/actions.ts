@@ -54,6 +54,9 @@ export async function saveBoat(formData: FormData) {
       if (v !== null && !Number.isNaN(v) && v > 0) monthly[`w${m}`] = v;
     }
   }
+  // APA yüzdesi (yalnızca 20/30/40)
+  const apa = Number(formData.get("apa"));
+  if ([20, 30, 40].includes(apa)) (monthly as Record<string, number>).apa = apa;
   const pd = mvals.length ? Math.min(...mvals) : null; // vitrin/eski kod için en düşük günlük fiyat
   const pw = null;
   const sort = num(formData, "sort_order") ?? 0;
