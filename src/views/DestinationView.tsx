@@ -6,6 +6,7 @@ import { BoatCard } from "@/components/BoatCard";
 import { Placeholder } from "@/components/Placeholder";
 import { PortArt } from "@/components/PortArt";
 import { RichText } from "@/components/RichText";
+import { IstanbulBosphorus } from "@/components/IstanbulBosphorus";
 import { boatsFor } from "@/lib/data";
 import { getBoats, getDestinations } from "@/lib/content";
 import { getReviews } from "@/lib/reviews";
@@ -34,6 +35,7 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
         </section>
         <div className="mx-auto max-w-7xl px-5 lg:px-8">
           {d.intro && <div className="mt-8 max-w-3xl"><RichText text={d.intro} /></div>}
+          {d.slug === "istanbul" && <IstanbulBosphorus lang={lang} />}
           {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleData}</p>}
           <div className="mt-10 flex items-end justify-between">
             <h2 className="font-display text-2xl text-navy">{L.destBoats(d.name)}</h2>
