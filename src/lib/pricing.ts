@@ -105,4 +105,4 @@ export const apaText = (pct: number, lang: "tr" | "en" = "tr") =>
       : `%5 APA, yalnızca su sporları yakıtı ve marina bağlama ücretleri için kiralama bedelinin %5'i kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`
     : lang === "en"
       ? `APA is an advance of ${pct}% of the charter fee for running costs such as fuel, port fees and provisions. Expenses are documented at the end of the charter; any balance is refunded or settled.`
-      : `APA, yakıt, liman ücretleri ve kumanya gibi tur masrafları için kiralama bedelinin %${pct}'${pctSuffix(pct)} kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`; artan iade edilir, eksik tamamlanır.`;
+      : `APA, yakıt, liman ücretleri ve kumanya gibi tur masrafları için kiralama bedelinin %${pct}'${pctSuffix(pct)} kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`;
