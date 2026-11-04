@@ -14,6 +14,8 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
   await db.storage.createBucket("brosur-foto", { public: false }).catch(() => null);
   const paths = [];
   let k = 0;
+  // Her yüklemede yeni dosya adı: aynı adla yüklenince tarayıcı ve CDN eski fotoğrafı göstermeye devam ediyordu
+  const stamp = Date.now().toString(36);
   for (const u of urls.slice(0, 30)) {
     try {
       const r = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0 yatpaketi-icerik" } });
@@ -31,7 +33,7 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
       const marked = await sharp(img).composite([{ input: overlay, left: m, top: H - oh - m }]).jpeg({ quality: 86 }).toBuffer();
       k++;
       const name = String(k).padStart(2, "0") + ".jpg";
-      const path = `tekneler/${slug}/${name}`;
+      const path = `tekneler/${slug}/${stamp}-${name}`;
       const up = await db.storage.from("media").upload(path, marked, { contentType: "image/jpeg", upsert: true });
       if (up.error) { log(slug, "yüklenemedi", up.error.message); k--; continue; }
       paths.push(path);
@@ -60,6 +62,10 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
   const { data: old } = await db.storage.from("brosur-foto").list(slug, { limit: 100 });
   const extra = (old ?? []).map((f) => f.name).filter((n) => Number(n.slice(0, 2)) > Math.min(paths.length, 13));
   if (extra.length) await db.storage.from("brosur-foto").remove(extra.map((n) => `${slug}/${n}`));
+  // önceki yüklemelerden kalan eski dosyalar silinir
+  const { data: prev } = await db.storage.from("media").list(`tekneler/${slug}`, { limit: 200 });
+  const stale = (prev ?? []).map((f) => `tekneler/${slug}/${f.name}`).filter((x) => !paths.includes(x));
+  if (stale.length) await db.storage.from("media").remove(stale);
   log(slug, `${paths.length} fotoğraf uzaktan alındı.`);
   return paths.length;
 }
