@@ -70,6 +70,39 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
   return paths.length;
 }
 
+// Tek seferlik temizlik (icerik/temizlik.json): yayındaki tüm yatlar fotoğraflarıyla birlikte kalıcı olarak silinir.
+async function cleanup(db, done) {
+  if (!existsSync("icerik/temizlik.json")) return;
+  const t = JSON.parse(readFileSync("icerik/temizlik.json", "utf8"));
+  if (!t.id || !t.yayindakileri_sil || done["temizlik:" + t.id]) return;
+  const { data: boats, error } = await db.from("boats").select("id,slug,brochure_path").eq("is_published", true);
+  if (error) return log("temizlik: yatlar okunamadı:", error.message);
+  const rmDir = async (bucket, dir) => {
+    for (let i = 0; i < 20; i++) {
+      const { data } = await db.storage.from(bucket).list(dir, { limit: 1000 });
+      const files = (data ?? []).filter((f) => f.id).map((f) => `${dir}/${f.name}`);
+      if (!files.length) break;
+      await db.storage.from(bucket).remove(files);
+    }
+  };
+  for (const b of boats ?? []) {
+    await rmDir("media", `boats/${b.id}`);
+    await rmDir("media", `tekneler/${b.slug}`);
+    await rmDir("brosur-foto", b.slug).catch(() => null);
+    if (b.brochure_path && !b.brochure_path.startsWith("/")) await db.storage.from("media").remove([b.brochure_path]);
+  }
+  const ids = (boats ?? []).map((b) => b.id);
+  for (let i = 0; i < ids.length; i += 100) {
+    const { error: de } = await db.from("boats").delete().in("id", ids.slice(i, i + 100));
+    if (de) log("temizlik: silinemedi:", de.message);
+  }
+  await db.from("site_texts").upsert({ key: "featured", data: { order: [] }, updated_at: new Date().toISOString() });
+  for (const k of Object.keys(done)) if (!k.startsWith("temizlik:")) delete done[k];
+  done["temizlik:" + t.id] = new Date().toISOString();
+  await db.from("site_texts").upsert({ key: "icerik_sync", data: done, updated_at: new Date().toISOString() });
+  log(`temizlik: ${ids.length} yayındaki yat kalıcı olarak silindi.`);
+}
+
 async function main() {
   const url = process.env.NEXT_PUBLIC_SUPABASE_URL, key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return log("SUPABASE_SERVICE_ROLE_KEY yok, atlandı.");
@@ -93,6 +126,7 @@ async function main() {
 
   const { data: st } = await db.from("site_texts").select("data").eq("key", "icerik_sync").maybeSingle();
   const done = { ...(st?.data ?? {}) };
+  await cleanup(db, done);
 
   for (const [slug, cfg] of Object.entries(list)) {
     if (slug.startsWith("_")) continue;
