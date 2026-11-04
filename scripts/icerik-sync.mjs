@@ -137,8 +137,11 @@ async function main() {
 
     if (paths.length) {
       const { data: imgs } = await db.from("boat_images").select("id,path,sort_order").eq("boat_id", boat.id);
-      const have = new Set((imgs ?? []).map((r) => r.path));
       const prefix = `/tekneler/${slug}/`;
+      // klasörden kaldırılan eski yerel fotoğrafların kayıtları silinir
+      const gone = (imgs ?? []).filter((r) => r.path.startsWith(prefix) && !paths.includes(r.path));
+      if (gone.length) await db.from("boat_images").delete().in("id", gone.map((r) => r.id));
+      const have = new Set((imgs ?? []).filter((r) => !gone.includes(r)).map((r) => r.path));
       // eski (panelden yüklenen) fotoğraflar yeni setin arkasına geçer, kapak yeni setin ilki olur
       for (const r of imgs ?? []) if (!r.path.startsWith(prefix)) await db.from("boat_images").update({ is_cover: false, sort_order: r.sort_order + 100 }).eq("id", r.id);
       await db.from("boat_images").update({ is_cover: false }).eq("boat_id", boat.id);
