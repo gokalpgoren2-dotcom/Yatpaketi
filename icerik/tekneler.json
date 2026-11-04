@@ -885,5 +885,37 @@
         "Balık tutma ekipmanı"
       ]
     }
+  },
+  "lycian-dream": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "motoryat",
+      "year": 2024,
+      "length_m": 26,
+      "width_m": 7,
+      "cabins": 6,
+      "guests": 12,
+      "captain_included": true,
+      "description_tr": "Lycian Dream, 2024 yapımı 26 metrelik yeni ve modern bir motoryattır. Aydınlık iç mekânı, geniş salonu, tam donanımlı mutfağı ve gölgelikli güverteleriyle 12 misafire konforlu bir mavi yolculuk sunar.\n\nYatta 6 kabin bulunur: çift kişilik yataklı iki master ve dört çift kişilik kabin. Tüm kabinlerde özel banyo, uzaktan kumandalı ve ayrı ayarlanabilen klima, uydu TV, müzik sistemi ve saç kurutma makinesi vardır. Üst güvertede şezlonglar, kıç güvertede 12 kişilik açık hava yemek masası ve baş güvertede oturma alanı bulunur. İkiz 500 HP motorlarıyla saatte 10–12 deniz mili hızla seyreden yatta su yapıcı, su kayağı, rüzgar sörfü, kano, ringo, wakeboard, paddle board, şnorkel ve balık tutma ekipmanı vardır.",
+      "description_en": "Lycian Dream is a new, modern 26-metre motor yacht built in 2024. With a bright interior, a spacious saloon, a fully equipped galley and shaded decks, she offers 12 guests a comfortable blue cruise.\n\nShe has 6 cabins: two masters with double beds and four doubles. All cabins are en-suite with individually remote-controlled air conditioning, satellite TV, a music system and hair dryers. Sun loungers on the upper deck, an alfresco dining table for 12 on the aft deck and a foredeck seating area complete the outdoor spaces. Cruising at 10–12 knots on twin 500 hp engines, she has a watermaker, water skis, windsurf, canoe, ringo, wakeboard, paddle board, snorkelling and fishing gear.",
+      "equipment": [
+        "Klima — Her kabinde uzaktan kumandalı",
+        "Eğlence sistemi — Kabinlerde uydu TV ve müzik sistemi, LCD TV",
+        "Su yapıcı",
+        "Jeneratör — 2× 27 kVA"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Rüzgar sörfü",
+        "Kano",
+        "Ringo",
+        "Wakeboard",
+        "Paddle board",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ]
+    }
   }
 }
