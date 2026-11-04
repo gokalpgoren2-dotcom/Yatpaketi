@@ -7,7 +7,7 @@ const log = (...a) => console.log("[icerik-sync]", ...a);
 
 // Uzaktaki fotoğrafları indirir: filigranlı kopya herkese açık "media" deposuna (sitede görünür),
 // filigransız kopya gizli "brosur-foto" deposuna (yalnızca tanıtım PDF'i) yüklenir.
-async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese = false) {
+async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese = false, hasLocal = true) {
   let sharp;
   try { sharp = (await import("sharp")).default; } catch { log(slug, "sharp yok, uzak fotoğraflar atlandı."); return 0; }
   const mark = readFileSync("scripts/filigran.png");
@@ -45,7 +45,7 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
       log(slug, "fotoğraf hatası", e?.message ?? e);
     }
   }
-  if (paths.length < (keepLocal ? 1 : 5)) { log(slug, `uzaktan yalnızca ${paths.length} fotoğraf alınabildi, broşürdeki fotoğraflar kalıyor.`); return paths.length; }
+  if (paths.length < (keepLocal || !hasLocal ? 1 : 5)) { log(slug, `uzaktan yalnızca ${paths.length} fotoğraf alınabildi, broşürdeki fotoğraflar kalıyor.`); return paths.length; }
   // Yeterli fotoğraf geldiyse broşürden alınan geçici fotoğraflar kaldırılır, yenileri sırayla eklenir
   if (!keepLocal) await db.from("boat_images").delete().eq("boat_id", boatId).like("path", `/tekneler/${slug}/%`);
   await db.from("boat_images").delete().eq("boat_id", boatId).like("path", `tekneler/${slug}/%`);
@@ -170,7 +170,7 @@ async function main() {
 
     // Uzaktaki fotoğraflar en sonda: hata olsa da yat yayına alınmış ve bilgileri yazılmış olur
     if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) {
-      try { await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true, cfg.sadece_bu_fotolar === true); }
+      try { await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true, cfg.sadece_bu_fotolar === true, paths.length > 0); }
       catch (e) { log(slug, "uzak fotoğraflar alınamadı:", e?.message ?? e); }
     }
 
