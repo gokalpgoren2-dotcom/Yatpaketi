@@ -22,9 +22,13 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false) {
       const base = sharp(raw).rotate().resize({ width: 1920, height: 1920, fit: "inside", withoutEnlargement: true });
       const img = await base.jpeg({ quality: 88 }).toBuffer();
       const meta = await sharp(img).metadata();
-      const mw = Math.round((meta.width ?? 1200) * 0.42);
+      // filigran: sol alt köşe
+      const W = meta.width ?? 1200, H = meta.height ?? 800;
+      const mw = Math.round(W * 0.24);
       const overlay = await sharp(mark).resize({ width: mw }).png().toBuffer();
-      const marked = await sharp(img).composite([{ input: overlay, gravity: "center" }]).jpeg({ quality: 86 }).toBuffer();
+      const oh = (await sharp(overlay).metadata()).height ?? Math.round(mw / 4);
+      const m = Math.round(Math.min(W, H) * 0.035);
+      const marked = await sharp(img).composite([{ input: overlay, left: m, top: H - oh - m }]).jpeg({ quality: 86 }).toBuffer();
       k++;
       const name = String(k).padStart(2, "0") + ".jpg";
       const path = `tekneler/${slug}/${name}`;
