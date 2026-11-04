@@ -73,6 +73,8 @@ function hueFor(slug: string) {
   return 170 + (h % 60);
 }
 
+const tipLabel = (x: string) => (/m[üu]rettebat\s+bah[şs]i[şs]i/i.test(x) ? "Mürettebat bahşişi" : x);
+
 function mapBoat(r: Row, lang: Lang = "tr"): Boat {
   const imgs = ((r.boat_images ?? []) as { path: string; is_cover: boolean; sort_order: number }[])
     .slice()
@@ -100,8 +102,9 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
     captained: Boolean(r.captain_included),
     priceDaily: r.price_daily == null ? null : Number(r.price_daily),
     priceWeekly: r.price_weekly == null ? null : Number(r.price_weekly),
-    included: (r.included ?? []) as string[],
-    excluded: (r.excluded ?? []) as string[],
+    // "%10 mürettebat bahşişi" gibi oranlı yazımlar sadece "Mürettebat bahşişi" olarak gösterilir
+    included: ((r.included ?? []) as string[]).map(tipLabel),
+    excluded: ((r.excluded ?? []) as string[]).map(tipLabel),
     vatMode: (r.vat_mode === "included" || r.vat_mode === "excluded" ? r.vat_mode : "none") as "none" | "included" | "excluded",
     vatRate: r.vat_rate == null ? 20 : Number(r.vat_rate),
     brochure: r.brochure_path ? publicImageUrl(r.brochure_path as string) : null,
