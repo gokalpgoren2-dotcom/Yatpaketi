@@ -695,5 +695,353 @@
       "home_port": "Fethiye"
     },
     "ad": "Lycian Dream"
+  },
+  "vgo": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 26,
+      "cabins": 8,
+      "guests": 17,
+      "captain_included": true,
+      "description_tr": "V-GO, 2009'da inşa edilen ve 2018'de yenilenen 26 metrelik bir gulettir. 8 kabinde 17 misafir ağırlayan yatta 4 kişilik mürettebat hizmet verir.\n\nKabin düzeni üç çift kişilik, üç üç kişilik ve iki twin kabinden oluşur; tüm kabinlerde banyo, sıcak su, saç kurutma makinesi ve klima vardır. Güvertede 17 güneşlenme minderi, güverte duşu ve açık hava yemek alanı; salonda TV ve DVD, müzik sistemi, buz makinesi ve Wi-Fi bulunur.\n\nBozburun'da inşa edilen iki direkli yat, 450 HP MAN motorla seyreder; 30 HP motorlu Zodiac tender bulunur. Misafirlerin kullanımına sunulan oyuncaklar: kano, şnorkel ekipmanı ve kutu oyunları.",
+      "description_en": "V-GO is a 26-metre gulet, built in 2009 and refitted in 2018. She accommodates 17 guests in 8 cabins, with a crew of 4.\n\nThe cabins comprise three doubles, three triples and two twins, all en-suite with hot water, hair dryers and air conditioning. On deck there are 17 sun mattresses, a deck shower and alfresco dining; the saloon has a TV and DVD, a music system, ice maker and Wi-Fi.\n\nBuilt in Bozburun, the two-masted yacht is powered by a 450 hp MAN engine and carries a Zodiac tender with 30 hp. Water toys on board: a kayak, snorkelling gear and board games.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Wi-Fi",
+        "Eğlence sistemi — Salonda TV ve DVD, müzik sistemi, kutu oyunları",
+        "Buz makinesi",
+        "Jeneratör — 32 kW Kubota",
+        "Tender — Zodiac, 30 HP"
+      ],
+      "water_sports": [
+        "Kano",
+        "Şnorkel ekipmanı"
+      ],
+      "width_m": 6.7,
+      "year": 2009,
+      "refit_year": 2018,
+      "crew": 4,
+      "name": "V-GO",
+      "home_port": "Fethiye"
+    },
+    "ad": "V-GO"
+  },
+  "mozaik": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 26,
+      "cabins": 8,
+      "guests": 16,
+      "captain_included": true,
+      "description_tr": "Mozaik, 2002'de inşa edilen 26 metrelik bir gulettir. 8 kabinde 16 misafir ağırlayan yatta 4 kişilik mürettebat hizmet verir.\n\nSekiz çift kişilik kabinin hepsinde kendi banyosu vardır. Kıçta gölgelikli açık hava yemek alanı, baş tarafta ve üst güvertede güneşlenme minderleri ile rahat bir salon bulunur.\n\n360 HP Iveco motorlu yatta 27 kW jeneratör, 5.000 litre su ve 2.000 litre yakıt kapasitesi ile 15 HP motorlu bot bulunur.",
+      "description_en": "Mozaik is a 26-metre gulet, built in 2002. She accommodates 16 guests in 8 cabins, with a crew of 4.\n\nAll eight double cabins are en-suite. A shaded alfresco dining area aft, sun cushions forward and on the upper deck, and a comfortable saloon are on board.\n\nPowered by a 360 hp Iveco engine, she has a 27 kW generator, 5,000 l of water, 2,000 l of fuel and a dinghy with 15 hp.",
+      "equipment": [
+        "Jeneratör — 27 kW",
+        "Tender — 15 HP"
+      ],
+      "water_sports": [],
+      "width_m": 7,
+      "year": 2002,
+      "crew": 4,
+      "name": "Mozaik",
+      "home_port": "Göcek"
+    },
+    "ad": "Mozaik"
+  },
+  "feyyaz-bey": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 22,
+      "cabins": 4,
+      "guests": 8,
+      "captain_included": true,
+      "description_tr": "Feyyaz Bey, 22 metrelik bir gulettir. 4 kabinde 8 misafir ağırlar.\n\nDört kabinin hepsi klimalıdır. Gölgelikli kıç güvertede açık hava yemek masası, baş tarafta güneşlenme minderleri ve tam donanımlı mutfak bulunur.",
+      "description_en": "Feyyaz Bey is a 22-metre gulet. She accommodates 8 guests in 4 cabins.\n\nAll four cabins are air-conditioned. The shaded aft deck has an alfresco dining table, with sun cushions forward and a fully equipped galley.",
+      "equipment": [
+        "Klima"
+      ],
+      "water_sports": [],
+      "name": "Feyyaz Bey",
+      "home_port": "Kaş-Kekova"
+    },
+    "ad": "Feyyaz Bey"
+  },
+  "northwind-a": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 28,
+      "cabins": 8,
+      "guests": 16,
+      "captain_included": true,
+      "description_tr": "Northwind A, 2010'da inşa edilen ve 2018'de yenilenen 28 metrelik bir gulettir. 8 kabinde 16 misafir ağırlayan yatta 4 kişilik mürettebat hizmet verir.\n\nKabin düzeni altı çift kişilik ve iki üç kişilik kabinden oluşur; tüm kabinlerde banyo, sıcak su, saç kurutma makinesi ve klima vardır. Güvertede 16 güneşlenme minderi, güverte duşu ve açık hava yemek alanı; salonda TV ve DVD, müzik sistemi, buz makinesi ve Wi-Fi bulunur.\n\nFethiye'de inşa edilen iki direkli yat, 500 HP Caterpillar motorla seyreder; 42 kW Iveco jeneratör ve 60 HP motorlu Zodiac tender bulunur. Misafirlerin kullanımına sunulan oyuncaklar: kano, ringo, şnorkel ekipmanı ve kutu oyunları.",
+      "description_en": "Northwind A is a 28-metre gulet, built in 2010 and refitted in 2018. She accommodates 16 guests in 8 cabins, with a crew of 4.\n\nThe cabins comprise six doubles and two triples, all en-suite with hot water, hair dryers and air conditioning. On deck there are 16 sun mattresses, a deck shower and alfresco dining; the saloon has a TV and DVD, a music system, ice maker and Wi-Fi.\n\nBuilt in Fethiye, the two-masted yacht is powered by a 500 hp Caterpillar engine, with a 42 kW Iveco generator and a Zodiac tender with 60 hp. Water toys on board: a canoe, ringo, snorkelling gear and board games.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Wi-Fi",
+        "Eğlence sistemi — Salonda TV ve DVD, müzik sistemi, kutu oyunları",
+        "Buz makinesi",
+        "Jeneratör — 42 kW Iveco",
+        "Tender — Zodiac, 60 HP"
+      ],
+      "water_sports": [
+        "Kano",
+        "Ringo",
+        "Şnorkel ekipmanı"
+      ],
+      "width_m": 6.8,
+      "year": 2010,
+      "refit_year": 2018,
+      "crew": 4,
+      "name": "Northwind A",
+      "home_port": "Göcek"
+    },
+    "ad": "Northwind A"
+  },
+  "buket": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 26,
+      "cabins": 10,
+      "guests": 20,
+      "captain_included": true,
+      "description_tr": "Buket, 2004'te inşa edilen 26 metrelik bir gulettir. 10 kabinde 20 misafir ağırlayan yatta 4 kişilik mürettebat hizmet verir.\n\nKabin düzeni yedi çift kişilik ve üç üç kişilik kabinden oluşur; her kabinin kendi banyosu vardır. Kalabalık gruplar için idealdir. Kıçta gölgelikli açık hava yemek alanı, baş tarafta güneşlenme minderleri ve geniş bir salon bulunur.\n\nİki yelkenli yat 450 HP Iveco motorla seyreder; 32 kW jeneratör, 8.000 litre su ve 3.000 litre yakıt kapasitesi ile bot bulunur.",
+      "description_en": "Buket is a 26-metre gulet, built in 2004. She accommodates 20 guests in 10 cabins, with a crew of 4.\n\nThe cabins comprise seven doubles and three triples, each en-suite; she is ideal for large groups. A shaded alfresco dining area aft, sun cushions forward and a spacious saloon are on board.\n\nWith two sails and a 450 hp Iveco engine, she has a 32 kW generator, 8,000 l of water, 3,000 l of fuel and a dinghy.",
+      "equipment": [
+        "Klima",
+        "Jeneratör — 32 kW",
+        "Tender"
+      ],
+      "water_sports": [],
+      "width_m": 7.3,
+      "year": 2004,
+      "crew": 4,
+      "name": "Buket",
+      "home_port": "Göcek"
+    },
+    "ad": "Buket"
+  },
+  "kasapoglu-5": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 28,
+      "cabins": 6,
+      "guests": 12,
+      "captain_included": true,
+      "description_tr": "Kasapoğlu 5, 28 metrelik bir gulettir. 6 kabinde 12 misafir ağırlar.\n\nKabin düzeni dört çift kişilik ve iki üç kişilik kabinden oluşur; kabinler klimalıdır. Geniş güneşlenme güverteleri, gölgelikli açık hava yemek alanı ve rahat bir salon bulunur.",
+      "description_en": "Kasapoğlu 5 is a 28-metre gulet. She accommodates 12 guests in 6 cabins.\n\nThe cabins comprise four doubles and two triples, all air-conditioned. Wide sun decks, a shaded alfresco dining area and a comfortable saloon are on board.",
+      "equipment": [
+        "Klima"
+      ],
+      "water_sports": [],
+      "name": "Kasapoğlu 5",
+      "home_port": "Fethiye"
+    },
+    "ad": "Kasapoğlu 5"
+  },
+  "can-brothers": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 25,
+      "cabins": 8,
+      "guests": 16,
+      "captain_included": true,
+      "description_tr": "Can Brothers, 25 metrelik bir gulettir. 8 kabinde 16 misafir ağırlayan yatta 4 kişilik mürettebat hizmet verir.\n\nSekiz çift kişilik kabinin hepsinde duşakabinli banyo ve marin tipi klima vardır; mürettebat ayrı kabinde kalır. Mavi tenteli geniş güverte, açık hava yemek alanı, güneşlenme minderleri, rahat salon, müzik sistemi ve sınırsız Wi-Fi bulunur.\n\nFethiye çıkışlı yat 440 HP Caterpillar motorla seyreder; 22 kW jeneratör ve 30 HP Tohatsu motorlu servis botu bulunur. Misafirlerin kullanımına sunulan oyuncaklar: paddle board, kano ve deniz maskeleri.",
+      "description_en": "Can Brothers is a 25-metre gulet. She accommodates 16 guests in 8 cabins, with a crew of 4.\n\nAll eight double cabins have shower-cabin bathrooms and marine air conditioning; the crew have a separate cabin. A wide deck with blue awnings, alfresco dining, sun cushions, a comfortable saloon, a music system and unlimited Wi-Fi are on board.\n\nDeparting from Fethiye, she is powered by a 440 hp Caterpillar engine, with a 22 kW generator and a service boat with a 30 hp Tohatsu. Water toys on board: a paddle board, canoe and snorkel masks.",
+      "equipment": [
+        "Klima — Her kabinde marin tipi",
+        "Wi-Fi — Sınırsız",
+        "Eğlence sistemi — Müzik sistemi",
+        "Jeneratör — 22 kW",
+        "Tender — 30 HP Tohatsu"
+      ],
+      "water_sports": [
+        "Paddle board",
+        "Kano",
+        "Şnorkel ekipmanı"
+      ],
+      "width_m": 6.8,
+      "crew": 4,
+      "home_port": "Fethiye",
+      "name": "Can Brothers"
+    },
+    "ad": "Can Brothers"
+  },
+  "grand-acar": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 35,
+      "cabins": 8,
+      "guests": 18,
+      "captain_included": true,
+      "description_tr": "Grand Acar, 2006'da inşa edilen ve 2022'de yenilenen 35 metrelik bir gulettir. 8 kabinde 18 misafir ağırlar.\n\nKabin düzeni altı çift kişilik ve iki üç kişilik kabinden oluşur; tüm kabinlerde banyo ve klima vardır. Güvertede jakuzi, geniş güneşlenme alanları, gölgelikli açık hava yemek alanı ve barlı geniş salon bulunur; DVD/CD oynatıcı ve kahve makinesi vardır.\n\nKetch tipi yat ikiz 450 HP Iveco motorlarla seyreder; 2×24 kVA jeneratör ve 50 HP Yamaha motorlu tender bulunur. Misafirlerin kullanımına sunulan oyuncaklar: 2 kano, ringo, paddle board, su kayağı, şnorkel ve balık tutma ekipmanı.",
+      "description_en": "Grand Acar is a 35-metre gulet, built in 2006 and refitted in 2022. She accommodates 18 guests in 8 cabins.\n\nThe cabins comprise six doubles and two triples, all en-suite and air-conditioned. A deck jacuzzi, generous sun areas, shaded alfresco dining and a spacious saloon with bar are on board, along with a DVD/CD player and coffee machine.\n\nThe ketch-rigged yacht is powered by twin 450 hp Iveco engines, with 2×24 kVA generators and a tender with a 50 hp Yamaha. Water toys on board: 2 canoes, ringo, paddle board, water skis, snorkelling and fishing gear.",
+      "equipment": [
+        "Klima",
+        "Jakuzi — Güvertede",
+        "Eğlence sistemi — DVD/CD oynatıcı",
+        "Jeneratör — 2× 24 kVA",
+        "Tender — 50 HP Yamaha"
+      ],
+      "water_sports": [
+        "Kano ×2",
+        "Ringo",
+        "Paddle board",
+        "Su kayağı",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ],
+      "width_m": 8,
+      "year": 2006,
+      "refit_year": 2022,
+      "name": "Grand Acar",
+      "home_port": "Marmaris"
+    },
+    "ad": "Grand Acar"
+  },
+  "angels": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Angels",
+    "bilgi": {
+      "tip": "luks-yat",
+      "brand": "Arcadia",
+      "year": 2025,
+      "length_m": 31.5,
+      "width_m": 7.6,
+      "cabins": 6,
+      "guests": 12,
+      "crew": 6,
+      "captain_included": true,
+      "description_tr": "Angels, 2025 yılında suya inen 31,5 metrelik bir Arcadia lüks motoryattır. Geniş cam yüzeyleri, aydınlık iç mekânları ve modern tasarımıyla 12 misafiri konforla ağırlar. Üst güvertedeki güneşlenme salonu, kapalı sky lounge ve kıç güvertedeki yemek alanı, günün her saati için ayrı bir yaşam alanı sunar.\n\nYatta 6 kabin bulunur: ana güvertede king size yataklı bir sahip süiti, tam genişlikte queen size yataklı bir VIP çift kişilik kabin, iskele ve sancak tarafında queen size yataklı iki çift kişilik kabin ve iki twin kabin. Tüm kabinlerde özel banyo, klima ve Smart TV vardır. Altı kişilik mürettebat ayrı bölümde kalır.\n\nSaatte 11 deniz mili seyir hızına ve 3.000 deniz mili menzile sahip Angels'ta klima 24 saat çalışır. 2×300 HP motorlu 10,7 m Technohull tender, ikinci bir 90 HP tender, Sea-Doo jet ski, 2 Seabob, e-foil, kanolar, 4 paddle board, su kayakları, monoski, wakeboard, şişme tüpler, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır.",
+      "description_en": "Angels is a 31.5-metre Arcadia luxury motor yacht launched in 2025. With expansive glazing, bright interiors and contemporary design, she hosts 12 guests in comfort. The upper-deck sun lounge, enclosed sky lounge and aft-deck dining area offer distinct living spaces for every time of day.\n\nShe has 6 cabins: a main-deck owner's suite with a king-size bed, a full-beam VIP double with a queen-size bed, port and starboard doubles with queen-size beds and two twin cabins. All cabins have en-suite bathrooms, air conditioning and a smart TV. The crew of six stay in separate quarters.\n\nCruising at 11 knots with a 3,000 nm range, Angels has 24-hour air conditioning. A 10.7 m Technohull tender with 2×300 hp engines, a second 90 hp tender, a Sea-Doo jet ski, 2 Seabobs, an e-foil, canoes, 4 paddle boards, water skis, a monoski, a wakeboard, towable tubes, snorkelling and fishing gear are available to guests.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Tender — 10,7 m Technohull, 2×300 HP, 12 kişilik",
+        "Tender — 4,90 m, 90 HP, 8 kişilik",
+        "Jeneratör — 2× Mase 65 kW ve 1× Mase 25 kW",
+        "Su yapıcı — Saatte 350 litre",
+        "Wi-Fi — Yunanistan'da Starlink",
+        "Eğlence sistemi — Salonda ve tüm kabinlerde Smart TV, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Jet ski",
+        "Seabob ×2",
+        "E-foil",
+        "Kano ×2",
+        "Paddle board ×4",
+        "Su kayağı ×2",
+        "Monoski",
+        "Wakeboard",
+        "Muz (banana) botu ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ],
+      "name": "Angels"
+    }
+  },
+  "caneren": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Caneren",
+    "bilgi": {
+      "tip": "motoryat",
+      "brand": "Mengi Yay Tersanesi",
+      "year": 1996,
+      "refit_year": 2025,
+      "length_m": 27.3,
+      "width_m": 6.6,
+      "cabins": 4,
+      "guests": 8,
+      "crew": 4,
+      "captain_included": true,
+      "home_port": "Bodrum",
+      "description_tr": "Caneren, 2025 yılında baştan sona yenilenen, 27 metrelik klasik bir motoryattır. Mengi Yay Tersanesi imzalı yat, flybridge'i, geniş güneşlenme alanları ve 8 misafire göre tasarlanmış ferah iç mekânıyla aileler ve arkadaş grupları için konforlu bir mavi yolculuk sunar.\n\nYatta 4 kabin bulunur: king size yataklı bir master kabin (kasa dahil), biri queen size biri king size yataklı ve giyinme odalı iki VIP çift kişilik kabin ve pullman yataklı bir twin kabin. Tüm kabinlerde özel banyo ve klima vardır. Klimalı salonda TV, bar, oturma köşesi ve 8 kişilik yemek alanı yer alır; kıç güvertede gölgelik altında açık havada yemek masası ve geniş oturma alanı bulunur.\n\nSaatte 10 deniz mili seyir hızına sahip olan Caneren'de klima 24 saat çalışır. 50 HP motorlu tender, kanolar, paddle board'lar, su kayakları, wakeboard, ringo, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır. Kaptan ve 3 kişilik mürettebat, ayrı mürettebat bölümünde kalır.",
+      "description_en": "Caneren is a 27-metre classic motor yacht, fully refitted in 2025. Built by Mengi Yay Shipyard, she offers a flybridge, generous sunbathing areas and a spacious interior designed for 8 guests, making her a comfortable choice for families and groups of friends.\n\nShe has 4 cabins: a master cabin with a king-size bed and safe, two VIP double cabins (one queen-size, one king-size with a dressing room) and a twin cabin with a pullman bed. All cabins have en-suite bathrooms and air conditioning. The air-conditioned saloon features a TV, bar, lounge and dining area for 8; the shaded aft deck offers alfresco dining and a large seating area.\n\nCruising at 10 knots, Caneren has 24-hour air conditioning. A tender with a 50 hp outboard, canoes, paddle boards, water skis, a wakeboard, ringos, snorkelling and fishing gear are available to guests. The captain and 3 crew stay in separate crew quarters.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Flybridge",
+        "Tender — 3,60 m, 50 HP, 6 kişilik",
+        "Jeneratör — Kohler 27 kW ve Onan 17,5 kW",
+        "Su yapıcı — Saatte 140 litre",
+        "Wi-Fi",
+        "Eğlence sistemi — IPTV (salon, kıç güverte, master kabin), DVD/CD, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Kano ×2",
+        "Paddle board ×2",
+        "Su kayağı ×2",
+        "Wakeboard",
+        "Monoski",
+        "Ringo ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ],
+      "name": "Caneren"
+    }
+  },
+  "lady-freya": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Lady Freya",
+    "bilgi": {
+      "tip": "gulet",
+      "brand": "Orion Shipyards",
+      "year": 2008,
+      "refit_year": 2023,
+      "length_m": 22.8,
+      "width_m": 6.1,
+      "cabins": 4,
+      "guests": 8,
+      "crew": 3,
+      "captain_included": true,
+      "description_tr": "Lady Freya, 2023 yılında yenilenen 22,8 metrelik, ahşap işçiliğiyle öne çıkan klasik bir yelkenli gulettir. Yelkenleriyle gerçek bir seyir keyfi sunan yat, 8 misafir için sıcak ve samimi bir atmosfere sahiptir. Baş güvertedeki oturma ve güneşlenme alanları ile kıç güvertedeki gölgelikli yemek ve dinlenme alanı, günün büyük bölümünü açık havada geçirmeyi sağlar.\n\nYatta 4 kabin bulunur: kıçta ve başta queen size yataklı iki master kabin ile iskele ve sancak tarafında iki çift kişilik kabin. Tüm kabinlerde özel banyo ve klima vardır. Klimalı salonda açık mutfak ve 8 kişilik yemek alanı yer alır. Kaptan ve 2 kişilik mürettebat baştaki ayrı bölümde kalır.\n\nSaatte 9 deniz mili seyir hızına sahip Lady Freya'da klima 24 saat çalışır. 70 HP motorlu tender, kanolar, paddle board'lar, su kayakları, monoski, wakeboard, ringolar, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır.",
+      "description_en": "Lady Freya is a 22.8-metre classic sailing gulet with fine woodwork, refitted in 2023. Offering genuine sailing under canvas, she has a warm, intimate atmosphere for 8 guests. The forward seating and sunbathing areas and the shaded aft dining and lounge area let guests spend most of the day outdoors.\n\nShe has 4 cabins: aft and forward master cabins with queen-size beds and port and starboard double cabins. All cabins have en-suite bathrooms and air conditioning. The air-conditioned saloon features an open galley and dining for 8. The captain and 2 crew stay in a separate forward crew quarter.\n\nCruising at 9 knots, Lady Freya has 24-hour air conditioning. A tender with a 70 hp outboard, canoes, paddle boards, water skis, a monoski, a wakeboard, ringos, snorkelling and fishing gear are available to guests.",
+      "equipment": [
+        "Klima — Tam gün (24 saat)",
+        "Tender — 4,20 m, 70 HP, 8 kişilik",
+        "Jeneratör — Onan 17,5 kW ve Albo Marine 14 kW",
+        "Wi-Fi",
+        "Eğlence sistemi — Salonda ve kıç güvertede uydu TV, DVD/CD, Bluetooth hoparlör, kutu oyunları"
+      ],
+      "water_sports": [
+        "Kano ×2",
+        "Paddle board ×2",
+        "Su kayağı ×2",
+        "Monoski",
+        "Wakeboard",
+        "Ringo ×2",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ],
+      "name": "Lady Freya",
+      "home_port": "Rodos"
+    }
   }
 }
