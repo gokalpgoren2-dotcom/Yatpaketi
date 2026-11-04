@@ -90,7 +90,19 @@ export function vatNote(b: { vatMode?: string; vatRate?: number }, lang: "tr" | 
 }
 
 // APA (Advance Provisioning Allowance) kısa açıklaması
+// "%20'si", "%30'u", "%5'i" — Türkçe ek
+const pctSuffix = (p: number) => {
+  const n = p % 10 ? p % 10 : p % 100 ? (p / 10) % 10 : 0;
+  const ones: Record<number, string> = { 1: "i", 2: "si", 3: "ü", 4: "ü", 5: "i", 6: "sı", 7: "si", 8: "i", 9: "u" };
+  const tens: Record<number, string> = { 1: "u", 2: "si", 3: "u", 4: "ı", 5: "si", 6: "ı", 7: "i", 8: "i", 9: "ı" };
+  return (p % 10 ? ones[n] : tens[n]) ?? "i";
+};
+// APA açıklaması. %5 APA yalnızca su sporları yakıtı ve marina bağlama ücretleri içindir.
 export const apaText = (pct: number, lang: "tr" | "en" = "tr") =>
-  lang === "en"
-    ? `APA is an advance of ${pct}% of the charter fee for running costs such as fuel, port fees and provisions. Expenses are documented at the end of the charter; any balance is refunded or settled.`
-    : `APA, yakıt, liman ücretleri ve kumanya gibi tur masrafları için kiralama bedelinin %${pct}'u kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`;
+  pct === 5
+    ? lang === "en"
+      ? "A 5% APA is an advance on the charter fee that covers water sports fuel and marina mooring fees only. Expenses are documented at the end of the charter; any balance is refunded or settled."
+      : `%5 APA, yalnızca su sporları yakıtı ve marina bağlama ücretleri için kiralama bedelinin %5'i kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`
+    : lang === "en"
+      ? `APA is an advance of ${pct}% of the charter fee for running costs such as fuel, port fees and provisions. Expenses are documented at the end of the charter; any balance is refunded or settled.`
+      : `APA, yakıt, liman ücretleri ve kumanya gibi tur masrafları için kiralama bedelinin %${pct}'${pctSuffix(pct)} kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`; artan iade edilir, eksik tamamlanır.`;

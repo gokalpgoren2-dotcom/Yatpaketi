@@ -106,7 +106,7 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
     vatRate: r.vat_rate == null ? 20 : Number(r.vat_rate),
     brochure: r.brochure_path ? publicImageUrl(r.brochure_path as string) : null,
     // APA yüzdesi monthly_prices içinde "apa" anahtarında tutulur (ek sütun gerektirmesin diye)
-    apa: [20, 30, 35, 40].includes(Number((r.monthly_prices ?? {}).apa)) ? Number((r.monthly_prices ?? {}).apa) : 0,
+    apa: [5, 20, 30, 35, 40].includes(Number((r.monthly_prices ?? {}).apa)) ? Number((r.monthly_prices ?? {}).apa) : 0,
     // monthly_prices: {"4": günlük, ..., "w4": haftalık, ...}
     monthly: Object.fromEntries(Object.entries((r.monthly_prices ?? {}) as Record<string, unknown>).filter(([k]) => !k.startsWith("w")).map(([k, v]) => [Number(k), Number(v)]).filter(([k, v]) => k >= 1 && k <= 12 && v > 0)),
     weekly: Object.fromEntries(Object.entries((r.monthly_prices ?? {}) as Record<string, unknown>).filter(([k]) => k.startsWith("w")).map(([k, v]) => [Number(k.slice(1)), Number(v)]).filter(([k, v]) => k >= 1 && k <= 12 && v > 0)),
