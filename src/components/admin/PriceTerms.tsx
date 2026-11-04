@@ -42,7 +42,7 @@ export function PriceTerms({ included, excluded, vatMode, vatRate, apa: apaInit 
         <p className="mb-2 text-xs font-semibold uppercase tracking-wide text-navy/60">APA</p>
         <input type="hidden" name="apa" value={apa || ""} />
         <div className="flex flex-wrap gap-2">
-          {[0, 5, 20, 30, 35, 40].map((v) => (
+          {[0, 5, 15, 20, 30, 35, 40].map((v) => (
             <button key={v} type="button" onClick={() => setApa(v)} className={`rounded-xl border px-4 py-2.5 text-sm font-semibold ${apa === v ? "border-navy bg-navy text-white" : "border-navy/15 bg-white text-navy"}`}>{v ? `%${v}` : "Yok"}</button>
           ))}
         </div>

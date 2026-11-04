@@ -56,7 +56,7 @@ export async function saveBoat(formData: FormData) {
   }
   // APA yüzdesi (yalnızca 20/30/40)
   const apa = Number(formData.get("apa"));
-  if ([5, 20, 30, 35, 40].includes(apa)) (monthly as Record<string, number>).apa = apa;
+  if ([5, 15, 20, 30, 35, 40].includes(apa)) (monthly as Record<string, number>).apa = apa;
   const pd = mvals.length ? Math.min(...mvals) : null; // vitrin/eski kod için en düşük günlük fiyat
   const pw = null;
   const sort = num(formData, "sort_order") ?? 0;
