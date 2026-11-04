@@ -7,7 +7,7 @@ const log = (...a) => console.log("[icerik-sync]", ...a);
 
 // Uzaktaki fotoğrafları indirir: filigranlı kopya herkese açık "media" deposuna (sitede görünür),
 // filigransız kopya gizli "brosur-foto" deposuna (yalnızca tanıtım PDF'i) yüklenir.
-async function remotePhotos(db, slug, boatId, urls, keepLocal = false) {
+async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese = false) {
   let sharp;
   try { sharp = (await import("sharp")).default; } catch { log(slug, "sharp yok, uzak fotoğraflar atlandı."); return 0; }
   const mark = readFileSync("scripts/filigran.png");
@@ -53,6 +53,8 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false) {
     const { data: loc } = await db.from("boat_images").select("id,path").eq("boat_id", boatId).like("path", `/tekneler/${slug}/%`).order("path");
     for (const [i, r] of (loc ?? []).entries()) await db.from("boat_images").update({ sort_order: 100 + i }).eq("id", r.id);
   }
+  // Yalnızca bu bağlantıdaki fotoğraflar kalsın: yatın diğer tüm fotoğrafları silinir
+  if (onlyThese) await db.from("boat_images").delete().eq("boat_id", boatId);
   await db.from("boat_images").insert(paths.map((p, i) => ({ boat_id: boatId, path: p, alt: slug, is_cover: i === 0, sort_order: i })));
   // fazladan kalan eski broşür fotoğrafları
   const { data: old } = await db.storage.from("brosur-foto").list(slug, { limit: 100 });
@@ -140,7 +142,7 @@ async function main() {
       log(slug, `${add.length} yeni fotoğraf, toplam ${paths.length}.`);
     }
 
-    if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true);
+    if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true, cfg.sadece_bu_fotolar === true);
 
     const upd = {};
     if (typeof cfg.yayinla === "boolean") upd.is_published = cfg.yayinla;
