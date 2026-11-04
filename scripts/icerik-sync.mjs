@@ -18,7 +18,7 @@ async function remotePhotos(db, slug, boatId, urls, keepLocal = false, onlyThese
   const stamp = Date.now().toString(36);
   for (const u of urls.slice(0, 30)) {
     try {
-      const r = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0 yatpaketi-icerik" } });
+      const r = await fetch(u, { headers: { "User-Agent": "Mozilla/5.0 yatpaketi-icerik" }, signal: AbortSignal.timeout(20000) });
       if (!r.ok) { log(slug, "indirilemedi", r.status, u); continue; }
       const raw = Buffer.from(await r.arrayBuffer());
       const base = sharp(raw).rotate().resize({ width: 1920, height: 1920, fit: "inside", withoutEnlargement: true });
@@ -148,8 +148,6 @@ async function main() {
       log(slug, `${add.length} yeni fotoğraf, toplam ${paths.length}.`);
     }
 
-    if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true, cfg.sadece_bu_fotolar === true);
-
     const upd = {};
     if (typeof cfg.yayinla === "boolean") upd.is_published = cfg.yayinla;
     if (typeof cfg.one_cikar === "boolean") upd.is_featured = cfg.one_cikar;
@@ -168,6 +166,12 @@ async function main() {
     if (cfg.brosur === true) {
       const { error } = await db.from("boats").update({ brochure_path: `/brosur/${slug}.pdf` }).eq("id", boat.id);
       log(slug, error ? "broşür bağlanamadı: " + error.message : "broşür bağlandı.");
+    }
+
+    // Uzaktaki fotoğraflar en sonda: hata olsa da yat yayına alınmış ve bilgileri yazılmış olur
+    if (Array.isArray(cfg.foto_url) && cfg.foto_url.length) {
+      try { await remotePhotos(db, slug, boat.id, cfg.foto_url, cfg.yerel_foto_kalsin === true, cfg.sadece_bu_fotolar === true); }
+      catch (e) { log(slug, "uzak fotoğraflar alınamadı:", e?.message ?? e); }
     }
 
     if (Number.isInteger(cfg.one_cikan_sira) && cfg.one_cikan_sira > 0) {
