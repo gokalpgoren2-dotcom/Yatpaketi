@@ -5,7 +5,7 @@ import { BoatsListView, type SP } from "@/views/BoatsListView";
 export const metadata: Metadata = {
   title: "Kiralık Yatlar",
   description: "Gulet, motoryat, katamaran ve yelkenli seçeneklerini filtreleyin.",
-  alternates: { canonical: "/tekneler", languages: { tr: "/tekneler", en: "/en/tekneler" } },
+  alternates: { canonical: "/tekneler", languages: { tr: "/tekneler", en: "/en/tekneler", ru: "/ru/tekneler" } },
   robots: { index: false, follow: true },
 };
 

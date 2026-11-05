@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: CULTURE.tr.title,
   description: CULTURE.tr.meta,
-  alternates: { canonical: "/yat-ve-yatcilik-kulturu", languages: { tr: "/yat-ve-yatcilik-kulturu", en: "/en/yat-ve-yatcilik-kulturu" } },
+  alternates: { canonical: "/yat-ve-yatcilik-kulturu", languages: { tr: "/yat-ve-yatcilik-kulturu", en: "/en/yat-ve-yatcilik-kulturu", ru: "/ru/yat-ve-yatcilik-kulturu" } },
 };
 
 export default function CulturePage() {

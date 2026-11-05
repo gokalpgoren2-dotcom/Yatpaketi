@@ -25,13 +25,14 @@ const RESP_IC = ["M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12ZM12 15a3 3 0 1
 
 export async function AboutView({ lang }: { lang: Lang }) {
   const [about, cats, dests, { boats }] = await Promise.all([getAbout(), getCategories(lang), getDestinations(lang), getBoats(lang)]);
-  const A = about[lang];
-  const en = lang === "en";
+  const A = about[lang === "tr" ? "tr" : "en"];
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const [t1, ...t2] = A.title.split(/(?<=\.)\s+/);
   // Rakamlar: {tekne} ve {liman} yerine yayındaki yat ve liman sayısı. Eski kayıtta "kurucu ortak / destinasyon bölgesi" kaldıysa onlar da sayıya çevrilir.
   const stats = ((A.stats ?? []) as string[][]).map(([v, l]) => {
-    if (v.includes("{tekne}") || /kurucu ortak|founding partner/i.test(l)) return [String(boats.length), v.includes("{tekne}") ? l : en ? "boats in our portfolio" : "portföyümüzdeki yat"];
-    if (v.includes("{liman}") || /destinasyon bölgesi|destination region/i.test(l)) return [String(dests.length), v.includes("{liman}") ? l : en ? "ports" : "liman"];
+    if (v.includes("{tekne}") || /kurucu ortak|founding partner/i.test(l)) return [String(boats.length), v.includes("{tekne}") ? l : ru ? "яхт в нашем портфолио" : en ? "boats in our portfolio" : "portföyümüzdeki yat"];
+    if (v.includes("{liman}") || /destinasyon bölgesi|destination region/i.test(l)) return [String(dests.length), v.includes("{liman}") ? l : ru ? "портов" : en ? "ports" : "liman"];
     return [v, l];
   });
   const edu = (A.edu ?? []) as string[];
@@ -49,7 +50,7 @@ export async function AboutView({ lang }: { lang: Lang }) {
           {/* arka planda yavaşça dönen dümen */}
           <svg className="absolute -right-32 top-10 -z-10 h-[34rem] w-[34rem] animate-spin text-white/[0.05] [animation-duration:90s] motion-reduce:animate-none lg:-right-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="0.6" aria-hidden><path d={HELM} /></svg>
           <div className={wrap}>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "About us" : "Hakkımızda"}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{ru ? "О нас" : en ? "About us" : "Hakkımızda"}</p>
             <h1 className="font-display mt-4 max-w-4xl text-4xl font-semibold leading-[1.05] lg:text-7xl">
               {t1}{t2.length > 0 && <><br /><span className="text-turquoise">{t2.join(" ")}</span></>}
             </h1>

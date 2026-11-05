@@ -23,15 +23,15 @@ export const homeDefaults: HomeContent = {
 };
 
 export async function getHome(lang: Lang = "tr"): Promise<HomeContent> {
-  const defs: HomeContent = lang === "en" ? { heroImage: null, title: t("en").heroTitle, subtitle: t("en").heroSubtitle } : homeDefaults;
+  const defs: HomeContent = lang !== "tr" ? { heroImage: null, title: t("en").heroTitle, subtitle: t("en").heroSubtitle } : homeDefaults;
   if (!supabaseConfigured()) return defs;
   try {
     const { data } = await db().from("site_settings").select("value").eq("key", "home").maybeSingle();
     const v = (data?.value ?? {}) as { hero_path?: string; title?: string; subtitle?: string; title_en?: string; subtitle_en?: string };
     return {
       heroImage: publicImageUrl(v.hero_path),
-      title: (lang === "en" ? v.title_en?.trim() : v.title?.trim()) || defs.title,
-      subtitle: (lang === "en" ? v.subtitle_en?.trim() : v.subtitle?.trim()) || defs.subtitle,
+      title: (lang !== "tr" ? v.title_en?.trim() : v.title?.trim()) || defs.title,
+      subtitle: (lang !== "tr" ? v.subtitle_en?.trim() : v.subtitle?.trim()) || defs.subtitle,
     };
   } catch {
     return defs;
@@ -50,9 +50,9 @@ export async function getDestinations(lang: Lang = "tr"): Promise<Destination[]>
     if (error || !data || data.length === 0) return sampleDestinations;
     return data.map((d, i) => ({
       slug: d.slug as string,
-      name: ((lang === "en" ? d.name_en : null) || d.name_tr) as string,
-      blurb: ((lang === "en" ? d.blurb_en : null) || d.blurb_tr || "") as string,
-      intro: ((lang === "en" ? d.intro_en : null) || d.intro_tr || "") as string,
+      name: ((lang !== "tr" ? d.name_en : null) || d.name_tr) as string,
+      blurb: ((lang !== "tr" ? d.blurb_en : null) || d.blurb_tr || "") as string,
+      intro: ((lang !== "tr" ? d.intro_en : null) || d.intro_tr || "") as string,
       hue: 175 + i * 9,
       image: publicImageUrl(d.cover_path as string | null),
       seoTitle: (d.seo_title as string | null) ?? "",
@@ -87,7 +87,7 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
   return {
     slug: r.slug,
     name: r.name,
-    type: (lang === "en" ? r.categories?.name_en : null) || r.categories?.name_tr || "",
+    type: (lang !== "tr" ? r.categories?.name_en : null) || r.categories?.name_tr || "",
     brand: r.brand ?? "",
     model: r.model ?? "",
     year: r.year ?? null,
@@ -117,7 +117,7 @@ function mapBoat(r: Row, lang: Lang = "tr"): Boat {
     currency: r.currency ?? "EUR",
     equipment: r.equipment ?? [],
     waterSports: r.water_sports ?? [],
-    description: (lang === "en" ? r.description_en : null) || r.description_tr || "",
+    description: (lang !== "tr" ? r.description_en : null) || r.description_tr || "",
     hue: hueFor(r.slug),
     addedAt: r.created_at ?? "",
     image: imgs[0] ?? null,
@@ -158,13 +158,13 @@ export async function getCategories(lang: Lang = "tr"): Promise<Category[]> {
     const full = await db().from("categories").select("slug,name_tr,name_en,intro_tr,cover_path,seo_title,seo_description").eq("is_active", true).order("sort_order");
     if (!full.error && full.data && full.data.length > 0) {
       return full.data.map((c) => ({
-        slug: c.slug as string, name: ((lang === "en" ? c.name_en : null) || c.name_tr) as string, intro: (c.intro_tr ?? "") as string,
+        slug: c.slug as string, name: ((lang !== "tr" ? c.name_en : null) || c.name_tr) as string, intro: (c.intro_tr ?? "") as string,
         image: publicImageUrl(c.cover_path as string | null), seoTitle: (c.seo_title as string | null) ?? "", seoDescription: (c.seo_description as string | null) ?? "",
       }));
     }
     const basic = await db().from("categories").select("slug,name_tr,name_en").eq("is_active", true).order("sort_order");
     if (basic.error || !basic.data || basic.data.length === 0) return sampleCategories.map(toCategory);
-    return basic.data.map((c) => ({ slug: c.slug as string, name: ((lang === "en" ? c.name_en : null) || c.name_tr) as string, intro: "", image: null, seoTitle: "", seoDescription: "" }));
+    return basic.data.map((c) => ({ slug: c.slug as string, name: ((lang !== "tr" ? c.name_en : null) || c.name_tr) as string, intro: "", image: null, seoTitle: "", seoDescription: "" }));
   } catch {
     return sampleCategories.map(toCategory);
   }

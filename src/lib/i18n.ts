@@ -1,27 +1,29 @@
-export type Lang = "tr" | "en";
+export type Lang = "tr" | "en" | "ru";
+export const LANGS: Lang[] = ["tr", "en", "ru"];
 
-// İngilizce sayfalar /en altındadır; adresler (yat, bölge adresleri) Türkçe ile aynıdır.
+// İngilizce sayfalar /en, Rusça sayfalar /ru altındadır; adresler (yat, bölge adresleri) Türkçe ile aynıdır.
 export function href(lang: Lang, path: string): string {
   if (lang === "tr") return path;
-  if (path === "/") return "/en";
-  if (path.startsWith("/#")) return `/en${path.slice(1)}`;
-  return `/en${path}`;
+  const p = `/${lang}`;
+  if (path === "/") return p;
+  if (path.startsWith("/#")) return `${p}${path.slice(1)}`;
+  return `${p}${path}`;
 }
 
 export function langFromPath(path: string): Lang {
-  return path === "/en" || path.startsWith("/en/") || path.startsWith("/en#") ? "en" : "tr";
+  for (const l of ["en", "ru"] as const) if (path === `/${l}` || path.startsWith(`/${l}/`) || path.startsWith(`/${l}#`)) return l;
+  return "tr";
 }
 
 // Bulunulan sayfanın diğer dildeki karşılığı.
 const EN_PAGES = ["/tekneler", "/limanlar", "/tekne-tipleri", "/rehber", "/destinasyonlar", "/rotalar", "/tur-paketleri", "/kiralama-sureci", "/sss", "/yat-ve-yatcilik-kulturu", "/hakkimizda", "/iletisim", "/favorilerim", "/tekne-karsilastir", "/hizmetlerimiz"];
 export function switchPath(path: string, to: Lang): string {
-  const bare = path === "/en" ? "/" : path.startsWith("/en/") ? path.slice(3) : path;
-  if (to === "en") {
-    // İngilizce karşılığı olmayan sayfalardan (blog, rehber, hakkımızda...) İngilizce ana sayfaya gidilir.
-    const ok = bare === "/" || EN_PAGES.some((p) => bare === p || bare.startsWith(p + "/"));
-    return ok ? href("en", bare) : "/en";
-  }
-  return bare;
+  const cur = langFromPath(path);
+  const bare = cur === "tr" ? path : path === `/${cur}` ? "/" : path.slice(cur.length + 1);
+  if (to === "tr") return bare;
+  // Karşılığı olmayan sayfalardan (blog vb.) o dilin ana sayfasına gidilir.
+  const ok = bare === "/" || EN_PAGES.some((p) => bare === p || bare.startsWith(p + "/"));
+  return ok ? href(to, bare) : `/${to}`;
 }
 
 const tr = {
@@ -205,6 +207,92 @@ const en: typeof tr = {
   call: "Call", contactAria: "Contact", reachUs: "Get in touch", sendEmail: "Send email", writeUs: "Write to us", closeContact: "Close contact menu", openContact: "Open contact menu",
 };
 
-export const dict = { tr, en };
+
+const ru: typeof tr = {
+  locale: "ru-RU",
+  months: ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"],
+  days: ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"],
+  navHome: "Главная", navBoats: "Яхты в аренду", navAllBoats: "Все яхты", navDest: "Порты", navAllDest: "Все порты",
+  navGuide: "Гид Yatpaketi", navBlueVoyage: "Голубой круиз", navBlog: "Блог", navAbout: "О нас", navServices: "Услуги", navContact: "Контакты",
+  langGroup: "Выбор языка", mainMenu: "Главное меню", mobileMenu: "Мобильное меню", menuOpen: "Открыть меню", menuClose: "Закрыть меню", homeAria: "главная страница yatpaketi",
+  quickMenu: "Быстрое меню", mbHome: "Главная", mbBoats: "Яхты", mbDest: "Порты", mbContact: "Контакты", mbFav: "Избранное",
+  searchAria: "Поиск яхт", location: "Локация", boatType: "Тип яхты", all: "Все", date: "Даты", searchBoats: "Найти яхты",
+  popular: "Популярное:", country: "Турция",
+  heroTitle: "Арендуйте голубой круиз своей мечты",
+  heroSubtitle: "Гулеты, моторные яхты, катамараны и парусники — выберите яхту и отправьте запрос на бронирование.",
+  byType: "Выберите по типу яхты",
+  featuredEyebrow: "Избранные яхты", featuredTitle: "Мы выбрали для вас", allBoatsBtn: "Все яхты",
+  sampleHome: "Пример: база данных не подключена, поэтому показаны примерные яхты.",
+  noBoatsHome: "Яхты пока не опубликованы. Скоро они появятся здесь.",
+  howEyebrow: "Как это работает?", howTitle: "Отправьте запрос в три шага",
+  steps: [
+    ["1", "Выберите яхту", "Фильтруйте яхты по региону, датам, количеству гостей и бюджету."],
+    ["2", "Отправьте запрос", "Создайте запрос на бронирование с датами и количеством гостей. Это бесплатно."],
+    ["3", "Дождитесь подтверждения", "Мы проверим наличие и цену. Бронирование окончательно после подтверждения."],
+  ],
+  destEyebrow: "Порты", destTitle: "Популярные порты для аренды яхт", seeAll: "Смотреть все",
+  modesEyebrow: "Варианты аренды", modesTitle: "Спланируйте под себя",
+  modes: [
+    ["Аренда на день", "Для прогулок по бухтам, дней рождения и частных мероприятий."],
+    ["Аренда на неделю", "Круиз с каютами: варианты с капитаном и экипажем."],
+    ["Коллекция люкс-яхт", "Яхты премиум-класса, индивидуальный маршрут и сервис."],
+  ],
+  seeBoats: "Смотреть яхты →",
+  routesEyebrow: "Голубой круиз", routesTitle: "Классические маршруты",
+  routes: [
+    ["Гёджек – 12 островов", "7 дней", "Терсане, Клеопатра, Капы Крик"],
+    ["Бодрум – Датча", "7 дней", "Караада, Книдос, Гёкова"],
+    ["Фетхие – Кекова", "7 дней", "Каш, Кекова, Калекёй"],
+  ],
+  whyEyebrow: "Почему yatpaketi?", whyTitle: "Выбирайте уверенно, отдыхайте спокойно",
+  why: [
+    ["Отобранный флот", "Мы проверяем и размещаем каждую яхту отдельно."],
+    ["Прозрачный процесс", "Запрос — это ещё не бронирование; оно окончательно после подтверждения."],
+    ["Знание региона", "Команда, которая знает побережье, подскажет маршрут и бухты."],
+    ["Поддержка рядом", "Быстрая связь по телефону и в WhatsApp."],
+  ],
+  blogEyebrow: "Гид Yatpaketi", blogTitle: "Читайте и планируйте", allPosts: "Все статьи",
+  footTag: "Платформа аренды яхт в Турции.", customerLogin: "Вход для клиентов", rights: "Все права защищены.",
+  captained: "С экипажем", askPrice: "Цена по запросу", guestsN: (n) => `${n} гостей`, cabinsN: (n) => `${n} кают`,
+  perWeek: "/ неделя от", perDay: "/ день от",
+  listEyebrow: "Яхты в аренду", listTitle: "Найдите подходящую яхту",
+  datesNote: "Результаты не фильтруются по датам. Наличие подтверждается после запроса.",
+  fDest: "Порт", fType: "Тип яхты", fGuests: "Гости (мин.)", fCabins: "Каюты (мин.)", fMin: "Мин. цена", fMax: "Макс. цена",
+  fLength: "Длина (мин., м)", fYear: "Год постройки (мин.)", fRental: "Тип аренды", fBoth: "На день и на неделю", fDaily: "На день", fWeekly: "На неделю",
+  fCaptain: "Капитан", fAny: "Не важно", fWithCaptain: "С капитаном", fNoCaptain: "Без капитана", fCrew: "Экипаж", fWithCrew: "С экипажем", fNoCrew: "Без экипажа",
+  fSort: "Сортировка", sRec: "Рекомендуемые", sPriceAsc: "Сначала дешевле", sPriceDesc: "Сначала дороже", sNew: "Новые", sLength: "Длина яхты",
+  filter: "Фильтр", clear: "Очистить",
+  priceNote: "Фильтр по цене работает в EUR по минимальной дневной цене яхты. К яхтам с ценой по запросу он не применяется.",
+  foundN: (n) => `Найдено яхт: ${n}`, noneYet: "Яхты пока не опубликованы.", noMatch: "Нет яхт по этим фильтрам. Попробуйте ослабить фильтры.",
+  breadcrumb: "Навигация", sendRequest: "Отправить запрос", photoN: (n) => `фото ${n}`, sampleBoat: "Пример: база данных не подключена, поэтому показана примерная яхта.",
+  about: "О яхте", specs: "Характеристики", notStated: "–",
+  sType: "Тип яхты", sBrand: "Марка / модель", sYear: "Год постройки", sRefit: "Год ремонта", sLen: "Длина", sWidth: "Ширина", sCabins: "Каюты", sCap: "Вместимость",
+  sCrew: "Экипаж", crewN: (n) => `${n} чел.`, noCrew: "Без экипажа", sCaptain: "Капитан", included: "Включено", notIncluded: "Не включено",
+  sPort: "Порт отправления", sRegions: "Регионы аренды",
+  equipment: "Оборудование", toys: "Водные развлечения и снаряжение", availability: "Наличие",
+  availText: "Наличие и окончательная цена подтверждаются после запроса. Даты можно указать в карточке запроса.",
+  price: "Цена", dailyPrice: "За день", requestTitle: "Отправить запрос на бронирование", similar: "Похожие яхты",
+  rental: "Аренда", titleSuffix: "Аренда",
+  pickDates: "Пожалуйста, выберите даты заезда и выезда.", endBefore: "Дата выезда не может быть раньше даты заезда.",
+  waGreeting: (b) => `Здравствуйте, я хочу отправить запрос на бронирование яхты ${b}.`,
+  waDate: "Даты", waGuests: "Гости", waName: "Имя", waBoat: "Яхта",
+  guestCount: "Гости", lessGuests: "Меньше гостей", moreGuests: "Больше гостей",
+  yourNameOpt: "Ваше имя (необязательно)", sendWa: "Отправить запрос в WhatsApp",
+  waHelp: "Готовое сообщение откроется в WhatsApp, перед отправкой его можно изменить. Запрос — это ещё не бронирование; наличие и цена будут подтверждены.",
+  noWa: "Нет WhatsApp? Заполните форму",
+  received: "Ваш запрос получен.", receivedNote: "Это ещё не бронирование. Мы свяжемся с вами после подтверждения наличия и цены.",
+  formAria: (b) => `Запрос на бронирование ${b}`, fullName: "Имя и фамилия *", phone: "Телефон", email: "Эл. почта", contactNote: "Укажите хотя бы телефон или эл. почту.",
+  guestsReq: "Гости *", message: "Сообщение", consent: "Я согласен(на) на обработку моих данных yatpaketi для ответа на этот запрос.",
+  sending: "Отправка…", submit: "Отправить запрос", formNote: "Запрос не создаёт бронирование. Бронирование окончательно после подтверждения наличия и цены.",
+  routePick: "Выберите маршрут", boatsCount: (n) => `Яхт: ${n}`,
+  destHero: (n) => `Аренда яхт: ${n}`, destBoats: (n) => `Яхты с отправлением из ${n}`, destNone: "Для этого порта яхты пока не добавлены.",
+  sampleData: "Пример: база данных не подключена, поэтому показаны примерные данные.",
+  catHero: (n) => `Аренда: ${n}`, catBoats: (n) => `${n}`, catNone1: "Яхт этого типа пока нет.", catNone2: "Посмотрите", catNone3: "все яхты.",
+  checkIn: "Заезд", checkOut: "Выезд", applyDates: "Готово", prevMonth: "Предыдущий месяц", nextMonth: "Следующий месяц", pickBoth: "Выберите даты заезда и выезда", pickEnd: "выберите дату выезда",
+  tapEnd: "Теперь нажмите на дату выезда.", tapStart: "Сначала нажмите на дату заезда, затем на дату выезда.",
+  call: "Позвонить", contactAria: "Контакты", reachUs: "Свяжитесь с нами", sendEmail: "Написать на почту", writeUs: "Написать нам", closeContact: "Закрыть меню контактов", openContact: "Открыть меню контактов",
+};
+
+export const dict = { tr, en, ru };
 export type Dict = typeof tr;
 export const t = (lang: Lang): Dict => dict[lang];

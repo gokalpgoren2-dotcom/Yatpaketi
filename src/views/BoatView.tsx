@@ -50,7 +50,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         {sample && <p className="mt-2 text-sm text-navy/50">{L.sampleBoat}</p>}
         <div className="mt-3 flex flex-wrap gap-2">
           <FavButton slug={b.slug} name={b.name} lang={lang} label className="rounded-full border border-navy/20 px-4 py-2 text-navy hover:border-[#e8453c]" />
-          <Link href={`${href(lang, "/tekne-karsilastir")}?a=${b.slug}`} className="inline-flex items-center rounded-full bg-turquoise/10 px-4 py-2 text-sm font-semibold text-turquoise-dark hover:bg-turquoise/20">{lang === "en" ? "Compare with another yacht →" : "Başka yatla karşılaştır →"}</Link>
+          <Link href={`${href(lang, "/tekne-karsilastir")}?a=${b.slug}`} className="inline-flex items-center rounded-full bg-turquoise/10 px-4 py-2 text-sm font-semibold text-turquoise-dark hover:bg-turquoise/20">{lang !== "tr" ? "Compare with another yacht →" : "Başka yatla karşılaştır →"}</Link>
         </div>
 
         {gallery.length > 0 ? (
@@ -68,18 +68,19 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
           <div>
             {/* Öne çıkan özellikler: telefonda fotoğrafların hemen altında */}
             {(() => {
-              const en = lang === "en";
+              const en = lang !== "tr";
+              const ru = lang === "ru";
               const acRaw = b.equipment.find((e) => /^klima|air.?cond/i.test(parseEquipment(e).name));
               const acD = acRaw ? parseEquipment(acRaw).detail.toLocaleLowerCase("tr") : "";
               const acH = acD.match(/(\d{1,2})\s*saat/)?.[1];
-              const ac = !acRaw ? (en ? "No" : "Yok") : /24\s*saat|7\s*\/\s*24|tam gün/.test(acD) ? "7/24" : acH ? (en ? `${acH} h/day` : `${acH} sa/gün`) : (en ? "Yes" : "Var");
+              const ac = !acRaw ? (ru ? "Нет" : en ? "No" : "Yok") : /24\s*saat|7\s*\/\s*24|tam gün/.test(acD) ? "7/24" : acH ? (en ? `${acH} h/day` : `${acH} sa/gün`) : (ru ? "Есть" : en ? "Yes" : "Var");
               const items: [string, string][] = [
-                [en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
-                [en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],
-                [en ? "Guests" : "Misafir", String(b.guests)],
-                [en ? "Crew" : "Personel", b.crew > 0 ? String(b.crew) : "–"],
-                [en ? "Built/Refit" : "Yapım/Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
-                [en ? "A/C" : "Klima", ac],
+                [ru ? "Длина" : en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
+                [ru ? "Каюты" : en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],
+                [ru ? "Гости" : en ? "Guests" : "Misafir", String(b.guests)],
+                [ru ? "Экипаж" : en ? "Crew" : "Personel", b.crew > 0 ? String(b.crew) : "–"],
+                [ru ? "Постройка/ремонт" : en ? "Built/Refit" : "Yapım/Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
+                [ru ? "Кондиционер" : en ? "A/C" : "Klima", ac],
               ];
               return (
                 <ul className="mb-8 grid grid-cols-3 gap-2 sm:grid-cols-6">
@@ -96,13 +97,13 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             {b.brochure && (
               <a href={b.brochure} target="_blank" rel="noopener" download className="-mt-4 mb-8 flex items-center justify-center gap-2 rounded-2xl border border-navy/15 px-4 py-3 text-sm font-semibold text-navy lg:hidden">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 3h7l5 5v13H7zM14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" /></svg>
-                {lang === "en" ? "Download yacht brochure (PDF)" : "Tanıtım dosyasını indir (PDF)"}
+                {lang !== "tr" ? "Download yacht brochure (PDF)" : "Tanıtım dosyasını indir (PDF)"}
               </a>
             )}
             {/* Telefonda kısa fiyat özeti: ayrıntılar ve tarih seçimi aşağıdaki kutuda */}
             <a href="#talep" className={`mb-8 flex items-center justify-between gap-3 rounded-2xl p-4 ring-1 lg:hidden ${b.offer && minDaily(b) != null ? "bg-[#fff1ee] ring-[#e8453c]/20" : "bg-white ring-navy/10 shadow-sm"}`}>
               <span>
-                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-navy/45">{lang === "en" ? "Daily from" : "Günlük, başlayan"}</span>
+                <span className="block text-[0.65rem] font-semibold uppercase tracking-[0.16em] text-navy/45">{lang !== "tr" ? "Daily from" : "Günlük, başlayan"}</span>
                 {minDaily(b) != null ? (
                   <span className="mt-0.5 flex flex-wrap items-baseline gap-x-2">
                     <span className={`font-display text-2xl font-semibold ${b.offer ? "text-[#c0332b]" : "text-navy"}`}>{money(off(minDaily(b)!, b.offer?.percent), b.currency, lang)}</span>
@@ -114,7 +115,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                   <span className="mt-0.5 block text-lg font-semibold text-turquoise-dark">{L.askPrice}</span>
                 )}
               </span>
-              <span className="shrink-0 rounded-full bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">{lang === "en" ? "Get price ↓" : "Fiyat hesapla ↓"}</span>
+              <span className="shrink-0 rounded-full bg-turquoise px-4 py-2.5 text-sm font-semibold text-white">{lang !== "tr" ? "Get price ↓" : "Fiyat hesapla ↓"}</span>
             </a>
 
             <h2 className="font-display text-2xl text-navy">{L.specs}</h2>
@@ -135,11 +136,11 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
 
             {((b.included?.length ?? 0) > 0 || (b.excluded?.length ?? 0) > 0) && (
               <>
-                <h2 className="font-display mt-10 text-2xl text-navy">{lang === "en" ? "What's included" : "Fiyata dahil olanlar"}</h2>
+                <h2 className="font-display mt-10 text-2xl text-navy">{lang !== "tr" ? "What's included" : "Fiyata dahil olanlar"}</h2>
                 <div className="mt-4 grid gap-4 sm:grid-cols-2">
                   {(b.included?.length ?? 0) > 0 && (
                     <div className="rounded-2xl bg-emerald-50/60 p-5 ring-1 ring-emerald-100">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{lang === "en" ? "Included" : "Dahil"}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-emerald-800">{lang !== "tr" ? "Included" : "Dahil"}</p>
                       <ul className="mt-3 space-y-2">
                         {b.included!.map((x) => <li key={x} className="flex items-start gap-2.5 text-sm text-navy"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-500 text-white"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M5 12.5l4.5 4.5L19 7.5" /></svg></span>{x}</li>)}
                       </ul>
@@ -147,7 +148,7 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                   )}
                   {(b.excluded?.length ?? 0) > 0 && (
                     <div className="rounded-2xl bg-mist p-5 ring-1 ring-navy/5">
-                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy/55">{lang === "en" ? "Not included" : "Dahil değil"}</p>
+                      <p className="text-xs font-semibold uppercase tracking-[0.14em] text-navy/55">{lang !== "tr" ? "Not included" : "Dahil değil"}</p>
                       <ul className="mt-3 space-y-2">
                         {b.excluded!.map((x) => <li key={x} className="flex items-start gap-2.5 text-sm text-navy/75"><span className="mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-navy/15 text-navy/60"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" aria-hidden><path d="M6 6l12 12M18 6L6 18" /></svg></span>{x}</li>)}
                       </ul>
@@ -200,20 +201,20 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                   <p className="flex flex-wrap items-center gap-2">
                     <span className="rounded-full bg-[#e8453c] px-3 py-1 text-sm font-bold text-white shadow">{offerLabel(b.offer!, lang)}</span>
                   </p>
-                  <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#c0332b]">{lang === "en" ? "Discounted daily price" : "İndirimli günlük fiyat"}</p>
+                  <p className="mt-3 text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-[#c0332b]">{lang !== "tr" ? "Discounted daily price" : "İndirimli günlük fiyat"}</p>
                   <p className="mt-1 flex flex-wrap items-baseline gap-x-2">
                     <span className="font-display text-4xl font-semibold leading-none text-[#c0332b]">{money(off(from, pct), b.currency, lang)}</span>
-                    <span className="text-sm text-navy/55">{lang === "en" ? "/ day from" : "’den başlayan"}</span>
+                    <span className="text-sm text-navy/55">{lang !== "tr" ? "/ day from" : "’den başlayan"}</span>
                   </p>
-                  <p className="mt-1 text-sm text-navy/45"><span className="line-through">{money(from, b.currency, lang)}</span> {lang === "en" ? "regular price" : "normal fiyat"}</p>
+                  <p className="mt-1 text-sm text-navy/45"><span className="line-through">{money(from, b.currency, lang)}</span> {lang !== "tr" ? "regular price" : "normal fiyat"}</p>
                   {offerUntil(b.offer!, lang) && <p className="mt-2 text-xs font-semibold text-[#c0332b]">{offerUntil(b.offer!, lang)}</p>}
                 </div>
               ) : (
                 <div>
-                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{lang === "en" ? "Daily price" : "Günlük fiyat"}</p>
+                  <p className="text-[0.7rem] font-semibold uppercase tracking-[0.18em] text-navy/45">{lang !== "tr" ? "Daily price" : "Günlük fiyat"}</p>
                   <p className="mt-1 flex items-baseline gap-2">
                     <span className="font-display text-4xl font-semibold leading-none text-navy">{money(from, b.currency, lang)}</span>
-                    <span className="text-sm text-navy/55">{lang === "en" ? "/ day from" : "’den başlayan"}</span>
+                    <span className="text-sm text-navy/55">{lang !== "tr" ? "/ day from" : "’den başlayan"}</span>
                   </p>
                 </div>
               );
@@ -246,19 +247,19 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
                           ) : (
                             <span className="block text-sm font-semibold tabular-nums text-navy">{money(v, b.currency, lang)}</span>
                           )}
-                          {weeklyFor(b, m) != null && <span className="mt-0.5 block text-[11px] leading-tight text-navy/55">{lang === "en" ? "Week" : "Haftalık"}: <b className={`tabular-nums ${pct ? "text-[#c0332b]" : "text-navy"}`}>{money(off(weeklyFor(b, m)!, pct), b.currency, lang)}</b></span>}
+                          {weeklyFor(b, m) != null && <span className="mt-0.5 block text-[11px] leading-tight text-navy/55">{lang !== "tr" ? "Week" : "Haftalık"}: <b className={`tabular-nums ${pct ? "text-[#c0332b]" : "text-navy"}`}>{money(off(weeklyFor(b, m)!, pct), b.currency, lang)}</b></span>}
                         </li>
                       );
                     })}
                   </ul>
-                  <p className="mt-2 text-xs text-navy/50">{lang === "en" ? SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Daily prices; weekly rates apply for 7 nights or more. Pick your dates below for the total." : "Prices are per day. Pick your dates below to see the total." : SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Günlük fiyatlar; 7 gece ve üzerinde haftalık fiyat uygulanır. Toplam için aşağıdan tarih seçin." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
+                  <p className="mt-2 text-xs text-navy/50">{lang !== "tr" ? SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Daily prices; weekly rates apply for 7 nights or more. Pick your dates below for the total." : "Prices are per day. Pick your dates below to see the total." : SEASON_MONTHS.some((m) => weeklyFor(b, m) != null) ? "Günlük fiyatlar; 7 gece ve üzerinde haftalık fiyat uygulanır. Toplam için aşağıdan tarih seçin." : "Fiyatlar günlüktür. Toplam tutar için aşağıdan tarih seçin."}</p>
                 </div>
               );
             })()}
             {b.brochure && (
               <a href={b.brochure} target="_blank" rel="noopener" download className="mt-5 flex items-center gap-3 rounded-2xl bg-navy px-4 py-3.5 text-white transition hover:bg-navy-soft">
                 <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-turquoise"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M7 3h7l5 5v13H7zM14 3v5h5M12 11v6M9.5 14.5 12 17l2.5-2.5" /></svg></span>
-                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{lang === "en" ? "Download yacht brochure" : "Tanıtım dosyasını indir"}</span><span className="block text-xs text-white/60">PDF</span></span>
+                <span className="min-w-0 flex-1"><span className="block text-sm font-semibold">{lang !== "tr" ? "Download yacht brochure" : "Tanıtım dosyasını indir"}</span><span className="block text-xs text-white/60">PDF</span></span>
                 <span aria-hidden>↓</span>
               </a>
             )}

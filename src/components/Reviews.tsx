@@ -24,7 +24,7 @@ export function RatingLine({ rating, lang = "tr", className = "" }: { rating: Ra
     <span className={`inline-flex items-center gap-1.5 text-sm ${className}`}>
       <Stars value={rating.avg} size={15} />
       <b className="text-navy">{rating.avg.toFixed(1)}</b>
-      <span className="text-navy/55">({rating.count} {lang === "en" ? (rating.count === 1 ? "review" : "reviews") : "yorum"})</span>
+      <span className="text-navy/55">({rating.count} {lang !== "tr" ? (rating.count === 1 ? "review" : "reviews") : "yorum"})</span>
     </span>
   );
 }
@@ -32,17 +32,18 @@ export function RatingLine({ rating, lang = "tr", className = "" }: { rating: Ra
 function when(label: string | null, lang: Lang) {
   if (!label || !/^\d{4}-\d{2}$/.test(label)) return "";
   const [y, m] = label.split("-").map(Number);
-  return new Date(y, m - 1, 15).toLocaleDateString(lang === "en" ? "en-GB" : "tr-TR", { month: "long", year: "numeric" });
+  return new Date(y, m - 1, 15).toLocaleDateString(lang !== "tr" ? "en-GB" : "tr-TR", { month: "long", year: "numeric" });
 }
 
 export function ReviewSection({ reviews, lang = "tr", title, showBoat = false, id }: { reviews: Review[]; lang?: Lang; title?: string; showBoat?: boolean; id?: string }) {
   if (reviews.length === 0) return null;
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const avg = reviews.reduce((a, r) => a + r.rating, 0) / reviews.length;
   return (
     <section id={id} className="mt-16 scroll-mt-24">
       <div className="flex flex-wrap items-end justify-between gap-3">
-        <h2 className="font-display text-2xl text-navy lg:text-3xl">{title ?? (en ? "Guest reviews" : "Misafir yorumları")}</h2>
+        <h2 className="font-display text-2xl text-navy lg:text-3xl">{title ?? (ru ? "Отзывы гостей" : en ? "Guest reviews" : "Misafir yorumları")}</h2>
         <RatingLine rating={{ avg, count: reviews.length }} lang={lang} />
       </div>
       <div className="mt-6 grid gap-5 md:grid-cols-2 lg:grid-cols-3">

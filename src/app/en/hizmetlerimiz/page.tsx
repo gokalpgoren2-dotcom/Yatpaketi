@@ -8,7 +8,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return {
     title: S.title.replace(/\s+/g, " "),
     description: S.meta,
-    alternates: { canonical: "/en/hizmetlerimiz", languages: { tr: "/hizmetlerimiz", en: "/en/hizmetlerimiz" } },
+    alternates: { canonical: "/en/hizmetlerimiz", languages: { tr: "/hizmetlerimiz", en: "/en/hizmetlerimiz", ru: "/ru/hizmetlerimiz" } },
   };
 }
 

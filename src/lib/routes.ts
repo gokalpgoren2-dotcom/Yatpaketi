@@ -375,7 +375,7 @@ const EN_NAMES: Record<string, string> = {
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
 const GENERIC = new Set(["Seyir günü", "Serbest gün", "Dönüş"]);
-const nm = (s: string, lang: Lang) => (lang === "en" ? EN_NAMES[s] ?? s : s);
+const nm = (s: string, lang: Lang) => (lang !== "tr" ? EN_NAMES[s] ?? s : s);
 
 // Bulunma eki düzeltmesi: "Bodrum'te" → "Bodrum'da", "Fethiye'te" → "Fethiye'de".
 function fixTr(t: string) {

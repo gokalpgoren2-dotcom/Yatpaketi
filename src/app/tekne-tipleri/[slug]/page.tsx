@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: c.seoTitle || `${c.name} Kiralama`,
     description: c.seoDescription || `${c.name} kiralama seçenekleri ve yatlar.`,
-    alternates: { canonical: `/tekne-tipleri/${c.slug}`, languages: { tr: `/tekne-tipleri/${c.slug}`, en: `/en/tekne-tipleri/${c.slug}` } },
+    alternates: { canonical: `/tekne-tipleri/${c.slug}`, languages: { tr: `/tekne-tipleri/${c.slug}`, en: `/en/tekne-tipleri/${c.slug}`, ru: `/ru/tekne-tipleri/${c.slug}` } },
     robots: { index: false, follow: true }, // Google'a açma adımına kadar kapalı
   };
 }

@@ -114,7 +114,7 @@ export function HowItWorks({ lang = "tr" }: { lang?: Lang }) {
           <div className="absolute inset-x-0 bottom-0 -z-10 h-24 overflow-hidden opacity-70" aria-hidden>
             <svg className="wave-a absolute bottom-0 left-0 h-24 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={SEC_WAVE(160)} fill="rgba(127,220,230,0.14)" /></svg>
           </div>
-          <Heading dark eyebrow={L.howEyebrow} title={L.howTitle} action={{ href: href(lang, "/kiralama-sureci"), label: lang === "en" ? "Charter process" : "Kiralama süreci" }} />
+          <Heading dark eyebrow={L.howEyebrow} title={L.howTitle} action={{ href: href(lang, "/kiralama-sureci"), label: lang !== "tr" ? "Charter process" : "Kiralama süreci" }} />
           <ol className="relative grid gap-5 md:grid-cols-3 lg:gap-6">
             <span className="absolute left-8 right-8 top-[2.6rem] hidden h-0.5 bg-[repeating-linear-gradient(90deg,rgba(127,220,230,0.45)_0_10px,transparent_10px_20px)] md:block" aria-hidden />
             {steps.map(([n, title, d], i) => (
@@ -151,7 +151,7 @@ export function Destinations({ items, lang = "tr" }: { items: Destination[]; lan
               <div className="absolute inset-0 bg-gradient-to-t from-navy/85 via-navy/10 to-transparent" />
               <span className="absolute left-4 top-4 rounded-full bg-white/90 px-2.5 py-1 font-display text-xs font-semibold text-navy shadow backdrop-blur">{String(i + 1).padStart(2, "0")}</span>
               <div className="absolute inset-x-0 bottom-0 p-5 text-white">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquoise">{d.slug.includes("yunan") ? (lang === "en" ? "Greece" : "Yunanistan") : L.country}</p>
+                <p className="text-[11px] font-semibold uppercase tracking-[0.25em] text-turquoise">{d.slug.includes("yunan") ? (lang !== "tr" ? "Greece" : "Yunanistan") : L.country}</p>
                 <h3 className="font-display mt-1 text-3xl font-semibold">{d.name}</h3>
                 <div className="mt-1 flex items-end justify-between gap-3">
                   <p className="line-clamp-2 text-sm text-white/80">{d.blurb}</p>
@@ -232,7 +232,7 @@ export function WhyUs({ lang = "tr" }: { lang?: Lang }) {
   return (
     <section className="py-14 lg:py-24" id="hakkimizda">
       <div className={wrap}>
-        <Heading eyebrow={L.whyEyebrow} title={L.whyTitle} action={{ href: href(lang, "/hakkimizda"), label: lang === "en" ? "About us" : "Hakkımızda" }} />
+        <Heading eyebrow={L.whyEyebrow} title={L.whyTitle} action={{ href: href(lang, "/hakkimizda"), label: lang !== "tr" ? "About us" : "Hakkımızda" }} />
         <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4 lg:gap-6">
           {items.map(([title, d], i) => (
             <div key={title} className="group relative overflow-hidden rounded-[1.75rem] bg-white p-6 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-2xl hover:shadow-navy/10 hover:ring-turquoise/40 lg:p-7">
@@ -251,7 +251,7 @@ export function WhyUs({ lang = "tr" }: { lang?: Lang }) {
 // Ana sayfa: Yatpaketi Rehberi, dergi düzeni (solda öne çıkan yazı, sağda liste).
 export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
   const L = t(lang);
-  if (lang === "en") return null;
+  if (lang !== "tr") return null;
   if (items.length === 0) return null;
   const [first, ...rest] = items;
   const list = rest.slice(0, 4);
@@ -297,12 +297,13 @@ export function Blog({ items, lang = "tr" }: { items: Post[]; lang?: Lang }) {
 // Ana sayfa: klasik rotalar vitrini (hareketli rota şeması, rota kartları, bölgeler).
 export function RoutesShowcase({ routes, regions, lang = "tr" }: { routes: Post[]; regions: Post[]; lang?: Lang }) {
   if (routes.length === 0) return null;
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const cards = routes.map((r) => toCard(r, lang));
   const feature = cards.find((c) => c.slug === "bodrum-gocek") ?? cards.find((c) => !c.loop) ?? cards[0];
   const ports = new Set(cards.map((c) => c.from)).size;
   const others = cards.filter((c) => c.slug !== feature.slug).slice(0, 6);
-  const U = ROUTE_UI[lang];
+  const U = ROUTE_UI[lang === "tr" ? "tr" : "en"];
   return (
     <section className="relative isolate overflow-hidden pb-28 pt-24 text-white lg:pb-36 lg:pt-32" style={{ background: "linear-gradient(160deg, #05204a 0%, #06264b 45%, #0b4a6e 80%, #0d6a86 100%)" }}>
       <svg className="absolute left-0 top-0 -z-10 h-10 w-full rotate-180" viewBox="0 0 1440 100" preserveAspectRatio="none" aria-hidden><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#f7f9fa" /></svg>
@@ -314,16 +315,16 @@ export function RoutesShowcase({ routes, regions, lang = "tr" }: { routes: Post[
       <div className={wrap}>
         <div className="grid items-center gap-12 lg:grid-cols-[1fr_1.15fr] lg:gap-16">
           <div>
-            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Classic routes" : "Klasik rotalar"}</p>
-            <h2 className="font-display mt-3 text-4xl font-semibold leading-[1.05] lg:text-6xl">{en ? "Your voyage, already charted." : "Rotanız hazır, sadece yelken açın."}</h2>
-            <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/75">{en ? "Tried-and-tested blue voyage routes, planned day by day: which cove, which evening, which harbour." : "Denenmiş mavi yolculuk rotaları, gün gün planlanmış: hangi gün hangi koy, hangi akşam hangi liman."}</p>
+            <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{ru ? "Классические маршруты" : en ? "Classic routes" : "Klasik rotalar"}</p>
+            <h2 className="font-display mt-3 text-4xl font-semibold leading-[1.05] lg:text-6xl">{ru ? "Ваш маршрут уже проложен." : en ? "Your voyage, already charted." : "Rotanız hazır, sadece yelken açın."}</h2>
+            <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/75">{ru ? "Проверенные маршруты «голубого круиза», расписанные по дням: какая бухта, какой вечер, какая гавань." : en ? "Tried-and-tested blue voyage routes, planned day by day: which cove, which evening, which harbour." : "Denenmiş mavi yolculuk rotaları, gün gün planlanmış: hangi gün hangi koy, hangi akşam hangi liman."}</p>
             <ul className="mt-8 flex gap-10">
-              <li><span className="font-display block text-5xl font-semibold text-turquoise">{cards.length}</span><span className="text-sm text-white/65">{en ? "routes" : "rota"}</span></li>
-              <li><span className="font-display block text-5xl font-semibold text-turquoise">{ports}</span><span className="text-sm text-white/65">{en ? "departure ports" : "kalkış limanı"}</span></li>
-              <li><span className="font-display block text-5xl font-semibold text-turquoise">7</span><span className="text-sm text-white/65">{en ? "days each" : "günlük program"}</span></li>
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">{cards.length}</span><span className="text-sm text-white/65">{ru ? "маршрутов" : en ? "routes" : "rota"}</span></li>
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">{ports}</span><span className="text-sm text-white/65">{ru ? "портов отправления" : en ? "departure ports" : "kalkış limanı"}</span></li>
+              <li><span className="font-display block text-5xl font-semibold text-turquoise">7</span><span className="text-sm text-white/65">{ru ? "дней каждый" : en ? "days each" : "günlük program"}</span></li>
             </ul>
             <Link href={href(lang, "/rotalar")} className="group mt-10 inline-flex items-center gap-3 rounded-full bg-turquoise py-2 pl-6 pr-2 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">
-              {en ? "Explore all routes" : "Tüm rotaları keşfedin"}
+              {ru ? "Все маршруты" : en ? "Explore all routes" : "Tüm rotaları keşfedin"}
               <span className="flex h-9 w-9 items-center justify-center rounded-full bg-navy text-white transition group-hover:translate-x-0.5" aria-hidden>→</span>
             </Link>
           </div>
@@ -352,7 +353,7 @@ export function RoutesShowcase({ routes, regions, lang = "tr" }: { routes: Post[
 
         {regions.length > 0 && (
           <div className="mt-12 flex flex-col gap-4 border-t border-white/10 pt-10 lg:flex-row lg:items-center lg:gap-8">
-            <p className="shrink-0 text-xs font-semibold uppercase tracking-[0.28em] text-turquoise">{en ? "Destinations" : "Destinasyonlar"}</p>
+            <p className="shrink-0 text-xs font-semibold uppercase tracking-[0.28em] text-turquoise">{ru ? "Направления" : en ? "Destinations" : "Destinasyonlar"}</p>
             <div className="no-scrollbar -mx-5 flex gap-2.5 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:px-0">
               {regions.map((r) => {
                 const map = regionMapFor("destination", r.slug);
@@ -376,10 +377,11 @@ export function RoutesShowcase({ routes, regions, lang = "tr" }: { routes: Post[
 
 // Ana sayfa kapanışı: büyük çağrı, WhatsApp, güven rakamları.
 export async function FinalCta({ lang = "tr" }: { lang?: Lang }) {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const [c, about] = await Promise.all([getContact(), getAbout()]);
-  const stats = ((about[lang].stats ?? []) as string[][]).slice(0, 2);
-  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}?text=${encodeURIComponent(en ? "Hello, I'd like to charter a boat. Dates and group size: " : "Merhaba, yat kiralamak istiyorum. Tarih ve kişi sayısı: ")}` : href(lang, "/iletisim");
+  const stats = ((about[lang === "tr" ? "tr" : "en"].stats ?? []) as string[][]).slice(0, 2);
+  const wa = c.whatsapp ? `https://wa.me/${c.whatsapp}?text=${encodeURIComponent(ru ? "Здравствуйте, я хочу арендовать яхту. Даты и количество человек: " : en ? "Hello, I'd like to charter a boat. Dates and group size: " : "Merhaba, yat kiralamak istiyorum. Tarih ve kişi sayısı: ")}` : href(lang, "/iletisim");
   return (
     <section className="pb-20 pt-6 lg:pb-28">
       <div className={wrap}>
@@ -392,14 +394,14 @@ export async function FinalCta({ lang = "tr" }: { lang?: Lang }) {
           </div>
           <div className="grid gap-12 lg:grid-cols-[1.4fr_1fr] lg:items-end">
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Ready when you are" : "Hazır olduğunuzda"}</p>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{ru ? "Готовы, когда готовы вы" : en ? "Ready when you are" : "Hazır olduğunuzda"}</p>
               <h2 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-7xl">{en ? <>The first step is<br /><span className="text-turquoise">just a message.</span></> : <>İlk adım<br /><span className="text-turquoise">sadece bir mesaj.</span></>}</h2>
-              <p className="mt-6 max-w-xl text-lg text-white/75">{en ? "Tell us your dates, group size and the region you dream of. We'll find the right boat and route, and stay with you until you're back on shore." : "Tatil tarihinizi, kişi sayınızı ve hayalinizdeki bölgeyi yazın. Size uygun yatı ve rotayı bulalım, kıyıya dönene kadar yanınızda olalım."}</p>
+              <p className="mt-6 max-w-xl text-lg text-white/75">{ru ? "Напишите даты, количество гостей и регион вашей мечты. Мы подберём подходящую яхту и маршрут и будем рядом, пока вы не вернётесь на берег." : en ? "Tell us your dates, group size and the region you dream of. We'll find the right boat and route, and stay with you until you're back on shore." : "Tatil tarihinizi, kişi sayınızı ve hayalinizdeki bölgeyi yazın. Size uygun yatı ve rotayı bulalım, kıyıya dönene kadar yanınızda olalım."}</p>
               <div className="mt-9 flex flex-wrap gap-3">
                 <a href={wa} target={c.whatsapp ? "_blank" : undefined} rel="noopener noreferrer" className="flex items-center gap-2.5 rounded-full bg-turquoise px-7 py-4 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">
-                  <Ic d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" size={18} />{en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
+                  <Ic d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" size={18} />{ru ? "Написать в WhatsApp" : en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
                 </a>
-                <Link href={href(lang, "/tekneler")} className="rounded-full px-7 py-4 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Browse boats" : "Yatları inceleyin"}</Link>
+                <Link href={href(lang, "/tekneler")} className="rounded-full px-7 py-4 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{ru ? "Смотреть яхты" : en ? "Browse boats" : "Yatları inceleyin"}</Link>
               </div>
             </div>
             <div className="space-y-3">

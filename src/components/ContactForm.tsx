@@ -21,7 +21,7 @@ const T = {
 const field = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-navy outline-none transition focus:border-turquoise focus:ring-2 focus:ring-turquoise/25";
 
 export function ContactForm({ lang, whatsapp, email }: { lang: Lang; whatsapp: string; email: string }) {
-  const L = T[lang];
+  const L = T[lang === "tr" ? "tr" : "en"];
   const [name, setName] = useState("");
   const [topic, setTopic] = useState(L.topics[0]);
   const [msg, setMsg] = useState("");

@@ -28,7 +28,8 @@ function BoatHead({ b, lang, tag }: { b: Boat; lang: Lang; tag: string }) {
 }
 
 export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: string; b?: string }) {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const [{ boats }, curated, contact] = await Promise.all([getBoats(lang), getCurated(), getContact()]);
   const A = boats.find((x) => x.slug === sa);
   const B = boats.find((x) => x.slug === sb);
@@ -37,7 +38,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
   const note = both ? curated.find((c) => samePair(c, A.slug, B.slug)) : undefined;
   const noteText = note ? ((en ? note.noteEn?.trim() : "") || note.note) : "";
   const featured = curated.filter((c) => c.featured && boats.some((x) => x.slug === c.a) && boats.some((x) => x.slug === c.b));
-  const askPrice = en ? "Ask for price" : "Fiyat sorunuz";
+  const askPrice = ru ? "Цена по запросу" : en ? "Ask for price" : "Fiyat sorunuz";
   const result = both ? { rows: compareRows(A, B, lang, (x) => priceLabel(x, lang), askPrice), ...buildPoints(A, B, lang) } : null;
   const origin = "https://yatpaketi.com";
   const wa = both && contact.whatsapp
@@ -58,10 +59,10 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
           </div>
           <div className={`${wrap} flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between`}>
             <div>
-              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{en ? "Yacht comparison" : "Yat karşılaştırma"}</p>
-              <h1 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-6xl">{en ? "Which yacht" : "Hangi yat"}<br /><span className="text-turquoise">{en ? "is right for you?" : "size uygun?"}</span></h1>
+              <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{ru ? "Сравнение яхт" : en ? "Yacht comparison" : "Yat karşılaştırma"}</p>
+              <h1 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-6xl">{ru ? "Какая яхта" : en ? "Which yacht" : "Hangi yat"}<br /><span className="text-turquoise">{ru ? "подходит вам?" : en ? "is right for you?" : "size uygun?"}</span></h1>
             </div>
-            <p className="max-w-md text-white/75 lg:border-l lg:border-white/20 lg:pl-6 lg:text-lg">{en ? "Pick two yachts and see how they compare on size, age, cabins, water sports and price, with our notes." : "İki yat seçin; boy, yaş, kabin, su sporları ve fiyat açısından nasıl ayrıştıklarını notlarımızla birlikte görün."}</p>
+            <p className="max-w-md text-white/75 lg:border-l lg:border-white/20 lg:pl-6 lg:text-lg">{ru ? "Выберите две яхты и сравните их по размеру, возрасту, каютам, водным развлечениям и цене — с нашими комментариями." : en ? "Pick two yachts and see how they compare on size, age, cabins, water sports and price, with our notes." : "İki yat seçin; boy, yaş, kabin, su sporları ve fiyat açısından nasıl ayrıştıklarını notlarımızla birlikte görün."}</p>
           </div>
         </section>
 
@@ -75,7 +76,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
               <div className="mt-12">
                 {featured.length > 0 && (
                   <>
-                    <p className={`mb-4 ${eyebrow}`}>{en ? "Popular comparisons" : "Sık karşılaştırılanlar"}</p>
+                    <p className={`mb-4 ${eyebrow}`}>{ru ? "Популярные сравнения" : en ? "Popular comparisons" : "Sık karşılaştırılanlar"}</p>
                     <div className="grid gap-4 md:grid-cols-2">
                       {featured.map((c) => {
                         const x = boats.find((q) => q.slug === c.a)!, y = boats.find((q) => q.slug === c.b)!;
@@ -92,7 +93,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                             <span className="min-w-0 flex-1">
                               <span className="font-display block text-base font-semibold leading-snug text-navy lg:text-lg">{x.name} <span className="text-navy/35">/</span> {y.name}</span>
                               <span className="mt-0.5 block text-xs text-navy/55">{x.length > 0 ? `${x.length} m` : ""}{x.year ? ` · ${x.year}` : ""} <span className="text-navy/30">/</span> {y.length > 0 ? `${y.length} m` : ""}{y.year ? ` · ${y.year}` : ""}</span>
-                              <span className="mt-2 block text-sm font-semibold text-turquoise-dark">{en ? "See comparison" : "Karşılaştırmayı gör"} <span className="inline-block transition group-hover:translate-x-1">→</span></span>
+                              <span className="mt-2 block text-sm font-semibold text-turquoise-dark">{ru ? "Смотреть сравнение" : en ? "See comparison" : "Karşılaştırmayı gör"} <span className="inline-block transition group-hover:translate-x-1">→</span></span>
                             </span>
                           </Link>
                         );
@@ -100,8 +101,8 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                     </div>
                   </>
                 )}
-                {(featured.length === 0 || A || B) && <p className="mt-6 rounded-3xl bg-mist p-8 text-center text-navy/70">{A || B ? (en ? `${(A ?? B)!.name} is selected. Now choose the second yacht above.` : `${(A ?? B)!.name} seçildi. Şimdi yukarıdan ikinci yatı seçin.`) : (en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki yat seçin.")}</p>}
-                <p className="mt-6 text-sm text-navy/60">{en ? "Tip: save yachts with the heart and compare them in " : "İpucu: Yatları kalple favorileyip "}<Link href={href(lang, "/favorilerim")} className="font-semibold text-turquoise-dark underline">{en ? "your saved list" : "favoriler sayfasında"}</Link>{en ? "." : " da karşılaştırabilirsiniz."}</p>
+                {(featured.length === 0 || A || B) && <p className="mt-6 rounded-3xl bg-mist p-8 text-center text-navy/70">{A || B ? (en ? `${(A ?? B)!.name} is selected. Now choose the second yacht above.` : `${(A ?? B)!.name} seçildi. Şimdi yukarıdan ikinci yatı seçin.`) : (ru ? "Выберите две яхты выше, чтобы сравнить их." : en ? "Choose two yachts above to compare them." : "Karşılaştırmak için yukarıdan iki yat seçin.")}</p>}
+                <p className="mt-6 text-sm text-navy/60">{ru ? "Совет: сохраняйте яхты сердечком и сравнивайте их в " : en ? "Tip: save yachts with the heart and compare them in " : "İpucu: Yatları kalple favorileyip "}<Link href={href(lang, "/favorilerim")} className="font-semibold text-turquoise-dark underline">{ru ? "избранном" : en ? "your saved list" : "favoriler sayfasında"}</Link>{ru ? "." : en ? "." : " da karşılaştırabilirsiniz."}</p>
               </div>
             )}
 
@@ -121,20 +122,20 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
                           {(["a", "b"] as const).map((k) => (
                             <dd key={k} className={`flex items-center justify-center gap-1.5 rounded-xl px-2 py-2 text-center text-sm font-semibold ${r.win === k ? "bg-turquoise/15 text-navy" : "text-navy/75"}`}>
                               {r[k]}
-                              {r.win === k && <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-turquoise-dark" aria-label={en ? "better" : "daha iyi"}><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>}
+                              {r.win === k && <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.6" strokeLinecap="round" strokeLinejoin="round" className="shrink-0 text-turquoise-dark" aria-label={ru ? "лучше" : en ? "better" : "daha iyi"}><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>}
                             </dd>
                           ))}
                         </div>
                       </div>
                     ))}
                   </dl>
-                  <p className="border-t border-navy/10 px-4 py-3 text-xs text-navy/50 sm:px-6">{en ? "✓ marks the stronger value in each row. Larger is not always better; it depends on your group and budget." : "✓ her satırda öne çıkan değeri gösterir. Büyük her zaman daha iyi demek değildir; grubunuza ve bütçenize bağlıdır."}</p>
+                  <p className="border-t border-navy/10 px-4 py-3 text-xs text-navy/50 sm:px-6">{ru ? "✓ отмечает более сильное значение в каждой строке. Больше — не всегда лучше: всё зависит от вашей компании и бюджета." : en ? "✓ marks the stronger value in each row. Larger is not always better; it depends on your group and budget." : "✓ her satırda öne çıkan değeri gösterir. Büyük her zaman daha iyi demek değildir; grubunuza ve bütçenize bağlıdır."}</p>
                 </div>
 
                 <CompareInsights A={A} B={B} note={noteText} points={result.points} summary={result.summary} lang={lang} />
 
                 <div className="flex flex-col gap-3 rounded-3xl bg-mist p-5 sm:flex-row sm:items-center sm:p-6">
-                  {wa && <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-6 py-3.5 text-base font-semibold text-white hover:brightness-95">{en ? "Ask us which one to pick" : "Hangisini seçeceğinizi bize sorun"}</a>}
+                  {wa && <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex items-center justify-center rounded-full bg-[#25D366] px-6 py-3.5 text-base font-semibold text-white hover:brightness-95">{ru ? "Спросите нас, какую выбрать" : en ? "Ask us which one to pick" : "Hangisini seçeceğinizi bize sorun"}</a>}
                   <Link href={href(lang, `/tekneler/${A.slug}`)} className="inline-flex items-center justify-center rounded-full border border-navy/20 px-6 py-3.5 text-base font-semibold text-navy">{A.name}</Link>
                   <Link href={href(lang, `/tekneler/${B.slug}`)} className="inline-flex items-center justify-center rounded-full border border-navy/20 px-6 py-3.5 text-base font-semibold text-navy">{B.name}</Link>
                 </div>

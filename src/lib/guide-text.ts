@@ -72,4 +72,4 @@ const en: typeof tr = {
   metaProcess: "From request to hand-over: how provisioning, welcome and sailing days work once your booking is confirmed.",
 };
 
-export const gt = (lang: Lang) => (lang === "en" ? en : tr);
+export const gt = (lang: Lang) => (lang !== "tr" ? en : tr);

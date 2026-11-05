@@ -5,7 +5,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Favori Yatlar | Yatpaketi",
   robots: { index: false, follow: true },
-  alternates: { canonical: "/favorilerim", languages: { tr: "/favorilerim", en: "/en/favorilerim" } },
+  alternates: { canonical: "/favorilerim", languages: { tr: "/favorilerim", en: "/en/favorilerim", ru: "/ru/favorilerim" } },
 };
 
 export default function Page() {

@@ -5,14 +5,15 @@ import type { Lang } from "@/lib/i18n";
 
 export function FavButton({ slug, name, lang = "tr", className = "", label = false }: { slug: string; name: string; lang?: Lang; className?: string; label?: boolean }) {
   const on = useFavorites().includes(slug);
-  const en = lang === "en";
-  const text = on ? (en ? "Saved" : "Favorilerde") : (en ? "Save" : "Favorile");
+  const en = lang !== "tr";
+  const ru = lang === "ru";
+  const text = on ? (ru ? "В избранном" : en ? "Saved" : "Favorilerde") : (ru ? "В избранное" : en ? "Save" : "Favorile");
   return (
     <button
       type="button"
       onClick={() => toggleFavorite(slug)}
       aria-pressed={on}
-      aria-label={`${name}: ${on ? (en ? "remove from favorites" : "favorilerden çıkar") : (en ? "add to favorites" : "favorilere ekle")}`}
+      aria-label={`${name}: ${on ? (ru ? "удалить из избранного" : en ? "remove from favorites" : "favorilerden çıkar") : (ru ? "добавить в избранное" : en ? "add to favorites" : "favorilere ekle")}`}
       className={`inline-flex items-center justify-center gap-2 transition active:scale-95 ${className}`}
     >
       <svg width="20" height="20" viewBox="0 0 24 24" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden className={on ? "fill-[#e8453c] stroke-[#e8453c]" : "fill-none stroke-current"}>

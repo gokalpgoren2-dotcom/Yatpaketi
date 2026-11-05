@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Kiralama Süreci",
   description: gt("tr").metaProcess,
-  alternates: { canonical: "/kiralama-sureci", languages: { tr: "/kiralama-sureci", en: "/en/kiralama-sureci" } },
+  alternates: { canonical: "/kiralama-sureci", languages: { tr: "/kiralama-sureci", en: "/en/kiralama-sureci", ru: "/ru/kiralama-sureci" } },
 };
 
 export default function ProcessPage() {

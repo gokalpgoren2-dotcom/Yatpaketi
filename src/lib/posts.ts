@@ -27,7 +27,8 @@ const COLS = "slug,kind,title_tr,excerpt_tr,content_tr,cover_path,published_at,s
 const COLS_EN = COLS + ",title_en,excerpt_en,content_en,seo_title_en,seo_description_en";
 
 function map(r: Record<string, any>, lang: Lang): Post {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   return {
     slug: r.slug,
     kind: r.kind,
@@ -46,8 +47,8 @@ export async function getPosts(kinds: PostKind | PostKind[], limit?: number, lan
   if (!supabaseConfigured()) return [];
   try {
     const list = Array.isArray(kinds) ? kinds : [kinds];
-    let q = db().from("blog_posts").select(lang === "en" ? COLS_EN : COLS).eq("status", "published").in("kind", list).order("sort_order").order("published_at", { ascending: false, nullsFirst: false });
-    if (lang === "en") q = q.not("title_en", "is", null).neq("title_en", "");
+    let q = db().from("blog_posts").select(lang !== "tr" ? COLS_EN : COLS).eq("status", "published").in("kind", list).order("sort_order").order("published_at", { ascending: false, nullsFirst: false });
+    if (lang !== "tr") q = q.not("title_en", "is", null).neq("title_en", "");
     if (limit) q = q.limit(limit);
     const { data, error } = await q;
     if (error || !data) return [];
@@ -60,7 +61,7 @@ export async function getPosts(kinds: PostKind | PostKind[], limit?: number, lan
 export async function getPost(kind: PostKind, slug: string, lang: Lang = "tr"): Promise<Post | null> {
   if (!supabaseConfigured()) return null;
   try {
-    const { data, error } = await db().from("blog_posts").select(lang === "en" ? COLS_EN : COLS).eq("status", "published").eq("kind", kind).eq("slug", slug).maybeSingle();
+    const { data, error } = await db().from("blog_posts").select(lang !== "tr" ? COLS_EN : COLS).eq("status", "published").eq("kind", kind).eq("slug", slug).maybeSingle();
     if (error || !data) return null;
     const p = map(data as any, lang);
     return p.title ? p : null;

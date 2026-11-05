@@ -5,7 +5,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "İletişim | Yatpaketi",
   description: "Yatpaketi ile iletişime geçin: WhatsApp, telefon veya e-posta. Tarihlerinizi yazın, size uygun yat ve rotayı birlikte netleştirelim.",
-  alternates: { canonical: "/iletisim", languages: { tr: "/iletisim", en: "/en/iletisim" } },
+  alternates: { canonical: "/iletisim", languages: { tr: "/iletisim", en: "/en/iletisim", ru: "/ru/iletisim" } },
 };
 
 export default function ContactPage() {

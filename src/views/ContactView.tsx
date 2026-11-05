@@ -31,7 +31,7 @@ const T = {
 };
 
 export async function ContactView({ lang }: { lang: Lang }) {
-  const L = T[lang];
+  const L = T[lang === "tr" ? "tr" : "en"];
   const c = await getContact();
   const card = "rounded-2xl bg-white p-6 ring-1 ring-navy/10 transition hover:ring-turquoise";
   return (
@@ -73,8 +73,8 @@ export async function ContactView({ lang }: { lang: Lang }) {
                 )}
                 {socialList(c).length > 0 && (
                   <div className={card}>
-                    <p className="font-display text-xl font-bold text-navy">{lang === "en" ? "Follow us" : "Bizi takip edin"}</p>
-                    <p className="mt-1 mb-4 text-sm text-navy/65">{lang === "en" ? "Life on board, new yachts and the coves we love." : "Yat hayatından kareler, yeni yatlar ve sevdiğimiz koylar."}</p>
+                    <p className="font-display text-xl font-bold text-navy">{lang !== "tr" ? "Follow us" : "Bizi takip edin"}</p>
+                    <p className="mt-1 mb-4 text-sm text-navy/65">{lang !== "tr" ? "Life on board, new yachts and the coves we love." : "Yat hayatından kareler, yeni yatlar ve sevdiğimiz koylar."}</p>
                     <SocialLinks c={c} tone="dark" labels />
                   </div>
                 )}

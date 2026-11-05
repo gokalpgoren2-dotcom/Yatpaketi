@@ -28,8 +28,9 @@ function Ic({ d, size = 22 }: { d: string; size?: number }) {
 
 export async function ServicesView({ lang }: { lang: Lang }) {
   const [svc, cats, contact] = await Promise.all([getServices(), getCategories(lang), getContact()]);
-  const S = svc[lang];
-  const en = lang === "en";
+  const S = svc[lang === "tr" ? "tr" : "en"];
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const [t1, ...t2] = S.title.split(/(?<=\.)\s+/);
   const [lt1, ...lt2] = S.listTitle.split(/(?<=\.)\s+/);
   const items = S.items as string[][];
@@ -54,7 +55,7 @@ export async function ServicesView({ lang }: { lang: Lang }) {
               </h1>
               <p className="mt-6 max-w-xl text-lg leading-relaxed text-white/80">{S.sub}</p>
               <div className="mt-9 flex flex-wrap gap-3">
-                <a href="#hizmetler" className="rounded-full bg-turquoise px-7 py-3.5 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">{en ? "See the services" : "Hizmetleri görün"} ↓</a>
+                <a href="#hizmetler" className="rounded-full bg-turquoise px-7 py-3.5 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">{ru ? "Наши услуги" : en ? "See the services" : "Hizmetleri görün"} ↓</a>
                 <a href="#plan" className="rounded-full px-7 py-3.5 text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{S.ctaBtn1}</a>
               </div>
             </div>

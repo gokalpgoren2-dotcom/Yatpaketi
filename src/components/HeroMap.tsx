@@ -134,12 +134,13 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
   }
   const pins = [...found.values()].sort((a, b) => a.pos[0] - b.pos[0]);
 
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   let prevLift = false; // önceki tabela aşağıya alındı mı
   let prevX = -999;
   const s = L.w > 600 ? 1 : 0.8;
   return (
-    <svg viewBox={`0 0 ${L.w} ${L.h}`} preserveAspectRatio="xMidYMax slice" className={className} role="img" aria-label={en ? "Map of the Bodrum – Kekova coast" : "Bodrum – Kekova kıyısı haritası"}>
+    <svg viewBox={`0 0 ${L.w} ${L.h}`} preserveAspectRatio="xMidYMax slice" className={className} role="img" aria-label={ru ? "Карта побережья Бодрум – Кекова" : en ? "Map of the Bodrum – Kekova coast" : "Bodrum – Kekova kıyısı haritası"}>
       {waves.map((w, i) => <path key={i} d={`M${w[0].toFixed(0)} ${w[1].toFixed(0)} q6 -5 12 0 q6 5 12 0`} stroke="#fff" strokeOpacity="0.22" strokeWidth="1.6" fill="none" strokeLinecap="round" />)}
       {/* Kıyıdan açılan sığ su */}
       <path d={shore} fill="none" stroke="#7fdcea" strokeOpacity="0.28" strokeWidth={L.w > 600 ? 46 : 22} strokeLinejoin="round" strokeLinecap="round" />
@@ -172,8 +173,8 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       ))}
 
       {/* Deniz ve ada adları */}
-      {L.w > 600 && <text x={L.x(29.3)} y={L.y(35.95)} fill="#fff" fillOpacity="0.5" fontSize={L.font} fontStyle="italic" letterSpacing="3">{en ? "MEDITERRANEAN" : "AKDENİZ"}</text>}
-      <text x={L.x(27.95)} y={L.y(36.15)} textAnchor="middle" fill="#fff" fillOpacity="0.75" fontSize={L.font - 2} fontStyle="italic" letterSpacing="2">{en ? "RHODES" : "RODOS"}</text>
+      {L.w > 600 && <text x={L.x(29.3)} y={L.y(35.95)} fill="#fff" fillOpacity="0.5" fontSize={L.font} fontStyle="italic" letterSpacing="3">{ru ? "СРЕДИЗЕМНОЕ МОРЕ" : en ? "MEDITERRANEAN" : "AKDENİZ"}</text>}
+      <text x={L.x(27.95)} y={L.y(36.15)} textAnchor="middle" fill="#fff" fillOpacity="0.75" fontSize={L.font - 2} fontStyle="italic" letterSpacing="2">{ru ? "РОДОС" : en ? "RHODES" : "RODOS"}</text>
       <text x={L.x(27.1)} y={L.y(36.7)} textAnchor="middle" fill="#fff" fillOpacity="0.7" fontSize={L.font - 3} fontStyle="italic" letterSpacing="2">KOS</text>
 
       {/* Destinasyon tabelaları: dokununca o bölgenin yatları açılır */}
@@ -185,7 +186,7 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
         const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : side ? (side === "down" ? 34 : -34) : close ? 34 : -34) * s;
         const below = dy > 0;
         return (
-          <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${label} ${en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
+          <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${label} ${ru ? "яхты" : en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>
             <g className="pk-link" transform={`translate(${pos[0].toFixed(1)} ${pos[1].toFixed(1)})`}>
               <g className="pk-pin" style={{ animationDelay: `${i * 0.6}s` }}>
                 <circle r={9 * s} fill="#fff" fillOpacity="0.45" />

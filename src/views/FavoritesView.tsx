@@ -9,15 +9,16 @@ const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 
 export async function FavoritesView({ lang }: { lang: Lang }) {
   const [{ boats }, c, curated] = await Promise.all([getBoats(lang), getContact(), getCurated()]);
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   return (
     <>
       <Header lang={lang} />
       <main>
         <section className="bg-gradient-to-r from-navy to-[#0b4a66] pb-12 pt-28 text-white lg:pb-16 lg:pt-36">
           <div className={`${wrap} flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between`}>
-            <h1 className="font-display text-4xl font-medium leading-tight lg:text-6xl">{en ? "Your saved" : "Favori"}<br /><span className="text-turquoise">{en ? "yachts." : "yatlarınız."}</span></h1>
-            <p className="max-w-md border-white/25 text-white/80 lg:border-l lg:pl-6 lg:text-lg">{en ? "Compare your picks side by side, then ask us about all of them in one message." : "Beğendiklerinizi yan yana karşılaştırın, hepsini tek mesajla bize sorun."}</p>
+            <h1 className="font-display text-4xl font-medium leading-tight lg:text-6xl">{ru ? "Ваши избранные" : en ? "Your saved" : "Favori"}<br /><span className="text-turquoise">{ru ? "яхты." : en ? "yachts." : "yatlarınız."}</span></h1>
+            <p className="max-w-md border-white/25 text-white/80 lg:border-l lg:pl-6 lg:text-lg">{ru ? "Сравните понравившиеся яхты и спросите нас обо всех одним сообщением." : en ? "Compare your picks side by side, then ask us about all of them in one message." : "Beğendiklerinizi yan yana karşılaştırın, hepsini tek mesajla bize sorun."}</p>
           </div>
         </section>
         <section className="py-12 pb-24 lg:py-16">

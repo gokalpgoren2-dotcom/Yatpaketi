@@ -35,8 +35,9 @@ const GU_IC: Record<string, string> = {
 };
 
 export async function CultureView({ lang }: { lang: Lang }) {
-  const C = (await getCulture())[lang];
-  const en = lang === "en";
+  const C = (await getCulture())[lang === "tr" ? "tr" : "en"];
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   // Kapak fotoğrafı: panel > Yazılar > "Yat ve Yatçılık Kültürü" sayfasına yüklenen fotoğraf (TR kaydında). Yoksa çizim gösterilir.
   const page = await getPost("page", "yat-ve-yatcilik-kulturu", "tr");
   const cover = page?.cover ?? null;
@@ -57,7 +58,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
               <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{C.heroEyebrow}</p>
               <h1 className="font-display mt-4 text-4xl font-semibold leading-[1.05] lg:text-6xl">{C.title}</h1>
               <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/80">{C.sub}</p>
-              <a href="#giris" className="mt-8 inline-flex items-center gap-2 rounded-full bg-turquoise px-7 py-3.5 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">{en ? "Start reading" : "Okumaya başlayın"} ↓</a>
+              <a href="#giris" className="mt-8 inline-flex items-center gap-2 rounded-full bg-turquoise px-7 py-3.5 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110">{ru ? "Начать чтение" : en ? "Start reading" : "Okumaya başlayın"} ↓</a>
             </div>
             <div className="relative">
               <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-turquoise/20 blur-3xl" aria-hidden />
@@ -176,7 +177,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
               <p className="mt-5 text-lg text-navy/70">{C.gloLead}</p>
             </div>
             <div className="mt-12">
-              <YachtGlossary items={C.glo} hint={en ? "Bow facing up · tap a word" : "Yatın başı yukarıda · bir kelimeye dokunun"} />
+              <YachtGlossary items={C.glo} hint={ru ? "Нос яхты вверху · нажмите на слово" : en ? "Bow facing up · tap a word" : "Yatın başı yukarıda · bir kelimeye dokunun"} />
             </div>
           </div>
         </section>
@@ -195,7 +196,7 @@ export async function CultureView({ lang }: { lang: Lang }) {
                   <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-navy text-turquoise transition group-hover:bg-turquoise group-hover:text-navy"><Ic d={GU_IC[to] ?? LIFE_IC[0]} /></span>
                   <h3 className="mt-5 font-display text-lg font-semibold text-navy">{t}</h3>
                   <p className="mt-1 text-sm text-navy/65">{d}</p>
-                  <span className="mt-auto pt-4 text-sm font-semibold text-turquoise-dark">{en ? "Explore" : "Göz atın"} <span className="inline-block transition group-hover:translate-x-1">→</span></span>
+                  <span className="mt-auto pt-4 text-sm font-semibold text-turquoise-dark">{ru ? "Смотреть" : en ? "Explore" : "Göz atın"} <span className="inline-block transition group-hover:translate-x-1">→</span></span>
                 </Link>
               ))}
             </div>

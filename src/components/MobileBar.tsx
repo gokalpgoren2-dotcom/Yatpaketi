@@ -20,13 +20,13 @@ export function MobileBar() {
   const L = t(lang);
   const favs = useFavorites().length;
   const [hint, hideHint] = useFavHint();
-  const bare = lang === "en" ? (path === "/en" ? "/" : path.slice(3)) : path;
+  const bare = lang !== "tr" ? (path === "/en" ? "/" : path.slice(3)) : path;
   if (path.startsWith("/admin") || path.startsWith("/musteri")) return null;
   return (
     <>
     {hint && favs > 0 && (
       <Link href={href(lang, "/favorilerim")} onClick={hideHint} role="status" className="fixed left-[70%] z-[60] w-44 -translate-x-1/2 rounded-xl bg-navy px-4 py-2.5 text-center text-sm font-semibold leading-snug text-white shadow-lg lg:hidden" style={{ bottom: "calc(4.9rem + env(safe-area-inset-bottom))" }}>
-        {lang === "en" ? "Compare your saved yachts →" : "Favori yatları karşılaştırın →"}
+        {lang !== "tr" ? "Compare your saved yachts →" : "Favori yatları karşılaştırın →"}
         <span aria-hidden className="absolute -bottom-1.5 left-1/2 h-3 w-3 -translate-x-1/2 rotate-45 bg-navy" />
       </Link>
     )}

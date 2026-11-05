@@ -6,7 +6,7 @@ import { PhotoGuard } from "@/components/PhotoGuard";
 
 // Tüm başlıklar için Gilroy Bold'a en yakın ücretsiz font.
 const headline = Urbanist({ subsets: ["latin", "latin-ext"], weight: ["500", "600", "700", "800"], variable: "--font-urbanist" });
-const sans = Inter({ subsets: ["latin", "latin-ext"], variable: "--font-inter" });
+const sans = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter" });
 
 const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yatpaketi.com";
 

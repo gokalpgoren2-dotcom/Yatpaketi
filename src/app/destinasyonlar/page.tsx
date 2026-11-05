@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Destinasyonlar",
   description: gt("tr").metaDest,
-  alternates: { canonical: "/destinasyonlar", languages: { tr: "/destinasyonlar", en: "/en/destinasyonlar" } },
+  alternates: { canonical: "/destinasyonlar", languages: { tr: "/destinasyonlar", en: "/en/destinasyonlar", ru: "/ru/destinasyonlar" } },
 };
 
 export default function Page() {

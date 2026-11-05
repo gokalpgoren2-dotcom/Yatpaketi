@@ -56,7 +56,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
   const T = gt(lang);
   const p = await getPost(kind, slug, lang);
   if (!p) {
-    if (lang === "en") redirect(back ? back.href : "/en");
+    if (lang !== "tr") redirect(back ? back.href : "/en");
     notFound();
   }
   if (kind === "route") return <RoutePage p={p} all={await getPosts("route", undefined, lang)} back={back} lang={lang} />;
@@ -70,7 +70,8 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
     const photos = await getDestPhotos(slug);
     const R = regionText(slug, lang);
     if (R) return <RegionPage p={p} R={R} photos={photos} map={map} more={more} back={back} lang={lang} />;
-    const en = lang === "en";
+    const en = lang !== "tr";
+    const ru = lang === "ru";
     const eyebrow = "text-xs font-semibold uppercase tracking-[0.25em] text-turquoise-dark";
     return (
       <>
@@ -96,23 +97,23 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
           <div className="mx-auto max-w-7xl px-5 lg:px-8">
             <div className="mt-12 grid gap-10 lg:grid-cols-[1fr_22rem] lg:gap-14">
               <div>
-                <p className={`mb-4 ${eyebrow}`}>{en ? "About the region" : "Bölge hakkında"}</p>
+                <p className={`mb-4 ${eyebrow}`}>{ru ? "О регионе" : en ? "About the region" : "Bölge hakkında"}</p>
                 <div className="max-w-3xl"><RichText text={p.content} /></div>
               </div>
               <aside className="h-fit rounded-3xl bg-gradient-to-br from-navy to-[#0b4a66] p-7 text-white lg:sticky lg:top-28">
-                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{en ? "Plan your trip" : "Planınızı yapalım"}</p>
-                <h2 className="font-display mt-3 text-2xl leading-snug">{en ? "Want to sail this region?" : "Bu bölgede yolculuk mu planlıyorsunuz?"}</h2>
-                <p className="mt-3 text-sm leading-relaxed text-white/75">{en ? "Tell us your dates and group size, we'll suggest the right yacht and route." : "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve rotayı önerelim."}</p>
+                <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{ru ? "Спланируйте поездку" : en ? "Plan your trip" : "Planınızı yapalım"}</p>
+                <h2 className="font-display mt-3 text-2xl leading-snug">{ru ? "Хотите отправиться в этот регион?" : en ? "Want to sail this region?" : "Bu bölgede yolculuk mu planlıyorsunuz?"}</h2>
+                <p className="mt-3 text-sm leading-relaxed text-white/75">{ru ? "Напишите даты и количество гостей — мы предложим подходящую яхту и маршрут." : en ? "Tell us your dates and group size, we'll suggest the right yacht and route." : "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve rotayı önerelim."}</p>
                 <div className="mt-6 flex flex-col gap-3">
                   <Link href={href(lang, "/tekneler")} className="rounded-full bg-turquoise px-6 py-3 text-center text-sm font-semibold text-navy transition hover:brightness-110">{T.browse}</Link>
-                  <Link href={href(lang, "/iletisim")} className="rounded-full px-6 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{en ? "Write to us" : "Bize yazın"}</Link>
+                  <Link href={href(lang, "/iletisim")} className="rounded-full px-6 py-3 text-center text-sm font-semibold text-white ring-1 ring-white/30 transition hover:bg-white/10">{ru ? "Написать нам" : en ? "Write to us" : "Bize yazın"}</Link>
                 </div>
               </aside>
             </div>
 
             {photos.length > 0 && (
               <section className="mt-14">
-                <p className={`mb-3 ${eyebrow}`}>{en ? "Gallery" : "Galeri"}</p>
+                <p className={`mb-3 ${eyebrow}`}>{ru ? "Фотографии" : en ? "Gallery" : "Galeri"}</p>
                 <div className="grid auto-rows-[10rem] grid-cols-2 gap-3 sm:auto-rows-[12rem] lg:grid-cols-4 lg:gap-4">
                   {photos.map((src, i) => (
                     <div key={src} className={`relative overflow-hidden rounded-2xl bg-mist lg:rounded-3xl ${i === 0 && photos.length > 2 ? "col-span-2 row-span-2" : ""}`}>

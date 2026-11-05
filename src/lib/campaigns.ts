@@ -65,7 +65,8 @@ export async function getOffers(): Promise<Record<string, Offer>> {
 }
 
 export function offerLabel(o: Offer, lang: Lang): string {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   if (o.kind === "early") return en ? `Early booking ${o.percent}% off` : `Erken rezervasyon %${o.percent}`;
   return en ? `${o.percent}% off` : `%${o.percent} indirim`;
 }
@@ -73,6 +74,6 @@ export function offerLabel(o: Offer, lang: Lang): string {
 export function offerUntil(o: Offer, lang: Lang): string {
   const e = endsAt(o.until);
   if (!e) return "";
-  const date = e.toLocaleDateString(lang === "en" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" });
-  return lang === "en" ? `Valid until ${date}` : `${date} tarihine kadar geçerli`;
+  const date = e.toLocaleDateString(lang !== "tr" ? "en-GB" : "tr-TR", { day: "numeric", month: "long", timeZone: "Europe/Istanbul" });
+  return lang !== "tr" ? `Valid until ${date}` : `${date} tarihine kadar geçerli`;
 }

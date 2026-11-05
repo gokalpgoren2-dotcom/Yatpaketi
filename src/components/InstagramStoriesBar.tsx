@@ -3,10 +3,11 @@ import { StoryViewer } from "./StoryViewer";
 
 // Ana sayfa, hero'nun hemen altı: Instagram'daki gibi yuvarlak story şeridi.
 // Instagram bağlı değilken ya da yayında story yokken daireler boş görünür.
-export async function InstagramStoriesBar({ lang }: { lang: "tr" | "en" }) {
+export async function InstagramStoriesBar({ lang }: { lang: "tr" | "en" | "ru" }) {
   const stories = await getStories();
   const user = igUser();
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const live = stories.length > 0;
   const profile = `https://www.instagram.com/${user}/`;
   return (
@@ -18,10 +19,10 @@ export async function InstagramStoriesBar({ lang }: { lang: "tr" | "en" }) {
               {live && <span className="relative flex h-2 w-2"><span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-red-500 opacity-60" /><span className="relative inline-flex h-2 w-2 rounded-full bg-red-500" /></span>}
               Instagram
             </p>
-            <p className="font-display mt-1 text-lg font-semibold leading-tight text-navy">{live ? (en ? "Live from the sea" : "Şimdi denizde") : en ? "Moments from the sea" : "Denizden anlık kareler"}</p>
+            <p className="font-display mt-1 text-lg font-semibold leading-tight text-navy">{live ? (ru ? "Прямо с моря" : en ? "Live from the sea" : "Şimdi denizde") : ru ? "Моменты с моря" : en ? "Moments from the sea" : "Denizden anlık kareler"}</p>
           </div>
           <a href={profile} target="_blank" rel="noopener noreferrer" className="shrink-0 rounded-full px-4 py-2 text-xs font-semibold text-navy ring-1 ring-navy/15 transition hover:ring-turquoise lg:mt-3 lg:inline-block">
-            {en ? "Follow" : "Takip et"} @{user}
+            {ru ? "Подписаться" : en ? "Follow" : "Takip et"} @{user}
           </a>
         </div>
 

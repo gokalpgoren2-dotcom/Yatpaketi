@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Charter Process",
   description: gt("en").metaProcess,
-  alternates: { canonical: "/en/kiralama-sureci", languages: { tr: "/kiralama-sureci", en: "/en/kiralama-sureci" } },
+  alternates: { canonical: "/en/kiralama-sureci", languages: { tr: "/kiralama-sureci", en: "/en/kiralama-sureci", ru: "/ru/kiralama-sureci" } },
 };
 
 export default function ProcessPage() {

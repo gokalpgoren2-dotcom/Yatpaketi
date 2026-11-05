@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Tour Packages",
   description: gt("en").metaPackages,
-  alternates: { canonical: "/en/tur-paketleri", languages: { tr: "/tur-paketleri", en: "/en/tur-paketleri" } },
+  alternates: { canonical: "/en/tur-paketleri", languages: { tr: "/tur-paketleri", en: "/en/tur-paketleri", ru: "/ru/tur-paketleri" } },
 };
 
 export default function Page() {

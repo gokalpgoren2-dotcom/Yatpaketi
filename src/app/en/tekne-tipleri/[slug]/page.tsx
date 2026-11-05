@@ -11,7 +11,7 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   return {
     title: `${c.name} Charter`,
     description: `${c.name} charter options and boats in Türkiye.`,
-    alternates: { canonical: `/en/tekne-tipleri/${c.slug}`, languages: { tr: `/tekne-tipleri/${c.slug}`, en: `/en/tekne-tipleri/${c.slug}` } },
+    alternates: { canonical: `/en/tekne-tipleri/${c.slug}`, languages: { tr: `/tekne-tipleri/${c.slug}`, en: `/en/tekne-tipleri/${c.slug}`, ru: `/ru/tekne-tipleri/${c.slug}` } },
     robots: { index: false, follow: true },
   };
 }

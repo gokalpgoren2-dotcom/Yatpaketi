@@ -3,8 +3,9 @@
 import { useState } from "react";
 
 // Hizmet seçici: ziyaretçi ihtiyaç duyduğu hizmetleri işaretler, tarih ve kişi sayısını yazar; WhatsApp'a hazır mesajla gider.
-export function ServicePicker({ items, icons, whatsapp, contactHref, lang }: { items: string[]; icons: string[]; whatsapp: string; contactHref: string; lang: "tr" | "en" }) {
-  const en = lang === "en";
+export function ServicePicker({ items, icons, whatsapp, contactHref, lang }: { items: string[]; icons: string[]; whatsapp: string; contactHref: string; lang: "tr" | "en" | "ru" }) {
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const [sel, setSel] = useState<string[]>([]);
   const [date, setDate] = useState("");
   const [people, setPeople] = useState("");
@@ -16,7 +17,7 @@ export function ServicePicker({ items, icons, whatsapp, contactHref, lang }: { i
   const input = "w-full rounded-2xl bg-white/10 px-4 py-3.5 text-white ring-1 ring-white/15 outline-none transition placeholder:text-white/40 focus:bg-white/15 focus:ring-turquoise";
   return (
     <div>
-      <p className="text-sm font-semibold text-white/70">{en ? "1. Pick the services you need" : "1. İhtiyacınız olan hizmetleri seçin"}</p>
+      <p className="text-sm font-semibold text-white/70">{ru ? "1. Выберите нужные услуги" : en ? "1. Pick the services you need" : "1. İhtiyacınız olan hizmetleri seçin"}</p>
       <div className="mt-3 flex flex-wrap gap-2.5">
         {items.map((s, i) => {
           const on = sel.includes(s);
@@ -35,19 +36,19 @@ export function ServicePicker({ items, icons, whatsapp, contactHref, lang }: { i
           );
         })}
       </div>
-      <p className="mt-7 text-sm font-semibold text-white/70">{en ? "2. Your dates and group size (optional)" : "2. Tarih ve kişi sayısı (isteğe bağlı)"}</p>
+      <p className="mt-7 text-sm font-semibold text-white/70">{ru ? "2. Даты и количество гостей (необязательно)" : en ? "2. Your dates and group size (optional)" : "2. Tarih ve kişi sayısı (isteğe bağlı)"}</p>
       <div className="mt-3 grid gap-3 sm:grid-cols-2">
-        <label className="block"><span className="sr-only">{en ? "Dates" : "Tarih"}</span>
-          <input value={date} onChange={(e) => setDate(e.target.value)} placeholder={en ? "e.g. 12–19 July" : "Örn. 12–19 Temmuz"} className={input} />
+        <label className="block"><span className="sr-only">{ru ? "Даты" : en ? "Dates" : "Tarih"}</span>
+          <input value={date} onChange={(e) => setDate(e.target.value)} placeholder={ru ? "напр. 12–19 июля" : en ? "e.g. 12–19 July" : "Örn. 12–19 Temmuz"} className={input} />
         </label>
-        <label className="block"><span className="sr-only">{en ? "Guests" : "Kişi sayısı"}</span>
-          <input value={people} onChange={(e) => setPeople(e.target.value)} inputMode="numeric" placeholder={en ? "e.g. 8 people" : "Örn. 8 kişi"} className={input} />
+        <label className="block"><span className="sr-only">{ru ? "Гости" : en ? "Guests" : "Kişi sayısı"}</span>
+          <input value={people} onChange={(e) => setPeople(e.target.value)} inputMode="numeric" placeholder={ru ? "напр. 8 человек" : en ? "e.g. 8 people" : "Örn. 8 kişi"} className={input} />
         </label>
       </div>
       <a href={link} target={whatsapp ? "_blank" : undefined} rel="noopener noreferrer"
         className="mt-7 flex w-full items-center justify-center gap-2.5 rounded-full bg-turquoise px-7 py-4 text-sm font-semibold text-navy shadow-lg shadow-turquoise/30 transition hover:brightness-110 sm:w-auto sm:inline-flex">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.9" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M4 20l1.3-4A8 8 0 1 1 8 18.7L4 20Z" /></svg>
-        {sel.length ? (en ? `Send ${sel.length} services on WhatsApp` : `${sel.length} hizmeti WhatsApp'tan gönder`) : en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
+        {sel.length ? (en ? `Send ${sel.length} services on WhatsApp` : `${sel.length} hizmeti WhatsApp'tan gönder`) : ru ? "Написать в WhatsApp" : en ? "Write on WhatsApp" : "WhatsApp'tan yazın"}
       </a>
     </div>
   );

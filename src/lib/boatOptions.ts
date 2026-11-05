@@ -66,12 +66,12 @@ const DETAIL_EN: Record<string, string> = {
   "Yalnızca kabinlerde": "In cabins only", "Salon ve kabinlerde, gün boyu": "Saloon and cabins, all day", "Jeneratör açıkken": "While the generator is running",
 };
 
-export function localizeToy(raw: string, lang: "tr" | "en"): string {
+export function localizeToy(raw: string, lang: "tr" | "en" | "ru"): string {
   if (lang === "tr") return raw;
   const { name, qty } = parseToy(raw);
   return formatToy(TOY_EN[name] ?? name, qty);
 }
-export function localizeEquipment(raw: string, lang: "tr" | "en"): string {
+export function localizeEquipment(raw: string, lang: "tr" | "en" | "ru"): string {
   if (lang === "tr") return raw;
   const { name, detail } = parseEquipment(raw);
   return formatEquipment(EQ_EN[name] ?? name, DETAIL_EN[detail] ?? detail);

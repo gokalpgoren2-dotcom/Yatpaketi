@@ -448,6 +448,6 @@ const EN: Record<string, RegionText> = {
   },
 };
 
-export function regionText(slug: string, lang: "tr" | "en"): RegionText | null {
-  return (lang === "en" ? EN : TR)[slug] ?? null;
+export function regionText(slug: string, lang: "tr" | "en" | "ru"): RegionText | null {
+  return (lang !== "tr" ? EN : TR)[slug] ?? null;
 }

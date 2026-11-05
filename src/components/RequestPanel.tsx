@@ -23,7 +23,8 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
   const [name, setName] = useState("");
   const [error, setError] = useState("");
 
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const q = pricing && start && end ? quote(pricing, start, end) : null;
   const pct = pricing?.percent ?? 0;
   const disc = (v: number) => off(v, pct);
@@ -40,19 +41,19 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
           <span className="text-sm font-semibold">{en ? `Total · ${q.nights} nights` : `Toplam · ${q.nights} gece`}</span>
           <span className={`text-xl font-bold tabular-nums ${pct ? "text-[#c0332b]" : ""}`}>{money(totalNow, pricing.currency, lang)}</span>
         </p>
-        {pct > 0 && <p className="mt-1 flex items-center justify-between gap-3 text-xs"><span className="rounded-full bg-[#e8453c] px-2 py-0.5 font-bold text-white">−%{pct} {en ? "discount" : "indirim"}</span><span className="text-navy/45 line-through tabular-nums">{money(q.total, pricing.currency, lang)}</span></p>}
+        {pct > 0 && <p className="mt-1 flex items-center justify-between gap-3 text-xs"><span className="rounded-full bg-[#e8453c] px-2 py-0.5 font-bold text-white">−%{pct} {ru ? "скидка" : en ? "discount" : "indirim"}</span><span className="text-navy/45 line-through tabular-nums">{money(q.total, pricing.currency, lang)}</span></p>}
         {pricing.vatMode === "excluded" && (
           <div className="mt-2 space-y-0.5 border-t border-navy/10 pt-2 text-sm">
             <p className="flex justify-between gap-3 text-navy/70"><span>{en ? `VAT (${pricing.vatRate ?? 20}%)` : `KDV (%${pricing.vatRate ?? 20})`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.vatRate ?? 20) / 100), pricing.currency, lang)}</span></p>
-            <p className="flex justify-between gap-3 font-semibold text-navy"><span>{en ? "Total incl. VAT" : "KDV dahil toplam"}</span><span className="tabular-nums">{money(Math.round(totalNow * (1 + (pricing.vatRate ?? 20) / 100)), pricing.currency, lang)}</span></p>
+            <p className="flex justify-between gap-3 font-semibold text-navy"><span>{ru ? "Итого с НДС" : en ? "Total incl. VAT" : "KDV dahil toplam"}</span><span className="tabular-nums">{money(Math.round(totalNow * (1 + (pricing.vatRate ?? 20) / 100)), pricing.currency, lang)}</span></p>
           </div>
         )}
         {(pricing.apa ?? 0) > 0 && (
           <p className="mt-2 flex justify-between gap-3 border-t border-navy/10 pt-2 text-sm text-amber-900"><span>{en ? `APA (${pricing.apa}%, advance for expenses)` : `APA (%${pricing.apa}, masraflar için ön ödeme)`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.apa ?? 0) / 100), pricing.currency, lang)}</span></p>
         )}
-        {pricing.vatMode === "included" && <p className="mt-1 text-xs font-semibold text-emerald-700">{en ? "VAT included." : "KDV dahildir."}</p>}
-        {q.weekly && <p className="mt-1 text-xs font-semibold text-turquoise-dark">{en ? "Weekly rate applied (7+ nights)." : "7 gece ve üzeri: haftalık fiyat uygulandı."}</p>}
-        <p className="mt-1 text-xs text-navy/55">{en ? "Check-out day is not charged. Provisions and extras are not included." : "Çıkış günü ücrete dahil değildir. Kumanya ve ekstralar dahil değildir."}</p>
+        {pricing.vatMode === "included" && <p className="mt-1 text-xs font-semibold text-emerald-700">{ru ? "НДС включён." : en ? "VAT included." : "KDV dahildir."}</p>}
+        {q.weekly && <p className="mt-1 text-xs font-semibold text-turquoise-dark">{ru ? "Применён недельный тариф (от 7 ночей)." : en ? "Weekly rate applied (7+ nights)." : "7 gece ve üzeri: haftalık fiyat uygulandı."}</p>}
+        <p className="mt-1 text-xs text-navy/55">{ru ? "День выезда не оплачивается. Питание и дополнительные услуги не включены." : en ? "Check-out day is not charged. Provisions and extras are not included." : "Çıkış günü ücrete dahil değildir. Kumanya ve ekstralar dahil değildir."}</p>
       </div>
     ) : (
       <p className="rounded-2xl bg-mist p-4 text-sm text-navy/70 ring-1 ring-navy/5">

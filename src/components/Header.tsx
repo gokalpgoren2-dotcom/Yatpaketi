@@ -9,7 +9,8 @@ import { href, t, type Lang } from "@/lib/i18n";
 export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
   const L = t(lang);
   const [nav, cats, dests, contact] = await Promise.all([getNavInfo(lang), getCategories(lang), getDestinations(lang), getContact()]);
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   // İngilizce yazılar (rehber, blog, sayfalar) henüz yok; o bağlantılar yalnızca Türkçe menüde görünür.
   const about = true; // Hakkımızda artık özel sayfa
   // Yatpaketi Rehberi açılır menüsü: yalnızca içeriği olan bölümler görünür.
@@ -31,7 +32,7 @@ export async function Header({ lang = "tr" }: { lang?: Lang } = {}) {
     {
       href: href(lang, "/tekneler"),
       label: L.navBoats,
-      children: [{ href: href(lang, "/tekneler"), label: L.navAllBoats, icon: "all" }, ...cats.map((c) => ({ href: href(lang, `/tekne-tipleri/${c.slug}`), label: c.name, icon: c.slug })), { href: href(lang, "/tekne-karsilastir"), label: lang === "en" ? "Compare yachts" : "Yatları karşılaştır", icon: "all" }],
+      children: [{ href: href(lang, "/tekneler"), label: L.navAllBoats, icon: "all" }, ...cats.map((c) => ({ href: href(lang, `/tekne-tipleri/${c.slug}`), label: c.name, icon: c.slug })), { href: href(lang, "/tekne-karsilastir"), label: lang !== "tr" ? "Compare yachts" : "Yatları karşılaştır", icon: "all" }],
     },
     {
       href: href(lang, "/limanlar"),

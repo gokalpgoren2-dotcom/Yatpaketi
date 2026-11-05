@@ -10,9 +10,9 @@ const T = {
 };
 
 export async function ReviewPageView({ lang, token }: { lang: Lang; token: string }) {
-  const L = T[lang];
+  const L = T[lang === "tr" ? "tr" : "en"];
   const info = await getReviewRequest(token);
-  const other = lang === "en" ? `/yorum/${token}` : `/en/yorum/${token}`;
+  const other = lang !== "tr" ? `/yorum/${token}` : `/en/yorum/${token}`;
   const state = !info ? "bad" : info.used ? "used" : info.expired ? "expired" : "ok";
   return (
     <>
@@ -32,8 +32,8 @@ export async function ReviewPageView({ lang, token }: { lang: Lang; token: strin
             <h1 className="font-display text-3xl font-bold text-navy">{L[state === "ok" ? "bad" : state]}</h1>
             <p className="mt-3 text-navy/70">{L[(state === "used" ? "usedText" : state === "expired" ? "expiredText" : "badText") as "badText"]}</p>
             <div className="mt-6 flex justify-center gap-3 text-sm font-semibold">
-              <Link href={lang === "en" ? "/en/iletisim" : "/iletisim"} className="rounded-full bg-turquoise px-5 py-2.5 text-white">{L.contact}</Link>
-              <Link href={lang === "en" ? "/en" : "/"} className="rounded-full border border-navy/20 px-5 py-2.5 text-navy">{L.home}</Link>
+              <Link href={lang !== "tr" ? "/en/iletisim" : "/iletisim"} className="rounded-full bg-turquoise px-5 py-2.5 text-white">{L.contact}</Link>
+              <Link href={lang !== "tr" ? "/en" : "/"} className="rounded-full border border-navy/20 px-5 py-2.5 text-navy">{L.home}</Link>
             </div>
           </div>
         )}

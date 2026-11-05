@@ -21,19 +21,20 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
   const L = t(lang);
   const from = minDaily(b);
   const pct = b.offer?.percent ?? 0; // geçerli kampanya indirimi
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   // Klima: yok / var / günde kaç saat dahil
   const acRaw = b.equipment.find((e) => /^klima|air.?cond/i.test(parseEquipment(e).name));
   const acDetail = acRaw ? parseEquipment(acRaw).detail.toLocaleLowerCase("tr") : "";
   const acHours = acDetail.match(/(\d{1,2})\s*saat/)?.[1];
-  const ac = !acRaw ? "–" : /24\s*saat|7\s*\/\s*24|tam gün/.test(acDetail) ? "7/24" : acHours ? (en ? `${acHours} h/day` : `${acHours} sa/gün`) : (en ? "Yes" : "Var");
+  const ac = !acRaw ? "–" : /24\s*saat|7\s*\/\s*24|tam gün/.test(acDetail) ? "7/24" : acHours ? (en ? `${acHours} h/day` : `${acHours} sa/gün`) : (ru ? "Есть" : en ? "Yes" : "Var");
   const specs: [React.ReactNode, string, string][] = [
-    [<IconLength key="l" />, en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
-    [<IconCabins key="c" />, en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],
-    [<IconGuests key="g" />, en ? "Guests" : "Misafir", String(b.guests)],
-    [<IconCrew key="p" />, en ? "Crew" : "Personel", b.crew > 0 ? String(b.crew) : "–"],
-    [<IconYear key="y" />, en ? "Built/Refit" : "Yapım/Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
-    [<IconAc key="a" />, en ? "A/C" : "Klima", ac],
+    [<IconLength key="l" />, ru ? "Длина" : en ? "Length" : "Boy", b.length > 0 ? `${b.length} m` : "–"],
+    [<IconCabins key="c" />, ru ? "Каюты" : en ? "Cabins" : "Kabin", b.cabins > 0 ? String(b.cabins) : "–"],
+    [<IconGuests key="g" />, ru ? "Гости" : en ? "Guests" : "Misafir", String(b.guests)],
+    [<IconCrew key="p" />, ru ? "Экипаж" : en ? "Crew" : "Personel", b.crew > 0 ? String(b.crew) : "–"],
+    [<IconYear key="y" />, ru ? "Постройка/ремонт" : en ? "Built/Refit" : "Yapım/Refit", b.year ? `${b.year}${b.refit ? ` (${b.refit})` : ""}` : "–"],
+    [<IconAc key="a" />, ru ? "Кондиционер" : en ? "A/C" : "Klima", ac],
   ];
   return (
     <div className="group relative transition duration-300 hover:-translate-y-1.5">
@@ -66,17 +67,17 @@ export function BoatCard({ b, lang = "tr" }: { b: Boat; lang?: Lang }) {
               <p className="pt-1 text-sm font-semibold text-turquoise-dark">{L.askPrice}</p>
             ) : pct ? (
               <>
-                <p className="leading-tight"><span className="font-display text-lg font-semibold text-[#e8453c]">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
+                <p className="leading-tight"><span className="font-display text-lg font-semibold text-[#e8453c]">{money(off(from, pct), b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{ru ? "/ день" : en ? "/ day" : "/ gün"}</span></p>
                 <p className="mt-0.5 flex items-center justify-end gap-1.5 text-[11px] text-navy/50">
                   <span className="rounded-full bg-[#e8453c] px-1.5 py-px text-[10px] font-bold text-white">−%{pct}</span>
                   <span className="line-through">{money(from, b.currency, lang)}</span>
-                  {b.vatMode === "excluded" && <span>{en ? "+VAT" : "+KDV"}</span>}
+                  {b.vatMode === "excluded" && <span>{ru ? "+НДС" : en ? "+VAT" : "+KDV"}</span>}
                 </p>
               </>
             ) : (
               <>
-                <p className="leading-tight"><span className="font-display text-lg font-semibold text-navy">{money(from, b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{en ? "/ day" : "/ gün"}</span></p>
-                <p className="mt-0.5 text-[11px] text-navy/50">{en ? "from" : "başlayan"}{b.vatMode === "excluded" ? (en ? " · +VAT" : " · +KDV") : ""}</p>
+                <p className="leading-tight"><span className="font-display text-lg font-semibold text-navy">{money(from, b.currency, lang)}</span> <span className="text-[11px] text-navy/55">{ru ? "/ день" : en ? "/ day" : "/ gün"}</span></p>
+                <p className="mt-0.5 text-[11px] text-navy/50">{ru ? "от" : en ? "from" : "başlayan"}{b.vatMode === "excluded" ? (ru ? " · +НДС" : en ? " · +VAT" : " · +KDV") : ""}</p>
               </>
             )}
           </div>

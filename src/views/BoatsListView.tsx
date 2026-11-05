@@ -50,7 +50,8 @@ function Pills({ name, value, options }: { name: string; value?: string; options
 
 export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
   const L = t(lang);
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const f: Filters = {
     destinasyon: one(sp.destinasyon),
     tip: one(sp.tip),
@@ -80,7 +81,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
     return s ? `${base}?${s}` : base;
   };
   const destName = destinations.find((d) => d.slug === f.destinasyon)?.name;
-  const eur = (n: number) => `€${n.toLocaleString(en ? "en-GB" : "tr-TR")}`;
+  const eur = (n: number) => `€${n.toLocaleString(ru ? "ru-RU" : en ? "en-GB" : "tr-TR")}`;
   const active: [string, string | string[]][] = [];
   if (f.destinasyon) active.push([destName ?? f.destinasyon, "destinasyon"]);
   if (f.tip) active.push([f.tip, "tip"]);
@@ -108,7 +109,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{L.listEyebrow}</p>
             <h1 className="font-display mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] lg:text-6xl">{L.listTitle}</h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 lg:text-lg">
-              {en ? "Pick a port, boat type and group size; refine with price, length and crew whenever you like." : "Liman, yat tipi ve kişi sayınızı seçin; dilerseniz fiyat, uzunluk ve mürettebatla daraltın."}
+              {ru ? "Выберите порт, тип яхты и количество гостей; при желании уточните по цене, длине и экипажу." : en ? "Pick a port, boat type and group size; refine with price, length and crew whenever you like." : "Liman, yat tipi ve kişi sayınızı seçin; dilerseniz fiyat, uzunluk ve mürettebatla daraltın."}
             </p>
           </div>
         </section>
@@ -140,25 +141,25 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
                 <FancySelect
                   id="destinasyon" name="destinasyon" title={L.fDest} defaultValue={f.destinasyon ?? ""}
                   icon={<Ic d={PATHS.pin} />}
-                  options={[{ value: "", label: en ? "All ports" : "Tüm limanlar", note: String(all.length) }, ...destinations.map((d) => ({ value: d.slug, label: d.name, note: String(all.filter((b) => b.destinations.includes(d.slug)).length) }))]}
+                  options={[{ value: "", label: ru ? "Все порты" : en ? "All ports" : "Tüm limanlar", note: String(all.length) }, ...destinations.map((d) => ({ value: d.slug, label: d.name, note: String(all.filter((b) => b.destinations.includes(d.slug)).length) }))]}
                 />
               </div>
               <div>
                 <label className={lab} htmlFor="misafir">{L.fGuests}</label>
                 <div className="relative">
                   <Ic d={PATHS.users} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-turquoise-dark" />
-                  <input id="misafir" name="misafir" type="number" min={1} inputMode="numeric" placeholder={en ? "e.g. 8" : "örn. 8"} defaultValue={f.misafir ?? ""} className={`${field} pl-10`} />
+                  <input id="misafir" name="misafir" type="number" min={1} inputMode="numeric" placeholder={ru ? "напр. 8" : en ? "e.g. 8" : "örn. 8"} defaultValue={f.misafir ?? ""} className={`${field} pl-10`} />
                 </div>
               </div>
               <div>
                 <label className={lab} htmlFor="kabin">{L.fCabins}</label>
                 <div className="relative">
                   <Ic d={PATHS.bed} className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-turquoise-dark" />
-                  <input id="kabin" name="kabin" type="number" min={0} inputMode="numeric" placeholder={en ? "e.g. 4" : "örn. 4"} defaultValue={f.kabin ?? ""} className={`${field} pl-10`} />
+                  <input id="kabin" name="kabin" type="number" min={0} inputMode="numeric" placeholder={ru ? "напр. 4" : en ? "e.g. 4" : "örn. 4"} defaultValue={f.kabin ?? ""} className={`${field} pl-10`} />
                 </div>
               </div>
               <button type="submit" className="h-[46px] rounded-xl bg-turquoise px-7 text-sm font-semibold text-navy shadow-lg shadow-turquoise/25 transition hover:brightness-110 sm:col-span-2 lg:col-span-1">
-                {en ? "Show boats" : "Yatları göster"}
+                {ru ? "Показать яхты" : en ? "Show boats" : "Yatları göster"}
               </button>
             </div>
 
@@ -166,23 +167,23 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <details className="group mt-5 border-t border-navy/10 pt-4" open={moreCount > 0 || undefined}>
               <summary className="flex cursor-pointer list-none items-center gap-2 text-sm font-semibold text-navy [&::-webkit-details-marker]:hidden">
                 <Ic d={PATHS.sliders} className="text-turquoise-dark" />
-                {en ? "More filters" : "Detaylı filtreler"}
+                {ru ? "Дополнительные фильтры" : en ? "More filters" : "Detaylı filtreler"}
                 {moreCount > 0 && <span className="rounded-full bg-turquoise px-2 py-0.5 text-[0.7rem] font-bold text-navy">{moreCount}</span>}
                 <Ic d={PATHS.chev} className="ml-auto text-navy/40 transition group-open:rotate-180" />
               </summary>
 
               <div className="mt-5 grid gap-x-8 gap-y-6 lg:grid-cols-2">
                 <div>
-                  <p className={lab}>{en ? "Daily price (EUR)" : "Günlük fiyat (EUR)"}</p>
+                  <p className={lab}>{ru ? "Цена за день (EUR)" : en ? "Daily price (EUR)" : "Günlük fiyat (EUR)"}</p>
                   <div className="flex items-center gap-2">
                     <div className="relative flex-1">
                       <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-navy/40">€</span>
-                      <input aria-label={L.fMin} name="min" type="number" min={0} inputMode="numeric" placeholder={en ? "Min" : "En az"} defaultValue={f.min ?? ""} className={`${field} pl-8`} />
+                      <input aria-label={L.fMin} name="min" type="number" min={0} inputMode="numeric" placeholder={ru ? "Мин." : en ? "Min" : "En az"} defaultValue={f.min ?? ""} className={`${field} pl-8`} />
                     </div>
                     <span className="text-navy/30">—</span>
                     <div className="relative flex-1">
                       <span className="pointer-events-none absolute left-3.5 top-1/2 -translate-y-1/2 text-sm font-semibold text-navy/40">€</span>
-                      <input aria-label={L.fMax} name="max" type="number" min={0} inputMode="numeric" placeholder={en ? "Max" : "En çok"} defaultValue={f.max ?? ""} className={`${field} pl-8`} />
+                      <input aria-label={L.fMax} name="max" type="number" min={0} inputMode="numeric" placeholder={ru ? "Макс." : en ? "Max" : "En çok"} defaultValue={f.max ?? ""} className={`${field} pl-8`} />
                     </div>
                   </div>
                   <p className="mt-2 text-xs leading-relaxed text-navy/45">{L.priceNote}</p>
@@ -190,11 +191,11 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
                 <div className="grid grid-cols-2 gap-3">
                   <div>
                     <label className={lab} htmlFor="uzunluk">{L.fLength}</label>
-                    <input id="uzunluk" name="uzunluk" type="number" min={0} inputMode="numeric" placeholder={en ? "e.g. 20" : "örn. 20"} defaultValue={f.uzunluk ?? ""} className={field} />
+                    <input id="uzunluk" name="uzunluk" type="number" min={0} inputMode="numeric" placeholder={ru ? "напр. 20" : en ? "e.g. 20" : "örn. 20"} defaultValue={f.uzunluk ?? ""} className={field} />
                   </div>
                   <div>
                     <label className={lab} htmlFor="yil">{L.fYear}</label>
-                    <input id="yil" name="yil" type="number" min={1990} inputMode="numeric" placeholder={en ? "e.g. 2015" : "örn. 2015"} defaultValue={f.yil ?? ""} className={field} />
+                    <input id="yil" name="yil" type="number" min={1990} inputMode="numeric" placeholder={ru ? "напр. 2015" : en ? "e.g. 2015" : "örn. 2015"} defaultValue={f.yil ?? ""} className={field} />
                   </div>
                 </div>
                 <div>
@@ -227,7 +228,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
                   {label}<Ic d={PATHS.x} className="h-3.5 w-3.5" />
                 </Link>
               ))}
-              {active.length > 1 && <Link href={base} className="text-xs font-semibold text-navy/50 underline-offset-4 hover:text-navy hover:underline">{en ? "Clear all" : "Tümünü temizle"}</Link>}
+              {active.length > 1 && <Link href={base} className="text-xs font-semibold text-navy/50 underline-offset-4 hover:text-navy hover:underline">{ru ? "Очистить всё" : en ? "Clear all" : "Tümünü temizle"}</Link>}
             </div>
             <div className="flex shrink-0 items-center gap-2 text-sm text-navy/60">
               <span>{L.fSort}</span>
@@ -246,7 +247,7 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <div className="mt-8 rounded-3xl bg-mist p-10 text-center">
               <span className="mx-auto flex h-14 w-14 items-center justify-center rounded-2xl bg-white text-turquoise-dark shadow-sm"><BoatIcon name="compass" className="h-7 w-7" /></span>
               <p className="mx-auto mt-4 max-w-md text-navy/70">{all.length === 0 ? L.noneYet : L.noMatch}</p>
-              {all.length > 0 && <Link href={base} className="mt-5 inline-block rounded-full bg-navy px-6 py-2.5 text-sm font-semibold text-white">{en ? "Clear filters" : "Filtreleri temizle"}</Link>}
+              {all.length > 0 && <Link href={base} className="mt-5 inline-block rounded-full bg-navy px-6 py-2.5 text-sm font-semibold text-white">{ru ? "Сбросить фильтры" : en ? "Clear filters" : "Filtreleri temizle"}</Link>}
             </div>
           )}
         </div>

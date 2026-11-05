@@ -14,27 +14,28 @@ const WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 
 
 // Rehber / blog yazısı sayfası: kapaklı başlık, okuma çubuğu, içindekiler, okunaklı metin, paylaş, teklif kutusu, diğer yazılar.
 export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Post[]; back?: { href: string; label: string }; lang: Lang }) {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   const contact = await getContact();
   const toc = headingsOf(p.content);
   const words = `${p.excerpt} ${p.content}`.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.round(words / 200));
-  const date = p.publishedAt ? new Date(p.publishedAt).toLocaleDateString(en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : null;
+  const date = p.publishedAt ? new Date(p.publishedAt).toLocaleDateString(ru ? "ru-RU" : en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : null;
   const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(en ? `Hello, I read "${p.title}" and I'd like to plan a boat holiday.` : `Merhaba, "${p.title}" yazınızı okudum, yat tatili planlamak istiyorum.`)}` : href(lang, "/iletisim");
   const isPage = p.kind === "page";
   const L = {
-    toc: en ? "In this article" : "Bu yazıda",
-    share: en ? "Share" : "Paylaş",
-    copy: en ? "Copy link" : "Bağlantıyı kopyala",
-    copied: en ? "Copied" : "Kopyalandı",
+    toc: ru ? "В этой статье" : en ? "In this article" : "Bu yazıda",
+    share: ru ? "Поделиться" : en ? "Share" : "Paylaş",
+    copy: ru ? "Скопировать ссылку" : en ? "Copy link" : "Bağlantıyı kopyala",
+    copied: ru ? "Скопировано" : en ? "Copied" : "Kopyalandı",
     min: en ? `${minutes} min read` : `${minutes} dk okuma`,
     parts: en ? `${toc.length} sections` : `${toc.length} bölüm`,
-    ctaEyebrow: en ? "Plan your trip" : "Planınızı yapalım",
-    ctaTitle: en ? "Ready to turn this into a holiday?" : "Okuduklarınızı tatile çevirelim mi?",
-    ctaText: en ? "Tell us your dates and group size; we'll suggest the right boat and route." : "Tarihlerinizi ve kişi sayınızı yazın; size uygun yatı ve rotayı önerelim.",
-    wa: en ? "Write on WhatsApp" : "WhatsApp'tan yazın",
-    boats: en ? "Browse boats" : "Yatları inceleyin",
-    more: en ? "Keep reading" : "Okumaya devam edin",
+    ctaEyebrow: ru ? "Спланируйте поездку" : en ? "Plan your trip" : "Planınızı yapalım",
+    ctaTitle: ru ? "Превратим прочитанное в отпуск?" : en ? "Ready to turn this into a holiday?" : "Okuduklarınızı tatile çevirelim mi?",
+    ctaText: ru ? "Напишите даты и количество гостей — мы предложим подходящую яхту и маршрут." : en ? "Tell us your dates and group size; we'll suggest the right boat and route." : "Tarihlerinizi ve kişi sayınızı yazın; size uygun yatı ve rotayı önerelim.",
+    wa: ru ? "Написать в WhatsApp" : en ? "Write on WhatsApp" : "WhatsApp'tan yazın",
+    boats: ru ? "Смотреть яхты" : en ? "Browse boats" : "Yatları inceleyin",
+    more: ru ? "Читать дальше" : en ? "Keep reading" : "Okumaya devam edin",
   };
 
   return (

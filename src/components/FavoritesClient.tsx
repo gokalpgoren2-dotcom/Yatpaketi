@@ -34,7 +34,7 @@ const T = {
 };
 
 export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boats: Boat[]; whatsapp: string; email: string; lang: Lang; curated: Curated[] }) {
-  const L = T[lang];
+  const L = T[lang === "tr" ? "tr" : "en"];
   const favs = useFavorites();
   const list = favs.map((s) => boats.find((b) => b.slug === s)).filter((b): b is Boat => Boolean(b));
   const has = (b: Boat, re: RegExp) => b.equipment.some((e) => re.test(e));
@@ -61,7 +61,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
     [L.rows.crew, (b) => (b.crew > 0 ? b.crew : "–")],
     [L.rows.captain, (b) => (b.captained ? L.included : L.notIncluded)],
     [L.rows.ac, (b) => eqCell(eqInfo(b, /^klima$|air.?cond/i, lang), lang)],
-    [lang === "en" ? "Generator" : "Jeneratör", (b) => eqCell(eqInfo(b, /jenerat|generator/i, lang), lang)],
+    [lang !== "tr" ? "Generator" : "Jeneratör", (b) => eqCell(eqInfo(b, /jenerat|generator/i, lang), lang)],
     [L.rows.jacuzzi, (b) => (has(b, /jakuzi|jacuzzi/i) ? L.yes : L.no)],
   ];
 
@@ -113,18 +113,18 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         const A = list.find((x) => x.slug === sa)!, B = list.find((x) => x.slug === sb)!;
         const { points, summary } = buildPoints(A, B, lang);
         const c = curated.find((x) => samePair(x, sa, sb));
-        const note = c ? ((lang === "en" ? c.noteEn?.trim() : "") || c.note) : "";
+        const note = c ? ((lang !== "tr" ? c.noteEn?.trim() : "") || c.note) : "";
         const sel = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-base font-semibold text-navy outline-none focus:border-turquoise";
         return (
-          <section className="mt-10" aria-label={lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
-            <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang === "en" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
-            <p className="mt-1 text-sm text-navy/65">{lang === "en" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki yat seçin, nasıl ayrıştıklarını görün."}</p>
+          <section className="mt-10" aria-label={lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
+            <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
+            <p className="mt-1 text-sm text-navy/65">{lang !== "tr" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki yat seçin, nasıl ayrıştıklarını görün."}</p>
             <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
-              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang === "en" ? "First yacht" : "Birinci yat"}>
+              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang !== "tr" ? "First yacht" : "Birinci yat"}>
                 {list.filter((x) => x.slug !== sb).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
-              <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang === "en" ? "vs" : "karşı"}</span>
-              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang === "en" ? "Second yacht" : "İkinci yat"}>
+              <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang !== "tr" ? "vs" : "karşı"}</span>
+              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang !== "tr" ? "Second yacht" : "İkinci yat"}>
                 {list.filter((x) => x.slug !== sa).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
             </div>
@@ -138,7 +138,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         <p className="mt-2 max-w-xl text-white/75">{L.askNote}</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
           {whatsapp && <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener noreferrer" className={`${cta} bg-[#25D366] text-white hover:brightness-95`}>WhatsApp</a>}
-          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang === "en" ? "Yacht enquiry" : "Yat bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
+          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang !== "tr" ? "Yacht enquiry" : "Yat bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
         </div>
       </div>
     </div>

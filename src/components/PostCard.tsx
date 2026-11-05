@@ -13,7 +13,7 @@ const KIND: Record<PostKind, [string, string]> = {
   guide: ["Rehber", "Guide"], blog: ["Blog", "Blog"], page: ["Sayfa", "Page"], destination: ["Destinasyon", "Destination"],
   route: ["Klasik rota", "Classic route"], package: ["Tur paketi", "Tour package"], process: ["Kiralama süreci", "Charter process"],
 };
-export const kindLabel = (k: PostKind, lang: Lang) => KIND[k][lang === "en" ? 1 : 0];
+export const kindLabel = (k: PostKind, lang: Lang) => KIND[k][lang !== "tr" ? 1 : 0];
 
 // Yazının görseli: bölge haritası > kapak fotoğrafı > hazır çizim > renkli yer tutucu. Üst öğe "relative" olmalı.
 export function PostThumb({ p, i = 0, sizes }: { p: Post; i?: number; sizes: string }) {
@@ -40,7 +40,7 @@ export function PostCard({ p, i = 0, lang = "tr" }: { p: Post; i?: number; lang?
         <h3 className="font-display mt-1.5 text-xl font-semibold leading-snug text-navy">{p.title}</h3>
         {p.excerpt && <p className="mt-2 line-clamp-2 text-sm leading-relaxed text-navy/60">{p.excerpt}</p>}
         <div className="mt-auto flex items-center justify-between gap-3 pt-5">
-          <span className="text-sm font-semibold text-navy/70 transition group-hover:text-turquoise-dark">{lang === "en" ? "Read" : "Oku"}</span>
+          <span className="text-sm font-semibold text-navy/70 transition group-hover:text-turquoise-dark">{lang !== "tr" ? "Read" : "Oku"}</span>
           <span className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-mist text-navy transition group-hover:bg-turquoise group-hover:text-white" aria-hidden>→</span>
         </div>
       </div>

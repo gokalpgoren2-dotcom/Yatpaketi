@@ -15,7 +15,7 @@ const input = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-b
 
 export function ReviewForm({ token, lang, defaultName }: { token: string | null; lang: Lang; defaultName: string }) {
   // token null: Turum sayfasından (oturumla), dolu: e-postadaki bağlantıdan
-  const L = T[lang];
+  const L = T[lang === "tr" ? "tr" : "en"];
   const fileRef = useRef<HTMLInputElement>(null);
   const [rating, setRating] = useState(0);
   const [name, setName] = useState(defaultName);
@@ -32,7 +32,7 @@ export function ReviewForm({ token, lang, defaultName }: { token: string | null;
       const blob = await shrink(f);
       setPhoto({ blob, preview: URL.createObjectURL(blob) });
     } catch {
-      setErr(lang === "en" ? "This photo could not be used." : "Bu fotoğraf kullanılamadı.");
+      setErr(lang !== "tr" ? "This photo could not be used." : "Bu fotoğraf kullanılamadı.");
     }
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -50,14 +50,14 @@ export function ReviewForm({ token, lang, defaultName }: { token: string | null;
         if (!slot.path) throw new Error(slot.error ?? "");
         const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false } });
         const up = await sb.storage.from("reviews").upload(slot.path, photo.blob, { contentType: "image/jpeg", upsert: false });
-        if (up.error) throw new Error(lang === "en" ? "The photo could not be uploaded. Please try again." : "Fotoğraf yüklenemedi. Lütfen tekrar deneyin.");
+        if (up.error) throw new Error(lang !== "tr" ? "The photo could not be uploaded. Please try again." : "Fotoğraf yüklenemedi. Lütfen tekrar deneyin.");
         path = slot.path;
       }
       const r = token ? await submitReview(token, name.trim(), rating, body.trim(), path) : await submitPortalReview(name.trim(), rating, body.trim(), path);
       if (!r.ok) throw new Error(r.error ?? "");
       setDone(true);
     } catch (e2) {
-      setErr((e2 instanceof Error && e2.message) || (lang === "en" ? "Something went wrong. Please try again." : "Bir sorun oluştu. Lütfen tekrar deneyin."));
+      setErr((e2 instanceof Error && e2.message) || (lang !== "tr" ? "Something went wrong. Please try again." : "Bir sorun oluştu. Lütfen tekrar deneyin."));
     }
     setBusy(false);
   }

@@ -91,11 +91,11 @@ export function boatsFor(list: Boat[], destSlug: string) {
 }
 
 // Fiyat gösterimi (vitrin): en düşük günlük fiyat. showPrice false ya da fiyat yoksa null ("Fiyat sorunuz").
-export function priceLabel(b: Boat, lang: "tr" | "en" = "tr"): string | null {
+export function priceLabel(b: Boat, lang: "tr" | "en" | "ru" = "tr"): string | null {
   const base = minDaily(b);
   if (base == null) return null;
   const v = off(base, b.offer?.percent); // geçerli kampanya varsa indirimli
-  return lang === "en" ? `from ${money(v, b.currency, lang)} / day` : `${money(v, b.currency, lang)}’den / gün`;
+  return lang !== "tr" ? `from ${money(v, b.currency, lang)} / day` : `${money(v, b.currency, lang)}’den / gün`;
 }
 
 // ---- Filtreleme ----

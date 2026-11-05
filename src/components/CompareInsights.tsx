@@ -6,17 +6,18 @@ const eyebrow = "text-xs font-semibold uppercase tracking-[0.25em] text-turquois
 
 // Ekibin notu + otomatik değerlendirme. Hem karşılaştırma sayfasında hem favorilerde kullanılır.
 export function CompareInsights({ A, B, note, points, summary, lang }: { A: Boat; B: Boat; note: string; points: Point[]; summary: string; lang: Lang }) {
-  const en = lang === "en";
+  const en = lang !== "tr";
+  const ru = lang === "ru";
   return (
     <div className="space-y-8">
       {note && (
         <div className="rounded-3xl bg-navy p-6 text-white lg:p-8">
-          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{en ? "Our take" : "Yatpaketi'nin yorumu"}</p>
+          <p className="text-xs font-semibold uppercase tracking-[0.25em] text-turquoise">{ru ? "Мнение yatpaketi" : en ? "Our take" : "Yatpaketi'nin yorumu"}</p>
           <p className="mt-3 whitespace-pre-line text-lg leading-relaxed text-white/90">{note}</p>
         </div>
       )}
       <div>
-        <p className={`mb-4 ${eyebrow}`}>{en ? "How they compare" : "Nasıl ayrışıyorlar?"}</p>
+        <p className={`mb-4 ${eyebrow}`}>{ru ? "Чем они отличаются" : en ? "How they compare" : "Nasıl ayrışıyorlar?"}</p>
         <div className="grid gap-4 md:grid-cols-2">
           {points.map((p) => (
             <article key={p.title} className="rounded-2xl bg-white p-5 ring-1 ring-navy/10">
@@ -28,7 +29,7 @@ export function CompareInsights({ A, B, note, points, summary, lang }: { A: Boat
             </article>
           ))}
         </div>
-        <p className="mt-5 rounded-2xl bg-turquoise/10 p-5 text-navy"><b>{en ? "In short: " : "Kısaca: "}</b>{summary}</p>
+        <p className="mt-5 rounded-2xl bg-turquoise/10 p-5 text-navy"><b>{ru ? "Коротко: " : en ? "In short: " : "Kısaca: "}</b>{summary}</p>
       </div>
     </div>
   );

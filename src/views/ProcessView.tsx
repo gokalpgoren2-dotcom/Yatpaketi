@@ -146,7 +146,7 @@ function Step({ s, i, U }: { s: Post; i: number; U: (typeof UI)["tr"] }) {
 
 export async function ProcessView({ lang }: { lang: Lang }) {
   const T = gt(lang);
-  const U = UI[lang];
+  const U = UI[lang === "tr" ? "tr" : "en"];
   const [steps, contact] = await Promise.all([getPosts("process", undefined, lang), getContact()]);
   const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(U.wa)}` : href(lang, "/iletisim");
   const phaseOf = (s: Post, i: number) => PHASE_OF[s.slug] ?? Math.min(3, Math.floor((i / Math.max(steps.length, 1)) * 4));

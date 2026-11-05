@@ -6,7 +6,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Classic Routes",
   description: gt("en").metaRoutes,
-  alternates: { canonical: "/en/rotalar", languages: { tr: "/rotalar", en: "/en/rotalar" } },
+  alternates: { canonical: "/en/rotalar", languages: { tr: "/rotalar", en: "/en/rotalar", ru: "/ru/rotalar" } },
 };
 
 export default function Page() {

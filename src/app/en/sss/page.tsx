@@ -5,7 +5,7 @@ export const revalidate = 60;
 export const metadata: Metadata = {
   title: "Frequently Asked Questions",
   description: "Frequently asked questions about boat charter, booking, payment, routes and life on board.",
-  alternates: { canonical: "/en/sss", languages: { tr: "/sss", en: "/en/sss" } },
+  alternates: { canonical: "/en/sss", languages: { tr: "/sss", en: "/en/sss", ru: "/ru/sss" } },
 };
 
 export default function FaqPage() {
