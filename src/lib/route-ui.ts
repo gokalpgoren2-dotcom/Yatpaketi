@@ -1,0 +1,36 @@
+// Klasik rota sayfalarının arayüz metinleri (istemci bileşenleri de kullanır; sözlük içermez).
+export const ROUTE_UI = {
+  tr: {
+    eyebrow: "Klasik rota", days: (n: number) => `${n} gün · ${Math.max(n - 1, 1)} gece`, from: "Kalkış", to: "Varış", loop: "Aynı limana dönüş", oneway: "Tek yön",
+    stops: (n: number) => `${n} durak`, greek: "Yunan adaları", quote: "Bu rota için teklif alın", program: "Programı görün", dayLabel: "Gün",
+    programEyebrow: "Gün gün program", programTitle: "Rotanızın akışı.", whoEyebrow: "Kimlere uygun?", noteTitle: "Program esnektir",
+    onewayNote: "Tek yön rotalarda yat bir limandan alınıp başka bir limanda teslim edilir; bu durum yata göre ek ücret getirebilir.",
+    greekNote: "Yunan adalarına geçişte pasaport ve giriş-çıkış işlemleri gerekir. Belgeleri rezervasyon sırasında birlikte netleştiririz.",
+    boatsEyebrow: "Bu rotaya uygun yatlar", boatsTitle: (p: string) => `${p} çıkışlı yatlar`, allBoats: "Tüm yatlar",
+    ctaTitle: "Bu rotada yelken açmaya hazır mısınız?", ctaText: "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve programı birlikte netleştirelim.", write: "Bize yazın",
+    more: "Diğer rotalar", all: "Tümü", allRoutes: "Tüm rotalar", filter: "Kalkış limanı", route: "Rotayı incele", count: (n: number) => `${n} rota`, chartLabel: "Rota şeması",
+    acts: { swim: "Yüzme", snorkel: "Şnorkel", walk: "Yürüyüş", dinner: "Akşam yemeği", sunset: "Gün batımı", history: "Tarih", market: "Çarşı", sail: "Uzun seyir", passport: "Pasaport", beach: "Plaj", relax: "Dinlenme" },
+  },
+  en: {
+    eyebrow: "Classic route", days: (n: number) => `${n} days · ${Math.max(n - 1, 1)} nights`, from: "Departure", to: "Arrival", loop: "Round trip", oneway: "One way",
+    stops: (n: number) => `${n} stops`, greek: "Greek islands", quote: "Get a quote for this route", program: "See the programme", dayLabel: "Day",
+    programEyebrow: "Day by day", programTitle: "How your voyage unfolds.", whoEyebrow: "Who is it for?", noteTitle: "A flexible programme",
+    onewayNote: "On one-way routes the boat is picked up in one port and returned in another; depending on the boat, this may involve an extra fee.",
+    greekNote: "Crossing to the Greek islands requires passports and entry/exit formalities. We'll sort out the documents together when you book.",
+    boatsEyebrow: "Boats for this route", boatsTitle: (p: string) => `Boats departing from ${p}`, allBoats: "All boats",
+    ctaTitle: "Ready to set sail on this route?", ctaText: "Tell us your dates and group size, and we'll finalise the right boat and programme together.", write: "Write to us",
+    more: "More routes", all: "All", allRoutes: "All routes", filter: "Departure port", route: "View route", count: (n: number) => `${n} routes`, chartLabel: "Route chart",
+    acts: { swim: "Swimming", snorkel: "Snorkelling", walk: "Walking", dinner: "Dinner", sunset: "Sunset", history: "History", market: "Market", sail: "Long sail", passport: "Passport", beach: "Beach", relax: "Relaxing" },
+  },
+  ru: {
+    eyebrow: "Классический маршрут", days: (n: number) => `${n} дн. · ${Math.max(n - 1, 1)} ноч.`, from: "Отправление", to: "Прибытие", loop: "Возвращение в тот же порт", oneway: "В одну сторону",
+    stops: (n: number) => `Остановок: ${n}`, greek: "Греческие острова", quote: "Получить предложение по маршруту", program: "Смотреть программу", dayLabel: "День",
+    programEyebrow: "Программа по дням", programTitle: "Как проходит ваше путешествие.", whoEyebrow: "Кому подходит?", noteTitle: "Программа гибкая",
+    onewayNote: "На маршрутах в одну сторону яхту принимают в одном порту и сдают в другом; в зависимости от яхты это может потребовать доплаты.",
+    greekNote: "Для перехода на греческие острова нужны паспорта и пограничные формальности. Документы уточним вместе при бронировании.",
+    boatsEyebrow: "Яхты для этого маршрута", boatsTitle: (p: string) => `Яхты с отправлением из ${p}`, allBoats: "Все яхты",
+    ctaTitle: "Готовы отправиться по этому маршруту?", ctaText: "Напишите даты и количество гостей — вместе подберём подходящую яхту и программу.", write: "Написать нам",
+    more: "Другие маршруты", all: "Все", allRoutes: "Все маршруты", filter: "Порт отправления", route: "Смотреть маршрут", count: (n: number) => `Маршрутов: ${n}`, chartLabel: "Схема маршрута",
+    acts: { swim: "Купание", snorkel: "Снорклинг", walk: "Прогулка", dinner: "Ужин", sunset: "Закат", history: "История", market: "Рынок", sail: "Долгий переход", passport: "Паспорт", beach: "Пляж", relax: "Отдых" },
+  },
+};

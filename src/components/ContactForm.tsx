@@ -16,12 +16,18 @@ const T = {
     wa: "Send via WhatsApp", mail: "Send by email", note: "Your message opens ready-made in WhatsApp; one tap sends it.",
     hi: "Hello, I'm", subj: "Contact form",
   },
+  ru: {
+    name: "Ваше имя", topic: "Тема", msg: "Ваше сообщение", msgPh: "Даты, количество гостей и маршрут, который вы представляете…",
+    topics: ["Аренда яхты", "Совет по маршруту и порту", "О моём текущем туре", "Другое"],
+    wa: "Отправить в WhatsApp", mail: "Отправить по почте", note: "Сообщение откроется в WhatsApp готовым — останется нажать «Отправить».",
+    hi: "Здравствуйте, меня зовут", subj: "Форма обратной связи",
+  },
 };
 
 const field = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-navy outline-none transition focus:border-turquoise focus:ring-2 focus:ring-turquoise/25";
 
 export function ContactForm({ lang, whatsapp, email }: { lang: Lang; whatsapp: string; email: string }) {
-  const L = T[lang === "tr" ? "tr" : "en"];
+  const L = T[lang];
   const [name, setName] = useState("");
   const [topic, setTopic] = useState(L.topics[0]);
   const [msg, setMsg] = useState("");

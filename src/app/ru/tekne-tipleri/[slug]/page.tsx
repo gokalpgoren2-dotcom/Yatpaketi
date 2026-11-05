@@ -9,8 +9,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const c = (await getCategories("ru")).find((x) => x.slug === slug);
   if (!c) return {};
   return {
-    title: `${c.name} Charter`,
-    description: `${c.name} charter options and boats in Türkiye.`,
+    title: `Аренда: ${c.name}`,
+    description: `${c.name}: варианты аренды и яхты в Турции.`,
     alternates: { canonical: `/ru/tekne-tipleri/${c.slug}`, languages: { tr: `/tekne-tipleri/${c.slug}`, en: `/en/tekne-tipleri/${c.slug}`, ru: `/ru/tekne-tipleri/${c.slug}` } },
     robots: { index: false, follow: true },
   };

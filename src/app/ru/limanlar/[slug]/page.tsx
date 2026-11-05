@@ -11,8 +11,8 @@ export async function generateMetadata({ params }: { params: Promise<{ slug: str
   const d = destinations.find((x) => x.slug === slug);
   if (!d) return {};
   return {
-    title: d.seoTitle || `${d.name} Boat Charter`,
-    description: `Gulet, motor yacht, catamaran and sailing yacht charter from ${d.name}. ${d.intro.slice(0, 120)}`,
+    title: `Аренда яхт: ${d.name}`,
+    description: `Аренда гулетов, моторных яхт, катамаранов и парусников с отправлением из: ${d.name}. ${d.intro.slice(0, 120)}`,
     alternates: { canonical: `/ru/limanlar/${d.slug}`, languages: { tr: `/limanlar/${d.slug}`, en: `/en/limanlar/${d.slug}`, ru: `/ru/limanlar/${d.slug}` } },
     robots: boatsFor(boats, d.slug).length > 0 ? { index: false, follow: true } : { index: false, follow: false },
   };

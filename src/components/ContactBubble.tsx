@@ -60,7 +60,7 @@ export function ContactBubble({ whatsapp, phone, phoneLabel, email, socials = []
           )}
           {socials.length > 0 && (
             <div className="mt-1 border-t border-navy/10 px-4 pb-2 pt-3">
-              <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{path.startsWith("/en") ? "Follow us" : "Bizi takip edin"}</p>
+              <p className="text-xs font-semibold uppercase tracking-wide text-navy/50">{path.startsWith("/ru") ? "Мы в соцсетях" : path.startsWith("/en") ? "Follow us" : "Bizi takip edin"}</p>
               <div className="mt-2 flex gap-2">
                 {socials.map(([k, url]) => (
                   <a key={k} href={url} target="_blank" rel="noopener noreferrer" aria-label={SOCIAL_NAMES[k]} title={SOCIAL_NAMES[k]} className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy ring-1 ring-navy/10 transition hover:bg-navy hover:text-white">

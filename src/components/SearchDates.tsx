@@ -140,7 +140,7 @@ export function SearchDates({ start, end, onChange, lang = "tr", labelClass, fie
 
         <div className="mt-5 flex items-center justify-between gap-3 border-t border-navy/10 pt-4">
           <button type="button" onClick={() => { onChange("", ""); setHover(""); }} className="text-sm font-semibold text-turquoise-dark disabled:opacity-30" disabled={!start}>{L.clear}</button>
-          <span className="text-sm text-navy/60">{nights > 0 ? `${nights} ${lang !== "tr" ? (nights === 1 ? "night" : "nights") : "gece"}` : start && !end ? L.tapEnd : L.tapStart}</span>
+          <span className="text-sm text-navy/60">{nights > 0 ? `${nights} ${lang === "ru" ? "ноч." : lang !== "tr" ? (nights === 1 ? "night" : "nights") : "gece"}` : start && !end ? L.tapEnd : L.tapStart}</span>
           <button type="button" onClick={() => setOpen(false)} className="rounded-full bg-turquoise px-6 py-2.5 text-sm font-semibold text-white hover:bg-turquoise-dark">{L.applyDates}</button>
         </div>
       </div>

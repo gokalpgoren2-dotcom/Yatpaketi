@@ -1,4 +1,5 @@
 import type { Lang } from "./i18n";
+import { ruDeep } from "./ru";
 
 const tr = {
   guide: "Yatpaketi Rehberi", faq: "S.S.S", culture: "Yat ve Yatçılık Kültürü",
@@ -72,4 +73,5 @@ const en: typeof tr = {
   metaProcess: "From request to hand-over: how provisioning, welcome and sailing days work once your booking is confirmed.",
 };
 
-export const gt = (lang: Lang) => (lang !== "tr" ? en : tr);
+const ru: typeof tr = ruDeep(en);
+export const gt = (lang: Lang) => (lang === "ru" ? ru : lang !== "tr" ? en : tr);

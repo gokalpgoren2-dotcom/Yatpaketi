@@ -95,7 +95,7 @@ export function priceLabel(b: Boat, lang: "tr" | "en" | "ru" = "tr"): string | n
   const base = minDaily(b);
   if (base == null) return null;
   const v = off(base, b.offer?.percent); // geçerli kampanya varsa indirimli
-  return lang !== "tr" ? `from ${money(v, b.currency, lang)} / day` : `${money(v, b.currency, lang)}’den / gün`;
+  return lang === "ru" ? `от ${money(v, b.currency, lang)} / день` : lang !== "tr" ? `from ${money(v, b.currency, lang)} / day` : `${money(v, b.currency, lang)}’den / gün`;
 }
 
 // ---- Filtreleme ----

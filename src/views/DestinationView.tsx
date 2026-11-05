@@ -47,7 +47,7 @@ export async function DestinationView({ lang, slug }: { lang: Lang; slug: string
           ) : (
             <p className="mt-6 rounded-2xl bg-mist p-8 text-navy/70">{L.destNone}</p>
           )}
-          <ReviewSection reviews={reviews} lang={lang} showBoat title={lang !== "tr" ? `Guest reviews from ${d.name}` : `${d.name} çıkışlı misafir yorumları`} />
+          <ReviewSection reviews={reviews} lang={lang} showBoat title={lang === "ru" ? `Отзывы гостей: ${d.name}` : lang !== "tr" ? `Guest reviews from ${d.name}` : `${d.name} çıkışlı misafir yorumları`} />
         </div>
       </main>
       <Footer lang={lang} />

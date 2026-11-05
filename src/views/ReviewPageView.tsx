@@ -7,10 +7,11 @@ import type { Lang } from "@/lib/i18n";
 const T = {
   tr: { title: "Yolculuğunuz nasıldı?", sub: (b: string) => `${b || "Turunuz"} hakkındaki yorumunuz, bir sonraki misafirlerimize yol gösterir.`, bad: "Bu bağlantı geçersiz.", badText: "Bağlantıyı e-postanızdan yeniden açmayı deneyin ya da bize yazın.", used: "Bu bağlantı ile zaten yorum gönderildi.", usedText: "Değerli yorumunuz için teşekkür ederiz.", expired: "Bu bağlantının süresi doldu.", expiredText: "Yine de görüşlerinizi duymak isteriz, lütfen bize yazın.", contact: "İletişim sayfası", home: "Ana sayfa", lang: "English" },
   en: { title: "How was your voyage?", sub: (b: string) => `Your review of ${b || "your tour"} helps our next guests.`, bad: "This link is not valid.", badText: "Try opening the link from your email again, or write to us.", used: "A review was already sent with this link.", usedText: "Thank you for your valuable feedback.", expired: "This link has expired.", expiredText: "We'd still love to hear from you, please write to us.", contact: "Contact page", home: "Home", lang: "Türkçe" },
+  ru: { title: "Как прошло ваше путешествие?", sub: (b: string) => `Ваш отзыв о ${b || "вашем туре"} поможет следующим гостям.`, bad: "Эта ссылка недействительна.", badText: "Попробуйте снова открыть ссылку из письма или напишите нам.", used: "По этой ссылке отзыв уже отправлен.", usedText: "Спасибо за ценный отзыв.", expired: "Срок действия ссылки истёк.", expiredText: "Мы всё равно будем рады услышать вас — напишите нам.", contact: "Контакты", home: "Главная", lang: "Türkçe" },
 };
 
 export async function ReviewPageView({ lang, token }: { lang: Lang; token: string }) {
-  const L = T[lang === "tr" ? "tr" : "en"];
+  const L = T[lang];
   const info = await getReviewRequest(token);
   const other = lang !== "tr" ? `/yorum/${token}` : `/en/yorum/${token}`;
   const state = !info ? "bad" : info.used ? "used" : info.expired ? "expired" : "ok";
@@ -32,8 +33,8 @@ export async function ReviewPageView({ lang, token }: { lang: Lang; token: strin
             <h1 className="font-display text-3xl font-bold text-navy">{L[state === "ok" ? "bad" : state]}</h1>
             <p className="mt-3 text-navy/70">{L[(state === "used" ? "usedText" : state === "expired" ? "expiredText" : "badText") as "badText"]}</p>
             <div className="mt-6 flex justify-center gap-3 text-sm font-semibold">
-              <Link href={lang !== "tr" ? "/en/iletisim" : "/iletisim"} className="rounded-full bg-turquoise px-5 py-2.5 text-white">{L.contact}</Link>
-              <Link href={lang !== "tr" ? "/en" : "/"} className="rounded-full border border-navy/20 px-5 py-2.5 text-navy">{L.home}</Link>
+              <Link href={lang !== "tr" ? `/${lang}/iletisim` : "/iletisim"} className="rounded-full bg-turquoise px-5 py-2.5 text-white">{L.contact}</Link>
+              <Link href={lang !== "tr" ? `/${lang}` : "/"} className="rounded-full border border-navy/20 px-5 py-2.5 text-navy">{L.home}</Link>
             </div>
           </div>
         )}

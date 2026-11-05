@@ -33,17 +33,32 @@ const messagesEn: Record<string, string> = {
   rate: "Too many requests were sent. Please try again later.",
 };
 
+const messagesRu: Record<string, string> = {
+  name: "Пожалуйста, укажите имя и фамилию.",
+  contact: "Пожалуйста, укажите хотя бы номер телефона или адрес эл. почты.",
+  phone: "Похоже, номер телефона указан неверно.",
+  email: "Похоже, адрес эл. почты указан неверно.",
+  dates: "Проверьте даты: заезд не может быть в прошлом, выезд должен быть позже заезда, а срок — не более 60 дней.",
+  guests: "Неверное количество гостей.",
+  capacity: "Количество гостей превышает вместимость этой яхты.",
+  message: "Сообщение слишком длинное (не более 2000 символов).",
+  boat: "Эта яхта больше не представлена.",
+  rate: "Отправлено слишком много запросов. Пожалуйста, попробуйте позже.",
+};
+
 const s = (fd: FormData, k: string, max: number) => String(fd.get(k) ?? "").trim().slice(0, max);
 
 export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
-  const en = String(fd.get("lang") ?? "") === "en";
-  const messages_ = en ? messagesEn : messages;
+  const lng = String(fd.get("lang") ?? "");
+  const en = lng === "en" || lng === "ru";
+  const ru = lng === "ru";
+  const messages_ = ru ? messagesRu : en ? messagesEn : messages;
   // Gizli alan (botlar doldurur) ve çok hızlı gönderim: sessizce "başarılı" gibi davranılır.
   if (s(fd, "website", 200) !== "") return { ok: true };
   const elapsed = Number(fd.get("elapsed"));
-  if (!Number.isFinite(elapsed) || elapsed < 2500) return { ok: false, message: en ? "Please fill in the form and submit again in a few seconds." : "Lütfen formu doldurup birkaç saniye sonra tekrar gönderin." };
+  if (!Number.isFinite(elapsed) || elapsed < 2500) return { ok: false, message: ru ? "Пожалуйста, заполните форму и отправьте её снова через несколько секунд." : en ? "Please fill in the form and submit again in a few seconds." : "Lütfen formu doldurup birkaç saniye sonra tekrar gönderin." };
 
-  if (fd.get("consent") !== "on") return { ok: false, message: en ? "To continue, please agree to the processing of your personal data." : "Devam etmek için kişisel verilerin işlenmesini onaylamanız gerekir." };
+  if (fd.get("consent") !== "on") return { ok: false, message: ru ? "Чтобы продолжить, подтвердите согласие на обработку персональных данных." : en ? "To continue, please agree to the processing of your personal data." : "Devam etmek için kişisel verilerin işlenmesini onaylamanız gerekir." };
 
   const start = s(fd, "start", 10);
   const end = s(fd, "end", 10);
@@ -70,7 +85,7 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     p_message: s(fd, "message", 2000),
     p_ip_hash: ipHash,
   });
-  if (error) return { ok: false, message: en ? "Your request could not be sent right now. Please try again later." : "Talebiniz şu an gönderilemedi. Lütfen daha sonra tekrar deneyin." };
+  if (error) return { ok: false, message: ru ? "Сейчас не удалось отправить запрос. Пожалуйста, попробуйте позже." : en ? "Your request could not be sent right now. Please try again later." : "Talebiniz şu an gönderilemedi. Lütfen daha sonra tekrar deneyin." };
   const r = data as { ok?: boolean; error?: string } | null;
   if (r?.ok) {
     let boatName = s(fd, "boat", 200);
@@ -90,7 +105,7 @@ export async function submitReservation(fd: FormData): Promise<TalepSonuc> {
     // Tanı amaçlı: ad "TESTMAIL" ise bildirim sonucu ekranda gösterilir.
     return s(fd, "name", 100).toUpperCase() === "TESTMAIL" ? { ok: true, debug: nr.ok ? "Bildirim e-postası gönderildi." : "Bildirim e-postası gönderilemedi: " + nr.message } : { ok: true };
   }
-  return { ok: false, message: messages_[r?.error ?? ""] ?? (en ? "Your request could not be sent. Please check your details." : "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin.") };
+  return { ok: false, message: messages_[r?.error ?? ""] ?? (ru ? "Не удалось отправить запрос. Пожалуйста, проверьте данные." : en ? "Your request could not be sent. Please check your details." : "Talebiniz gönderilemedi. Lütfen bilgileri kontrol edin.") };
 }
 
 // WhatsApp düğmesine basılınca talebi sessizce panele kaydeder (telefon/e-posta yoktur). Hata olursa WhatsApp yolu etkilenmez.

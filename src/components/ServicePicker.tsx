@@ -10,7 +10,9 @@ export function ServicePicker({ items, icons, whatsapp, contactHref, lang }: { i
   const [date, setDate] = useState("");
   const [people, setPeople] = useState("");
   const toggle = (s: string) => setSel((v) => (v.includes(s) ? v.filter((x) => x !== s) : [...v, s]));
-  const msg = en
+  const msg = ru
+    ? `Здравствуйте, меня интересует: ${sel.join(", ") || "ваши услуги"}.${date ? ` Даты: ${date}.` : ""}${people ? ` Гостей: ${people}.` : ""}`
+    : en
     ? `Hello, I'm interested in: ${sel.join(", ") || "your services"}.${date ? ` Dates: ${date}.` : ""}${people ? ` Guests: ${people}.` : ""}`
     : `Merhaba, şu hizmetlerle ilgileniyorum: ${sel.join(", ") || "hizmetleriniz"}.${date ? ` Tarih: ${date}.` : ""}${people ? ` Kişi sayısı: ${people}.` : ""}`;
   const link = whatsapp ? `https://wa.me/${whatsapp}?text=${encodeURIComponent(msg)}` : contactHref;

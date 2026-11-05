@@ -10,12 +10,13 @@ import type { Lang } from "@/lib/i18n";
 const T = {
   tr: { rating: "Puanınız", name: "Adınız (sitede görünür)", nameHint: "İsterseniz yalnızca adınız ve soyadınızın baş harfi: Ayşe K.", body: "Deneyiminiz", bodyPh: "Yat, mürettebat ve rotanız hakkında neler düşünüyorsunuz?", photo: "Fotoğraf ekle (isteğe bağlı)", photoChange: "Fotoğrafı değiştir", remove: "Kaldır", send: "Yorumu gönder", sending: "Gönderiliyor…", short: "Lütfen en az 10 karakterlik bir yorum yazın.", star: "yıldız", noRating: "Lütfen yıldız verin.", consent: "Yorumum ve fotoğrafım, onaylandıktan sonra yatpaketi sitesinde yayınlanabilir.", done: "Teşekkürler!", doneText: "Yorumunuzu aldık. Ekibimiz inceledikten sonra sitede yayınlanacak." },
   en: { rating: "Your rating", name: "Your name (shown on the site)", nameHint: "You may use your first name and last initial: Anna K.", body: "Your experience", bodyPh: "What did you think of the yacht, the crew and your route?", photo: "Add a photo (optional)", photoChange: "Change photo", remove: "Remove", send: "Send review", sending: "Sending…", short: "Please write at least 10 characters.", star: "stars", noRating: "Please choose a rating.", consent: "My review and photo may be published on the Yatpaketi site once approved.", done: "Thank you!", doneText: "We received your review. It will appear on the site once our team has checked it." },
+  ru: { rating: "Ваша оценка", name: "Ваше имя (будет показано на сайте)", nameHint: "Можно указать имя и первую букву фамилии: Анна К.", body: "Ваши впечатления", bodyPh: "Как вам яхта, экипаж и маршрут?", photo: "Добавить фото (необязательно)", photoChange: "Изменить фото", remove: "Удалить", send: "Отправить отзыв", sending: "Отправка…", short: "Напишите не менее 10 символов.", star: "звёзд", noRating: "Пожалуйста, выберите оценку.", consent: "Мой отзыв и фото могут быть опубликованы на сайте Yatpaketi после проверки.", done: "Спасибо!", doneText: "Мы получили ваш отзыв. Он появится на сайте после проверки нашей командой." },
 };
 const input = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-base text-navy outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30";
 
 export function ReviewForm({ token, lang, defaultName }: { token: string | null; lang: Lang; defaultName: string }) {
   // token null: Turum sayfasından (oturumla), dolu: e-postadaki bağlantıdan
-  const L = T[lang === "tr" ? "tr" : "en"];
+  const L = T[lang];
   const fileRef = useRef<HTMLInputElement>(null);
   const [rating, setRating] = useState(0);
   const [name, setName] = useState(defaultName);
@@ -32,7 +33,7 @@ export function ReviewForm({ token, lang, defaultName }: { token: string | null;
       const blob = await shrink(f);
       setPhoto({ blob, preview: URL.createObjectURL(blob) });
     } catch {
-      setErr(lang !== "tr" ? "This photo could not be used." : "Bu fotoğraf kullanılamadı.");
+      setErr(lang === "ru" ? "Это фото нельзя использовать." : lang !== "tr" ? "This photo could not be used." : "Bu fotoğraf kullanılamadı.");
     }
     if (fileRef.current) fileRef.current.value = "";
   }
@@ -50,14 +51,14 @@ export function ReviewForm({ token, lang, defaultName }: { token: string | null;
         if (!slot.path) throw new Error(slot.error ?? "");
         const sb = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false } });
         const up = await sb.storage.from("reviews").upload(slot.path, photo.blob, { contentType: "image/jpeg", upsert: false });
-        if (up.error) throw new Error(lang !== "tr" ? "The photo could not be uploaded. Please try again." : "Fotoğraf yüklenemedi. Lütfen tekrar deneyin.");
+        if (up.error) throw new Error(lang === "ru" ? "Не удалось загрузить фото. Попробуйте ещё раз." : lang !== "tr" ? "The photo could not be uploaded. Please try again." : "Fotoğraf yüklenemedi. Lütfen tekrar deneyin.");
         path = slot.path;
       }
       const r = token ? await submitReview(token, name.trim(), rating, body.trim(), path) : await submitPortalReview(name.trim(), rating, body.trim(), path);
       if (!r.ok) throw new Error(r.error ?? "");
       setDone(true);
     } catch (e2) {
-      setErr((e2 instanceof Error && e2.message) || (lang !== "tr" ? "Something went wrong. Please try again." : "Bir sorun oluştu. Lütfen tekrar deneyin."));
+      setErr((e2 instanceof Error && e2.message) || (lang === "ru" ? "Что-то пошло не так. Попробуйте ещё раз." : lang !== "tr" ? "Something went wrong. Please try again." : "Bir sorun oluştu. Lütfen tekrar deneyin."));
     }
     setBusy(false);
   }

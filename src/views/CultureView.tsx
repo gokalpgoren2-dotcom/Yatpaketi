@@ -8,6 +8,7 @@ import { YachtGlossary } from "@/components/culture/YachtGlossary";
 import { getCulture } from "@/lib/site-texts";
 import { getPost } from "@/lib/posts";
 import { href, type Lang } from "@/lib/i18n";
+import { pick } from "@/lib/ru";
 
 const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-turquoise-dark";
 const h2 = "font-display text-3xl font-semibold leading-tight text-navy lg:text-5xl";
@@ -35,7 +36,7 @@ const GU_IC: Record<string, string> = {
 };
 
 export async function CultureView({ lang }: { lang: Lang }) {
-  const C = (await getCulture())[lang === "tr" ? "tr" : "en"];
+  const C = pick(await getCulture(), lang);
   const en = lang !== "tr";
   const ru = lang === "ru";
   // Kapak fotoğrafı: panel > Yazılar > "Yat ve Yatçılık Kültürü" sayfasına yüklenen fotoğraf (TR kaydında). Yoksa çizim gösterilir.

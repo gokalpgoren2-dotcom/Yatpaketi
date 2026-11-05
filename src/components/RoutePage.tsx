@@ -26,7 +26,7 @@ function Pill({ d, children }: { d: string; children: React.ReactNode }) {
 
 // Klasik rota sayfası: dalgalı başlık + hareketli rota şeması, gün gün zaman çizelgesi, uygun yatlar, diğer rotalar.
 export async function RoutePage({ p, all, back, lang }: { p: Post; all: Post[]; back?: { href: string; label: string }; lang: Lang }) {
-  const U = ROUTE_UI[lang === "tr" ? "tr" : "en"];
+  const U = ROUTE_UI[lang];
   const R = routeInfo(p, lang);
   const [{ boats }, contact] = await Promise.all([getBoats(lang), getContact()]);
   const fit = R.port ? boats.filter((b) => b.destinations.includes(R.port!) || b.port.toLocaleLowerCase("tr").includes(R.from.toLocaleLowerCase("tr"))).slice(0, 8) : [];
@@ -34,7 +34,7 @@ export async function RoutePage({ p, all, back, lang }: { p: Post; all: Post[]; 
   const sameStart = others.filter((x) => routeInfo(x, lang).from === R.from);
   const more = [...sameStart, ...others.filter((x) => !sameStart.includes(x))].slice(0, 6);
   const wa = contact.whatsapp
-    ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(lang !== "tr" ? `Hello, I'd like a quote for the "${p.title}" route.` : `Merhaba, "${p.title}" rotası için teklif almak istiyorum.`)}`
+    ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(lang === "ru" ? `Здравствуйте, я хочу получить предложение по маршруту «${p.title}».` : lang !== "tr" ? `Hello, I'd like a quote for the "${p.title}" route.` : `Merhaba, "${p.title}" rotası için teklif almak istiyorum.`)}`
     : href(lang, "/iletisim");
 
   return (
@@ -187,7 +187,7 @@ export function RoutesIndex({ posts, eyebrow: eb, title, intro, empty, lang }: {
               <Link href={feature.href} className="group relative block">
                 <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-turquoise/20 blur-3xl" aria-hidden />
                 <div className="aspect-[600/340] overflow-hidden rounded-[1.75rem] shadow-2xl shadow-black/40 ring-1 ring-white/15">
-                  <RouteChart id={`hero-${feature.slug}`} stops={feature.chart} loop={feature.loop} label={ROUTE_UI[lang === "tr" ? "tr" : "en"].chartLabel} />
+                  <RouteChart id={`hero-${feature.slug}`} stops={feature.chart} loop={feature.loop} label={ROUTE_UI[lang].chartLabel} />
                 </div>
                 <span className="absolute bottom-4 left-4 rounded-full bg-white/95 px-4 py-2 text-sm font-semibold text-navy shadow-lg">{feature.title} →</span>
               </Link>

@@ -7,6 +7,7 @@ import { gt } from "@/lib/guide-text";
 import { getFaqItems } from "@/lib/site-texts";
 import { getContact } from "@/lib/content";
 import { FAQ_CATS } from "@/lib/faq";
+import { ruText } from "@/lib/ru";
 
 const wrap = "mx-auto max-w-7xl px-5 lg:px-8";
 const WAVE = (y: number) => `M0 ${y} q180 -60 360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 t360 0 V400 H0 z`;
@@ -16,7 +17,8 @@ function Ic({ d, size = 18 }: { d: string; size?: number }) {
 }
 
 export async function FaqView({ lang }: { lang: Lang }) {
-  const [faq, contact] = await Promise.all([getFaqItems(), getContact()]);
+  const [faq0, contact] = await Promise.all([getFaqItems(), getContact()]);
+  const faq = lang === "ru" ? faq0.map((f) => ({ ...f, qEn: ruText(f.qEn), aEn: ruText(f.aEn).replace(/\]\(\/en\//g, "](/ru/") })) : faq0;
   const en = lang !== "tr";
   const ru = lang === "ru";
   const T = gt(lang);

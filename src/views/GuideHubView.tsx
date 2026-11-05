@@ -10,17 +10,17 @@ import { href, type Lang } from "@/lib/i18n";
 import { gt } from "@/lib/guide-text";
 
 // Kart üstündeki küçük etiketler (yazı adresine göre)
-const TAG: Record<string, [string, string]> = {
-  "gulet-kiralamadan-once": ["Gulet rehberi", "Gulet guide"],
-  "motoryat-tatilinin-butcesi": ["Motoryat rehberi", "Motor yacht guide"],
-  "hangi-tekne-nasil-bir-yolculuk": ["Yelkenli & Katamaran", "Sailing & catamaran"],
-  "bavul-hazirligi": ["Bavul hazırlığı", "Packing"],
-  "tatilin-temposu": ["Tatilin temposu", "Holiday pace"],
-  "arkadas-grubuyla-tatil": ["Birlikte yolculuk", "Travelling together"],
-  "teknede-yemek-plani": ["Lezzet ve hazırlık", "Food and prep"],
-  "tekne-tatilinde-fotograflar": ["Fotoğraf ve anılar", "Photos and memories"],
-  "gunubirlik-mi-konaklamali-mi": ["Yat seçimi", "Choosing a trip"],
-  "teknede-muzik-yuzme-kurallar": ["Kurallar ve güvenlik", "Rules and safety"],
+const TAG: Record<string, [string, string, string?]> = {
+  "gulet-kiralamadan-once": ["Gulet rehberi", "Gulet guide", "Гид по гулетам"],
+  "motoryat-tatilinin-butcesi": ["Motoryat rehberi", "Motor yacht guide", "Гид по моторным яхтам"],
+  "hangi-tekne-nasil-bir-yolculuk": ["Yelkenli & Katamaran", "Sailing & catamaran", "Парусники и катамараны"],
+  "bavul-hazirligi": ["Bavul hazırlığı", "Packing", "Сборы в дорогу"],
+  "tatilin-temposu": ["Tatilin temposu", "Holiday pace", "Темп отдыха"],
+  "arkadas-grubuyla-tatil": ["Birlikte yolculuk", "Travelling together", "Путешествие вместе"],
+  "teknede-yemek-plani": ["Lezzet ve hazırlık", "Food and prep", "Еда и подготовка"],
+  "tekne-tatilinde-fotograflar": ["Fotoğraf ve anılar", "Photos and memories", "Фото и воспоминания"],
+  "gunubirlik-mi-konaklamali-mi": ["Yat seçimi", "Choosing a trip", "Выбор поездки"],
+  "teknede-muzik-yuzme-kurallar": ["Kurallar ve güvenlik", "Rules and safety", "Правила и безопасность"],
 };
 const FEATURED_SLUGS = ["gulet-kiralamadan-once", "motoryat-tatilinin-butcesi", "hangi-tekne-nasil-bir-yolculuk"];
 
@@ -29,7 +29,7 @@ export async function GuideHubView({ lang }: { lang: Lang }) {
   const en = lang !== "tr";
   const ru = lang === "ru";
   const [nav, posts] = await Promise.all([getNavInfo(lang), getPosts("guide", undefined, lang)]);
-  const tag = (p: Post) => TAG[p.slug]?.[en ? 1 : 0];
+  const tag = (p: Post) => TAG[p.slug]?.[ru ? 2 : en ? 1 : 0] ?? TAG[p.slug]?.[en ? 1 : 0];
   const bySlug = (s: string) => posts.find((p) => p.slug === s);
 
   type Feat = { tag: string; title: string; text: string; to: string; cover?: string | null };

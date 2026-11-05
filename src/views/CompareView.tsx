@@ -42,7 +42,9 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
   const result = both ? { rows: compareRows(A, B, lang, (x) => priceLabel(x, lang), askPrice), ...buildPoints(A, B, lang) } : null;
   const origin = "https://yatpaketi.com";
   const wa = both && contact.whatsapp
-    ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(en
+    ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(ru
+        ? `Здравствуйте, я сравниваю ${A.name} и ${B.name}. Поможете выбрать?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nМои даты: `
+        : en
         ? `Hello, I'm comparing ${A.name} and ${B.name}. Could you help me choose?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nMy dates: `
         : `Merhaba, ${A.name} ile ${B.name} yatlarını karşılaştırıyorum. Seçmeme yardımcı olur musunuz?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nTarihlerim: `)}`
     : "";

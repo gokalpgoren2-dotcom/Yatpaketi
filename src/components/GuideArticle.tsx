@@ -21,15 +21,15 @@ export async function GuideArticle({ p, more, back, lang }: { p: Post; more: Pos
   const words = `${p.excerpt} ${p.content}`.split(/\s+/).filter(Boolean).length;
   const minutes = Math.max(1, Math.round(words / 200));
   const date = p.publishedAt ? new Date(p.publishedAt).toLocaleDateString(ru ? "ru-RU" : en ? "en-GB" : "tr-TR", { day: "numeric", month: "long", year: "numeric" }) : null;
-  const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(en ? `Hello, I read "${p.title}" and I'd like to plan a boat holiday.` : `Merhaba, "${p.title}" yazınızı okudum, yat tatili planlamak istiyorum.`)}` : href(lang, "/iletisim");
+  const wa = contact.whatsapp ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(ru ? `Здравствуйте, я прочитал(а) «${p.title}» и хочу спланировать отдых на яхте.` : en ? `Hello, I read "${p.title}" and I'd like to plan a boat holiday.` : `Merhaba, "${p.title}" yazınızı okudum, yat tatili planlamak istiyorum.`)}` : href(lang, "/iletisim");
   const isPage = p.kind === "page";
   const L = {
     toc: ru ? "В этой статье" : en ? "In this article" : "Bu yazıda",
     share: ru ? "Поделиться" : en ? "Share" : "Paylaş",
     copy: ru ? "Скопировать ссылку" : en ? "Copy link" : "Bağlantıyı kopyala",
     copied: ru ? "Скопировано" : en ? "Copied" : "Kopyalandı",
-    min: en ? `${minutes} min read` : `${minutes} dk okuma`,
-    parts: en ? `${toc.length} sections` : `${toc.length} bölüm`,
+    min: ru ? `${minutes} мин чтения` : en ? `${minutes} min read` : `${minutes} dk okuma`,
+    parts: ru ? `Разделов: ${toc.length}` : en ? `${toc.length} sections` : `${toc.length} bölüm`,
     ctaEyebrow: ru ? "Спланируйте поездку" : en ? "Plan your trip" : "Planınızı yapalım",
     ctaTitle: ru ? "Превратим прочитанное в отпуск?" : en ? "Ready to turn this into a holiday?" : "Okuduklarınızı tatile çevirelim mi?",
     ctaText: ru ? "Напишите даты и количество гостей — мы предложим подходящую яхту и маршрут." : en ? "Tell us your dates and group size; we'll suggest the right boat and route." : "Tarihlerinizi ve kişi sayınızı yazın; size uygun yatı ve rotayı önerelim.",

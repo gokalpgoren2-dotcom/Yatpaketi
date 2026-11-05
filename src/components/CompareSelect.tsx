@@ -21,7 +21,7 @@ function Thumb({ b, className }: { b: PickBoat; className: string }) {
   );
 }
 
-const meta = (b: PickBoat, en: boolean) => [b.type, b.length > 0 ? `${b.length} m` : "", b.guests ? (en ? `${b.guests} guests` : `${b.guests} kişi`) : ""].filter(Boolean).join(" · ");
+const meta = (b: PickBoat, en: boolean, ru = false) => [b.type, b.length > 0 ? `${b.length} ${ru ? "м" : "m"}` : "", b.guests ? (ru ? `${b.guests} гостей` : en ? `${b.guests} guests` : `${b.guests} kişi`) : ""].filter(Boolean).join(" · ");
 
 // Tek bir yat seçme alanı: aranabilir, fotoğraflı liste. Telefonda alttan açılan panel.
 function Picker({ label, boats, value, exclude, onPick, en, ru }: { label: string; boats: PickBoat[]; value: string; exclude: string; onPick: (s: string) => void; en: boolean; ru?: boolean }) {
@@ -63,7 +63,7 @@ function Picker({ label, boats, value, exclude, onPick, en, ru }: { label: strin
         <span className="min-w-0 flex-1">
           <span className="block text-[0.7rem] font-semibold uppercase tracking-[0.14em] text-navy/45">{label}</span>
           <span className="font-display mt-0.5 block truncate text-lg font-semibold text-navy">{cur ? cur.name : ru ? "Выберите яхту" : en ? "Choose a yacht" : "Yat seçin"}</span>
-          {cur && <span className="block truncate text-xs text-navy/55">{meta(cur, en)}</span>}
+          {cur && <span className="block truncate text-xs text-navy/55">{meta(cur, en, ru)}</span>}
         </span>
         <Ic d="M6 9l6 6 6-6" className={`mr-1 shrink-0 text-navy/40 transition ${open ? "rotate-180" : ""}`} />
       </button>
@@ -102,7 +102,7 @@ function Picker({ label, boats, value, exclude, onPick, en, ru }: { label: strin
                     <Thumb b={b} className="h-12 w-16 rounded-lg" />
                     <span className="min-w-0 flex-1">
                       <span className="block truncate text-sm font-semibold">{b.name}</span>
-                      <span className={`block truncate text-xs ${sel ? "text-white/60" : "text-navy/50"}`}>{[meta(b, en), b.port].filter(Boolean).join(" · ")}</span>
+                      <span className={`block truncate text-xs ${sel ? "text-white/60" : "text-navy/50"}`}>{[meta(b, en, ru), b.port].filter(Boolean).join(" · ")}</span>
                     </span>
                     {sel && <Ic d="M5 12.5l4.5 4.5L19 7.5" className="mr-1 text-turquoise" />}
                   </button>

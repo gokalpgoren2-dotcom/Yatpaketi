@@ -2,6 +2,11 @@ import { createClient } from "@supabase/supabase-js";
 import { cache } from "react";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import type { Lang } from "./i18n";
+import RU_POSTS from "./ru-posts.json";
+import { ruText } from "./ru";
+
+const RP = RU_POSTS as Record<string, { title: string; excerpt: string; content: string }>;
+const ruLinks = (s: string) => s.replace(/\]\(\/en(\/|\))/g, "](/ru$1");
 
 export type PostKind = "blog" | "guide" | "page" | "destination" | "route" | "package" | "process";
 
@@ -29,6 +34,16 @@ const COLS_EN = COLS + ",title_en,excerpt_en,content_en,seo_title_en,seo_descrip
 function map(r: Record<string, any>, lang: Lang): Post {
   const en = lang !== "tr";
   const ru = lang === "ru";
+  const R = ru ? RP[r.slug] : undefined;
+  if (ru) {
+    const t = R?.title ?? ruText(r.title_en ?? "");
+    const e = R?.excerpt ?? ruText(r.excerpt_en ?? "");
+    return {
+      slug: r.slug, kind: r.kind, title: t, excerpt: e, content: ruLinks(R?.content ?? ruText(r.content_en ?? "")),
+      cover: publicImageUrl(r.cover_path), publishedAt: r.published_at ?? null,
+      seoTitle: R ? R.title : ruText(r.seo_title_en ?? ""), seoDescription: R ? R.excerpt : ruText(r.seo_description_en ?? ""),
+    };
+  }
   return {
     slug: r.slug,
     kind: r.kind,

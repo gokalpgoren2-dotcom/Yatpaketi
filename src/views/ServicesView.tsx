@@ -6,6 +6,7 @@ import { ServicePicker } from "@/components/ServicePicker";
 import { getServices } from "@/lib/site-texts";
 import { getCategories, getContact } from "@/lib/content";
 import { href, type Lang } from "@/lib/i18n";
+import { pick } from "@/lib/ru";
 
 const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-turquoise-dark";
 const h2 = "font-display text-3xl font-semibold leading-tight text-navy lg:text-5xl";
@@ -28,7 +29,7 @@ function Ic({ d, size = 22 }: { d: string; size?: number }) {
 
 export async function ServicesView({ lang }: { lang: Lang }) {
   const [svc, cats, contact] = await Promise.all([getServices(), getCategories(lang), getContact()]);
-  const S = svc[lang === "tr" ? "tr" : "en"];
+  const S = pick(svc, lang);
   const en = lang !== "tr";
   const ru = lang === "ru";
   const [t1, ...t2] = S.title.split(/(?<=\.)\s+/);

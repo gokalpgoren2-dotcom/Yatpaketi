@@ -1,12 +1,12 @@
 // S.S.S içeriği. Metinleri buradan düzenleyebilirsiniz: [kategori, soru TR, cevap TR, soru EN, cevap EN]
 export type FaqCat = "choose" | "booking" | "route" | "life" | "special";
 
-export const FAQ_CATS: { key: FaqCat; tr: string; en: string; titleTr: string; titleEn: string }[] = [
-  { key: "choose", tr: "Yat Seçimi", en: "Choosing a Boat", titleTr: "Yat seçimi ve tatil planlama", titleEn: "Choosing a boat and planning your holiday" },
-  { key: "booking", tr: "Rezervasyon & Ödeme", en: "Booking & Payment", titleTr: "Rezervasyon, fiyat ve ödemeler", titleEn: "Booking, prices and payments" },
-  { key: "route", tr: "Rota & Program", en: "Route & Programme", titleTr: "Rota ve tur programı", titleEn: "Route and programme" },
-  { key: "life", tr: "Yatta Yaşam", en: "Life on Board", titleTr: "Yatta yaşam", titleEn: "Life on board" },
-  { key: "special", tr: "Özel Talepler", en: "Special Requests", titleTr: "Özel talepler ve ulaşım", titleEn: "Special requests and transport" },
+export const FAQ_CATS: { key: FaqCat; tr: string; en: string; ru: string; titleTr: string; titleEn: string; titleRu: string }[] = [
+  { key: "choose", tr: "Yat Seçimi", en: "Choosing a Boat", titleTr: "Yat seçimi ve tatil planlama", titleEn: "Choosing a boat and planning your holiday", ru: "Выбор яхты", titleRu: "Выбор яхты и планирование отдыха" },
+  { key: "booking", tr: "Rezervasyon & Ödeme", en: "Booking & Payment", titleTr: "Rezervasyon, fiyat ve ödemeler", titleEn: "Booking, prices and payments", ru: "Бронирование и оплата", titleRu: "Бронирование, цены и платежи" },
+  { key: "route", tr: "Rota & Program", en: "Route & Programme", titleTr: "Rota ve tur programı", titleEn: "Route and programme", ru: "Маршрут и программа", titleRu: "Маршрут и программа" },
+  { key: "life", tr: "Yatta Yaşam", en: "Life on Board", titleTr: "Yatta yaşam", titleEn: "Life on board", ru: "Жизнь на борту", titleRu: "Жизнь на борту" },
+  { key: "special", tr: "Özel Talepler", en: "Special Requests", titleTr: "Özel talepler ve ulaşım", titleEn: "Special requests and transport", ru: "Особые пожелания", titleRu: "Особые пожелания и транспорт" },
 ];
 
 export const FAQ: [FaqCat, string, string, string, string][] = [

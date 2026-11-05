@@ -1,6 +1,7 @@
 // Klasik rotaların ek bilgileri (kalkış/varış, günlük durak adları). Gün açıklamaları panelde yazılan metinden okunur.
 import type { Post } from "./posts";
 import { href, type Lang } from "./i18n";
+import { ruText } from "./ru";
 
 // days: panelde yazılan gün metinleri yerine kullanılacak gün gün program (Türkçe ve İngilizce).
 type Meta = { from: string; to: string; port: string; stops: string[]; greek?: boolean; days?: { tr: string[]; en: string[] } };
@@ -375,7 +376,7 @@ const EN_NAMES: Record<string, string> = {
   "Sedir Adası": "Sedir Island", "12 Adalar": "12 Islands", "Rodos": "Rhodes", "Meis": "Kastellorizo",
 };
 const GENERIC = new Set(["Seyir günü", "Serbest gün", "Dönüş"]);
-const nm = (s: string, lang: Lang) => (lang !== "tr" ? EN_NAMES[s] ?? s : s);
+const nm = (s: string, lang: Lang) => (lang === "ru" ? ruText(EN_NAMES[s] ?? s) : lang !== "tr" ? EN_NAMES[s] ?? s : s);
 
 // Bulunma eki düzeltmesi: "Bodrum'te" → "Bodrum'da", "Fethiye'te" → "Fethiye'de".
 function fixTr(t: string) {
@@ -413,10 +414,10 @@ export function routeInfo(p: Post, lang: Lang): RouteInfo {
     const l = raw.trim();
     if (!l) continue;
     if (l.startsWith("## ")) {
-      sec = /gün gün|day by day/i.test(l) ? "days" : /kimlere|who is it/i.test(l) ? "who" : "other";
+      sec = /gün gün|day by day|по дням/i.test(l) ? "days" : /kimlere|who is it|кому подходит/i.test(l) ? "who" : "other";
       continue;
     }
-    const d = l.match(/^[-*]\s*\*\*(?:Gün|Day)\s*(\d+):?\*\*:?\s*(.*)$/i);
+    const d = l.match(/^[-*]\s*\*\*(?:Gün|Day|День)\s*(\d+):?\*\*:?\s*(.*)$/i);
     if (d) {
       const n = Number(d[1]);
       const body = d[2].trim();
@@ -424,25 +425,25 @@ export function routeInfo(p: Post, lang: Lang): RouteInfo {
       const stop = m?.stops[n - 1];
       const title = stop ? nm(stop, lang) : c > 0 ? body.slice(0, c) : body.split(/[,;(]/)[0];
       const before = c > 0 ? body.slice(0, c).trim() : "";
-      const simple = before.toLocaleLowerCase("tr") === title.toLocaleLowerCase("tr") || /^(seyir günü|serbest gün|sailing day|free day)$/i.test(before);
+      const simple = before.toLocaleLowerCase("tr") === title.toLocaleLowerCase("tr") || /^(seyir günü|serbest gün|sailing day|free day|ходовой день|свободный день)$/i.test(before);
       let text = c > 0 && c < 70 && simple ? body.slice(c + 1).trim() : body;
-      text = text.charAt(0).toLocaleUpperCase(lang === "tr" ? "tr" : "en") + text.slice(1);
+      text = text.charAt(0).toLocaleUpperCase(lang) + text.slice(1);
       days.push({ n, title, text, acts: ACT.filter(([, re]) => re.test(body)).map(([a]) => a).slice(0, 3) });
       continue;
     }
-    if (/^(rota seçiminde|if you need help)/i.test(l)) { outro.push(l); sec = "other"; continue; }
+    if (/^(rota seçiminde|if you need help|если нужна помощь)/i.test(l)) { outro.push(l); sec = "other"; continue; }
     if (sec === "intro") intro.push(l);
-    else if (sec === "who") { if (!/ek masraf|ek ücret|extra cost|extra fee|additional cost/i.test(l)) who.push(l.replace(/^[-*]\s*/, "")); }
+    else if (sec === "who") { if (!/ek masraf|ek ücret|extra cost|extra fee|additional cost|доплат/i.test(l)) who.push(l.replace(/^[-*]\s*/, "")); }
     else outro.push(l);
   }
   if (m?.days) {
-    const list = m.days[lang === "tr" ? "tr" : "en"];
+    const list = lang === "ru" ? m.days.en.map(ruText) : m.days[lang === "tr" ? "tr" : "en"];
     days.length = 0;
     list.forEach((text, i) => days.push({ n: i + 1, title: nm(m.stops[i], lang), text, acts: ACT.filter(([, re]) => re.test(text)).map(([a]) => a).slice(0, 3) }));
   }
   const introText = intro.join(" ");
   const parts = introText.split(/(?<=\.)\s+/);
-  const isNote = (s: string) => /örnektir|is an example|kaptanınız|captain may/i.test(s);
+  const isNote = (s: string) => /örnektir|is an example|kaptanınız|captain may|— пример|капитан может/i.test(s);
   const chart: string[] = [];
   for (const s of m?.stops ?? days.map((d) => d.title)) {
     if (GENERIC.has(s)) continue;
@@ -459,30 +460,7 @@ export function routeInfo(p: Post, lang: Lang): RouteInfo {
   };
 }
 
-export const ROUTE_UI = {
-  tr: {
-    eyebrow: "Klasik rota", days: (n: number) => `${n} gün · ${Math.max(n - 1, 1)} gece`, from: "Kalkış", to: "Varış", loop: "Aynı limana dönüş", oneway: "Tek yön",
-    stops: (n: number) => `${n} durak`, greek: "Yunan adaları", quote: "Bu rota için teklif alın", program: "Programı görün", dayLabel: "Gün",
-    programEyebrow: "Gün gün program", programTitle: "Rotanızın akışı.", whoEyebrow: "Kimlere uygun?", noteTitle: "Program esnektir",
-    onewayNote: "Tek yön rotalarda yat bir limandan alınıp başka bir limanda teslim edilir; bu durum yata göre ek ücret getirebilir.",
-    greekNote: "Yunan adalarına geçişte pasaport ve giriş-çıkış işlemleri gerekir. Belgeleri rezervasyon sırasında birlikte netleştiririz.",
-    boatsEyebrow: "Bu rotaya uygun yatlar", boatsTitle: (p: string) => `${p} çıkışlı yatlar`, allBoats: "Tüm yatlar",
-    ctaTitle: "Bu rotada yelken açmaya hazır mısınız?", ctaText: "Tarihlerinizi ve kişi sayınızı yazın, size uygun yatı ve programı birlikte netleştirelim.", write: "Bize yazın",
-    more: "Diğer rotalar", all: "Tümü", allRoutes: "Tüm rotalar", filter: "Kalkış limanı", route: "Rotayı incele", count: (n: number) => `${n} rota`, chartLabel: "Rota şeması",
-    acts: { swim: "Yüzme", snorkel: "Şnorkel", walk: "Yürüyüş", dinner: "Akşam yemeği", sunset: "Gün batımı", history: "Tarih", market: "Çarşı", sail: "Uzun seyir", passport: "Pasaport", beach: "Plaj", relax: "Dinlenme" },
-  },
-  en: {
-    eyebrow: "Classic route", days: (n: number) => `${n} days · ${Math.max(n - 1, 1)} nights`, from: "Departure", to: "Arrival", loop: "Round trip", oneway: "One way",
-    stops: (n: number) => `${n} stops`, greek: "Greek islands", quote: "Get a quote for this route", program: "See the programme", dayLabel: "Day",
-    programEyebrow: "Day by day", programTitle: "How your voyage unfolds.", whoEyebrow: "Who is it for?", noteTitle: "A flexible programme",
-    onewayNote: "On one-way routes the boat is picked up in one port and returned in another; depending on the boat, this may involve an extra fee.",
-    greekNote: "Crossing to the Greek islands requires passports and entry/exit formalities. We'll sort out the documents together when you book.",
-    boatsEyebrow: "Boats for this route", boatsTitle: (p: string) => `Boats departing from ${p}`, allBoats: "All boats",
-    ctaTitle: "Ready to set sail on this route?", ctaText: "Tell us your dates and group size, and we'll finalise the right boat and programme together.", write: "Write to us",
-    more: "More routes", all: "All", allRoutes: "All routes", filter: "Departure port", route: "View route", count: (n: number) => `${n} routes`, chartLabel: "Route chart",
-    acts: { swim: "Swimming", snorkel: "Snorkelling", walk: "Walking", dinner: "Dinner", sunset: "Sunset", history: "History", market: "Market", sail: "Long sail", passport: "Passport", beach: "Beach", relax: "Relaxing" },
-  },
-};
+export { ROUTE_UI } from "./route-ui";
 
 export type CardData = { slug: string; title: string; excerpt: string; href: string; from: string; to: string; loop: boolean; greek: boolean; days: number; chart: string[] };
 export function toCard(p: Post, lang: Lang): CardData {

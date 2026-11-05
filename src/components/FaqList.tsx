@@ -5,7 +5,7 @@ import { RichText } from "./RichText";
 import { FAQ_CATS, type FaqCat, type FaqItem } from "@/lib/faq";
 import type { Lang } from "@/lib/i18n";
 
-const norm = (s: string, lang: Lang) => s.toLocaleLowerCase(lang !== "tr" ? "en" : "tr");
+const norm = (s: string, lang: Lang) => s.toLocaleLowerCase(lang);
 
 // Kategori ikonları
 const CAT_IC: Record<FaqCat, string> = {
@@ -64,13 +64,13 @@ export function FaqList({ lang, faq, children }: { lang: Lang; faq: FaqItem[]; c
         </div>
         <div className="no-scrollbar -mx-5 mt-4 flex gap-2 overflow-x-auto px-5 lg:mx-0 lg:flex-wrap lg:px-0" role="tablist" aria-label={ru ? "Категории" : en ? "Categories" : "Kategoriler"}>
           {chip("all", ru ? "Все" : en ? "All" : "Tümü", ALL_IC)}
-          {FAQ_CATS.map((c) => chip(c.key, en ? c.en : c.tr, CAT_IC[c.key]))}
+          {FAQ_CATS.map((c) => chip(c.key, ru ? c.ru : en ? c.en : c.tr, CAT_IC[c.key]))}
         </div>
       </div>
 
       <div className="mt-12 grid gap-10 lg:grid-cols-[minmax(0,1fr)_21rem] lg:gap-14">
         <div>
-          <p className="text-sm text-navy/50" aria-live="polite">{en ? `${items.length} questions` : `${items.length} soru`}</p>
+          <p className="text-sm text-navy/50" aria-live="polite">{ru ? `Вопросов: ${items.length}` : en ? `${items.length} questions` : `${items.length} soru`}</p>
 
           {items.length === 0 && (
             <div className="mt-6 rounded-[2rem] bg-mist p-10 text-center">
@@ -86,7 +86,7 @@ export function FaqList({ lang, faq, children }: { lang: Lang; faq: FaqItem[]; c
               <section key={c.key} className="mt-8 first-of-type:mt-4">
                 <div className="flex items-center gap-3">
                   <span className="flex h-11 w-11 items-center justify-center rounded-2xl bg-navy text-turquoise"><Ic d={CAT_IC[c.key]} size={20} /></span>
-                  <h2 className="font-display text-2xl font-semibold text-navy lg:text-3xl">{en ? c.titleEn : c.titleTr}</h2>
+                  <h2 className="font-display text-2xl font-semibold text-navy lg:text-3xl">{ru ? c.titleRu : en ? c.titleEn : c.titleTr}</h2>
                 </div>
                 <ul className="mt-5 space-y-3">
                   {list.map((f) => {

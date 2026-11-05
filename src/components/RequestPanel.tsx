@@ -34,22 +34,22 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
       <div className={`rounded-2xl p-4 ring-1 ${pct ? "bg-[#fff1ee] ring-[#e8453c]/20" : "bg-turquoise/10 ring-turquoise/25"}`}>
         <ul className="space-y-1 text-sm text-navy/75">
           {q.parts.map((p, i) => (
-            <li key={i} className="flex justify-between gap-3"><span>{monthName(p.month, lang)} · {p.nights} {en ? (p.nights === 1 ? "night" : "nights") : "gece"} × {money(disc(p.daily), pricing.currency, lang)}</span><span className="tabular-nums">{money(disc(p.sub), pricing.currency, lang)}</span></li>
+            <li key={i} className="flex justify-between gap-3"><span>{monthName(p.month, lang)} · {p.nights} {ru ? "ноч." : en ? (p.nights === 1 ? "night" : "nights") : "gece"} × {money(disc(p.daily), pricing.currency, lang)}</span><span className="tabular-nums">{money(disc(p.sub), pricing.currency, lang)}</span></li>
           ))}
         </ul>
         <p className="mt-2 flex items-baseline justify-between gap-3 border-t border-turquoise/25 pt-2 text-navy">
-          <span className="text-sm font-semibold">{en ? `Total · ${q.nights} nights` : `Toplam · ${q.nights} gece`}</span>
+          <span className="text-sm font-semibold">{ru ? `Итого · ночей: ${q.nights}` : en ? `Total · ${q.nights} nights` : `Toplam · ${q.nights} gece`}</span>
           <span className={`text-xl font-bold tabular-nums ${pct ? "text-[#c0332b]" : ""}`}>{money(totalNow, pricing.currency, lang)}</span>
         </p>
         {pct > 0 && <p className="mt-1 flex items-center justify-between gap-3 text-xs"><span className="rounded-full bg-[#e8453c] px-2 py-0.5 font-bold text-white">−%{pct} {ru ? "скидка" : en ? "discount" : "indirim"}</span><span className="text-navy/45 line-through tabular-nums">{money(q.total, pricing.currency, lang)}</span></p>}
         {pricing.vatMode === "excluded" && (
           <div className="mt-2 space-y-0.5 border-t border-navy/10 pt-2 text-sm">
-            <p className="flex justify-between gap-3 text-navy/70"><span>{en ? `VAT (${pricing.vatRate ?? 20}%)` : `KDV (%${pricing.vatRate ?? 20})`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.vatRate ?? 20) / 100), pricing.currency, lang)}</span></p>
+            <p className="flex justify-between gap-3 text-navy/70"><span>{ru ? `НДС (${pricing.vatRate ?? 20}%)` : en ? `VAT (${pricing.vatRate ?? 20}%)` : `KDV (%${pricing.vatRate ?? 20})`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.vatRate ?? 20) / 100), pricing.currency, lang)}</span></p>
             <p className="flex justify-between gap-3 font-semibold text-navy"><span>{ru ? "Итого с НДС" : en ? "Total incl. VAT" : "KDV dahil toplam"}</span><span className="tabular-nums">{money(Math.round(totalNow * (1 + (pricing.vatRate ?? 20) / 100)), pricing.currency, lang)}</span></p>
           </div>
         )}
         {(pricing.apa ?? 0) > 0 && (
-          <p className="mt-2 flex justify-between gap-3 border-t border-navy/10 pt-2 text-sm text-amber-900"><span>{en ? `APA (${pricing.apa}%, advance for expenses)` : `APA (%${pricing.apa}, masraflar için ön ödeme)`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.apa ?? 0) / 100), pricing.currency, lang)}</span></p>
+          <p className="mt-2 flex justify-between gap-3 border-t border-navy/10 pt-2 text-sm text-amber-900"><span>{ru ? `APA (${pricing.apa}%, аванс на расходы)` : en ? `APA (${pricing.apa}%, advance for expenses)` : `APA (%${pricing.apa}, masraflar için ön ödeme)`}</span><span className="tabular-nums">{money(Math.round(totalNow * (pricing.apa ?? 0) / 100), pricing.currency, lang)}</span></p>
         )}
         {pricing.vatMode === "included" && <p className="mt-1 text-xs font-semibold text-emerald-700">{ru ? "НДС включён." : en ? "VAT included." : "KDV dahildir."}</p>}
         {q.weekly && <p className="mt-1 text-xs font-semibold text-turquoise-dark">{ru ? "Применён недельный тариф (от 7 ночей)." : en ? "Weekly rate applied (7+ nights)." : "7 gece ve üzeri: haftalık fiyat uygulandı."}</p>}
@@ -57,7 +57,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
       </div>
     ) : (
       <p className="rounded-2xl bg-mist p-4 text-sm text-navy/70 ring-1 ring-navy/5">
-        {en ? `No price is listed for ${q.missing.map((m) => monthName(m, lang)).join(", ")}. Message us for a quote.` : `${q.missing.map((m) => monthName(m, lang)).join(", ")} için fiyat girilmemiş. Fiyat için bize yazın.`}
+        {ru ? `Для месяцев ${q.missing.map((m) => monthName(m, lang)).join(", ")} цена не указана. Напишите нам, чтобы узнать цену.` : en ? `No price is listed for ${q.missing.map((m) => monthName(m, lang)).join(", ")}. Message us for a quote.` : `${q.missing.map((m) => monthName(m, lang)).join(", ")} için fiyat girilmemiş. Fiyat için bize yazın.`}
       </p>
     )
   ) : null;
@@ -73,7 +73,7 @@ export function RequestPanel({ boatSlug, boatName, maxGuests, whatsapp, lang = "
       `${L.waGuests}: ${guests}`,
     ];
     if (name.trim()) lines.push(`${L.waName}: ${name.trim()}`);
-    if (q && q.ok && pricing) lines.push(en ? `Estimated price: ${money(totalNow, pricing.currency, lang)} (${q.nights} nights${pct ? `, ${pct}% discount applied` : ""}${pricing.vatMode === "excluded" ? `, +${pricing.vatRate ?? 20}% VAT` : pricing.vatMode === "included" ? ", VAT included" : ""})` : `Tahmini tutar: ${money(totalNow, pricing.currency, lang)} (${q.nights} gece${pct ? `, %${pct} indirimli` : ""}${pricing.vatMode === "excluded" ? `, +%${pricing.vatRate ?? 20} KDV` : pricing.vatMode === "included" ? ", KDV dahil" : ""})`);
+    if (q && q.ok && pricing) lines.push(ru ? `Ориентировочная цена: ${money(totalNow, pricing.currency, lang)} (ночей: ${q.nights}${pct ? `, скидка ${pct}%` : ""}${pricing.vatMode === "excluded" ? `, +${pricing.vatRate ?? 20}% НДС` : pricing.vatMode === "included" ? ", НДС включён" : ""})` : en ? `Estimated price: ${money(totalNow, pricing.currency, lang)} (${q.nights} nights${pct ? `, ${pct}% discount applied` : ""}${pricing.vatMode === "excluded" ? `, +${pricing.vatRate ?? 20}% VAT` : pricing.vatMode === "included" ? ", VAT included" : ""})` : `Tahmini tutar: ${money(totalNow, pricing.currency, lang)} (${q.nights} gece${pct ? `, %${pct} indirimli` : ""}${pricing.vatMode === "excluded" ? `, +%${pricing.vatRate ?? 20} KDV` : pricing.vatMode === "included" ? ", KDV dahil" : ""})`);
     lines.push("", `${L.waBoat}: ${url}`);
     return lines.join("\n");
   }

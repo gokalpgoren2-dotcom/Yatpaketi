@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { useMemo, useState } from "react";
 import { RouteChart } from "./RouteChart";
-import { ROUTE_UI, type CardData } from "@/lib/routes";
+import { ROUTE_UI } from "@/lib/route-ui";
+import type { CardData } from "@/lib/routes";
 import type { Lang } from "@/lib/i18n";
 
 export function RouteCard({ r, lang }: { r: CardData; lang: Lang }) {
-  const U = ROUTE_UI[lang === "tr" ? "tr" : "en"];
+  const U = ROUTE_UI[lang];
   return (
     <Link href={r.href} className="group flex h-full flex-col overflow-hidden rounded-3xl bg-white ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1.5 hover:shadow-2xl hover:shadow-navy/15">
       <div className="relative aspect-[600/340] overflow-hidden">
@@ -34,7 +35,7 @@ export function RouteCard({ r, lang }: { r: CardData; lang: Lang }) {
 
 // Rota listesi: kalkış limanına ve Yunan adalarına göre süzülebilir kartlar.
 export function RouteList({ routes, lang }: { routes: CardData[]; lang: Lang }) {
-  const U = ROUTE_UI[lang === "tr" ? "tr" : "en"];
+  const U = ROUTE_UI[lang];
   const ports = useMemo(() => Array.from(new Set(routes.map((r) => r.from))), [routes]);
   const hasGreek = routes.some((r) => r.greek);
   const [f, setF] = useState<string>("all");

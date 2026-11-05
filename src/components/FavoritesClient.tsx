@@ -31,10 +31,19 @@ const T = {
     msg: (list: string) => `Hello, I'd like information and availability for these yachts:\n\n${list}\n\nMy dates: `,
     mail: "Ask by email",
   },
+  ru: {
+    empty: "Вы ещё не сохранили ни одной яхты.", emptyText: "Нажмите на сердечко на карточке яхты, чтобы сохранить её здесь, и сравните понравившиеся варианты.", browse: "Смотреть яхты",
+    count: (n: number) => `Сравнение яхт: ${n}`, clear: "Очистить список", remove: "Удалить", open: "Открыть яхту",
+    rows: { type: "Тип", port: "Порт отправления", guests: "Гости", cabins: "Каюты", length: "Длина", year: "Год", crew: "Экипаж", captain: "Капитан", price: "Цена", ac: "Кондиционер", jacuzzi: "Джакузи", offer: "Акция", rating: "Рейтинг" },
+    yes: "Есть", no: "Нет", included: "Включено", notIncluded: "Не включено", askPrice: "Цена по запросу", people: "чел.",
+    ask: "Спросить нас в WhatsApp одним сообщением", askNote: "Ваши яхты откроются в WhatsApp готовым сообщением — добавьте даты и отправьте.",
+    msg: (list: string) => `Здравствуйте, хочу узнать подробности и наличие по этим яхтам:\n\n${list}\n\nМои даты: `,
+    mail: "Спросить по почте",
+  },
 };
 
 export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boats: Boat[]; whatsapp: string; email: string; lang: Lang; curated: Curated[] }) {
-  const L = T[lang === "tr" ? "tr" : "en"];
+  const L = T[lang];
   const favs = useFavorites();
   const list = favs.map((s) => boats.find((b) => b.slug === s)).filter((b): b is Boat => Boolean(b));
   const has = (b: Boat, re: RegExp) => b.equipment.some((e) => re.test(e));
@@ -61,7 +70,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
     [L.rows.crew, (b) => (b.crew > 0 ? b.crew : "–")],
     [L.rows.captain, (b) => (b.captained ? L.included : L.notIncluded)],
     [L.rows.ac, (b) => eqCell(eqInfo(b, /^klima$|air.?cond/i, lang), lang)],
-    [lang !== "tr" ? "Generator" : "Jeneratör", (b) => eqCell(eqInfo(b, /jenerat|generator/i, lang), lang)],
+    [lang === "ru" ? "Генератор" : lang !== "tr" ? "Generator" : "Jeneratör", (b) => eqCell(eqInfo(b, /jenerat|generator/i, lang), lang)],
     [L.rows.jacuzzi, (b) => (has(b, /jakuzi|jacuzzi/i) ? L.yes : L.no)],
   ];
 
@@ -116,15 +125,15 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         const note = c ? ((lang !== "tr" ? c.noteEn?.trim() : "") || c.note) : "";
         const sel = "w-full rounded-xl border border-navy/15 bg-white px-4 py-3 text-base font-semibold text-navy outline-none focus:border-turquoise";
         return (
-          <section className="mt-10" aria-label={lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
-            <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
-            <p className="mt-1 text-sm text-navy/65">{lang !== "tr" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki yat seçin, nasıl ayrıştıklarını görün."}</p>
+          <section className="mt-10" aria-label={lang === "ru" ? "Подробное сравнение" : lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}>
+            <h2 className="font-display text-2xl font-bold text-navy lg:text-3xl">{lang === "ru" ? "Подробное сравнение" : lang !== "tr" ? "Detailed comparison" : "Yorumlu karşılaştırma"}</h2>
+            <p className="mt-1 text-sm text-navy/65">{lang === "ru" ? "Выберите две яхты из избранного, чтобы сравнить их." : lang !== "tr" ? "Pick any two of your saved yachts to see how they compare." : "Favorilerinizden iki yat seçin, nasıl ayrıştıklarını görün."}</p>
             <div className="mt-4 grid items-center gap-3 sm:grid-cols-[1fr_auto_1fr]">
-              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang !== "tr" ? "First yacht" : "Birinci yat"}>
+              <select value={sa} onChange={(e) => setPick({ a: e.target.value, b: sb })} className={sel} aria-label={lang === "ru" ? "Первая яхта" : lang !== "tr" ? "First yacht" : "Birinci yat"}>
                 {list.filter((x) => x.slug !== sb).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
-              <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang !== "tr" ? "vs" : "karşı"}</span>
-              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang !== "tr" ? "Second yacht" : "İkinci yat"}>
+              <span className="text-center text-sm font-bold uppercase tracking-widest text-turquoise-dark">{lang === "ru" ? "и" : lang !== "tr" ? "vs" : "karşı"}</span>
+              <select value={sb} onChange={(e) => setPick({ a: sa, b: e.target.value })} className={sel} aria-label={lang === "ru" ? "Вторая яхта" : lang !== "tr" ? "Second yacht" : "İkinci yat"}>
                 {list.filter((x) => x.slug !== sa).map((x) => <option key={x.slug} value={x.slug}>{x.name}</option>)}
               </select>
             </div>
@@ -138,7 +147,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
         <p className="mt-2 max-w-xl text-white/75">{L.askNote}</p>
         <div className="mt-5 flex flex-col gap-3 sm:flex-row">
           {whatsapp && <a href={`https://wa.me/${whatsapp}?text=${encodeURIComponent(text)}`} target="_blank" rel="noopener noreferrer" className={`${cta} bg-[#25D366] text-white hover:brightness-95`}>WhatsApp</a>}
-          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang !== "tr" ? "Yacht enquiry" : "Yat bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
+          {email && <a href={`mailto:${email}?subject=${encodeURIComponent(lang === "ru" ? "Запрос по яхтам" : lang !== "tr" ? "Yacht enquiry" : "Yat bilgi talebi")}&body=${encodeURIComponent(text)}`} className={`${cta} border border-white/30 text-white hover:bg-white/10`}>{L.mail}</a>}
         </div>
       </div>
     </div>

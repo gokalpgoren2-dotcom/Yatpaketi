@@ -56,7 +56,7 @@ export async function ArticlePage({ kind, slug, back, lang = "tr" }: { kind: Pos
   const T = gt(lang);
   const p = await getPost(kind, slug, lang);
   if (!p) {
-    if (lang !== "tr") redirect(back ? back.href : "/en");
+    if (lang !== "tr") redirect(back ? back.href : `/${lang}`);
     notFound();
   }
   if (kind === "route") return <RoutePage p={p} all={await getPosts("route", undefined, lang)} back={back} lang={lang} />;

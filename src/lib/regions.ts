@@ -1,5 +1,6 @@
 // Destinasyon (bölge) sayfalarının bölümlü içeriği. Her bölge: giriş, numaralı duraklar, fotoğraflı "ileri keşif" kartları, not kutusu, harita.
 // Fotoğraflar panelden gelir (Yazılar > destinasyon > Galeri): 1-3. fotoğraflar keşif kartlarında, 4-6. fotoğraflar manzara alanında, kalanlar galeride.
+import { ruDeep } from "./ru";
 export type Item = [name: string, tagline: string, text: string];
 export type RegionText = {
   introEyebrow: string; introTitle: string; introLead: string; introText: string; introCta: string;
@@ -31,6 +32,17 @@ export const REGION_UI = {
     routesEyebrow: "Routes through this region", routesTitle: "Classic routes, day by day.", allRoutes: "All routes",
     allRegions: "All destinations", explore: "Explore the region", regions: "regions", stopsLabel: "selected stops",
     waText: (r: string) => `Hello, I'd like to charter a boat in the ${r} region.`,
+  },
+  ru: {
+    mapNote: "Карта носит иллюстративный характер и не предназначена для навигации.", gallery: "Фотографии", views: "Виды региона", planEyebrow: "Спланируйте поездку", planTitle: "Думаете об отдыхе в этом регионе?",
+    planText: "Напишите даты и количество гостей — вместе подберём подходящую яхту и маршрут.", write: "Написать нам",
+    stopsCount: (n: number) => `Остановок: ${n}`, exploreCount: (n: number) => `Интересных мест: ${n}`, routesCount: (n: number) => `Классических маршрутов: ${n}`,
+    quote: "Получить предложение по региону", enlarge: "Увеличить карту", close: "Закрыть",
+    navStops: "Остановки", navExplore: "Что посмотреть", navBoats: "Яхты", navRoutes: "Маршруты",
+    boatsEyebrow: "Яхты с отправлением из этого региона", boatsTitle: "Яхты для вашего отдыха.", allBoats: "Все яхты",
+    routesEyebrow: "Маршруты через этот регион", routesTitle: "Классические маршруты по дням.", allRoutes: "Все маршруты",
+    allRegions: "Все направления", explore: "Откройте регион", regions: "регионов", stopsLabel: "избранных остановок",
+    waText: (r: string) => `Здравствуйте, я хочу арендовать яхту в регионе ${r}.`,
   },
 };
 
@@ -449,5 +461,6 @@ const EN: Record<string, RegionText> = {
 };
 
 export function regionText(slug: string, lang: "tr" | "en" | "ru"): RegionText | null {
+  if (lang === "ru") { const e = EN[slug]; return e ? ruDeep(e) : null; }
   return (lang !== "tr" ? EN : TR)[slug] ?? null;
 }

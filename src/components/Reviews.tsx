@@ -24,7 +24,7 @@ export function RatingLine({ rating, lang = "tr", className = "" }: { rating: Ra
     <span className={`inline-flex items-center gap-1.5 text-sm ${className}`}>
       <Stars value={rating.avg} size={15} />
       <b className="text-navy">{rating.avg.toFixed(1)}</b>
-      <span className="text-navy/55">({rating.count} {lang !== "tr" ? (rating.count === 1 ? "review" : "reviews") : "yorum"})</span>
+      <span className="text-navy/55">({rating.count} {lang === "ru" ? "отз." : lang !== "tr" ? (rating.count === 1 ? "review" : "reviews") : "yorum"})</span>
     </span>
   );
 }
@@ -32,7 +32,7 @@ export function RatingLine({ rating, lang = "tr", className = "" }: { rating: Ra
 function when(label: string | null, lang: Lang) {
   if (!label || !/^\d{4}-\d{2}$/.test(label)) return "";
   const [y, m] = label.split("-").map(Number);
-  return new Date(y, m - 1, 15).toLocaleDateString(lang !== "tr" ? "en-GB" : "tr-TR", { month: "long", year: "numeric" });
+  return new Date(y, m - 1, 15).toLocaleDateString(lang === "ru" ? "ru-RU" : lang !== "tr" ? "en-GB" : "tr-TR", { month: "long", year: "numeric" });
 }
 
 export function ReviewSection({ reviews, lang = "tr", title, showBoat = false, id }: { reviews: Review[]; lang?: Lang; title?: string; showBoat?: boolean; id?: string }) {
@@ -54,7 +54,7 @@ export function ReviewSection({ reviews, lang = "tr", title, showBoat = false, i
             {r.photo && (
               // eslint-disable-next-line @next/next/no-img-element
               <a href={r.photo} target="_blank" rel="noopener noreferrer" className="mt-4 block overflow-hidden rounded-2xl">
-                <img src={r.photo} alt={en ? `Photo from ${r.author}` : `${r.author} fotoğrafı`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
+                <img src={r.photo} alt={ru ? `Фото от ${r.author}` : en ? `Photo from ${r.author}` : `${r.author} fotoğrafı`} loading="lazy" className="aspect-[4/3] w-full object-cover" />
               </a>
             )}
             <figcaption className="mt-4 border-t border-navy/10 pt-3 text-sm">

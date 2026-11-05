@@ -85,11 +85,11 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
   const active: [string, string | string[]][] = [];
   if (f.destinasyon) active.push([destName ?? f.destinasyon, "destinasyon"]);
   if (f.tip) active.push([f.tip, "tip"]);
-  if (f.misafir) active.push([en ? `${f.misafir}+ guests` : `${f.misafir}+ misafir`, "misafir"]);
-  if (f.kabin) active.push([en ? `${f.kabin}+ cabins` : `${f.kabin}+ kabin`, "kabin"]);
+  if (f.misafir) active.push([ru ? `от ${f.misafir} гостей` : en ? `${f.misafir}+ guests` : `${f.misafir}+ misafir`, "misafir"]);
+  if (f.kabin) active.push([ru ? `от ${f.kabin} кают` : en ? `${f.kabin}+ cabins` : `${f.kabin}+ kabin`, "kabin"]);
   if (f.min !== undefined || f.max !== undefined) active.push([`${f.min !== undefined ? eur(f.min) : "€0"} – ${f.max !== undefined ? eur(f.max) : "∞"}`, ["min", "max"]]);
   if (f.uzunluk) active.push([`${f.uzunluk}+ m`, "uzunluk"]);
-  if (f.yil) active.push([en ? `Built ${f.yil}+` : `${f.yil} ve sonrası`, "yil"]);
+  if (f.yil) active.push([ru ? `Построена с ${f.yil} г.` : en ? `Built ${f.yil}+` : `${f.yil} ve sonrası`, "yil"]);
   if (f.kaptan) active.push([f.kaptan === "kaptanli" ? L.fWithCaptain : L.fNoCaptain, "kaptan"]);
   if (f.murettebat) active.push([f.murettebat === "var" ? L.fWithCrew : L.fNoCrew, "murettebat"]);
   const moreCount = [f.kabin, f.min ?? f.max, f.uzunluk, f.yil, f.kaptan, f.murettebat].filter((x) => x !== undefined).length;

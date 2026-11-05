@@ -13,7 +13,8 @@ export const SEASONS: { key: Season; tr: string; en: string; months: number[] }[
 ];
 const MONTHS_TR = ["", "Ocak", "Şubat", "Mart", "Nisan", "Mayıs", "Haziran", "Temmuz", "Ağustos", "Eylül", "Ekim", "Kasım", "Aralık"];
 const MONTHS_EN = ["", "January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-export const monthName = (m: number, lang: "tr" | "en" | "ru" = "tr") => (lang !== "tr" ? MONTHS_EN : MONTHS_TR)[m] ?? "";
+const MONTHS_RU = ["", "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+export const monthName = (m: number, lang: "tr" | "en" | "ru" = "tr") => (lang === "ru" ? MONTHS_RU : lang !== "tr" ? MONTHS_EN : MONTHS_TR)[m] ?? "";
 
 type Priced = { showPrice: boolean; priceDaily: number | null; monthly?: Monthly; weekly?: Monthly };
 
@@ -80,12 +81,12 @@ const SYM: Record<string, string> = { EUR: "€", USD: "$", TRY: "₺" };
 export const sym = (cur: string) => SYM[cur] ?? cur;
 // 1.000 € (TR) / €1,000 (EN)
 export const money = (v: number, cur: string, lang: "tr" | "en" | "ru" = "tr") =>
-  lang !== "tr" ? `${sym(cur)}${v.toLocaleString("en-GB")}` : `${v.toLocaleString("tr-TR")} ${sym(cur)}`;
+  lang === "ru" ? `${v.toLocaleString("ru-RU")} ${sym(cur)}` : lang !== "tr" ? `${sym(cur)}${v.toLocaleString("en-GB")}` : `${v.toLocaleString("tr-TR")} ${sym(cur)}`;
 
 // KDV notu (fiyatın yanında)
 export function vatNote(b: { vatMode?: string; vatRate?: number }, lang: "tr" | "en" | "ru" = "tr"): string {
-  if (b.vatMode === "included") return lang !== "tr" ? "VAT included" : "KDV dahil";
-  if (b.vatMode === "excluded") return lang !== "tr" ? `+${b.vatRate ?? 20}% VAT` : `+%${b.vatRate ?? 20} KDV`;
+  if (b.vatMode === "included") return lang === "ru" ? "НДС включён" : lang !== "tr" ? "VAT included" : "KDV dahil";
+  if (b.vatMode === "excluded") return lang === "ru" ? `+${b.vatRate ?? 20}% НДС` : lang !== "tr" ? `+${b.vatRate ?? 20}% VAT` : `+%${b.vatRate ?? 20} KDV`;
   return "";
 }
 
@@ -100,9 +101,13 @@ const pctSuffix = (p: number) => {
 // APA açıklaması. %5 APA yalnızca su sporları yakıtı ve marina bağlama ücretleri içindir.
 export const apaText = (pct: number, lang: "tr" | "en" | "ru" = "tr") =>
   pct === 5
-    ? lang !== "tr"
+    ? lang === "ru"
+      ? "APA 5% — это аванс в размере 5% от стоимости аренды, который покрывает только топливо для водных развлечений и сборы за стоянку в маринах. В конце аренды расходы подтверждаются документами; остаток возвращается или доплачивается."
+      : lang !== "tr"
       ? "A 5% APA is an advance on the charter fee that covers water sports fuel and marina mooring fees only. Expenses are documented at the end of the charter; any balance is refunded or settled."
       : `%5 APA, yalnızca su sporları yakıtı ve marina bağlama ücretleri için kiralama bedelinin %5'i kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`
-    : lang !== "tr"
+    : lang === "ru"
+      ? `APA — это аванс в размере ${pct}% от стоимости аренды на текущие расходы: топливо, портовые сборы и продукты. В конце аренды расходы подтверждаются документами; остаток возвращается или доплачивается.`
+      : lang !== "tr"
       ? `APA is an advance of ${pct}% of the charter fee for running costs such as fuel, port fees and provisions. Expenses are documented at the end of the charter; any balance is refunded or settled.`
       : `APA, yakıt, liman ücretleri ve kumanya gibi tur masrafları için kiralama bedelinin %${pct}'${pctSuffix(pct)} kadar alınan ön ödemedir. Tur sonunda harcamalar belgelenir; artan iade edilir, eksik tamamlanır.`;

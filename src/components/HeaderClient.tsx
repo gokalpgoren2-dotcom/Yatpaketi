@@ -76,13 +76,13 @@ export function HeaderClient({ links, lang = "tr", socials = [] }: { links: NavL
         </nav>
 
         <div className="flex items-center gap-2 sm:gap-3">
-          <Link href={hrefFor(lang, "/favorilerim")} aria-label={lang !== "tr" ? "Saved yachts" : "Favori yatlar"} title={lang !== "tr" ? "Saved yachts" : "Favori yatlar"} className="relative hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-[#e8453c] hover:text-[#e8453c] lg:flex">
+          <Link href={hrefFor(lang, "/favorilerim")} aria-label={lang === "ru" ? "Избранные яхты" : lang !== "tr" ? "Saved yachts" : "Favori yatlar"} title={lang === "ru" ? "Избранные яхты" : lang !== "tr" ? "Saved yachts" : "Favori yatlar"} className="relative hidden h-10 w-10 shrink-0 items-center justify-center rounded-full border border-navy/20 text-navy transition hover:border-[#e8453c] hover:text-[#e8453c] lg:flex">
             <svg width="20" height="20" viewBox="0 0 24 24" fill={favCount ? "#e8453c" : "none"} stroke={favCount ? "#e8453c" : "currentColor"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M12 20.5s-7.5-4.6-9.2-9.4C1.6 7.7 3.7 4.5 7 4.5c2 0 3.5 1.1 5 3 1.5-1.9 3-3 5-3 3.3 0 5.4 3.2 4.2 6.6-1.7 4.8-9.2 9.4-9.2 9.4z" /></svg>
             {favCount > 0 && <span className="absolute -right-1 -top-1 rounded-full bg-[#e8453c] px-1.5 text-[10px] font-bold leading-4 text-white">{favCount}</span>}
             {hint && favCount > 0 && (
               <span role="status" onClick={hideHint} className="absolute right-0 top-full z-50 mt-3 w-max rounded-xl bg-navy px-4 py-2.5 text-sm font-semibold text-white shadow-lg">
                 <span aria-hidden className="absolute -top-1.5 right-3 h-3 w-3 rotate-45 bg-navy" />
-                {lang !== "tr" ? "Compare your saved yachts →" : "Favori yatları karşılaştırın →"}
+                {lang === "ru" ? "Сравнить избранные яхты →" : lang !== "tr" ? "Compare your saved yachts →" : "Favori yatları karşılaştırın →"}
               </span>
             )}
           </Link>
@@ -159,7 +159,7 @@ export function HeaderClient({ links, lang = "tr", socials = [] }: { links: NavL
           <Link href="/musteri" onClick={() => setOpen(false)} className="flex items-center gap-3 border-b border-navy/5 py-4 text-base font-semibold text-navy"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" aria-hidden><rect x="7.5" y="2.5" width="9" height="12" rx="1.5" fill="#1bb4c4" stroke="#1bb4c4" /><path d="M7.5 6.2h9" stroke="#fff" /><path d="M10 1.4v2.4M14 1.4v2.4" /><path d="M10 9h.01M12 9h.01M14 9h.01M10 11.6h.01M12 11.6h.01" stroke="#fff" strokeWidth="2" /><path d="M4 13L1.8 9.6h4.6L7.2 13" fill="#fff" /><path d="M20 13l2.2-3.4h-4.6L16.8 13" fill="#fff" /><rect x="4" y="13" width="16" height="8.5" rx="1.4" fill="#fff" /><path d="M10 16.5h4" /></svg>{track}</Link>
           {socials.length > 0 && (
             <div className="flex items-center justify-between gap-3 pt-5">
-              <span className="text-sm font-medium text-navy/60">{lang !== "tr" ? "Follow us" : "Bizi takip edin"}</span>
+              <span className="text-sm font-medium text-navy/60">{lang === "ru" ? "Мы в соцсетях" : lang !== "tr" ? "Follow us" : "Bizi takip edin"}</span>
               <div className="flex gap-2">
                 {socials.map(([k, url]) => (
                   <a key={k} href={url} target="_blank" rel="noopener noreferrer" aria-label={SOCIAL_NAMES[k]} className="flex h-10 w-10 items-center justify-center rounded-full bg-mist text-navy ring-1 ring-navy/10">

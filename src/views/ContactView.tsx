@@ -28,10 +28,19 @@ const T = {
     formEyebrow: "Leave a message", formTitle: "We'll get back to you.",
     tourTitle: "Is your tour confirmed?", tourText: "Your contract, preparation list and yacht location are on your My Tour page. Your login code is in your email.", tourCta: "Go to My Tour",
   },
+  ru: {
+    title: "Давайте поговорим.", accent: "Спланируем путешествие вместе.",
+    sub: "Напишите даты, количество гостей и ваши пожелания — вместе подберём подходящую яхту и маршрут.",
+    ways: "Как связаться", wa: "WhatsApp", waSub: "Самый быстрый способ. Большинство гостей пишут нам здесь.", waCta: "Написать сообщение",
+    phone: "Телефон", phoneSub: "Звоните, будем рады.", mail: "Эл. почта", mailSub: "Для подробных вопросов.",
+    loc: "Местоположение", locName: "Фетхие, Мугла, Турция", locSub: "Адрес офиса скоро появится здесь.", locCta: "Проложить маршрут",
+    formEyebrow: "Оставьте сообщение", formTitle: "Мы ответим вам.",
+    tourTitle: "Ваш тур подтверждён?", tourText: "Договор, список подготовки и местоположение яхты — на странице «Мой тур». Код для входа — в вашем письме.", tourCta: "Перейти в «Мой тур»",
+  },
 };
 
 export async function ContactView({ lang }: { lang: Lang }) {
-  const L = T[lang === "tr" ? "tr" : "en"];
+  const L = T[lang];
   const c = await getContact();
   const card = "rounded-2xl bg-white p-6 ring-1 ring-navy/10 transition hover:ring-turquoise";
   return (
@@ -73,8 +82,8 @@ export async function ContactView({ lang }: { lang: Lang }) {
                 )}
                 {socialList(c).length > 0 && (
                   <div className={card}>
-                    <p className="font-display text-xl font-bold text-navy">{lang !== "tr" ? "Follow us" : "Bizi takip edin"}</p>
-                    <p className="mt-1 mb-4 text-sm text-navy/65">{lang !== "tr" ? "Life on board, new yachts and the coves we love." : "Yat hayatından kareler, yeni yatlar ve sevdiğimiz koylar."}</p>
+                    <p className="font-display text-xl font-bold text-navy">{lang === "ru" ? "Мы в соцсетях" : lang !== "tr" ? "Follow us" : "Bizi takip edin"}</p>
+                    <p className="mt-1 mb-4 text-sm text-navy/65">{lang === "ru" ? "Жизнь на борту, новые яхты и бухты, которые мы любим." : lang !== "tr" ? "Life on board, new yachts and the coves we love." : "Yat hayatından kareler, yeni yatlar ve sevdiğimiz koylar."}</p>
                     <SocialLinks c={c} tone="dark" labels />
                   </div>
                 )}

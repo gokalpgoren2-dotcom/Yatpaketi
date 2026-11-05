@@ -72,7 +72,7 @@ function Waves() {
 export function RegionCard({ p, lang }: { p: Post; lang: Lang }) {
   const R = regionText(p.slug, lang);
   const map = regionMapFor("destination", p.slug);
-  const U = REGION_UI[lang === "tr" ? "tr" : "en"];
+  const U = REGION_UI[lang];
   return (
     <Link href={href(lang, `/destinasyonlar/${p.slug}`)} className="group flex h-full flex-col rounded-[1.75rem] bg-white p-2.5 ring-1 ring-navy/10 transition duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-navy/10 hover:ring-turquoise/40">
       <div className="relative aspect-[7/4] overflow-hidden rounded-[1.35rem] bg-navy">
@@ -97,7 +97,7 @@ export function RegionCard({ p, lang }: { p: Post; lang: Lang }) {
 // Destinasyon (bölge) sayfası.
 // Fotoğraf sırası (panel galerisi): 1-3 → keşif kartları, kalanlar → galeri. Harita başlığın yanında, tıklayınca büyür.
 export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R: RegionText; photos: string[]; map: string | null; more?: Post[]; back?: { href: string; label: string }; lang: Lang }) {
-  const U = REGION_UI[lang === "tr" ? "tr" : "en"];
+  const U = REGION_UI[lang];
   const T = gt(lang);
   const cfg = REGION[p.slug];
   const [{ boats }, routes, contact, allDest] = await Promise.all([getBoats(lang), getPosts("route", undefined, lang), getContact(), getPosts("destination", undefined, lang)]);
@@ -150,7 +150,7 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
             <div className="relative">
               <div className="absolute -inset-6 -z-10 rounded-[2.5rem] bg-turquoise/20 blur-3xl" aria-hidden />
               {map ? (
-                <MapZoom src={map} title={p.title} label={`Yatpaketi / ${T.destinations}`} alt={lang !== "tr" ? `${p.title} map` : `${p.title} haritası`} open={U.enlarge} close={U.close} />
+                <MapZoom src={map} title={p.title} label={`Yatpaketi / ${T.destinations}`} alt={lang === "ru" ? `Карта: ${p.title}` : lang !== "tr" ? `${p.title} map` : `${p.title} haritası`} open={U.enlarge} close={U.close} />
               ) : (
                 <div className="relative aspect-[4/3] overflow-hidden rounded-3xl">{p.cover ? <Photo src={p.cover} alt={p.title} priority sizes="(min-width:1024px) 50vw, 100vw" className="object-cover" /> : <Sea label={p.title} />}</div>
               )}
@@ -339,7 +339,7 @@ export async function RegionPage({ p, R, photos, map, back, lang }: { p: Post; R
 
 // Destinasyonlar listesi.
 export function RegionsIndex({ posts, eyebrow: eb, title, intro, empty, lang }: { posts: Post[]; eyebrow: string; title: string; intro: string; empty: string; lang: Lang }) {
-  const U = REGION_UI[lang === "tr" ? "tr" : "en"];
+  const U = REGION_UI[lang];
   const stops = posts.reduce((n, p) => n + (regionText(p.slug, lang)?.stops.length ?? 0), 0);
   return (
     <>

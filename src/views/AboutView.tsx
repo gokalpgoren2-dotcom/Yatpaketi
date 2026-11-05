@@ -5,6 +5,7 @@ import { CountUp } from "@/components/CountUp";
 import { getAbout } from "@/lib/site-texts";
 import { getBoats, getCategories, getDestinations } from "@/lib/content";
 import { href, type Lang } from "@/lib/i18n";
+import { pick } from "@/lib/ru";
 
 const eyebrow = "text-xs font-semibold uppercase tracking-[0.28em] text-turquoise-dark";
 const h2 = "font-display text-3xl font-semibold leading-tight text-navy lg:text-5xl";
@@ -25,7 +26,7 @@ const RESP_IC = ["M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7S2 12 2 12ZM12 15a3 3 0 1
 
 export async function AboutView({ lang }: { lang: Lang }) {
   const [about, cats, dests, { boats }] = await Promise.all([getAbout(), getCategories(lang), getDestinations(lang), getBoats(lang)]);
-  const A = about[lang === "tr" ? "tr" : "en"];
+  const A = pick(about, lang);
   const en = lang !== "tr";
   const ru = lang === "ru";
   const [t1, ...t2] = A.title.split(/(?<=\.)\s+/);
