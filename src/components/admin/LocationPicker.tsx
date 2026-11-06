@@ -25,10 +25,10 @@ function loadLeaflet(): Promise<any> {
   });
 }
 
-type Props = { portalId: string; lat: number | null; lng: number | null; text: string | null; updatedAt: string | null; opensAt: string };
+type Props = { portalId: string; lat: number | null; lng: number | null; text: string | null; updatedAt: string | null; boardingTime: string; tourStart: string };
 
 // Yat konumunu haritada dokunarak ya da koordinat/harita bağlantısı yapıştırarak işaretler.
-export function LocationPicker({ portalId, lat, lng, text, updatedAt, opensAt }: Props) {
+export function LocationPicker({ portalId, lat, lng, text, updatedAt, boardingTime, tourStart }: Props) {
   const supabase = createClient();
   const router = useRouter();
   const box = useRef<HTMLDivElement>(null);
@@ -40,6 +40,17 @@ export function LocationPicker({ portalId, lat, lng, text, updatedAt, opensAt }:
   const [busy, setBusy] = useState(false);
   const [msg, setMsg] = useState<{ ok: boolean; text: string } | null>(null);
   const [mapErr, setMapErr] = useState("");
+  const [board, setBoard] = useState(boardingTime || "14:00");
+  const [boardMsg, setBoardMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  // Konum, biniş saatinden 2 saat önce müşteriye açılır.
+  const opensAt = new Date(new Date(`${tourStart}T${board || "14:00"}:00+03:00`).getTime() - 2 * 3600 * 1000).toISOString();
+
+  async function saveBoard() {
+    if (!/^\d{2}:\d{2}$/.test(board)) { setBoardMsg({ ok: false, text: "Saati SS:DD biçiminde girin (ör. 14:00)." }); return; }
+    const { error } = await supabase.from("customer_portals").update({ boarding_time: board }).eq("id", portalId);
+    if (error) setBoardMsg({ ok: false, text: "Kaydedilemedi: " + error.message + (error.message.includes("boarding") ? " (Supabase'e konum-2-saat SQL kodunu yapıştırdınız mı?)" : "") });
+    else { setBoardMsg({ ok: true, text: "Biniş saati kaydedildi." }); router.refresh(); }
+  }
 
   function put(p: { lat: number; lng: number }, pan = false) {
     setPos(p);
@@ -97,7 +108,15 @@ export function LocationPicker({ portalId, lat, lng, text, updatedAt, opensAt }:
 
   return (
     <div className="space-y-3">
-      <p className="text-sm text-navy/70">Müşteri bu konumu <b>{opens}</b> tarihinden itibaren (tura 12 saat kala) görür. Öncesinde hiçbir konum bilgisi müşteriye gönderilmez.</p>
+      <div className="flex flex-wrap items-end gap-2">
+        <div>
+          <label htmlFor="board" className="mb-1 block text-xs font-semibold uppercase tracking-wide text-navy/60">Biniş saati</label>
+          <input id="board" type="time" value={board} onChange={(e) => setBoard(e.target.value)} className="rounded-xl border border-navy/15 bg-white px-3 py-2.5 text-base outline-none focus:border-turquoise focus:ring-2 focus:ring-turquoise/30" />
+        </div>
+        <button type="button" onClick={saveBoard} className="rounded-xl border border-navy/15 px-4 py-2.5 text-sm font-semibold">Saati kaydet</button>
+      </div>
+      {boardMsg && <p role={boardMsg.ok ? "status" : "alert"} className={`rounded-xl p-3 text-sm font-medium ${boardMsg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-700"}`}>{boardMsg.text}</p>}
+      <p className="text-sm text-navy/70">Müşteri bu konumu <b>{opens}</b> itibarıyla (binişe 2 saat kala) görür. Öncesinde hiçbir konum bilgisi müşteriye gönderilmez.</p>
       {msg && <p role={msg.ok ? "status" : "alert"} className={`rounded-xl p-3 text-sm font-medium ${msg.ok ? "bg-green-50 text-green-800" : "bg-red-50 text-red-700"}`}>{msg.text}</p>}
       {mapErr ? <p className="rounded-xl bg-red-50 p-3 text-sm text-red-700">{mapErr}. Koordinatı aşağıdaki kutuya yapıştırarak da girebilirsiniz.</p> : <div ref={box} className="h-72 w-full overflow-hidden rounded-xl bg-mist" aria-label="Konum haritası" />}
       <p className="text-xs text-navy/55">Haritada yatın olduğu yere dokunun. Yakınlaştırmak için iki parmakla büyütün.</p>

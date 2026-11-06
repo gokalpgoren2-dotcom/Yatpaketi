@@ -17,6 +17,9 @@ export default async function PortalDetail({ params }: { params: Promise<{ id: s
   const plain = withCol.error ? await supabase.from("customer_portals").select(cols).eq("id", id).maybeSingle() : null;
   const data = (withCol.error ? plain?.data : withCol.data) as Record<string, unknown> | null | undefined;
   if (!data) notFound();
+  // Biniş saati (konum-2-saat.sql çalıştırılmadıysa boş kalır, 14:00 kabul edilir)
+  const bt = await supabase.from("customer_portals").select("boarding_time").eq("id", id).maybeSingle();
+  data.boarding_time = bt.error ? null : (bt.data as { boarding_time?: string | null } | null)?.boarding_time ?? null;
   const { data: items } = await supabase.from("portal_checklist").select("id,label,done,sort_order").eq("portal_id", id).order("sort_order").order("label");
   const store = supabase.storage.from("contracts");
   const sign = async (path: string | null) => (path ? (await store.createSignedUrl(path, 900)).data?.signedUrl ?? null : null);

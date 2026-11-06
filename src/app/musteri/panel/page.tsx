@@ -344,7 +344,7 @@ export default async function PortalHome() {
             </>
           ) : (
             <p className="mt-3 text-sm leading-relaxed text-navy/60">
-              {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Yatın konumu, turunuzdan yaklaşık 12 saat önce burada açılır."}
+              {p.location_open ? "Konum bilgisi henüz girilmedi. Ekibimiz girdiğinde burada görünecek." : "Yatın konumu, biniş saatinden 2 saat önce burada açılır."}
             </p>
           )}
         </section>}

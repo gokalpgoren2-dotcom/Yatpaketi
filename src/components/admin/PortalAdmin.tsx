@@ -9,7 +9,7 @@ import { emailContractToCustomer, notifyChecklistDone, setReviewOpen } from "@/a
 
 export type PortalRow = {
   id: string; email: string; customer_name: string | null; boat_name: string; tour_start: string; tour_end: string; status: string;
-  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; review_open?: boolean; lat?: number | null; lng?: number | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
+  location_text: string | null; location_updated_at: string | null; contract_emailed_at?: string | null; review_open?: boolean; lat?: number | null; lng?: number | null; boarding_time?: string | null; contract_path: string | null; signed_path: string | null; signed_at: string | null;
 };
 export type CheckItem = { id: string; label: string; done: boolean; sort_order: number };
 
@@ -176,7 +176,7 @@ export function PortalAdmin({ portal, items, contractUrl, signedUrl }: { portal:
       <section className={card}>
         <h2 className="font-semibold">Yat konumu (harita)</h2>
         <div className="mt-3">
-          <LocationPicker portalId={portal.id} lat={portal.lat ?? null} lng={portal.lng ?? null} text={portal.location_text} updatedAt={portal.location_updated_at} opensAt={new Date(new Date(portal.tour_start + "T00:00:00+03:00").getTime() - 12 * 3600 * 1000).toISOString()} />
+          <LocationPicker portalId={portal.id} lat={portal.lat ?? null} lng={portal.lng ?? null} text={portal.location_text} updatedAt={portal.location_updated_at} boardingTime={(portal.boarding_time ?? "").slice(0, 5)} tourStart={portal.tour_start} />
         </div>
       </section>
 
