@@ -136,6 +136,23 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
 
   const en = lang !== "tr";
   const ru = lang === "ru";
+  // Telefonda tabelalar üst üste binmesin: her tabela için çakışmayan ilk yüksekliği seç.
+  const mobileDy = new Map<string, number>();
+  if (L.w < 600) {
+    const placed: { x0: number; x1: number; y0: number; y1: number }[] = [];
+    const sc = 0.8;
+    for (const p of pins) {
+      const w = p.label.length * (L.font * 0.62) + 30 * sc;
+      let pick = -32;
+      for (const c of [-32, 34, -64, 66, -96, 98]) {
+        const y = p.pos[1] + c * sc;
+        const box = { x0: p.pos[0] - w / 2 - 4, x1: p.pos[0] + w / 2 + 4, y0: y - 13 * sc - 3, y1: y + 13 * sc + 3 };
+        if (box.y0 < 0 || box.y1 > L.h) continue;
+        if (!placed.some((q) => box.x0 < q.x1 && q.x0 < box.x1 && box.y0 < q.y1 && q.y0 < box.y1)) { pick = c; placed.push(box); break; }
+      }
+      mobileDy.set(p.key, pick);
+    }
+  }
   let prevLift = false; // önceki tabela aşağıya alındı mı
   let prevX = -999;
   const s = L.w > 600 ? 1 : 0.8;
@@ -180,10 +197,11 @@ function MapSvg({ L, destinations, lang, className }: { L: Layout; destinations:
       {/* Destinasyon tabelaları: dokununca o bölgenin yatları açılır */}
       {pins.map(({ d, key, pos, label }, i) => {
         const w = label.length * (L.font * 0.62) + 30 * s;
+        const mdy = mobileDy.get(key);
         const close = L.w > 600 && pos[0] - prevX < 130 && !prevLift;
         prevLift = close; prevX = pos[0];
         const side = SIDE[key];
-        const dy = (L.w < 600 ? [-32, 34, -64][i % 3] : side ? (side === "down" ? 34 : -34) : close ? 34 : -34) * s;
+        const dy = (L.w < 600 ? mdy ?? -32 : side ? (side === "down" ? 34 : -34) : close ? 34 : -34) * s;
         const below = dy > 0;
         return (
           <Link key={d.slug} href={`${href(lang, "/tekneler")}?destinasyon=${d.slug}`} aria-label={`${label} ${ru ? "яхты" : en ? "boats" : "tekneleri"}`} style={{ pointerEvents: "auto" }}>

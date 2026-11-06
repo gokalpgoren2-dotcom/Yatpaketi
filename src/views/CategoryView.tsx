@@ -45,11 +45,9 @@ export async function CategoryView({ lang, slug }: { lang: Lang; slug: string })
   if (!c) notFound();
   const list = boats.filter((b) => b.type === c.name);
   const lead = LEAD[c.slug]?.[i] ?? c.intro;
-  const maxGuests = Math.max(0, ...list.map((b) => b.guests || 0));
   const ports = new Set(list.map((b) => b.port).filter(Boolean)).size;
   const stats: [string, string][] = [
     [String(list.length), ru ? "яхт" : en ? (list.length === 1 ? "yacht" : "yachts") : "yat"],
-    ...(maxGuests ? [[ru ? `до ${maxGuests}` : en ? `up to ${maxGuests}` : `${maxGuests} kişiye`, ru ? "гостей" : en ? "guests" : "kadar"] as [string, string]] : []),
     ...(ports ? [[String(ports), ru ? "портов отправления" : en ? (ports === 1 ? "departure port" : "departure ports") : "kalkış limanı"] as [string, string]] : []),
   ];
   const tabs = [{ slug: "all", name: L.navAllBoats, to: href(lang, "/tekneler") }, ...cats.map((x) => ({ slug: x.slug, name: x.name, to: href(lang, `/tekne-tipleri/${x.slug}`) }))];
