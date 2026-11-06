@@ -34,7 +34,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
   const A = boats.find((x) => x.slug === sa);
   const B = boats.find((x) => x.slug === sb);
   const both = A && B && A.slug !== B.slug;
-  const options = boats.map((x) => ({ slug: x.slug, name: x.name, type: x.type, port: x.port, length: x.length, guests: x.guests, image: x.image ?? null, hue: x.hue }));
+  const options = boats.map((x) => ({ slug: x.slug, name: x.name, type: x.type, port: x.port, length: x.length, guests: x.guests, image: x.image ?? null, hue: x.hue })).sort((p, q) => p.name.localeCompare(q.name, "tr", { sensitivity: "base", numeric: true }));
   const note = both ? curated.find((c) => samePair(c, A.slug, B.slug)) : undefined;
   const noteText = note ? ((en ? note.noteEn?.trim() : "") || note.note) : "";
   const featured = curated.filter((c) => c.featured && boats.some((x) => x.slug === c.a) && boats.some((x) => x.slug === c.b));
