@@ -1043,5 +1043,179 @@
       "name": "Lady Freya",
       "home_port": "Rodos"
     }
+  },
+  "simay-m": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Simay M",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 26,
+      "cabins": 5,
+      "guests": 10,
+      "captain_included": true,
+      "year": 2022,
+      "home_port": "Fethiye",
+      "description_tr": "Simay M, 2022'de inşa edilen 26 metrelik lüks bir trawler motoryattır. 5 geniş ve konforlu kabinde 10 misafir ağırlar.\n\nKabinler: 3 master ve 2 çift kişilik kabin; king size yataklar, Smart TV ve klima bulunur. Fethiye'den kalkan yatta açık güverte yemek alanı, flybridge ve geniş güneşlenme alanları vardır; Türkiye sularında sınırsız internet sunulur.\n\nMisafirlerin kullanımına kano, ringo, su kayağı ve paddle board sunulur.",
+      "description_en": "Simay M is a 26-metre luxury trawler built in 2022. She accommodates 10 guests in 5 spacious, comfortable cabins.\n\nCabins: 3 master and 2 double cabins with king-size beds, smart TVs and air conditioning. Based in Fethiye, she offers an alfresco dining area, a flybridge and generous sun decks, with unlimited internet in Turkish waters.\n\nWater toys on board: canoe, ringo, water skis and paddle board.",
+      "equipment": [
+        "Klima",
+        "Flybridge",
+        "Wi-Fi — Türkiye sularında sınırsız",
+        "Eğlence sistemi — Tüm kabinlerde Smart TV"
+      ],
+      "water_sports": [
+        "Kano",
+        "Ringo",
+        "Su kayağı",
+        "Paddle board"
+      ],
+      "name": "Simay M"
+    }
+  },
+  "simay-s": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Simay S",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 26,
+      "cabins": 5,
+      "guests": 10,
+      "captain_included": true,
+      "year": 2015,
+      "home_port": "Fethiye",
+      "description_tr": "Simay S, 2015'te inşa edilen ve 2023'te yenilenen 26 metrelik lüks bir trawler motoryattır. 5 geniş ve konforlu kabinde 10 misafir ağırlar.\n\nKabinler: 3 master ve 2 twin kabin; king size yataklar, Smart TV ve klima bulunur. Fethiye'den kalkan yatta açık güverte yemek alanı, flybridge, geniş salon ve güneşlenme alanları vardır; Türkiye sularında sınırsız internet sunulur.\n\nMisafirlerin kullanımına kano, ringo, su kayağı ve paddle board sunulur.",
+      "description_en": "Simay S is a 26-metre luxury trawler built in 2015 and refitted in 2023. She accommodates 10 guests in 5 spacious, comfortable cabins.\n\nCabins: 3 master and 2 twin cabins with king-size beds, smart TVs and air conditioning. Based in Fethiye, she offers an alfresco dining area, a flybridge, a spacious saloon and sun decks, with unlimited internet in Turkish waters.\n\nWater toys on board: canoe, ringo, water skis and paddle board.",
+      "equipment": [
+        "Klima",
+        "Flybridge",
+        "Wi-Fi — Türkiye sularında sınırsız",
+        "Eğlence sistemi — Tüm kabinlerde Smart TV"
+      ],
+      "water_sports": [
+        "Kano",
+        "Ringo",
+        "Su kayağı",
+        "Paddle board"
+      ],
+      "name": "Simay S",
+      "refit_year": 2023
+    }
+  },
+  "simay-f": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Simay F",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 26,
+      "cabins": 4,
+      "guests": 8,
+      "captain_included": true,
+      "year": 2015,
+      "home_port": "Fethiye",
+      "description_tr": "Simay F, 2015'te inşa edilen 26 metrelik lüks bir trawler motoryattır. 4 geniş ve konforlu kabinde 8 misafir ağırlar.\n\nKabinler: 2 master ve 2 çift kişilik kabin; king size yataklar, Smart TV ve klima bulunur. Fethiye'den kalkan yatta geniş salon, açık güverte yemek alanı, flybridge ve baş güvertede güneşlenme alanı vardır; Türkiye sularında sınırsız internet sunulur.\n\nMisafirlerin kullanımına kano, ringo, su kayağı ve paddle board sunulur.",
+      "description_en": "Simay F is a 26-metre luxury trawler built in 2015. She accommodates 8 guests in 4 spacious, comfortable cabins.\n\nCabins: 2 master and 2 double cabins with king-size beds, smart TVs and air conditioning. Based in Fethiye, she offers a spacious saloon, an alfresco dining area, a flybridge and a foredeck sun lounge, with unlimited internet in Turkish waters.\n\nWater toys on board: canoe, ringo, water skis and paddle board.",
+      "equipment": [
+        "Klima",
+        "Flybridge",
+        "Wi-Fi — Türkiye sularında sınırsız",
+        "Eğlence sistemi — Tüm kabinlerde Smart TV"
+      ],
+      "water_sports": [
+        "Kano",
+        "Ringo",
+        "Su kayağı",
+        "Paddle board"
+      ],
+      "name": "Simay F"
+    }
+  },
+  "by-cf": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "BY C.F",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 24,
+      "cabins": 4,
+      "guests": 9,
+      "captain_included": true,
+      "year": 2023,
+      "home_port": "Fethiye",
+      "description_tr": "BY C.F, 2023'te inşa edilen 24 metrelik deluxe sınıfı bir trawler motoryattır. 4 kabinde toplam 9 misafir ağırlar.\n\nKabinler: 2 master, 1 üç kişilik ve 1 twin kabin. Her kabinde duş, tuvalet ve klima bulunur. Fethiye'den kalkan yatta modern salon ve açık mutfak, kıç güvertede geniş yemek alanı, flybridge ve baş güvertede güneşlenme alanı vardır.\n\nMisafirlerin kullanımına su kayağı, paddle board ve wakeboard sunulur.",
+      "description_en": "BY C.F is a 24-metre deluxe trawler built in 2023. She accommodates up to 9 guests in 4 cabins.\n\nCabins: 2 master cabins, 1 triple and 1 twin. Each cabin has a shower, toilet and air conditioning. Based in Fethiye, she offers a modern saloon with an open galley, a large aft-deck dining area, a flybridge and a foredeck sun lounge.\n\nWater toys on board: water skis, paddle board and wakeboard.",
+      "equipment": [
+        "Klima",
+        "Flybridge"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Paddle board",
+        "Wakeboard"
+      ],
+      "name": "BY C.F"
+    }
+  },
+  "oggusto": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Oggusto",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 22,
+      "cabins": 4,
+      "guests": 8,
+      "captain_included": true,
+      "year": 2023,
+      "home_port": "Fethiye",
+      "description_tr": "Oggusto, 2023'te inşa edilen 22 metrelik bir trawler motoryattır. Lüks donanımı ve denizde otel konforuyla 4 kabinde 8 misafir ağırlar.\n\nKabinler: 1 master ve 3 çift kişilik kabin; her kabinde özel banyo ve tuvalet, klima, televizyon ve saç kurutma makinesi bulunur. Fethiye'den kalkan yatta kıç güvertede yemek alanı, flybridge, baş güvertede güneşlenme alanı ve ahşap detaylı salon vardır.\n\nMisafirlerin kullanımına 2 ringo ve 2 paddle board sunulur.",
+      "description_en": "Oggusto is a 22-metre trawler built in 2023. With luxury equipment and hotel comfort at sea, she accommodates 8 guests in 4 cabins.\n\nCabins: 1 master and 3 double cabins, each with a private bathroom and toilet, air conditioning, TV and hair dryer. Based in Fethiye, she offers an aft-deck dining area, a flybridge, a foredeck sun lounge and a wood-panelled saloon.\n\nWater toys on board: 2 ringos and 2 paddle boards.",
+      "equipment": [
+        "Klima",
+        "Flybridge",
+        "Eğlence sistemi — Tüm kabinlerde TV"
+      ],
+      "water_sports": [
+        "Ringo ×2",
+        "Paddle board ×2"
+      ],
+      "name": "Oggusto"
+    }
+  },
+  "junior-simay": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Junior Simay",
+    "bilgi": {
+      "tip": "motoryat",
+      "length_m": 21,
+      "cabins": 3,
+      "guests": 8,
+      "captain_included": true,
+      "year": 2025,
+      "home_port": "Fethiye",
+      "description_tr": "Junior Simay, Simay filosunun en yeni ve en küçük üyesi olan, 2025'te inşa edilen 21 metre uzunluğunda ve 6 metre genişliğinde bir trawler motoryattır. 3 konforlu kabinde 8 misafir ağırlar.\n\nKabinler: baş tarafta 1 çift ve 1 tek kişilik yataklı master kabin, ortada 1 çift ve 1 tek kişilik yataklı kabin ve kıç tarafta çift kişilik yataklı master kabin. Fethiye'den kalkan yatta geniş salon, kıç güvertede yemek alanı, flybridge ve baş güvertede güneşlenme alanı vardır; aileler için ideal bir seçenektir.\n\nMisafirlerin kullanımına kano, ringo, su kayağı ve paddle board sunulur.",
+      "description_en": "Junior Simay, the newest and smallest member of the Simay fleet, is a 21-metre, 6-metre-wide trawler built in 2025. She accommodates 8 guests in 3 comfortable cabins.\n\nCabins: a forward master with a double and a single bed, a mid cabin with a double and a single bed, and an aft master with a double bed. Based in Fethiye, she offers a spacious saloon, an aft-deck dining area, a flybridge and a foredeck sun lounge — ideal for families.\n\nWater toys on board: canoe, ringo, water skis and paddle board.",
+      "equipment": [
+        "Klima",
+        "Flybridge"
+      ],
+      "water_sports": [
+        "Kano",
+        "Ringo",
+        "Su kayağı",
+        "Paddle board"
+      ],
+      "name": "Junior Simay",
+      "width_m": 6
+    }
   }
 }

@@ -11,7 +11,7 @@ import RU_BOATS from "./ru-boats.json";
 // ---- Rusça (site /ru): veritabanındaki Türkçe/İngilizce adların karşılıkları ----
 const CAT_RU: Record<string, string> = {
   Gulet: "Гулет", Motoryat: "Моторная яхта", Katamaran: "Катамаран", Yelkenli: "Парусная яхта", Trawler: "Траулер",
-  "Lüks Yat": "Люкс-яхта", "Günlük Tekneler": "Яхты на день", "Günlük Tekne": "Яхта на день",
+  "Lüks Yat": "Люкс-яхта", "Yelkenli / Katamaran": "Парусная яхта / катамаран", "Günlük Tekneler": "Яхты на день", "Günlük Tekne": "Яхта на день",
 };
 const PLACE_RU: Record<string, string> = {
   "Göcek": "Гёджек", "Bodrum": "Бодрум", "Fethiye": "Фетхие", "Marmaris": "Мармарис", "Kaş - Kekova": "Каш — Кекова", "Kaş-Kekova": "Каш — Кекова",

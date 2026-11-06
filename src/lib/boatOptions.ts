@@ -76,6 +76,7 @@ const EQ_RU: Record<string, string> = {
 };
 // Ayrıntı metinleri (ör. "Saatte 200 litre", "Tüm kabinlerde") için uzun ifadeden kısaya doğru çeviri.
 const PHRASES: [string, string, string][] = [
+  ["Tüm kabinlerde Smart TV", "Smart TV in all cabins", "Smart TV во всех каютах"], ["Tüm kabinlerde TV", "TV in all cabins", "ТВ во всех каютах"],
   ["Tam gün (24 saat), fiyata dahil", "All day (24 hours), included in the price", "Весь день (24 часа), включено в цену"],
   ["Günde 4 saat fiyata dahil, fazlası ekstra", "4 hours a day included, extra beyond that", "4 часа в день включены, сверх — за доп. плату"],
   ["Günde 6 saat fiyata dahil, fazlası ekstra", "6 hours a day included, extra beyond that", "6 часов в день включены, сверх — за доп. плату"],
@@ -103,6 +104,7 @@ const PHRASES: [string, string, string][] = [
   ["salon, kıç güverte, master kabin", "saloon, aft deck, master cabin", "салон, кормовая палуба, мастер-каюта"],
   ["Baş güvertede", "On the foredeck", "На носовой палубе"], ["Güvertede", "On deck", "На палубе"], ["Flybridge'de", "On the flybridge", "На флайбридже"],
   ["(ekstra ücretli)", "(extra charge)", "(за доп. плату)"], ["ekstra ücretli", "extra charge", "за доп. плату"], ["Ekstra ücretli", "Extra charge", "За доп. плату"],
+  ["Türkiye sularında sınırsız", "Unlimited in Turkish waters", "Безлимитный в турецких водах"],
   ["Sınırsız", "Unlimited", "Безлимитный"], ["Beach club", "Beach club", "Бич-клуб"],
   [" ve ", " and ", " и "],
 ];
