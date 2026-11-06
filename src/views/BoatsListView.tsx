@@ -92,6 +92,12 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
   if (f.yil) active.push([ru ? `Построена с ${f.yil} г.` : en ? `Built ${f.yil}+` : `${f.yil} ve sonrası`, "yil"]);
   if (f.kaptan) active.push([f.kaptan === "kaptanli" ? L.fWithCaptain : L.fNoCaptain, "kaptan"]);
   if (f.murettebat) active.push([f.murettebat === "var" ? L.fWithCrew : L.fNoCrew, "murettebat"]);
+  const portCount = new Set(all.map((b) => b.port).filter(Boolean)).size;
+  const stats: [string, string][] = [
+    [String(all.length), ru ? "яхт в аренду" : en ? "yachts for charter" : "kiralık yat"],
+    [String(categories.length), ru ? "типов яхт" : en ? "yacht types" : "yat tipi"],
+    ...(portCount ? [[String(portCount), ru ? "портов отправления" : en ? "departure ports" : "kalkış limanı"] as [string, string]] : []),
+  ];
   const moreCount = [f.kabin, f.min ?? f.max, f.uzunluk, f.yil, f.kaptan, f.murettebat].filter((x) => x !== undefined).length;
 
   return (
@@ -105,12 +111,25 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
             <svg className="wave-b absolute bottom-0 left-0 h-20 w-[200%]" viewBox="0 0 2880 400" preserveAspectRatio="none"><path d={WAVE(220)} fill="rgba(255,255,255,0.12)" /></svg>
             <svg className="absolute bottom-0 left-0 h-10 w-full" viewBox="0 0 1440 100" preserveAspectRatio="none"><path d="M0 60 q360 -50 720 0 t720 0 V100 H0z" fill="#ffffff" /></svg>
           </div>
-          <div className={wrap}>
+          <div className={`${wrap} lg:flex lg:items-end lg:justify-between lg:gap-10`}>
+            <div>
             <p className="text-xs font-semibold uppercase tracking-[0.3em] text-turquoise">{L.listEyebrow}</p>
             <h1 className="font-display mt-4 max-w-3xl text-4xl font-semibold leading-[1.05] lg:text-6xl">{L.listTitle}</h1>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-white/75 lg:text-lg">
               {ru ? "Выберите порт, тип яхты и количество гостей; при желании уточните по цене, длине и экипажу." : en ? "Pick a port, boat type and group size; refine with price, length and crew whenever you like." : "Liman, yat tipi ve kişi sayınızı seçin; dilerseniz fiyat, uzunluk ve mürettebatla daraltın."}
             </p>
+            </div>
+            {all.length > 0 && (
+              <dl className="mt-8 flex flex-wrap gap-3 lg:mt-0 lg:flex-nowrap">
+                {stats.map(([v, k]) => (
+                  <div key={k} className="min-w-[7.5rem] rounded-2xl bg-white/10 px-5 py-4 ring-1 ring-white/15 backdrop-blur">
+                    <dt className="sr-only">{k}</dt>
+                    <dd className="font-display text-2xl font-semibold leading-none">{v}</dd>
+                    <dd className="mt-1.5 text-xs text-white/65">{k}</dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </div>
         </section>
 
@@ -250,6 +269,14 @@ export async function BoatsListView({ lang, sp }: { lang: Lang; sp: SP }) {
               {all.length > 0 && <Link href={base} className="mt-5 inline-block rounded-full bg-navy px-6 py-2.5 text-sm font-semibold text-white">{ru ? "Сбросить фильтры" : en ? "Clear filters" : "Filtreleri temizle"}</Link>}
             </div>
           )}
+
+          <div className="mt-14 flex flex-col items-start gap-5 overflow-hidden rounded-3xl p-8 text-white sm:flex-row sm:items-center sm:justify-between lg:p-10" style={{ background: "linear-gradient(135deg, #06264b 0%, #0b4a6e 60%, #0d6a86 100%)" }}>
+            <div>
+              <p className="font-display text-2xl font-semibold">{ru ? "Не нашли подходящую яхту?" : en ? "Can't find the right yacht?" : "Aradığınız yatı bulamadınız mı?"}</p>
+              <p className="mt-2 max-w-xl text-sm leading-relaxed text-white/70">{ru ? "Напишите даты и количество гостей — мы подберём варианты, которых ещё нет на сайте." : en ? "Tell us your dates and group size — we'll find options that aren't on the site yet." : "Tarihlerinizi ve kişi sayınızı yazın; sitede henüz yer almayan seçenekleri de sizin için bulalım."}</p>
+            </div>
+            <Link href={href(lang, "/iletisim")} className="shrink-0 rounded-full bg-white px-6 py-3 text-sm font-semibold text-navy transition hover:bg-turquoise">{ru ? "Написать нам" : en ? "Contact us" : "Bize yazın"}</Link>
+          </div>
         </div>
       </main>
       <Footer lang={lang} />
