@@ -1217,5 +1217,185 @@
       "name": "Junior Simay",
       "width_m": 6
     }
+  },
+  "berrak-su": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Berrak Su",
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 33,
+      "width_m": 8.2,
+      "cabins": 6,
+      "guests": 12,
+      "captain_included": true,
+      "description_tr": "Berrak Su, 8,20 metre genişliğinde 33 metrelik lüks bir gulettir. 6 kabinde 12 misafir ağırlar.\n\nKabinler: 2 master ve 4 çift kişilik kabin. Tüm kabinlerde klima, TV, uydu sistemi, DVD oynatıcı ve ev tipi tuvaletli, duşlu özel banyo bulunur. Baş ve kıç güvertede tenteli geniş güneşlenme alanları, yüzme platformu ve deniz merdiveni vardır. Tam donanımlı mutfak, buz makinesi, jeneratör, sıcak su, ücretsiz kablosuz internet, uydu TV ve müzik sistemi misafirlerin hizmetindedir.\n\n2×600 HP Baudouin motorlu yat, 6 ton yakıt ve 8 ton tatlı su kapasitesiyle uzun seyirlere uygundur. 100 HP motorlu 4,80 m sürat teknesiyle su kayağı, wakeboard ve şişme oyuncaklar çekilebilir. Ringo, muz botu, kano, paddle board, şnorkel ve balık tutma ekipmanı bulunur; jet ski talep üzerine ekstra ücretle sağlanır.",
+      "description_en": "Berrak Su is a 33-metre luxury gulet with a beam of 8.20 metres. She accommodates 12 guests in 6 cabins.\n\nCabins: 2 master and 4 double cabins, all air-conditioned with a TV, satellite system, DVD player and a private en-suite bathroom with home-style toilet and shower. Spacious foredeck and aft-deck lounging areas with sun mattresses and awnings, a swimming platform and sea ladder. A fully equipped galley, ice maker, generator, hot water, free Wi-Fi, satellite TV and a music system are on board.\n\nPowered by 2×600 hp Baudouin engines and carrying 6 tons of fuel and 8 tons of fresh water, she is built for extended cruising. A 4.80 m speedboat with a 100 hp outboard tows water skis, wakeboards and inflatables. A ringo, banana, kayak, paddleboard, snorkelling and fishing gear are available; a jet ski can be provided on request at extra charge.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Tender — 4,80 m, 100 HP",
+        "Jeneratör",
+        "Buz makinesi",
+        "Wi-Fi",
+        "Eğlence sistemi — Uydu TV, DVD, müzik sistemi"
+      ],
+      "water_sports": [
+        "Ringo",
+        "Muz (banana) botu",
+        "Kano",
+        "Paddle board",
+        "Su kayağı",
+        "Wakeboard",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı",
+        "Jet ski — Ekstra ücretli"
+      ],
+      "name": "Berrak Su"
+    }
+  },
+  "yuksel-deniz": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Yüksel Deniz",
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 26,
+      "width_m": 6.8,
+      "cabins": 4,
+      "guests": 10,
+      "captain_included": true,
+      "description_tr": "Yüksel Deniz, 6,80 metre genişliğinde 26 metrelik bir gulettir. 4 kabinde 10 misafir ağırlar.\n\nKabinler: 1 master, 2 üç kişilik ve 1 çift kişilik kabin; her kabinde klima ve duşlu özel banyo bulunur. Geniş güvertelerde güneşlenme minderleri ve gölgeli oturma alanları, yüzme platformu ve deniz merdiveni vardır. Tam donanımlı mutfak, buz makinesi, jeneratör, sıcak su, Wi-Fi, TV ve Bluetooth ses sistemi misafirlerin hizmetindedir.\n\n2×285 HP Cummins motorlu yatta 60 HP motorlu 4,20 m tender bulunur. Su kayağı, wakeboard, ringo, muz botu, paddle board, kano, şnorkel ve balık tutma ekipmanı misafirlerin kullanımındadır.",
+      "description_en": "Yüksel Deniz is a 26-metre gulet with a beam of 6.80 metres. She accommodates 10 guests in 4 cabins.\n\nCabins: 1 master, 2 triple and 1 double cabin, each air-conditioned with a private shower room. Spacious decks offer sun mattresses and shaded seating, plus a swimming platform and sea ladder. A fully equipped galley, ice maker, generator, hot water, Wi-Fi, TV and a Bluetooth sound system are on board.\n\nPowered by 2×285 hp Cummins engines, she carries a 4.20 m tender with a 60 hp outboard. Water skis, wakeboard, ringo, banana, paddleboard, canoe, snorkelling and fishing gear are available to guests.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Tender — 4,20 m, 60 HP",
+        "Jeneratör",
+        "Buz makinesi",
+        "Wi-Fi",
+        "Eğlence sistemi — TV, Bluetooth ses sistemi"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Wakeboard",
+        "Ringo",
+        "Muz (banana) botu",
+        "Paddle board",
+        "Kano",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ],
+      "name": "Yüksel Deniz"
+    }
+  },
+  "ece-berrak": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Ece Berrak",
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 33,
+      "width_m": 7.8,
+      "cabins": 5,
+      "guests": 10,
+      "captain_included": true,
+      "description_tr": "Ece Berrak, 7,80 metre genişliğinde 33 metrelik ketch tipi bir gulettir. 5 konforlu kabinde 10 misafir ağırlar.\n\nKabinler: 1 master, 2 çift kişilik ve 2 twin kabin; tümünde klima ve ev tipi tuvaletli, duşlu özel banyo bulunur. Baş ve kıç güvertede tenteli güneşlenme alanları, güvertede jakuzi, yüzme platformu ve deniz merdiveni vardır. Tam donanımlı mutfak, buz makinesi, jeneratör, sıcak su, TV, DVD ve müzik sistemi misafirlerin hizmetindedir.\n\n2×360 HP Iveco motorlu yat 6 ton yakıt ve 9 ton tatlı su taşır. 100 HP motorlu 4,80 m sürat teknesiyle su kayağı, wakeboard, muz botu ve ringo keyfi yapılabilir.",
+      "description_en": "Ece Berrak is a 33-metre ketch-rigged gulet with a beam of 7.80 metres. She accommodates 10 guests in 5 comfortable cabins.\n\nCabins: 1 master, 2 double and 2 twin cabins, all air-conditioned with a private en-suite bathroom with home-style toilet and shower. Foredeck and aft-deck sun areas with awnings, an on-deck jacuzzi, a swimming platform and sea ladder. A fully equipped galley, ice maker, generator, hot water, TV, DVD and a music system are on board.\n\nPowered by 2×360 hp Iveco engines, she carries 6 tons of fuel and 9 tons of fresh water. A 4.80 m speedboat with a 100 hp outboard offers water skiing, wakeboarding, banana and ringo rides.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Jakuzi — Güvertede",
+        "Tender — 4,80 m, 100 HP",
+        "Jeneratör",
+        "Buz makinesi",
+        "Eğlence sistemi — TV, DVD, müzik sistemi"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Wakeboard",
+        "Muz (banana) botu",
+        "Ringo"
+      ],
+      "name": "Ece Berrak"
+    }
+  },
+  "white-soul": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "White Soul",
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 38,
+      "width_m": 8.2,
+      "cabins": 5,
+      "guests": 10,
+      "captain_included": true,
+      "description_tr": "White Soul, 8,20 metre genişliğinde 38 metrelik lüks bir gulettir. 5 geniş kabinde 10 misafir ağırlar.\n\nKabinler: 1 süit master, 2 master ve 2 çift kişilik kabin. Tüm kabinlerde klima, TV, uydu anteni, müzik sistemi, kasa, gardırop ve duşakabinli, ev tipi tuvaletli özel banyo bulunur. Baş ve kıç güvertede tenteli güneşlenme alanları, çift yüzer platformlu yüzme platformu ve Nautibuoy platformu vardır. Tam donanımlı mutfak, buz makinesi, jeneratör, sıcak su ve internet; PlayStation, TV, DVD, müzik sistemi, kutu oyunları, 5 elektrikli e-TWOW scooter ve golf putting halısı misafirlerin hizmetindedir.\n\n2×440 HP MAN motorlu yatta Yamaha 115 HP motorlu 5,20 m GALA tender bulunur. Sea-Doo GTI SE 155 jet ski, Seabob F5S, muz ve simit gibi şişme oyuncaklar, 3 wakeboard, kneeboard, monoski ve su kayağı, 2 Subwing, 2 ringo, 2 paddle board, 2 kano, 2 tüplü dalış seti (yaklaşık 40 dakika), şnorkel ve balık tutma ekipmanı ile deneyimli kullanıcılar için Zapata Flyboard sunulur. GTX 300 Limited jet ski ekstra ücretle sağlanır.",
+      "description_en": "White Soul is a 38-metre luxury gulet with a beam of 8.20 metres. She accommodates 10 guests in 5 spacious cabins.\n\nCabins: 1 master suite, 2 master and 2 double cabins, all air-conditioned with a TV, satellite antenna, music system, safe, wardrobe and an en-suite bathroom with shower cabin and home-style toilet. Sun areas with awnings on the foredeck and aft deck, a swimming platform with a double floating deck and a Nautibuoy platform. A fully equipped galley, ice maker, generator, hot water and internet, plus a PlayStation, TV, DVD, music system, board games, 5 electric e-TWOW scooters and a golf putting mat.\n\nPowered by 2×440 hp MAN engines, she carries a 5.20 m GALA tender with a Yamaha 115 hp engine. Toys include a Sea-Doo GTI SE 155 jet ski, a Seabob F5S, inflatable towables such as a banana and doughnut, 3 wakeboards, kneeboards, mono and double water skis, 2 Subwings, 2 ringos, 2 paddleboards, 2 kayaks, 2 scuba tanks (about 40 minutes each), snorkelling and fishing gear, and a Zapata Flyboard for experienced users. A GTX 300 Limited jet ski is available at extra charge.",
+      "equipment": [
+        "Klima — Tüm kabinlerde",
+        "Tender — 5,20 m GALA, Yamaha 115 HP",
+        "Jeneratör",
+        "Buz makinesi",
+        "Wi-Fi",
+        "Eğlence sistemi — PlayStation, uydu TV, DVD, müzik sistemi, kutu oyunları"
+      ],
+      "water_sports": [
+        "Jet ski",
+        "Seabob",
+        "Muz (banana) botu",
+        "Wakeboard ×3",
+        "Kneeboard",
+        "Monoski",
+        "Su kayağı",
+        "Subwing ×2",
+        "Ringo ×2",
+        "Paddle board ×2",
+        "Kano ×2",
+        "Dalış ekipmanı",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı",
+        "Jet ski — GTX 300 Limited, ekstra ücretli"
+      ],
+      "name": "White Soul"
+    }
+  },
+  "ugur": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Uğur",
+    "bilgi": {
+      "tip": "gulet",
+      "length_m": 32,
+      "width_m": 8.1,
+      "cabins": 7,
+      "guests": 14,
+      "captain_included": true,
+      "description_tr": "Uğur, 8,10 metre genişliğinde 32 metrelik deluxe bir gulettir. 7 konforlu kabinde 14 misafir ağırlar.\n\nKabinler: 2 süit master, 2 master ve 3 çift kişilik kabin; tümünde ev tipi tuvaletli, duşlu özel banyo bulunur. Geniş kıç güverte açık havada yemek ve sohbet için idealdir; flybridge'de jakuzi ve dinlenme alanları, baş ve kıç güvertede tenteli güneşlenme alanları vardır. Tam donanımlı mutfak, buz makinesi, jeneratör, sıcak su, uydu TV ve kaliteli müzik sistemi misafirlerin hizmetindedir.\n\n2×450 HP Baudouin motorlu yatta 100 HP motorlu tender bulunur. Su kayağı, wakeboard, muz botu, ringo, kano, paddle board, amatör balık tutma ve şnorkel ekipmanı misafirlerin kullanımındadır; jet ski talep üzerine ekstra ücretle sağlanır.",
+      "description_en": "Uğur is a 32-metre deluxe gulet with a beam of 8.10 metres. She accommodates 14 guests in 7 comfortable cabins.\n\nCabins: 2 master suites, 2 master and 3 double cabins, all with private home-style bathrooms with toilet and shower. Her expansive aft deck is perfect for alfresco dining; the flybridge has a jacuzzi and lounging areas, and the foredeck and aft deck offer sun areas with awnings. A fully equipped galley, ice maker, generator, hot water, satellite TV and a high-quality music system are on board.\n\nPowered by 2×450 hp Baudouin engines, she carries a tender with a 100 hp outboard. Water skis, wakeboard, banana, ringo, canoe, paddleboard, fishing and snorkelling gear are available; a jet ski can be provided on request at extra charge.",
+      "equipment": [
+        "Jakuzi — Flybridge'de",
+        "Flybridge",
+        "Tender — 100 HP",
+        "Jeneratör",
+        "Buz makinesi",
+        "Eğlence sistemi — Uydu TV, müzik sistemi"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Wakeboard",
+        "Muz (banana) botu",
+        "Ringo",
+        "Kano",
+        "Paddle board",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı",
+        "Jet ski — Ekstra ücretli"
+      ],
+      "name": "Uğur"
+    }
   }
 }

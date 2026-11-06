@@ -76,6 +76,7 @@ const EQ_RU: Record<string, string> = {
 };
 // Ayrıntı metinleri (ör. "Saatte 200 litre", "Tüm kabinlerde") için uzun ifadeden kısaya doğru çeviri.
 const PHRASES: [string, string, string][] = [
+  ["Uydu TV", "Satellite TV", "Спутниковое ТВ"], ["Subwing", "Subwing", "Subwing"], ["GTX 300 Limited, ekstra ücretli", "GTX 300 Limited, extra charge", "GTX 300 Limited, за доп. плату"],
   ["Tüm kabinlerde Smart TV", "Smart TV in all cabins", "Smart TV во всех каютах"], ["Tüm kabinlerde TV", "TV in all cabins", "ТВ во всех каютах"],
   ["Tam gün (24 saat), fiyata dahil", "All day (24 hours), included in the price", "Весь день (24 часа), включено в цену"],
   ["Günde 4 saat fiyata dahil, fazlası ekstra", "4 hours a day included, extra beyond that", "4 часа в день включены, сверх — за доп. плату"],
