@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { getBoatBySlug } from "@/lib/content";
+import { getBoatBySlug, getBoats } from "@/lib/content";
 import { BoatView } from "@/views/BoatView";
 
 export const revalidate = 60;
 export const maxDuration = 30;
+
+// Yat sayfaları yayına alınırken önceden hazırlanır; ilk ziyaretçi de beklemeden açar.
+export async function generateStaticParams() {
+  const { boats, sample } = await getBoats();
+  return sample ? [] : boats.map((b) => ({ slug: b.slug }));
+}
 
 export async function generateMetadata({ params }: { params: Promise<{ slug: string }> }): Promise<Metadata> {
   const { slug } = await params;
