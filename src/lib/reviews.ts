@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { cached } from "./cache";
 import { publicImageUrl, supabaseConfigured, supabaseOrigin } from "./supabase/config";
 
 export type Review = {
@@ -22,7 +23,7 @@ export const mapReview = (r: Row): Review => ({
 const COLS = "id,boat_slug,boat_name,author_name,rating,body,photo_path,tour_label,created_at";
 
 // Yalnızca onaylı yorumlar gelir (RLS). Hata olursa boş liste döner, sayfa bozulmaz.
-export async function getReviews(opts: { boatSlugs?: string[]; limit?: number } = {}): Promise<Review[]> {
+async function getReviewsRaw(opts: { boatSlugs?: string[]; limit?: number } = {}): Promise<Review[]> {
   if (!supabaseConfigured()) return [];
   try {
     let q = db().from("reviews").select(COLS).eq("status", "approved").order("created_at", { ascending: false });
@@ -37,7 +38,7 @@ export async function getReviews(opts: { boatSlugs?: string[]; limit?: number } 
   }
 }
 
-export async function getRatings(): Promise<Record<string, Rating>> {
+async function getRatingsRaw(): Promise<Record<string, Rating>> {
   if (!supabaseConfigured()) return {};
   try {
     const { data } = await db().from("reviews").select("boat_slug,rating").eq("status", "approved").not("boat_slug", "is", null);
@@ -59,3 +60,7 @@ export function averageOf(list: Review[]): Rating | null {
 }
 
 export { publicImageUrl };
+
+// Önbellekli dışa açık okumalar
+export const getReviews = cached(getReviewsRaw, "reviews:getReviews");
+export const getRatings = cached(getRatingsRaw, "reviews:getRatings");

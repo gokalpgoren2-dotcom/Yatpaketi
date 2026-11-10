@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { cached } from "./cache";
 import { boats as sampleBoats, categories as sampleCategories, destinations as sampleDestinations, type Boat, type Destination } from "./data";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import { normalizePhone } from "./phone";
@@ -60,7 +61,7 @@ export const homeDefaults: HomeContent = {
   subtitle: "Gulet, motoryat, katamaran ve yelkenli seçeneklerini keşfedin, rezervasyon talebinizi iletin.",
 };
 
-export async function getHome(lang: Lang = "tr"): Promise<HomeContent> {
+async function getHomeRaw(lang: Lang = "tr"): Promise<HomeContent> {
   const defs: HomeContent = lang !== "tr" ? { heroImage: null, title: t(lang).heroTitle, subtitle: t(lang).heroSubtitle } : homeDefaults;
   if (!supabaseConfigured()) return defs;
   try {
@@ -77,7 +78,7 @@ export async function getHome(lang: Lang = "tr"): Promise<HomeContent> {
 }
 
 // Destinasyonlar veritabanından gelir. Veritabanına ulaşılamazsa örnek liste kullanılır.
-export async function getDestinations(lang: Lang = "tr"): Promise<Destination[]> {
+async function getDestinationsRaw(lang: Lang = "tr"): Promise<Destination[]> {
   if (!supabaseConfigured()) return sampleDestinations;
   try {
     const { data, error } = await db()
@@ -168,7 +169,7 @@ const BOAT_SELECT =
   "*, categories(name_tr,name_en), boat_destinations(destinations(slug)), boat_images(path,is_cover,sort_order)";
 
 // Yayındaki yatlar. Supabase tanımlı değilse örnek yatlar (sample: true) döner.
-export async function getBoats(lang: Lang = "tr"): Promise<{ boats: Boat[]; sample: boolean }> {
+async function getBoatsRaw(lang: Lang = "tr"): Promise<{ boats: Boat[]; sample: boolean }> {
   if (!supabaseConfigured()) return { boats: sampleBoats, sample: true };
   try {
     const { data, error } = await db().from("boats").select(BOAT_SELECT).eq("is_published", true).order("sort_order").order("created_at", { ascending: false });
@@ -190,7 +191,7 @@ export type Category = { slug: string; name: string; intro: string; image: strin
 const toCategory = (n: string): Category => ({ slug: slugify(n), name: n, intro: "", image: null, seoTitle: "", seoDescription: "" });
 
 // Yat tipleri. Yeni alanlar (tanıtım metni vb.) henüz eklenmediyse yalnızca ad ve adres okunur.
-export async function getCategories(lang: Lang = "tr"): Promise<Category[]> {
+async function getCategoriesRaw(lang: Lang = "tr"): Promise<Category[]> {
   if (!supabaseConfigured()) return sampleCategories.map(toCategory);
   try {
     const full = await db().from("categories").select("slug,name_tr,name_en,intro_tr,cover_path,seo_title,seo_description").eq("is_active", true).order("sort_order");
@@ -215,7 +216,7 @@ export async function getCategoryNames(lang: Lang = "tr"): Promise<string[]> {
 // ---- İletişim ayarları (Panel > Ayarlar) ----
 export type Contact = { phone: string; whatsapp: string; email: string; instagram: string; tiktok: string; linkedin: string };
 
-export async function getContact(): Promise<Contact> {
+async function getContactRaw(): Promise<Contact> {
   // TikTok ve LinkedIn henüz açılmadı: Ayarlar'dan girilene kadar örnek adresler görünür.
   const empty = { phone: "", whatsapp: "", email: "", instagram: "https://www.instagram.com/yatpaketi/", tiktok: "https://www.tiktok.com/@yatpaketi", linkedin: "https://www.linkedin.com/company/yatpaketi/" };
   if (!supabaseConfigured()) return empty;
@@ -231,3 +232,10 @@ export async function getContact(): Promise<Contact> {
     return empty;
   }
 }
+
+// Önbellekli dışa açık okumalar
+export const getHome = cached(getHomeRaw, "content:getHome");
+export const getDestinations = cached(getDestinationsRaw, "content:getDestinations");
+export const getBoats = cached(getBoatsRaw, "content:getBoats");
+export const getCategories = cached(getCategoriesRaw, "content:getCategories");
+export const getContact = cached(getContactRaw, "content:getContact");

@@ -1,10 +1,13 @@
 import { createClient } from "@supabase/supabase-js";
+import { cached } from "./cache";
 import { supabaseConfigured } from "./supabase/config";
 import { FAQ_DEFAULT, type FaqItem } from "./faq";
 import { CULTURE } from "./culture";
 
+const read = cached(readRaw, "site-texts:read");
+
 // Panelden kaydedilen sayfa metinleri (site_texts tablosu). Kayıt yoksa ya da tablo henüz yoksa koddaki varsayılanlar kullanılır.
-async function read(key: string): Promise<any | null> {
+async function readRaw(key: string): Promise<any | null> {
   if (!supabaseConfigured()) return null;
   try {
     const db = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL!, process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!, { auth: { persistSession: false, autoRefreshToken: false } });

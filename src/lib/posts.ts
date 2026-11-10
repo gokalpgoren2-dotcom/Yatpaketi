@@ -1,4 +1,5 @@
 import { createClient } from "@supabase/supabase-js";
+import { cached } from "./cache";
 import { cache } from "react";
 import { publicImageUrl, supabaseConfigured } from "./supabase/config";
 import type { Lang } from "./i18n";
@@ -58,7 +59,7 @@ function map(r: Record<string, any>, lang: Lang): Post {
 }
 
 // İngilizce sütunlar veritabanında yoksa (SQL henüz çalışmadıysa) İngilizce için boş döner, Türkçe etkilenmez.
-export async function getPosts(kinds: PostKind | PostKind[], limit?: number, lang: Lang = "tr"): Promise<Post[]> {
+async function getPostsRaw(kinds: PostKind | PostKind[], limit?: number, lang: Lang = "tr"): Promise<Post[]> {
   if (!supabaseConfigured()) return [];
   try {
     const list = Array.isArray(kinds) ? kinds : [kinds];
@@ -73,7 +74,7 @@ export async function getPosts(kinds: PostKind | PostKind[], limit?: number, lan
   }
 }
 
-export async function getPost(kind: PostKind, slug: string, lang: Lang = "tr"): Promise<Post | null> {
+async function getPostRaw(kind: PostKind, slug: string, lang: Lang = "tr"): Promise<Post | null> {
   if (!supabaseConfigured()) return null;
   try {
     const { data, error } = await db().from("blog_posts").select(lang !== "tr" ? COLS_EN : COLS).eq("status", "published").eq("kind", kind).eq("slug", slug).maybeSingle();
@@ -101,3 +102,7 @@ export const getNavInfo = cache(async (lang: Lang = "tr") => {
     pages: pages.map((p) => ({ slug: p.slug, title: p.title })),
   };
 });
+
+// Önbellekli dışa açık okumalar
+export const getPosts = cached(getPostsRaw, "posts:getPosts");
+export const getPost = cached(getPostRaw, "posts:getPost");
