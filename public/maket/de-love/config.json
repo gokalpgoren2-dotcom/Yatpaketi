@@ -1,0 +1,254 @@
+{
+ "name": "De Love",
+ "meta": "Lüks yat · 47 m · 7 kabin · 14 misafir",
+ "frames": [
+  "f1.jpg",
+  "f2.jpg",
+  "f3.jpg",
+  "f4.jpg",
+  "f5.jpg",
+  "f6.jpg",
+  "f7.jpg",
+  "f8.jpg",
+  "f9.jpg",
+  "f10.jpg",
+  "f11.jpg",
+  "f12.jpg"
+ ],
+ "loop": true,
+ "plan": "plan.jpg",
+ "colors": {
+  "sky-a": "#3f7ad0",
+  "sky-b": "#5d7fa6",
+  "sea": "#173b66",
+  "planbg": "#0f2a4a"
+ },
+ "decks": [
+  {
+   "id": "ana",
+   "label": "Ana güverte",
+   "crop": [
+    120,
+    40,
+    1960,
+    310
+   ],
+   "note": "Bir alana dokunun",
+   "crew": [],
+   "rooms": [
+    {
+     "key": "aftlounge",
+     "x": 0.088,
+     "y": 0.535,
+     "t": "Oturma alanı"
+    },
+    {
+     "key": "aftdining",
+     "x": 0.163,
+     "y": 0.42,
+     "t": "Yemek alanı"
+    },
+    {
+     "key": "salon",
+     "x": 0.338,
+     "y": 0.62
+    },
+    {
+     "key": "dining",
+     "x": 0.426,
+     "y": 0.5
+    },
+    {
+     "key": "sunbed",
+     "x": 0.592,
+     "y": 0.52,
+     "t": "Güneşlenme"
+    },
+    {
+     "key": "bow",
+     "x": 0.695,
+     "y": 0.52,
+     "t": "Baş oturma"
+    }
+   ]
+  },
+  {
+   "id": "kabin",
+   "label": "Kabin katı",
+   "crop": [
+    120,
+    352,
+    1950,
+    350
+   ],
+   "note": "7 misafir kabini · dokunun",
+   "crew": [
+    [
+     0.05,
+     0.08,
+     0.234,
+     0.92
+    ],
+    [
+     0.234,
+     0.08,
+     0.328,
+     0.92
+    ],
+    [
+     0.763,
+     0.1,
+     0.852,
+     0.9
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "crew",
+     "x": 0.14,
+     "y": 0.3,
+     "t": "Mürettebat"
+    },
+    {
+     "key": "galley",
+     "x": 0.172,
+     "y": 0.72
+    },
+    {
+     "key": "engine",
+     "x": 0.278,
+     "y": 0.483
+    },
+    {
+     "key": "vip",
+     "x": 0.39,
+     "y": 0.206,
+     "t": "VIP"
+    },
+    {
+     "key": "vip",
+     "x": 0.498,
+     "y": 0.206,
+     "t": "VIP"
+    },
+    {
+     "key": "vip",
+     "x": 0.634,
+     "y": 0.206,
+     "t": "VIP"
+    },
+    {
+     "key": "vip",
+     "x": 0.398,
+     "y": 0.857,
+     "t": "VIP"
+    },
+    {
+     "key": "vip",
+     "x": 0.478,
+     "y": 0.857,
+     "t": "VIP"
+    },
+    {
+     "key": "vip",
+     "x": 0.585,
+     "y": 0.857,
+     "t": "VIP"
+    },
+    {
+     "key": "master",
+     "x": 0.729,
+     "y": 0.6,
+     "t": "Master · king"
+    },
+    {
+     "key": "crew",
+     "x": 0.81,
+     "y": 0.39,
+     "t": "Mürettebat"
+    }
+   ]
+  }
+ ],
+ "rooms": {
+  "aftlounge": {
+   "kind": "Misafir alanı",
+   "t": "Kıç oturma alanı",
+   "p": "Kıçta minderli oturma grubu.",
+   "ph": "/tekneler/de-love/v3-07.jpg"
+  },
+  "aftdining": {
+   "kind": "Misafir alanı",
+   "t": "Kıç güverte yemek alanı",
+   "p": "Kıç güvertede açık hava yemek masası.",
+   "ph": "/tekneler/de-love/v3-06.jpg"
+  },
+  "salon": {
+   "kind": "Misafir alanı",
+   "t": "Salon",
+   "p": "Geniş pencereli, geniş salon.",
+   "f": [
+    "Klima"
+   ],
+   "ph": "/tekneler/de-love/v3-14.jpg"
+  },
+  "dining": {
+   "kind": "Misafir alanı",
+   "t": "Yemek salonu",
+   "p": "Salondan ayrı, kapalı yemek salonu.",
+   "f": [
+    "Klima"
+   ],
+   "ph": "/tekneler/de-love/v3-15.jpg"
+  },
+  "sunbed": {
+   "kind": "Misafir alanı",
+   "t": "Güneşlenme minderi",
+   "p": "Ana güvertenin önünde geniş güneşlenme minderi.",
+   "ph": "/tekneler/de-love/v3-08.jpg"
+  },
+  "bow": {
+   "kind": "Misafir alanı",
+   "t": "Baş oturma alanı",
+   "p": "Baş tarafta minderli oturma alanı.",
+   "ph": "/tekneler/de-love/v3-10.jpg"
+  },
+  "master": {
+   "kind": "Misafir kabini",
+   "t": "Master kabin",
+   "p": "Kabin katının başında, king size yataklı geniş master kabin.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima"
+   ],
+   "ph": "/tekneler/de-love/v3-16.jpg"
+  },
+  "vip": {
+   "kind": "Misafir kabini",
+   "t": "VIP kabin",
+   "p": "King size yataklı VIP kabin. Teknede altı tane var.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima"
+   ],
+   "ph": "/tekneler/de-love/v3-19.jpg"
+  },
+  "crew": {
+   "kind": "Mürettebat alanı",
+   "t": "Mürettebat kabinleri",
+   "p": "10 kişilik mürettebat ayrı bölümde kalır."
+  },
+  "galley": {
+   "kind": "Mürettebat alanı",
+   "t": "Mutfak",
+   "p": "Yemekler burada hazırlanır; mürettebata ayrılmış bölüm."
+  },
+  "engine": {
+   "kind": "Mürettebat alanı",
+   "t": "Makine dairesi",
+   "p": "İkiz 750 HP Volvo motor."
+  }
+ }
+}
