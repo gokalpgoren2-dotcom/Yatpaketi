@@ -14,6 +14,8 @@ import { RatingLine, ReviewSection } from "@/components/Reviews";
 import { getBoatBySlug, getContact, getDestinations } from "@/lib/content";
 import { RequestPanel } from "@/components/RequestPanel";
 import { BoatGallery } from "@/components/BoatGallery";
+import { BoatExplore } from "@/components/BoatExplore";
+import { hasMaket } from "@/lib/maket";
 import { parseEquipment } from "@/lib/boatOptions";
 import { href, t, type Lang } from "@/lib/i18n";
 import { localizeEquipment, localizeToy } from "@/lib/boatOptions";
@@ -51,6 +53,12 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
         <div className="mt-3 flex flex-wrap gap-2">
           <FavButton slug={b.slug} name={b.name} lang={lang} label className="rounded-full border border-navy/20 px-4 py-2 text-navy hover:border-[#e8453c]" />
           <Link href={`${href(lang, "/tekne-karsilastir")}?a=${b.slug}`} className="inline-flex items-center rounded-full bg-turquoise/10 px-4 py-2 text-sm font-semibold text-turquoise-dark hover:bg-turquoise/20">{lang === "ru" ? "Сравнить с другой яхтой →" : lang !== "tr" ? "Compare with another yacht →" : "Başka yatla karşılaştır →"}</Link>
+          {hasMaket(b.slug) && (
+            <a href="#kesfet" className="inline-flex items-center gap-1.5 rounded-full bg-navy px-4 py-2 text-sm font-semibold text-white hover:bg-navy/90">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" aria-hidden><path d="M3 12a9 4 0 1 0 18 0 9 4 0 1 0-18 0" /><path d="M12 3v18" /></svg>
+              {lang === "ru" ? "360° · План кают" : lang !== "tr" ? "360° · Cabin plan" : "360° · Kabin planı"}
+            </a>
+          )}
         </div>
 
         {gallery.length > 0 ? (
@@ -63,6 +71,8 @@ export async function BoatView({ lang, slug }: { lang: Lang; slug: string }) {
             </div>
           </div>
         )}
+
+        <BoatExplore slug={b.slug} name={b.name} lang={lang} />
 
         <div className="mt-6 grid gap-8 lg:mt-10 lg:grid-cols-[2fr_1fr] lg:gap-10">
           <div>
