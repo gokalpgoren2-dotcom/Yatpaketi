@@ -132,7 +132,7 @@ h1{font:800 20px/1.15 var(--display);margin:6px 0 3px}
 
   /* ---------- Katlar ---------- */
   const view = $("deckview"), deck = $("deck"), dimg = $("deckimg");
-  dimg.src = url(C.plan);
+  if (C.plan) dimg.src = url(C.plan);
   let D = null, tags = [], S = { s: 1, x: 0, y: 0, rot: 0, fit: 1 };
   const portrait = () => innerHeight > innerWidth * 1.15;
   function layoutFit() {
@@ -167,6 +167,7 @@ h1{font:800 20px/1.15 var(--display);margin:6px 0 3px}
   }
   function showDeck(d) {
     D = d; const [x, y, w, h] = d.crop;
+    const want = url(d.img || C.plan); if (dimg.getAttribute("src") !== want) dimg.setAttribute("src", want);
     deck.style.width = w + "px"; deck.style.height = h + "px";
     dimg.style.left = -x + "px"; dimg.style.top = -y + "px";
     deck.querySelectorAll(".tag,.zone").forEach(e => e.remove());

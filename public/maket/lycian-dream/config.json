@@ -1,0 +1,218 @@
+{
+ "name": "Lycian Dream",
+ "meta": "Motoryat · 26 m · 6 kabin · 12 misafir",
+ "frames": [
+  "f1.jpg",
+  "f2.jpg",
+  "f3.jpg",
+  "f4.jpg",
+  "f5.jpg",
+  "f6.jpg",
+  "f7.jpg",
+  "f8.jpg"
+ ],
+ "loop": true,
+ "colors": {
+  "sky-a": "#81a9db",
+  "sky-b": "#707e8e",
+  "sea": "#2c465f",
+  "planbg": "#13283d"
+ },
+ "decks": [
+  {
+   "id": "ana",
+   "label": "Ana güverte",
+   "img": "ana.jpg",
+   "crop": [
+    8,
+    195,
+    1630,
+    550
+   ],
+   "note": "Bir alana dokunun",
+   "crew": [
+    [
+     0.59,
+     0.17,
+     0.735,
+     0.79
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "aft",
+     "x": 0.123,
+     "y": 0.495,
+     "t": "Yemek alanı"
+    },
+    {
+     "key": "salon",
+     "x": 0.34,
+     "y": 0.396
+    },
+    {
+     "key": "m1",
+     "x": 0.537,
+     "y": 0.414,
+     "t": "Master kabin"
+    },
+    {
+     "key": "galley",
+     "x": 0.648,
+     "y": 0.324
+    },
+    {
+     "key": "capt",
+     "x": 0.667,
+     "y": 0.757,
+     "t": "Kaptan"
+    },
+    {
+     "key": "bow",
+     "x": 0.806,
+     "y": 0.42,
+     "t": "Baş güverte"
+    }
+   ]
+  },
+  {
+   "id": "kabin",
+   "label": "Kabin katı",
+   "img": "kabin.webp",
+   "crop": [
+    0,
+    0,
+    2172,
+    724
+   ],
+   "note": "5 misafir kabini · dokunun",
+   "crew": [
+    [
+     0.242,
+     0.08,
+     0.364,
+     0.92
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "dbl",
+     "x": 0.115,
+     "y": 0.359,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "dbl",
+     "x": 0.106,
+     "y": 0.635,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "engine",
+     "x": 0.299,
+     "y": 0.552
+    },
+    {
+     "key": "dbl",
+     "x": 0.479,
+     "y": 0.249,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "dbl",
+     "x": 0.479,
+     "y": 0.718,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "m2",
+     "x": 0.668,
+     "y": 0.456,
+     "t": "Master kabin"
+    }
+   ]
+  }
+ ],
+ "rooms": {
+  "aft": {
+   "kind": "Misafir alanı",
+   "t": "Kıç güverte yemek alanı",
+   "p": "Kıçta 12 kişilik açık hava yemek masası ve minderli oturma grubu.",
+   "ph": "/tekneler/lycian-dream/v3-08.jpg"
+  },
+  "salon": {
+   "kind": "Misafir alanı",
+   "t": "Salon",
+   "p": "Geniş pencereli, aydınlık ve geniş salon.",
+   "f": [
+    "Klima",
+    "Uydu TV"
+   ],
+   "ph": "/tekneler/lycian-dream/v3-09.jpg"
+  },
+  "m1": {
+   "kind": "Misafir kabini",
+   "t": "Ana güverte master kabin",
+   "p": "Ana güvertede, çift kişilik yataklı master kabin.",
+   "f": [
+    "Çift kişilik yatak",
+    "Özel banyo",
+    "Uzaktan kumandalı klima",
+    "Uydu TV",
+    "Müzik sistemi",
+    "Saç kurutma makinesi"
+   ],
+   "ph": "/tekneler/lycian-dream/v3-14.jpg"
+  },
+  "galley": {
+   "kind": "Mürettebat alanı",
+   "t": "Mutfak",
+   "p": "Tam donanımlı mutfak; mürettebata ayrılmış bölüm.",
+   "ph": "/tekneler/lycian-dream/v3-11.jpg"
+  },
+  "capt": {
+   "kind": "Mürettebat alanı",
+   "t": "Kaptan kabini",
+   "p": "Kaptanın kabini."
+  },
+  "bow": {
+   "kind": "Misafir alanı",
+   "t": "Baş güverte oturma alanı",
+   "p": "Baş tarafta minderli oturma alanı.",
+   "ph": "/tekneler/lycian-dream/v3-13.jpg"
+  },
+  "m2": {
+   "kind": "Misafir kabini",
+   "t": "Baş master kabin",
+   "p": "Kabin katının başında, çift kişilik yataklı geniş master kabin.",
+   "f": [
+    "Çift kişilik yatak",
+    "Özel banyo",
+    "Uzaktan kumandalı klima",
+    "Uydu TV",
+    "Müzik sistemi",
+    "Saç kurutma makinesi"
+   ],
+   "ph": "/tekneler/lycian-dream/v3-15.jpg"
+  },
+  "dbl": {
+   "kind": "Misafir kabini",
+   "t": "Çift kişilik kabin",
+   "p": "Çift kişilik yataklı misafir kabini. Bu katta dört tane var.",
+   "f": [
+    "Çift kişilik yatak",
+    "Özel banyo",
+    "Uzaktan kumandalı klima",
+    "Uydu TV",
+    "Müzik sistemi",
+    "Saç kurutma makinesi"
+   ],
+   "ph": "/tekneler/lycian-dream/v3-16.jpg"
+  },
+  "engine": {
+   "kind": "Mürettebat alanı",
+   "t": "Makine dairesi",
+   "p": "İkiz 500 HP motor; yat saatte 10–12 deniz mili hızla seyreder. Su yapıcı da burada."
+  }
+ }
+}
