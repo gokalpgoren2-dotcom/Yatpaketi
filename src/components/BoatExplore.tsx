@@ -37,37 +37,35 @@ export function BoatExplore({ slug, name, lang }: { slug: string; name: string; 
   const start = () => setOpen(window.matchMedia("(min-width: 768px)").matches ? "inline" : "full");
 
   return (
-    <section id="kesfet" className="mt-10 scroll-mt-28">
-      <div className="mb-4 flex flex-wrap items-end justify-between gap-3">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-wide text-turquoise">{T.eb}</p>
-          <h2 className="font-display mt-1 text-2xl font-medium text-navy lg:text-3xl">{T.h}</h2>
-          <p className="mt-1 max-w-2xl text-sm text-navy/60">{T.p}</p>
-        </div>
-      </div>
-
+    <section id="kesfet" className="mt-6 scroll-mt-28">
       {open === "inline" ? (
         <div className="relative overflow-hidden rounded-3xl ring-1 ring-navy/10" style={{ height: "min(78vh, 680px)" }}>
           <iframe src={src} title={`${name} 360°`} className="h-full w-full border-0" allow="fullscreen" />
-          <button type="button" onClick={() => setOpen("full")} className="absolute right-3 top-3 rounded-full bg-navy/80 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-navy">
-            {ru ? "Во весь экран" : en ? "Full screen" : "Tam ekran"}
-          </button>
+          <div className="absolute right-3 top-3 flex gap-2">
+            <button type="button" onClick={() => setOpen("full")} className="rounded-full bg-navy/80 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-navy">
+              {ru ? "Во весь экран" : en ? "Full screen" : "Tam ekran"}
+            </button>
+            <button type="button" onClick={() => setOpen(null)} className="rounded-full bg-navy/80 px-3 py-1.5 text-xs font-semibold text-white backdrop-blur hover:bg-navy">{T.close}</button>
+          </div>
         </div>
       ) : (
-        <button type="button" onClick={start} className="group relative block w-full overflow-hidden rounded-3xl text-left ring-1 ring-navy/10" style={{ background: m.bg }}>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={m.cover} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl" />
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={m.cover} alt={`${name} 360°`} loading="lazy" className="relative mx-auto block aspect-[2/1] w-full max-w-4xl object-contain transition duration-500 group-hover:scale-[1.02]" />
-          <span className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/10 to-transparent" />
-          <span className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 p-4 lg:p-6">
-            <span className="flex flex-wrap gap-2">
-              {T.chips.map((c) => <span key={c} className="rounded-full bg-white/90 px-3 py-1 text-xs font-semibold text-navy">{c}</span>)}
-            </span>
-            <span className="inline-flex items-center gap-2 rounded-full bg-turquoise px-5 py-2.5 text-sm font-bold text-white shadow-lg transition group-hover:bg-turquoise-dark">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M3 12a9 4 0 1 0 18 0 9 4 0 1 0-18 0" /><path d="M12 3v18" /></svg>
-              {T.btn}
-            </span>
+        /* Kompakt şerit: küçük önizleme, kısa açıklama ve düğme */
+        <button type="button" onClick={start} className="group flex w-full items-center gap-3 rounded-2xl bg-white p-2.5 text-left shadow-sm ring-1 ring-navy/10 transition hover:shadow-md hover:ring-turquoise/40 sm:gap-4 sm:p-3">
+          <span className="relative h-16 w-24 shrink-0 overflow-hidden rounded-xl sm:h-20 sm:w-32" style={{ background: m.bg }}>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={m.cover} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full scale-125 object-cover blur-md" />
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={m.cover} alt={`${name} 360°`} loading="lazy" className="relative h-full w-full object-contain transition duration-500 group-hover:scale-105" />
+            <span className="absolute bottom-1 left-1 rounded-full bg-navy/85 px-1.5 py-0.5 text-[10px] font-bold text-white">360°</span>
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[11px] font-semibold uppercase tracking-wide text-turquoise">{T.eb}</span>
+            <span className="font-display block text-base font-semibold leading-tight text-navy sm:text-lg">{T.h}</span>
+            <span className="mt-0.5 block truncate text-xs text-navy/55 sm:text-sm">{T.chips.join(" · ")}</span>
+          </span>
+          <span className="inline-flex shrink-0 items-center gap-1.5 rounded-full bg-turquoise px-3 py-2 text-sm font-bold text-white transition group-hover:bg-turquoise-dark sm:px-4">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" aria-hidden><path d="M3 12a9 4 0 1 0 18 0 9 4 0 1 0-18 0" /><path d="M12 3v18" /></svg>
+            <span className="hidden sm:inline">{T.btn}</span>
           </span>
         </button>
       )}
