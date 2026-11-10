@@ -1,0 +1,333 @@
+{
+ "name": "Angels",
+ "meta": "Lüks motoryat · 31,5 m · 6 kabin · 12 misafir",
+ "frames": [
+  "f1.jpg",
+  "f2.jpg",
+  "f3.jpg",
+  "f4.jpg",
+  "f5.jpg",
+  "f6.jpg",
+  "f7.jpg",
+  "f8.jpg"
+ ],
+ "loop": true,
+ "plan": "plan.jpg",
+ "colors": {
+  "sky-a": "#a1aec4",
+  "sky-b": "#7d7b83",
+  "sea": "#18304a",
+  "planbg": "#182335"
+ },
+ "decks": [
+  {
+   "id": "ust",
+   "label": "Üst güverte",
+   "crop": [
+    70,
+    70,
+    1260,
+    298
+   ],
+   "note": "Bir alana dokunun",
+   "crew": [
+    [
+     0.532,
+     0.235,
+     0.615,
+     0.772
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "sun",
+     "x": 0.23,
+     "y": 0.49,
+     "t": "Oturma alanı"
+    },
+    {
+     "key": "sky",
+     "x": 0.46,
+     "y": 0.45
+    },
+    {
+     "key": "helm",
+     "x": 0.573,
+     "y": 0.6
+    },
+    {
+     "key": "sundeck",
+     "x": 0.746,
+     "y": 0.49,
+     "t": "Güneşlenme"
+    },
+    {
+     "key": "bowup",
+     "x": 0.9,
+     "y": 0.49,
+     "t": "Ön oturma"
+    }
+   ]
+  },
+  {
+   "id": "ana",
+   "label": "Ana güverte",
+   "crop": [
+    70,
+    366,
+    1260,
+    296
+   ],
+   "note": "Bir alana dokunun",
+   "crew": [
+    [
+     0.56,
+     0.1,
+     0.679,
+     0.82
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "platform",
+     "x": 0.05,
+     "y": 0.47,
+     "t": "Kıç platform"
+    },
+    {
+     "key": "aftdeck",
+     "x": 0.294,
+     "y": 0.47,
+     "t": "Yemek alanı"
+    },
+    {
+     "key": "salon",
+     "x": 0.468,
+     "y": 0.47
+    },
+    {
+     "key": "galley",
+     "x": 0.62,
+     "y": 0.35
+    },
+    {
+     "key": "owner",
+     "x": 0.79,
+     "y": 0.42,
+     "t": "Sahip süiti · king"
+    },
+    {
+     "key": "bowlounge",
+     "x": 0.909,
+     "y": 0.49
+    }
+   ]
+  },
+  {
+   "id": "kabin",
+   "label": "Kabin katı",
+   "crop": [
+    70,
+    662,
+    1260,
+    296
+   ],
+   "note": "5 misafir kabini · dokunun",
+   "crew": [
+    [
+     0.08,
+     0.08,
+     0.36,
+     0.93
+    ],
+    [
+     0.718,
+     0.07,
+     0.948,
+     0.93
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "garage",
+     "x": 0.14,
+     "y": 0.47,
+     "t": "Tender garajı"
+    },
+    {
+     "key": "engine",
+     "x": 0.317,
+     "y": 0.47
+    },
+    {
+     "key": "vip",
+     "x": 0.433,
+     "y": 0.45,
+     "t": "VIP · queen"
+    },
+    {
+     "key": "dbl",
+     "x": 0.563,
+     "y": 0.2,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "dbl",
+     "x": 0.563,
+     "y": 0.7,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "twin",
+     "x": 0.662,
+     "y": 0.21,
+     "t": "Twin"
+    },
+    {
+     "key": "twin",
+     "x": 0.662,
+     "y": 0.72,
+     "t": "Twin"
+    },
+    {
+     "key": "crew",
+     "x": 0.84,
+     "y": 0.47,
+     "t": "Mürettebat"
+    }
+   ]
+  }
+ ],
+ "rooms": {
+  "sun": {
+   "kind": "Misafir alanı",
+   "t": "Üst güverte oturma alanı",
+   "p": "Üst güvertenin kıçında, minderli kanepeler ve sehpalarla açık hava oturma alanı.",
+   "ph": "/tekneler/angels/v3-04.jpg"
+  },
+  "sky": {
+   "kind": "Misafir alanı",
+   "t": "Sky lounge",
+   "p": "Üst güvertede kapalı, camlı oturma ve yemek salonu.",
+   "f": [
+    "Klima"
+   ],
+   "ph": "/tekneler/angels/v3-07.jpg"
+  },
+  "helm": {
+   "kind": "Mürettebat alanı",
+   "t": "Kaptan köşkü",
+   "p": "Yatın idare edildiği bölüm."
+  },
+  "sundeck": {
+   "kind": "Misafir alanı",
+   "t": "Güneşlenme alanı",
+   "p": "Üst güvertenin ön tarafında geniş güneşlenme alanı."
+  },
+  "bowup": {
+   "kind": "Misafir alanı",
+   "t": "Ön oturma köşesi",
+   "p": "Üst güvertenin en önünde minderli oturma köşesi."
+  },
+  "aftdeck": {
+   "kind": "Misafir alanı",
+   "t": "Kıç güverte yemek alanı",
+   "p": "Kıç güvertede açık hava yemek masası ve oturma grubu.",
+   "ph": "/tekneler/angels/v3-05.jpg"
+  },
+  "platform": {
+   "kind": "Misafir alanı",
+   "t": "Kıç platform",
+   "p": "Denize iniş platformu; tender ve su oyuncakları buradan kullanılır.",
+   "f": [
+    "10,7 m Technohull tender",
+    "90 HP ikinci tender",
+    "Sea-Doo jet ski",
+    "2 Seabob",
+    "E-foil"
+   ]
+  },
+  "salon": {
+   "kind": "Misafir alanı",
+   "t": "Salon",
+   "p": "Geniş cam yüzeyli, aydınlık ana salon.",
+   "f": [
+    "Klima"
+   ],
+   "ph": "/tekneler/angels/v3-09.jpg"
+  },
+  "galley": {
+   "kind": "Mürettebat alanı",
+   "t": "Mutfak",
+   "p": "Yemekler burada hazırlanır; mürettebata ayrılmış bölüm."
+  },
+  "owner": {
+   "kind": "Misafir kabini",
+   "t": "Sahip süiti",
+   "p": "Ana güvertede, geniş pencereli, king size yataklı sahip süiti.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima",
+    "Smart TV"
+   ],
+   "ph": "/tekneler/angels/v3-11.jpg"
+  },
+  "bowlounge": {
+   "kind": "Misafir alanı",
+   "t": "Baş güverte",
+   "p": "Ana güvertenin önünde minderli oturma alanı."
+  },
+  "garage": {
+   "kind": "Mürettebat alanı",
+   "t": "Tender garajı",
+   "p": "Tender ve su oyuncaklarının saklandığı teknik bölüm."
+  },
+  "engine": {
+   "kind": "Mürettebat alanı",
+   "t": "Makine dairesi",
+   "p": "Yat saatte 11 deniz mili hızla seyreder, menzili 3.000 deniz milidir."
+  },
+  "vip": {
+   "kind": "Misafir kabini",
+   "t": "VIP kabin",
+   "p": "Teknenin tam genişliğinde, queen size yataklı VIP kabin.",
+   "f": [
+    "Queen size yatak",
+    "Özel banyo",
+    "Klima",
+    "Smart TV"
+   ],
+   "ph": "/tekneler/angels/v3-14.jpg"
+  },
+  "dbl": {
+   "kind": "Misafir kabini",
+   "t": "Çift kişilik kabin",
+   "p": "Queen size yataklı çift kişilik kabin. Bu katta iskele ve sancakta iki tane var.",
+   "f": [
+    "Queen size yatak",
+    "Özel banyo",
+    "Klima",
+    "Smart TV"
+   ],
+   "ph": "/tekneler/angels/v3-17.jpg"
+  },
+  "twin": {
+   "kind": "Misafir kabini",
+   "t": "Twin kabin",
+   "p": "İki tek yataklı kabin. Bu katta iki tane var.",
+   "f": [
+    "İki tek yatak",
+    "Özel banyo",
+    "Klima",
+    "Smart TV"
+   ],
+   "ph": "/tekneler/angels/v3-21.jpg"
+  },
+  "crew": {
+   "kind": "Mürettebat alanı",
+   "t": "Mürettebat bölümü",
+   "p": "Altı kişilik mürettebat ayrı bölümde kalır."
+  }
+ }
+}

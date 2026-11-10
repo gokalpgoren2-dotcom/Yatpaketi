@@ -1,0 +1,233 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="robots" content="noindex">
+<title>360° ve kabin planı</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@700;800&family=Inter:wght@400;500;600&display=swap">
+<style>
+/* Ortak yat görüntüleyici: ?yat=<slug> ile o yatın config.json dosyasını okur.
+   Dış görünüm: 360° kareler (elle çevrilir). Katlar: plan görseli, yakınlaştırılır, odalara dokunulur. */
+:root{
+  --navy:#0e2a47; --ink:#0e2a47; --muted:#4f6478; --turq:#139fae; --turq-soft:rgba(19,159,174,.14);
+  --panel:rgba(255,255,255,.88); --line:rgba(14,42,71,.12);
+  --guest:#0f7f8c; --crew:#5b6672;
+  --display:"Manrope",ui-sans-serif,system-ui,sans-serif; --body:"Inter",ui-sans-serif,system-ui,sans-serif;
+  --sky-a:#a1aec4; --sky-b:#7d7b83; --sea:#18304a; --planbg:#0f2238;
+}
+*,*::before,*::after{box-sizing:border-box}
+html,body{height:100%;margin:0}
+body{background:var(--planbg);color:var(--ink);font-family:var(--body);overflow:hidden;-webkit-tap-highlight-color:transparent}
+[hidden]{display:none!important}
+.ui{position:fixed;z-index:5}
+.card{top:calc(14px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px));max-width:min(360px,calc(100% - 32px));background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:18px;padding:12px 15px}
+html.embed .card{display:none}
+.eb{font:600 10.5px/1 var(--body);letter-spacing:.14em;text-transform:uppercase;color:var(--turq);margin:0}
+h1{font:800 20px/1.15 var(--display);margin:6px 0 3px}
+.meta{font-size:12.5px;color:var(--muted);margin:0}
+.bar{left:50%;transform:translateX(-50%);bottom:calc(14px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:8px;width:max-content;max-width:calc(100% - 24px)}
+.seg{display:flex;gap:4px;background:var(--panel);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);border:1px solid var(--line);border-radius:999px;padding:4px;flex-wrap:wrap;justify-content:center}
+.seg button{font:600 13.5px/1 var(--body);color:var(--ink);background:transparent;border:0;border-radius:999px;padding:11px 14px;cursor:pointer;white-space:nowrap}
+.seg button[aria-pressed="true"]{background:var(--navy);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--turq);outline-offset:2px}
+.legend{display:flex;gap:12px;align-items:center;justify-content:center;flex-wrap:wrap;font:600 12px var(--body);color:var(--ink);background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:7px 14px;backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.legend i{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:5px;vertical-align:-1px}
+.hint{font-size:11.5px;color:rgba(255,255,255,.85);text-align:center;text-shadow:0 1px 3px rgba(0,0,0,.45);margin:0;display:flex;gap:6px;align-items:center;transition:opacity .5s;white-space:nowrap}
+/* 360° */
+#spin{position:fixed;inset:0;background:linear-gradient(180deg,var(--sky-a) 0%,var(--sky-a) 30%,var(--sky-b) 48%,var(--sea) 62%,var(--sea) 100%);cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+#spin:active{cursor:grabbing}
+
+#spin img{position:absolute;left:50%;top:44%;transform:translate(-50%,-50%);width:min(100vw,calc(70vh * var(--ar,1)));height:auto;opacity:0;pointer-events:none;-webkit-mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);-webkit-mask-composite:source-in;mask-image:linear-gradient(90deg,transparent,#000 9%,#000 91%,transparent),linear-gradient(180deg,transparent,#000 9%,#000 91%,transparent);mask-composite:intersect}
+#spin img.bg{left:-8%;top:-8%;transform:none;width:116%;height:116%;object-fit:cover;filter:blur(48px) saturate(1.1) brightness(.92);opacity:1;-webkit-mask-image:none;mask-image:none}
+/* katlar */
+#deckview{position:fixed;inset:0;overflow:hidden;touch-action:none;background:var(--planbg)}
+#deck{position:absolute;left:0;top:0;transform-origin:0 0;will-change:transform}
+#deck .img{position:absolute;inset:0;overflow:hidden;border-radius:6px}
+#deck .img img{position:absolute;max-width:none;user-select:none;-webkit-user-drag:none;pointer-events:none}
+.zone{position:absolute;background:rgba(40,50,62,.55);border-radius:6px;pointer-events:none}
+.tag{position:absolute;left:0;top:0;border:0;font:600 12px/1 var(--body);color:#fff;background:var(--guest);padding:7px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;transform-origin:0 0}
+.tag.crew{background:var(--crew)}
+.tag::after{content:"";position:absolute;left:50%;bottom:-4px;width:8px;height:8px;margin-left:-4px;background:inherit;transform:rotate(45deg);border-radius:1px}
+.tag.sel{outline:2px solid #fff;outline-offset:1px}
+/* oda kartı */
+.info{left:50%;transform:translateX(-50%);bottom:calc(150px + env(safe-area-inset-bottom,0px));width:min(420px,calc(100% - 32px));background:var(--panel);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border:1px solid var(--line);border-radius:18px;overflow:hidden;box-shadow:0 12px 40px rgba(0,0,0,.3)}
+.info img{display:block;width:100%;aspect-ratio:16/9;object-fit:cover}
+.info .ib{padding:12px 14px 14px;display:grid;gap:6px}
+.info h2{font:800 17px/1.2 var(--display);margin:0}
+.info .kind{font:600 10.5px/1 var(--body);letter-spacing:.12em;text-transform:uppercase;color:var(--turq)}
+.info p{margin:0;font-size:13px;line-height:1.5;color:var(--muted)}
+.info ul{list-style:none;margin:2px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.info li{font:600 11.5px/1 var(--body);padding:6px 9px;border-radius:999px;background:var(--turq-soft);color:var(--ink)}
+.info .x{position:absolute;top:8px;right:8px;width:32px;height:32px;border-radius:50%;border:0;background:rgba(0,0,0,.45);color:#fff;font:600 18px/1 var(--body);cursor:pointer}
+#load{position:fixed;inset:0;display:grid;place-items:center;color:#cfe0ee;font:600 14px var(--body)}
+@media (max-width:560px){.seg button{padding:10px 11px;font-size:13px}h1{font-size:18px}}
+</style>
+<script>if (new URLSearchParams(location.search).has("embed")) document.documentElement.classList.add("embed");</script>
+</head>
+<body>
+<div id="load">Yükleniyor…</div>
+<div id="spin" hidden aria-label="360 derece dış görünüm. Sağa sola sürükleyin." tabindex="0"></div>
+<div id="deckview" hidden><div id="deck"><div class="img"><img id="deckimg" alt=""></div></div></div>
+
+<section class="ui card" id="card" hidden><p class="eb">Yatpaketi · 360° ve kabin planı</p><h1 id="name"></h1><p class="meta" id="meta"></p></section>
+
+<section class="ui info" id="info" hidden aria-live="polite">
+  <button class="x" id="info-x" type="button" aria-label="Kapat">×</button>
+  <img id="info-img" alt="">
+  <div class="ib"><span class="kind" id="info-kind"></span><h2 id="info-t"></h2><p id="info-p"></p><ul id="info-f"></ul></div>
+</section>
+
+<nav class="ui bar" aria-label="Görünüm">
+  <p class="hint" id="hint"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 13V5.5a1.5 1.5 0 0 1 3 0V12m0-1.5v-2a1.5 1.5 0 0 1 3 0V12m0-1v-.5a1.5 1.5 0 0 1 3 0V14a6 6 0 0 1-6 6h-1.2a6 6 0 0 1-4.6-2.2L3.6 15a1.5 1.5 0 0 1 2.3-1.9L8 15"/></svg><span id="hint-t">Parmağınızla sağa sola çevirin</span></p>
+  <div class="legend" id="legend" hidden><span><i style="background:var(--guest)"></i>Misafir</span><span><i style="background:var(--crew)"></i>Mürettebat</span><span id="legend-n">Bir odaya dokunun</span></div>
+  <div class="seg" id="seg" role="group" aria-label="Görünüm seçimi"></div>
+</nav>
+
+<script>
+(async () => {
+  const qs = new URLSearchParams(location.search);
+  const yat = (qs.get("yat") || "").replace(/[^a-z0-9-]/g, "");
+  const base = `./${yat}/`;
+  const $ = id => document.getElementById(id);
+  let C;
+  try { C = await (await fetch(base + "config.json")).json(); }
+  catch { $("load").textContent = "Bu yat için görünüm bulunamadı."; return; }
+  const url = p => /^(https?:)?\//.test(p) ? p : base + p;
+
+  $("name").textContent = C.name; $("meta").textContent = C.meta || ""; $("card").hidden = false;
+  if (C.colors) for (const [k, v] of Object.entries(C.colors)) document.documentElement.style.setProperty("--" + k, v);
+
+  /* ---------- 360° ---------- */
+  const spin = $("spin");
+  const bg = new Image(); bg.className = "bg"; bg.alt = ""; bg.src = url(C.frames[0]); spin.appendChild(bg);
+  const frames = C.frames.map((f, i) => { const im = new Image(); im.src = url(f); im.alt = ""; im.draggable = false; if (i === 0) im.style.opacity = 1; spin.appendChild(im); return im; });
+  const n = frames.length, loop = C.loop !== false;
+  frames[0].addEventListener("load", () => document.documentElement.style.setProperty("--ar", frames[0].naturalWidth / frames[0].naturalHeight), { once: true });
+  let p = 0, vel = 0, drag = null, last = performance.now();
+  const step = () => Math.max(60, innerWidth / (n + 2));
+  function drawSpin() {
+    if (!loop) p = Math.max(0, Math.min(n - 1, p));
+    const k = ((Math.round(p) % n) + n) % n;
+    frames.forEach((im, i) => { im.style.opacity = i === k ? 1 : 0; });
+    if (bg.dataset.k !== String(k)) { bg.dataset.k = k; bg.src = frames[k].src; }
+  }
+  spin.addEventListener("pointerdown", e => { drag = { x: e.clientX, p, t: performance.now(), lx: e.clientX }; vel = 0; spin.setPointerCapture(e.pointerId); $("hint").style.opacity = 0; e.preventDefault(); });
+  spin.addEventListener("pointermove", e => {
+    if (!drag) return; const now = performance.now();
+    p = drag.p + (drag.x - e.clientX) / step();
+    const dt = (now - drag.t) / 1000; if (dt > 0) vel = ((drag.lx - e.clientX) / step()) / dt;
+    drag.t = now; drag.lx = e.clientX; drawSpin();
+  });
+  const endSpin = () => { if (!drag) return; drag = null; vel = Math.max(-4, Math.min(4, vel)); };
+  spin.addEventListener("pointerup", endSpin); spin.addEventListener("pointercancel", endSpin);
+  spin.addEventListener("keydown", e => { if (e.key === "ArrowRight") { p = Math.round(p) + 1; drawSpin(); } if (e.key === "ArrowLeft") { p = Math.round(p) - 1; drawSpin(); } });
+  (function tick(t) {
+    const dt = Math.min(0.05, (t - last) / 1000); last = t;
+    if (!drag && Math.abs(vel) > 0.05 && !spin.hidden) { p += vel * dt; vel *= Math.pow(0.03, dt); drawSpin(); }
+    requestAnimationFrame(tick);
+  })(last);
+
+  /* ---------- Katlar ---------- */
+  const view = $("deckview"), deck = $("deck"), dimg = $("deckimg");
+  dimg.src = url(C.plan);
+  let D = null, tags = [], S = { s: 1, x: 0, y: 0, rot: 0, fit: 1 };
+  const portrait = () => innerHeight > innerWidth * 1.15;
+  function layoutFit() {
+    if (!D) return;
+    const [, , w, h] = D.crop; S.rot = portrait() ? -90 : 0;
+    const vw = innerWidth, vh = innerHeight - 170, top = 20;
+    const bw = S.rot ? h : w, bh = S.rot ? w : h;
+    S.fit = Math.min((vw - 24) / bw, (vh - top) / bh); S.s = S.fit;
+    S.x = (vw - bw * S.s) / 2; S.y = top + (vh - top - bh * S.s) / 2;
+    if (S.rot) S.y += bh * S.s; // -90° dönüşte başlangıç noktası alt sol
+    apply();
+  }
+  function apply() {
+    deck.style.transform = `translate(${S.x}px,${S.y}px) rotate(${S.rot}deg) scale(${S.s})`;
+    const inv = `rotate(${-S.rot}deg) scale(${1 / S.s}) translate(-50%,-115%)`;
+    for (const t of tags) t.style.transform = inv;
+  }
+  function showDeck(d) {
+    D = d; const [x, y, w, h] = d.crop;
+    deck.style.width = w + "px"; deck.style.height = h + "px";
+    dimg.style.left = -x + "px"; dimg.style.top = -y + "px";
+    deck.querySelectorAll(".tag,.zone").forEach(e => e.remove());
+    for (const [x0, y0, x1, y1] of d.crew || []) {
+      const z = document.createElement("div"); z.className = "zone";
+      Object.assign(z.style, { left: x0 * w + "px", top: y0 * h + "px", width: (x1 - x0) * w + "px", height: (y1 - y0) * h + "px" }); deck.appendChild(z);
+    }
+    tags = d.rooms.map(r => {
+      const R = C.rooms[r.key], b = document.createElement("button");
+      b.type = "button"; b.className = "tag" + (R.kind && R.kind.startsWith("Mürettebat") ? " crew" : ""); b.textContent = r.t || R.t;
+      b.style.left = r.x * w + "px"; b.style.top = r.y * h + "px";
+      b.addEventListener("click", e => { e.stopPropagation(); showRoom(r.key, b); });
+      deck.appendChild(b); return b;
+    });
+    layoutFit();
+  }
+  // yakınlaştır / kaydır
+  const ptrs = new Map(); let g = null, moved = 0;
+  view.addEventListener("pointerdown", e => { if (e.target.closest(".tag")) return; view.setPointerCapture(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY }); g = null; moved = 0; });
+  view.addEventListener("pointermove", e => {
+    if (!ptrs.has(e.pointerId)) return;
+    const prev = ptrs.get(e.pointerId); ptrs.set(e.pointerId, { x: e.clientX, y: e.clientY });
+    if (ptrs.size === 1) { S.x += e.clientX - prev.x; S.y += e.clientY - prev.y; moved += Math.abs(e.clientX - prev.x) + Math.abs(e.clientY - prev.y); apply(); return; }
+    const [a, b] = [...ptrs.values()], d = Math.hypot(a.x - b.x, a.y - b.y), m = { x: (a.x + b.x) / 2, y: (a.y + b.y) / 2 };
+    if (g) zoomAt(m.x, m.y, d / g.d, m.x - g.m.x, m.y - g.m.y);
+    g = { d, m }; moved = 99;
+  });
+  const up = e => { ptrs.delete(e.pointerId); if (ptrs.size < 2) g = null; };
+  view.addEventListener("pointerup", up); view.addEventListener("pointercancel", up);
+  view.addEventListener("wheel", e => { e.preventDefault(); zoomAt(e.clientX, e.clientY, Math.exp(-e.deltaY * 0.0015), 0, 0); }, { passive: false });
+  let lastTap = 0;
+  view.addEventListener("click", e => {
+    if (e.target.closest(".tag")) return;
+    if (moved > 8) return;
+    const now = Date.now();
+    if (now - lastTap < 320) zoomAt(e.clientX, e.clientY, S.s > S.fit * 1.4 ? S.fit / S.s : 2.2, 0, 0); else hideRoom();
+    lastTap = now;
+  });
+  function zoomAt(cx, cy, f, dx, dy) {
+    const ns = Math.max(S.fit * 0.9, Math.min(S.fit * 6, S.s * f)); f = ns / S.s;
+    S.x = cx - (cx - S.x) * f + dx; S.y = cy - (cy - S.y) * f + dy; S.s = ns; apply();
+  }
+  addEventListener("resize", () => { if (mode !== "dis") layoutFit(); });
+
+  /* ---------- Oda kartı ---------- */
+  function showRoom(key, el) {
+    const r = C.rooms[key], img = $("info-img");
+    document.querySelectorAll(".tag.sel").forEach(t => t.classList.remove("sel")); el && el.classList.add("sel");
+    $("info-kind").textContent = r.kind || ""; $("info-t").textContent = r.t; $("info-p").textContent = r.p || "";
+    $("info-f").replaceChildren(...(r.f || []).map(t => Object.assign(document.createElement("li"), { textContent: t })));
+    if (r.ph) { img.src = url(r.ph); img.alt = r.t; img.hidden = false; } else img.hidden = true;
+    $("info").hidden = false;
+  }
+  function hideRoom() { $("info").hidden = true; document.querySelectorAll(".tag.sel").forEach(t => t.classList.remove("sel")); }
+  $("info-x").addEventListener("click", hideRoom);
+
+  /* ---------- Görünüm seçimi ---------- */
+  let mode = "dis";
+  const seg = $("seg");
+  const modes = [{ id: "dis", label: "Dış görünüm" }, ...C.decks.map(d => ({ id: d.id, label: d.label }))];
+  for (const m of modes) {
+    const b = document.createElement("button"); b.type = "button"; b.dataset.mode = m.id; b.textContent = m.label;
+    b.addEventListener("click", () => setMode(m.id)); seg.appendChild(b);
+  }
+  function setMode(m) {
+    mode = m; hideRoom();
+    seg.querySelectorAll("button").forEach(b => b.setAttribute("aria-pressed", String(b.dataset.mode === m)));
+    const d = C.decks.find(x => x.id === m);
+    spin.hidden = !!d; view.hidden = !d; $("legend").hidden = !d;
+    $("hint").hidden = false; $("hint").style.opacity = 1;
+    const fine = matchMedia("(pointer: fine)").matches;
+    $("hint-t").textContent = d ? (fine ? "Tekerlekle yakınlaştırın, odalara tıklayın" : "İki parmakla yakınlaştırın, odalara dokunun") : (fine ? "Fareyle sağa sola sürükleyerek çevirin" : "Parmağınızla sağa sola çevirin");
+    if (d) { $("legend-n").textContent = d.note || "Bir odaya dokunun"; showDeck(d); }
+  }
+  setMode("dis"); drawSpin();
+  $("load").remove();
+})();
+</script>
+</body>
+</html>

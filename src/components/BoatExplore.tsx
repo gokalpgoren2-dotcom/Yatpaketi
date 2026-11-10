@@ -33,7 +33,7 @@ export function BoatExplore({ slug, name, lang }: { slug: string; name: string; 
   }, [open]);
 
   if (!m) return null;
-  const src = `/maket/${slug}/index.html?embed=1`;
+  const src = m.src;
   const start = () => setOpen(window.matchMedia("(min-width: 768px)").matches ? "inline" : "full");
 
   return (
@@ -54,9 +54,11 @@ export function BoatExplore({ slug, name, lang }: { slug: string; name: string; 
           </button>
         </div>
       ) : (
-        <button type="button" onClick={start} className="group relative block w-full overflow-hidden rounded-3xl bg-[#8998aa] text-left ring-1 ring-navy/10">
+        <button type="button" onClick={start} className="group relative block w-full overflow-hidden rounded-3xl text-left ring-1 ring-navy/10" style={{ background: m.bg }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={m.cover} alt={`${name} 360°`} loading="lazy" className="mx-auto block aspect-[2/1] w-full max-w-4xl object-contain transition duration-500 group-hover:scale-[1.02]" />
+          <img src={m.cover} alt="" aria-hidden loading="lazy" className="absolute inset-0 h-full w-full scale-110 object-cover opacity-80 blur-2xl" />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img src={m.cover} alt={`${name} 360°`} loading="lazy" className="relative mx-auto block aspect-[2/1] w-full max-w-4xl object-contain transition duration-500 group-hover:scale-[1.02]" />
           <span className="absolute inset-0 bg-gradient-to-t from-navy/70 via-navy/10 to-transparent" />
           <span className="absolute inset-x-0 bottom-0 flex flex-wrap items-center justify-between gap-3 p-4 lg:p-6">
             <span className="flex flex-wrap gap-2">
