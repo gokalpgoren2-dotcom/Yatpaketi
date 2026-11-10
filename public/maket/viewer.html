@@ -49,6 +49,7 @@ h1{font:800 20px/1.15 var(--display);margin:6px 0 3px}
 .zone{position:absolute;background:rgba(40,50,62,.55);border-radius:6px;pointer-events:none}
 .tag{position:absolute;left:0;top:0;border:0;font:600 12px/1 var(--body);color:#fff;background:var(--guest);padding:7px 10px;border-radius:999px;white-space:nowrap;box-shadow:0 4px 14px rgba(0,0,0,.3);cursor:pointer;transform-origin:0 0}
 .tag.crew{background:var(--crew)}
+.tag.dot{font-size:0;padding:7px;border:2px solid #fff}
 .tag::after{content:"";position:absolute;left:50%;bottom:-4px;width:8px;height:8px;margin-left:-4px;background:inherit;transform:rotate(45deg);border-radius:1px}
 .tag.sel{outline:2px solid #fff;outline-offset:1px}
 /* oda kartı */
@@ -144,10 +145,25 @@ h1{font:800 20px/1.15 var(--display);margin:6px 0 3px}
     if (S.rot) S.y += bh * S.s; // -90° dönüşte başlangıç noktası alt sol
     apply();
   }
+  let dcl = 0;
+  function declutter() {
+    cancelAnimationFrame(dcl);
+    dcl = requestAnimationFrame(() => {
+      tags.forEach(t => t.classList.remove("dot"));
+      const placed = [];
+      const order = tags.slice().sort((a, b) => (a.classList.contains("crew") ? 1 : 0) - (b.classList.contains("crew") ? 1 : 0));
+      for (const t of order) {
+        const r = t.getBoundingClientRect();
+        if (placed.some(p => r.left < p.right + 4 && r.right > p.left - 4 && r.top < p.bottom + 2 && r.bottom > p.top - 2)) t.classList.add("dot");
+        else placed.push(r);
+      }
+    });
+  }
   function apply() {
     deck.style.transform = `translate(${S.x}px,${S.y}px) rotate(${S.rot}deg) scale(${S.s})`;
     const inv = `rotate(${-S.rot}deg) scale(${1 / S.s}) translate(-50%,-115%)`;
     for (const t of tags) t.style.transform = inv;
+    declutter();
   }
   function showDeck(d) {
     D = d; const [x, y, w, h] = d.crop;

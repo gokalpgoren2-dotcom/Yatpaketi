@@ -1,0 +1,269 @@
+{
+ "name": "All About U 2",
+ "meta": "Yelkenli · 50 m · 6 kabin · 12 misafir",
+ "frames": [
+  "f1.jpg",
+  "f2.jpg",
+  "f3.jpg",
+  "f4.jpg",
+  "f5.jpg",
+  "f6.jpg",
+  "f7.jpg",
+  "f8.jpg"
+ ],
+ "loop": true,
+ "plan": "plan.jpg",
+ "colors": {
+  "sky-a": "#b49a9a",
+  "sky-b": "#8e7a7c",
+  "sea": "#33384a",
+  "planbg": "#18303f"
+ },
+ "decks": [
+  {
+   "id": "ana",
+   "label": "Ana güverte",
+   "crop": [
+    20,
+    150,
+    1405,
+    330
+   ],
+   "note": "Bir alana dokunun",
+   "crew": [
+    [
+     0.697,
+     0.18,
+     0.765,
+     0.79
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "aft",
+     "x": 0.206,
+     "y": 0.44
+    },
+    {
+     "key": "saloon",
+     "x": 0.375,
+     "y": 0.455
+    },
+    {
+     "key": "bow",
+     "x": 0.661,
+     "y": 0.485,
+     "t": "Oturma alanı"
+    },
+    {
+     "key": "crewacc",
+     "x": 0.731,
+     "y": 0.62,
+     "t": "Mürettebat"
+    },
+    {
+     "key": "tender",
+     "x": 0.805,
+     "y": 0.53,
+     "t": "Tender · jet ski"
+    }
+   ]
+  },
+  {
+   "id": "alt",
+   "label": "Kabin katı",
+   "crop": [
+    20,
+    525,
+    1405,
+    335
+   ],
+   "note": "6 misafir kabini · dokunun",
+   "crew": [
+    [
+     0.18,
+     0.08,
+     0.364,
+     0.92
+    ],
+    [
+     0.711,
+     0.1,
+     0.903,
+     0.9
+    ]
+   ],
+   "rooms": [
+    {
+     "key": "beach",
+     "x": 0.119,
+     "y": 0.552
+    },
+    {
+     "key": "galley",
+     "x": 0.224,
+     "y": 0.418
+    },
+    {
+     "key": "engine",
+     "x": 0.31,
+     "y": 0.522
+    },
+    {
+     "key": "massage",
+     "x": 0.4,
+     "y": 0.358
+    },
+    {
+     "key": "dbl",
+     "x": 0.505,
+     "y": 0.269,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "dbl",
+     "x": 0.606,
+     "y": 0.269,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "master",
+     "x": 0.4,
+     "y": 0.731,
+     "t": "Master · king"
+    },
+    {
+     "key": "dbl",
+     "x": 0.57,
+     "y": 0.746,
+     "t": "Çift kişilik"
+    },
+    {
+     "key": "vip",
+     "x": 0.675,
+     "y": 0.7,
+     "t": "VIP · king"
+    },
+    {
+     "key": "capt",
+     "x": 0.74,
+     "y": 0.313,
+     "t": "Kaptan"
+    },
+    {
+     "key": "crew",
+     "x": 0.827,
+     "y": 0.537,
+     "t": "Mürettebat"
+    }
+   ]
+  }
+ ],
+ "rooms": {
+  "aft": {
+   "kind": "Misafir alanı",
+   "t": "Kıç güverte",
+   "p": "Kıç güvertede açık hava yemek masası ve geniş oturma alanı.",
+   "ph": "/tekneler/all-about-u-2/v3-06.jpg"
+  },
+  "saloon": {
+   "kind": "Misafir alanı",
+   "t": "Ana salon",
+   "p": "Oturma grupları, bar ve büyük yemek masasıyla geniş ana salon.",
+   "f": [
+    "Klima"
+   ],
+   "ph": "/tekneler/all-about-u-2/v3-11.jpg"
+  },
+  "bow": {
+   "kind": "Misafir alanı",
+   "t": "Baş güverte oturma alanı",
+   "p": "Ana güvertenin ön tarafında minderli oturma alanı.",
+   "ph": "/tekneler/all-about-u-2/v3-07.jpg"
+  },
+  "crewacc": {
+   "kind": "Mürettebat alanı",
+   "t": "Mürettebat girişi",
+   "p": "Mürettebat bölümüne iniş."
+  },
+  "tender": {
+   "kind": "Misafir alanı",
+   "t": "Tender ve jet ski",
+   "p": "Baş güvertede taşınan tender ve iki jet ski.",
+   "f": [
+    "Sacs Strider 13 tender",
+    "2 Yamaha WaveRunner jet ski",
+    "4 Seabob",
+    "Su kayağı, wakeboard, ringo",
+    "Paddle board, kano",
+    "12 m şişme kaydırak"
+   ]
+  },
+  "beach": {
+   "kind": "Misafir alanı",
+   "t": "Beach club",
+   "p": "Kıçta denize açılan beach club; yüzme ve su sporları buradan.",
+   "ph": "/tekneler/all-about-u-2/v3-05.jpg"
+  },
+  "galley": {
+   "kind": "Mürettebat alanı",
+   "t": "Mutfak",
+   "p": "Yemekler burada hazırlanır; mürettebata ayrılmış bölüm."
+  },
+  "engine": {
+   "kind": "Mürettebat alanı",
+   "t": "Makine dairesi",
+   "p": "İkiz 803 HP Caterpillar motor."
+  },
+  "massage": {
+   "kind": "Misafir alanı",
+   "t": "Masaj odası",
+   "p": "Teknedeki masaj odası.",
+   "ph": "/tekneler/all-about-u-2/v3-12.jpg"
+  },
+  "master": {
+   "kind": "Misafir kabini",
+   "t": "Master kabin",
+   "p": "King size yataklı master kabin.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima"
+   ],
+   "ph": "/tekneler/all-about-u-2/v3-13.jpg"
+  },
+  "vip": {
+   "kind": "Misafir kabini",
+   "t": "VIP kabin (sahip kabini)",
+   "p": "Giyinme odalı, king size yataklı geniş kabin.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima",
+    "Giyinme odası"
+   ],
+   "ph": "/tekneler/all-about-u-2/v3-14.jpg"
+  },
+  "dbl": {
+   "kind": "Misafir kabini",
+   "t": "Çift kişilik kabin",
+   "p": "King size yataklı çift kişilik misafir kabini. Teknede dört tane var.",
+   "f": [
+    "King size yatak",
+    "Özel banyo",
+    "Klima"
+   ],
+   "ph": "/tekneler/all-about-u-2/v3-18.jpg"
+  },
+  "capt": {
+   "kind": "Mürettebat alanı",
+   "t": "Kaptan kabini",
+   "p": "Kaptanın kabini."
+  },
+  "crew": {
+   "kind": "Mürettebat alanı",
+   "t": "Mürettebat kabinleri",
+   "p": "10 kişilik mürettebat başta, ayrı bölümde kalır."
+  }
+ }
+}
