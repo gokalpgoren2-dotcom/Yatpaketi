@@ -4,7 +4,7 @@ Sekiz uzman ajanın masası olan izometrik ofis ve arkasındaki görev yürütme
 
 ## Çalıştırma
 
-Node 20 ya da üstü gerekir.
+Node 22.13 ya da üstü gerekir. Derleme gerektiren paket yoktur; veritabanı için Node'un yerleşik SQLite modülü kullanılır.
 
 ```bash
 cd ai-office

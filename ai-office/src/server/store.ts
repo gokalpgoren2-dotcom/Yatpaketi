@@ -1,4 +1,4 @@
-import Database from "better-sqlite3";
+import { DatabaseSync } from "node:sqlite";
 import fs from "node:fs";
 import path from "node:path";
 import { randomUUID } from "node:crypto";
@@ -6,6 +6,7 @@ import { getConfig } from "./config";
 import type { AgentId, ExecutionMode, Job, JobEvent, JobEventType, JobStatus, JobUsage, PendingApproval } from "@/shared/types";
 
 // Kalıcı görev kaydı (SQLite). Site veritabanından (Supabase) tamamen ayrıdır.
+// Node'un yerleşik SQLite modülü kullanılır: derleme gerektiren yerel paket yoktur.
 
 const SCHEMA = `
 CREATE TABLE IF NOT EXISTS jobs (
@@ -93,13 +94,12 @@ const COLS: Record<keyof JobPatch, string> = {
 };
 
 export class Store {
-  private db: Database.Database;
+  private db: DatabaseSync;
 
   constructor(file: string) {
     if (file !== ":memory:") fs.mkdirSync(path.dirname(file), { recursive: true });
-    this.db = new Database(file);
-    this.db.pragma("journal_mode = WAL");
-    this.db.pragma("foreign_keys = ON");
+    this.db = new DatabaseSync(file);
+    this.db.exec("PRAGMA journal_mode = WAL; PRAGMA foreign_keys = ON;");
     this.db.exec(SCHEMA);
   }
 
@@ -139,7 +139,7 @@ export class Store {
       const sets = keys.map((k) => `${COLS[k]} = ?`).join(", ");
       const vals = keys.map((k) => {
         const v = patch[k];
-        return v !== null && typeof v === "object" ? JSON.stringify(v) : (v ?? null);
+        return (v !== null && typeof v === "object" ? JSON.stringify(v) : (v ?? null)) as string | number | null;
       });
       this.db.prepare(`UPDATE jobs SET ${sets}, rev = rev + 1 WHERE id = ?`).run(...vals, id);
     }

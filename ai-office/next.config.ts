@@ -2,8 +2,8 @@ import type { NextConfig } from "next";
 import path from "node:path";
 
 const nextConfig: NextConfig = {
-  // Yerel modüller ve CLI başlatan SDK paketlenmez, Node tarafından doğrudan yüklenir.
-  serverExternalPackages: ["better-sqlite3", "@anthropic-ai/claude-agent-sdk"],
+  // CLI başlatan SDK paketlenmez, Node tarafından doğrudan yüklenir.
+  serverExternalPackages: ["@anthropic-ai/claude-agent-sdk"],
   outputFileTracingRoot: path.resolve(process.cwd()),
   poweredByHeader: false,
   async headers() {
