@@ -34,3 +34,15 @@ Framework Preset: Next.js (otomatik algılanır). Build Command, Output Director
 ## Ticari kullanım notu
 
 Vercel Hobby planı ticari kullanıma izin vermez; gerçek müşteri trafiği için Pro plan gerekir. Supabase ücretsiz planda projeler hareketsizlikte duraklatılabilir ve yedekleme sınırlıdır; canlı kullanımda Pro plan önerilir. Güncel limitler için vercel.com/pricing ve supabase.com/pricing sayfalarına bakın.
+
+## AI Office (ayrı uygulama)
+
+`ai-office/` klasörü, sekiz uzman ajanın izometrik ofis arayüzünü ve görev yürütme motorunu içeren bağımsız bir Next.js uygulamasıdır. Bu sitenin derlemesine dahil değildir (`tsconfig.json` içinde hariç tutulur), kendi bağımlılıkları ve kendi SQLite veritabanı vardır; Supabase'e ve Vercel yayınına dokunmaz.
+
+```
+cd ai-office
+npm install
+npm run dev
+```
+
+Adres: http://localhost:3100. Ayrıntılar: `ai-office/README.md`. Ajan tanımları: `.claude/agents/`.
