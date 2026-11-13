@@ -3,7 +3,7 @@
 // 60 günde sona ermemesi için site, haftada bir anahtarı kendiliğinden yeniler.
 import { createClient } from "@supabase/supabase-js";
 
-export type IgItem = { id: string; type: "IMAGE" | "VIDEO"; url: string; thumb: string; link: string; time: string };
+export type IgItem = { id: string; type: "IMAGE" | "VIDEO"; url: string; thumb: string; link: string; time: string; caption?: string; likes?: number; album?: boolean };
 
 const API = "https://graph.instagram.com";
 export const igUser = () => (process.env.IG_USERNAME ?? "yatpaketi").replace(/^@/, "").trim();
@@ -107,7 +107,11 @@ async function list(edge: string): Promise<IgItem[]> {
       if (!id) return [];
       base = `${FB}/${id}`;
     }
-    const r = await fetch(`${base}/${edge}?fields=id,media_type,media_url,thumbnail_url,permalink,timestamp&limit=${edge === "stories" ? 20 : 8}&access_token=${t}`, { next: { revalidate: 300 } });
+    // Gönderilerde açıklama ve beğeni sayısı da istenir; hesap izin vermezse temel alanlarla yeniden denenir.
+    const basic = "id,media_type,media_url,thumbnail_url,permalink,timestamp";
+    const url = (f: string) => `${base}/${edge}?fields=${f}&limit=${edge === "stories" ? 20 : 10}&access_token=${t}`;
+    let r = await fetch(url(edge === "media" ? `${basic},caption,like_count` : basic), { next: { revalidate: 300 } });
+    if (!r.ok && edge === "media") r = await fetch(url(basic), { next: { revalidate: 300 } });
     if (!r.ok) return [];
     const j = (await r.json()) as { data?: Record<string, string>[] };
     return (j.data ?? [])
@@ -119,6 +123,9 @@ async function list(edge: string): Promise<IgItem[]> {
         thumb: m.thumbnail_url || m.media_url,
         link: m.permalink,
         time: m.timestamp,
+        caption: m.caption || undefined,
+        likes: Number(m.like_count) || undefined,
+        album: m.media_type === "CAROUSEL_ALBUM",
       }));
   } catch {
     return [];

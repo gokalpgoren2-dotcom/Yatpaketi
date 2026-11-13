@@ -26,7 +26,7 @@ export async function HomeView({ lang }: { lang: Lang }) {
         <Destinations items={dests} lang={lang} />
         <RoutesShowcase routes={routes} regions={regions} lang={lang} />
         <Blog items={posts} lang={lang} />
-        {lang === "tr" && <InstagramSection />}
+        <InstagramSection lang={lang} />
         <HowItWorks lang={lang} />
         <WhyUs lang={lang} />
         <FinalCta lang={lang} />
