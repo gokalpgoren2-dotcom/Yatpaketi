@@ -13,6 +13,7 @@ const path = require("path");
   const browser = await chromium.launch();
   const page = await browser.newPage({ viewport: { width: 1080, height: 1920 } });
   await page.goto("file://" + path.resolve(html) + "?render=1");
+  await page.evaluate(() => window.HAZIR);
   const sure = await page.evaluate(() => window.SURE);
 
   if (kIdx > -1) { // sadece önizleme kareleri
@@ -27,10 +28,10 @@ const path = require("path");
   const n = Math.round(sure * FPS);
   for (let i = 0; i < n; i++) {
     await page.evaluate(t => renderAt(t), i / FPS);
-    await page.screenshot({ path: `${dir}/${String(i).padStart(5, "0")}.png` });
+    await page.screenshot({ path: `${dir}/${String(i).padStart(5, "0")}.jpg`, type: "jpeg", quality: 95 });
   }
   await browser.close();
-  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", `${dir}/%05d.png`,
+  execFileSync("ffmpeg", ["-y", "-loglevel", "error", "-framerate", String(FPS), "-i", `${dir}/%05d.jpg`,
     "-c:v", "libx264", "-pix_fmt", "yuv420p", "-crf", "18", "-movflags", "+faststart", out]);
   fs.rmSync(dir, { recursive: true });
   console.log("Hazır:", out);
