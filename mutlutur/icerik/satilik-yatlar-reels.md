@@ -1,6 +1,6 @@
 # Mutlutur Yachting — Satılık Yatlar Reels
 
-**Video:** `animasyon/cikti/mutlutur-satilik-yatlar-reels.mp4` (1080×1920, ~35 sn) — fiyatlar müşteriden teyitli
+**Video:** `animasyon/cikti/mutlutur-yachts-for-sale-reels.mp4` (1080×1920, ~35 sn, ekran yazıları İngilizce) — fiyatlar müşteriden teyitli
 **Kaynak dosya:** `animasyon/satilik-filo-reels.html` → rakamlar en üstteki `TEKNELER` listesinde.
 Yeniden üretmek için: `cd mutlutur/animasyon && node render.js satilik-filo-reels.html cikti/mutlutur-satilik-yatlar-reels.mp4`
 

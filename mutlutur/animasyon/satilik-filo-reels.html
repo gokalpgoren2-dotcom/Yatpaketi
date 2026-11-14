@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="tr">
+<html lang="en">
 <head>
 <meta charset="utf-8">
 <title>Mutlutur Satılık Filo</title>
@@ -89,20 +89,20 @@
    ====================================================================== */
 const MAIL = "info@mutluturyachting.com", WEB = "mutluturyachting.com";
 const TEKNELER = [
-  { ad:"MERELEY I", tur:"AES YACHT · 2024 · EXPLORER", fiyat:10485000,
+  { ad:"MERELEY I", tur:"AES YACHT · 2024 · TRI-DECK EXPLORER", fiyat:10485000,
     A:{f:"mereley-1.webp", x0:22, x1:62}, B:{f:"mereley-2.webp", ox:45},
-    oz:[["BOY","34,62 M"],["EN","7,60 M"],["MOTOR","2×800 HP"],["KABİN","5 · 12 KİŞİ"]] },
+    oz:[["LENGTH","34.62 M"],["BEAM","7.60 M"],["ENGINES","2×800 HP"],["CABINS · GUESTS","5 · 12"]] },
   { ad:"MERMAID", tur:"MOTORSAILER · 2009 / REFIT 2020", fiyat:2500000,
     A:{f:"mermaid-1.webp", x0:40, x1:58}, B:{f:"mermaid-2.webp", ox:58},
-    oz:[["BOY","34 M"],["EN","7,50 M"],["MOTOR","2×450 HP"],["KABİN","5 · 10 KİŞİ"]] },
+    oz:[["LENGTH","34 M"],["BEAM","7.50 M"],["ENGINES","2×450 HP"],["CABINS · GUESTS","5 · 10"]] },
   { ad:"WHITE SWAN", tur:"GULET · 2004", fiyat:495000,
     A:{f:"white-swan-2.webp", x0:28, x1:60}, B:{f:"white-swan-1.webp", ox:55},
-    oz:[["BOY","32 M"],["EN","7,90 M"],["MOTOR","2×440 HP"],["KABİN","6 · 12 KİŞİ"]] },
-  { ad:"AZIMUT 54 FLY", tur:"AZIMUT · FLYBRIDGE", fiyat:600000,
+    oz:[["LENGTH","32 M"],["BEAM","7.90 M"],["ENGINES","2×440 HP"],["CABINS · GUESTS","6 · 12"]] },
+  { ad:"AZIMUT 54 FLY", tur:"AZIMUT · FLYBRIDGE MOTOR YACHT", fiyat:600000,
     A:{f:"azimut54-1.webp", x0:78, x1:30}, B:{f:"azimut54-2.webp", ox:50},
-    oz:[["BOY","16,70 M"],["EN","4,95 M"],["MOTOR","2×725 HP"],["KABİN","3 · 6 KİŞİ"]] },
+    oz:[["LENGTH","16.70 M"],["BEAM","4.95 M"],["ENGINES","2×725 HP"],["CABINS · GUESTS","3 · 6"]] },
 ];
-const KELIMELER = ["LÜKS.", "KONFOR.", "GÜÇ.", "YATIRIM."];
+const KELIMELER = ["LUXURY", "COMFORT", "POWER", "LEGACY"];
 const GIRIS = 3.2, TEKNE = 6.6, KAPANIS = 5.0, WHIP = 3.0;
 const SURE = GIRIS + TEKNELER.length * TEKNE + KAPANIS;
 
@@ -114,7 +114,7 @@ const inOut = x => { x = clamp(x); return x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/
 const p = (t,a,b) => clamp((t-a)/(b-a));
 const lerp = (a,b,x) => a + (b-a)*x;
 const el = h => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstChild; };
-const euro = n => "€ " + Math.round(n).toLocaleString("de-DE");
+const euro = n => "€" + Math.round(n).toLocaleString("en-US");
 const sahne = document.getElementById("sahne");
 const foto = f => `../fotograflar/${f}`;
 const vis = (e, on) => e.style.display = on ? "block" : "none";
@@ -137,9 +137,9 @@ const montaj = TEKNELER.map((T, i) => {
 const gLogoK = el(`<div class="kat" style="background:radial-gradient(110% 60% at 50% 45%, #14205a 0%, var(--gece) 75%)"></div>`);
 giris.appendChild(gLogoK);
 const gLogo = el(logoHTML(1.3)); gLogoK.appendChild(gLogo); gLogo.style.top = "560px";
-const gHook1 = el(`<div class="abs orta" style="top:1010px;font-size:40px;font-weight:300;letter-spacing:22px;padding-left:22px">${TEKNELER.length} SATILIK YAT</div>`);
+const gHook1 = el(`<div class="abs orta" style="top:1010px;font-size:40px;font-weight:300;letter-spacing:22px;padding-left:22px">${TEKNELER.length} YACHTS FOR SALE</div>`);
 const gHook2 = el(`<div class="abs orta" style="top:1100px;font-size:28px;font-weight:300;letter-spacing:3px;color:#c9cce3">
-  <span style="display:inline-block;width:40px;height:2px;background:var(--kirmizi);vertical-align:middle;margin-right:18px"></span><b style="color:#fff;font-weight:500">${euro(minFiyat)}</b>'den başlayan fiyatlarla<span style="display:inline-block;width:40px;height:2px;background:var(--kirmizi);vertical-align:middle;margin-left:18px"></span></div>`);
+  <span style="display:inline-block;width:40px;height:2px;background:var(--kirmizi);vertical-align:middle;margin-right:18px"></span>Starting from <b style="color:#fff;font-weight:500">${euro(minFiyat)}</b><span style="display:inline-block;width:40px;height:2px;background:var(--kirmizi);vertical-align:middle;margin-left:18px"></span></div>`);
 gLogoK.append(gHook1, gHook2);
 const flas = el(`<div class="kat flas" style="opacity:0"></div>`); giris.appendChild(flas);
 
@@ -151,14 +151,14 @@ const sahneler = TEKNELER.map((T, i) => {
       <div class="serit"><img src="${foto(T.B.f)}" style="object-position:${T.B.ox}% 50%"></div>
       <div class="abs orta bas kIsim">${T.ad}</div><div class="kCizgi"></div>
       <div class="ozSatir">${T.oz.map(([e,d])=>`<div class="oz"><div class="e">${e}</div><div class="d">${d}</div></div>`).join("")}</div>
-      <div class="abs orta fiyatE">FİYAT</div>
-      <div class="abs orta bas fiyat">€ 0</div>
-      <div class="abs orta mail"><i>BİLGİ & GÖRÜNTÜLEME</i>${MAIL}</div>
+      <div class="abs orta fiyatE">ASKING PRICE</div>
+      <div class="abs orta bas fiyat">€0</div>
+      <div class="abs orta mail"><i>ENQUIRIES & VIEWINGS</i>${MAIL}</div>
     </div>
     <div class="kat segA">
       <img class="kapla" src="${foto(T.A.f)}">
       <div class="ustGolge"></div><div class="altGolge"></div>
-      <div class="abs rozet">SATILIK · FOR SALE</div>
+      <div class="abs rozet">FOR SALE</div>
       <div class="isimCizgi"></div>
       <div class="abs numara">0${i+1} / 0${TEKNELER.length}</div>
       <div class="abs bas isim maske"><span>${T.ad}</span></div>
@@ -178,8 +178,8 @@ const izgara = el(`<div class="izgara">${TEKNELER.map(T=>`<div class="kart"><div
   <div class="n bas">${T.ad}</div><div class="c"></div><div class="f">${euro(T.fiyat)}</div></div>`).join("")}</div>`);
 kap.appendChild(izgara);
 const kartlar = [...izgara.children];
-const kBas = el(`<div class="abs orta" style="top:1330px;font-size:44px;font-weight:300;letter-spacing:2px">Hayalinizdeki yat, bir mail uzakta.</div>`);
-const kAlt = el(`<div class="abs orta" style="top:1410px;font-size:18px;font-weight:500;letter-spacing:9px;color:#8f97c0">DETAYLI BİLGİ · GÖRÜNTÜLEME</div>`);
+const kBas = el(`<div class="abs orta" style="top:1330px;font-size:44px;font-weight:300;letter-spacing:2px">Your dream yacht is one email away.</div>`);
+const kAlt = el(`<div class="abs orta" style="top:1410px;font-size:18px;font-weight:500;letter-spacing:9px;color:#8f97c0">FULL SPECIFICATIONS · PRIVATE VIEWINGS</div>`);
 const kCta = el(`<div class="abs cta" style="top:1470px">${MAIL}</div>`);
 const kLogo = el(logoHTML(.5)); kLogo.style.top = "1690px";
 kap.append(kBas, kAlt, kCta, kLogo);
