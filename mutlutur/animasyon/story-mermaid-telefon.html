@@ -11,27 +11,30 @@
   * { margin:0; padding:0; box-sizing:border-box; }
   html, body { width:1080px; height:1920px; overflow:hidden; background:var(--gece); }
   body { font-family:MontL, MontX, sans-serif; color:var(--beyaz); }
-  .abs { position:absolute; }
 
   /* Arka plan */
   #zemin { position:absolute; inset:0;
     background:radial-gradient(90% 55% at 70% 70%, #16306b 0%, rgba(22,48,107,0) 70%),
                radial-gradient(70% 40% at 10% 10%, #13245a 0%, rgba(19,36,90,0) 70%),
                linear-gradient(180deg, #0a1a3f 0%, #061227 100%); }
+  #arkaFoto { position:absolute; inset:0; opacity:0; }
+  #arkaFoto img { position:absolute; inset:-100px; width:calc(100% + 200px); height:calc(100% + 200px); object-fit:cover;
+    filter:blur(46px) brightness(.42) saturate(1.1); }
+  #arkaFoto .ton { position:absolute; inset:0; background:linear-gradient(180deg, rgba(6,18,39,.65), rgba(6,18,39,.25) 40%, rgba(6,18,39,.7)); }
   #isik { position:absolute; width:1100px; height:1100px; border-radius:50%;
-    background:radial-gradient(circle, rgba(74,124,255,.28) 0%, rgba(74,124,255,0) 65%); }
+    background:radial-gradient(circle, rgba(74,124,255,.26) 0%, rgba(74,124,255,0) 65%); }
   .cizgiDeniz { position:absolute; left:-200px; right:-200px; height:2px;
     background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.07), rgba(255,255,255,0)); }
 
   /* Logo */
-  .logo { position:absolute; top:86px; left:70px; text-align:center; }
+  .logo { position:absolute; top:86px; left:70px; text-align:center; z-index:20; }
   .logo .m { font-family:OswaldL; font-weight:700; color:var(--kirmizi); line-height:1; font-size:66px; letter-spacing:1px; }
   .logo .y { background:var(--lacivert); color:#fff; font-weight:600; display:flex; justify-content:space-between;
     font-size:18px; padding:4px 9px; margin-top:3px; }
   .logo .s { font-size:13px; color:#d8dcef; margin-top:5px; }
 
   /* Başlık */
-  .baslik { position:absolute; left:70px; top:250px; width:960px; }
+  .baslik { position:absolute; left:70px; top:250px; width:960px; z-index:20; }
   .satir { font-size:72px; font-weight:500; line-height:1.18; letter-spacing:-.5px; white-space:nowrap; }
   .satir.kucuk { font-size:26px; font-weight:600; letter-spacing:9px; color:#aeb8e0; margin-bottom:14px; }
   .satir.dev { font-family:OswaldL; font-size:150px; font-weight:600; letter-spacing:4px; line-height:1; }
@@ -42,26 +45,50 @@
   .vurgu .k { position:relative; }
 
   /* Telefon */
-  #sahneTel { position:absolute; inset:0; perspective:2400px; }
+  #sahneTel { position:absolute; inset:0; perspective:2400px; z-index:10; }
   #telefon { position:absolute; left:0; top:0; width:632px; height:1317px; border-radius:92px; padding:16px;
     background:linear-gradient(140deg, #4a4e57 0%, #1a1c21 30%, #0f1013 60%, #393c44 100%);
     box-shadow:0 80px 140px rgba(0,0,0,.6), 0 0 0 2px rgba(255,255,255,.06) inset, 0 0 0 1px #000;
     transform-origin:50% 50%; will-change:transform; }
   #telefon .tus { position:absolute; width:6px; background:#2b2e35; border-radius:3px; }
-  #ekran { position:relative; width:600px; height:1285px; border-radius:76px; overflow:hidden; background:#000; }
-  #durum { position:absolute; left:0; right:0; top:0; height:56px; background:#0d1626; z-index:3;
+  #ekran { position:relative; width:600px; height:1285px; border-radius:76px; overflow:hidden; background:#0d1626; }
+  #durum { position:absolute; left:0; right:0; top:0; height:56px; z-index:3;
     display:flex; align-items:center; justify-content:space-between; padding:6px 54px 0 62px; font-size:21px; font-weight:600; }
   #ada { position:absolute; top:14px; left:50%; width:176px; height:50px; margin-left:-88px; background:#000;
     border-radius:26px; z-index:4; }
-  .kare { position:absolute; left:0; top:56px; width:600px; height:1229px; object-fit:cover; }
+  .katman { position:absolute; left:0; top:56px; width:600px; height:1229px; overflow:hidden; display:none; background:#0d1626; }
+  .katman > img { width:100%; height:100%; object-fit:cover; display:block; }
+  .karart { position:absolute; inset:0; background:#000; opacity:0; pointer-events:none; }
   #parlama { position:absolute; inset:0; border-radius:76px; pointer-events:none; z-index:5;
     background:linear-gradient(120deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 35%); }
   #dokun { position:absolute; width:90px; height:90px; margin:-45px 0 0 -45px; border-radius:50%; z-index:6;
     background:radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,.15) 60%, rgba(255,255,255,0) 72%);
     border:2px solid rgba(255,255,255,.7); opacity:0; }
 
-  /* Rozetler (telefondan fırlayan bilgi kartları) */
-  .rozet { position:absolute; display:flex; align-items:center; will-change:transform, opacity; }
+  /* Telefon içi galeri */
+  .galeri { background:linear-gradient(180deg, #0b1324 0%, #0a0f1a 100%); }
+  .gUst { position:absolute; left:50px; right:50px; top:60px; display:flex; align-items:flex-end; justify-content:space-between; }
+  .gKucuk { font-size:15px; font-weight:600; letter-spacing:6px; color:#c9a45c; margin-bottom:8px; }
+  .gBaslik { font-size:46px; font-weight:600; letter-spacing:.5px; }
+  .gSayac { font-size:22px; font-weight:500; letter-spacing:3px; color:#aab3d6; padding-bottom:8px; }
+  .gSayac b { color:#fff; font-weight:700; }
+  .gIz { position:absolute; left:0; top:200px; height:620px; width:6000px; will-change:transform; }
+  .gKart { position:absolute; top:0; width:500px; height:620px; border-radius:30px; overflow:hidden;
+    box-shadow:0 24px 50px rgba(0,0,0,.45); background:#111; }
+  .gKart img { position:absolute; top:0; left:-60px; width:620px; height:100%; object-fit:cover; will-change:transform; }
+  .gKart .gr { position:absolute; inset:0; background:linear-gradient(180deg, rgba(0,0,0,0) 60%, rgba(0,0,0,.55)); }
+  .gAcik { position:absolute; left:50px; right:50px; top:850px; height:80px; }
+  .gAcik div { position:absolute; left:0; top:0; font-size:30px; font-weight:500; white-space:nowrap; }
+  .gAcik span { display:block; font-size:16px; letter-spacing:5px; color:#8f99c4; font-weight:600; margin-bottom:8px; }
+  .gNokta { position:absolute; left:50px; top:950px; display:flex; gap:10px; }
+  .gNokta i { display:block; height:8px; width:8px; border-radius:4px; background:rgba(255,255,255,.3); }
+  .gKucukler { position:absolute; left:0; top:1010px; height:110px; width:3000px; will-change:transform; }
+  .gKucukler div { position:absolute; top:0; width:140px; height:100px; border-radius:16px; overflow:hidden;
+    border:3px solid transparent; opacity:.55; }
+  .gKucukler img { width:100%; height:100%; object-fit:cover; display:block; }
+
+  /* Rozetler */
+  .rozet { position:absolute; display:flex; align-items:center; will-change:transform, opacity; z-index:15; }
   .rozet .ikon { width:96px; height:96px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #e8343a, #a50f14);
     box-shadow:0 10px 30px rgba(199,22,28,.45), inset 0 2px 0 rgba(255,255,255,.25); display:flex; align-items:center;
     justify-content:center; position:relative; z-index:2; }
@@ -73,16 +100,12 @@
   .rozet .d { font-size:38px; font-weight:700; margin-top:2px; white-space:nowrap; }
   .rozet.buyuk .kutu { padding:20px 42px 20px 56px; }
   .rozet.buyuk .d { font-size:54px; }
-
-  /* Kapanış */
-  .mailKutu { position:absolute; left:70px; top:560px; display:flex; align-items:center; gap:18px;
-    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.3); border-radius:18px; padding:22px 30px; }
-  .mailKutu b { font-size:34px; font-weight:600; }
-  .web { position:absolute; left:74px; top:680px; font-size:24px; letter-spacing:6px; color:#aeb8e0; font-weight:500; }
+  .web { position:absolute; left:74px; top:700px; font-size:24px; letter-spacing:6px; color:#aeb8e0; font-weight:500; z-index:20; }
 </style>
 </head>
 <body>
 <div id="zemin"></div>
+<div id="arkaFoto"><img id="arkaA"><img id="arkaB"><div class="ton"></div></div>
 <div id="isik"></div>
 <div class="cizgiDeniz" style="top:1500px"></div><div class="cizgiDeniz" style="top:1580px"></div><div class="cizgiDeniz" style="top:1680px"></div>
 
@@ -99,13 +122,13 @@
     <div class="tus" style="left:-5px;top:490px;height:120px"></div>
     <div class="tus" style="right:-5px;top:380px;height:180px"></div>
     <div id="ekran">
-      <div id="durum"><span>9:41</span><span style="display:flex;gap:10px;align-items:center">
-        <svg width="34" height="20" viewBox="0 0 34 20"><rect x="0" y="13" width="6" height="7" rx="1.5" fill="#fff"/><rect x="9" y="9" width="6" height="11" rx="1.5" fill="#fff"/><rect x="18" y="5" width="6" height="15" rx="1.5" fill="#fff"/><rect x="27" y="0" width="6" height="20" rx="1.5" fill="#fff"/></svg>
+      <div id="durum"><span>9:41</span><span id="durumSag" style="display:flex;gap:10px;align-items:center">
+        <svg width="34" height="20" viewBox="0 0 34 20"><g fill="currentColor"><rect x="0" y="13" width="6" height="7" rx="1.5"/><rect x="9" y="9" width="6" height="11" rx="1.5"/><rect x="18" y="5" width="6" height="15" rx="1.5"/><rect x="27" y="0" width="6" height="20" rx="1.5"/></g></svg>
         <span style="font-size:19px">5G</span>
-        <svg width="46" height="22" viewBox="0 0 46 22"><rect x="1" y="1" width="39" height="20" rx="6" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/><rect x="4" y="4" width="33" height="14" rx="3.5" fill="#fff"/><rect x="42" y="7" width="3" height="8" rx="1.5" fill="rgba(255,255,255,.5)"/></svg>
+        <svg width="46" height="22" viewBox="0 0 46 22"><rect x="1" y="1" width="39" height="20" rx="6" fill="none" stroke="currentColor" stroke-opacity=".5" stroke-width="2"/><rect x="4" y="4" width="33" height="14" rx="3.5" fill="currentColor"/><rect x="42" y="7" width="3" height="8" rx="1.5" fill="currentColor" fill-opacity=".5"/></svg>
       </span></div>
       <div id="ada"></div>
-      <img class="kare" id="kareA"><img class="kare" id="kareB">
+      <div id="katmanlar"></div>
       <div id="dokun"></div>
       <div id="parlama"></div>
     </div>
@@ -115,33 +138,39 @@
 
 <script>
 /* ======================= AYARLAR ======================= */
-const KLASOR = "ekran-mermaid/";
-const FPS = 30;
-// Telefon ekranında oynayacak kayıt parçaları: [klasör, başlangıç sn, kare sayısı]
+const KLASOR = "ekran-mermaid/", GALERI_KLASOR = "../fotograflar/mermaid-galeri/";
+const FPS = 30, SURE = 24.0, GECIS = .45;
+// Telefon ekranı: kayıt klipleri (kare aralığı + hız) ve araya giren sayfa geçişleri
+// gecis: "it" = iPhone sayfa itme (sağdan gelir), "kaydir" = aşağı kaydırma, durum = durum çubuğu rengi
 const EKRAN = [
-  ["1-anasayfa",   0.0, 72],
-  ["2-koleksiyon", 2.4, 48],
-  ["3-liste",      4.0, 78],
-  ["4-mermaid",    6.6, 57],
-  ["5-ozellik",    8.5, 78],
-  ["6-galeri",    11.1, 72],
-  ["7-dis",       13.5, 96],
-  ["8-ic",        16.7, 90],
-  ["9-kabin",     19.7, 42],
-  ["10-form",     21.1, 16],   // son kare kapanışta donar
+  { k:"1-anasayfa",   t:0.0,  a:1,  b:72, hiz:1,   durum:"koyu" },
+  { k:"2-koleksiyon", t:2.4,  a:6,  b:48, hiz:1,   durum:"koyu",  gecis:"it" },
+  { k:"3-liste",      t:4.0,  a:1,  b:78, hiz:1,   durum:"acik",  gecis:"it" },
+  { k:"4-mermaid",    t:6.6,  a:16, b:57, hiz:.9,  durum:"koyu",  gecis:"it" },
+  { k:"5-ozellik",    t:8.5,  a:1,  b:57, hiz:.55, durum:"acik",  gecis:"kaydir" },
+  { k:"GALERI",       t:12.0,                      durum:"koyu",  gecis:"kaydir" },
+  { k:"10-form",      t:20.0, a:1,  b:16, hiz:.8,  durum:"acik",  gecis:"it" },
 ];
-const SURE = 25.0;
+// Galeri fotoğrafları (dosya, başlık, üst etiket)
+const GALERI = [
+  ["01-yelken.jpg",          "Under full sail",  "EXTERIOR"],
+  ["02-demir.jpg",           "At anchor",        "EXTERIOR"],
+  ["03-havadan.jpg",         "Aerial view",      "EXTERIOR"],
+  ["04-gece-guverte.jpg",    "Evenings on deck", "DECK"],
+  ["05-gunes-guvertesi.jpg", "Sundeck lounge",   "DECK"],
+  ["06-salon.jpg",           "Main salon",       "INTERIOR"],
+  ["07-yemek-salonu.jpg",    "Formal dining",    "INTERIOR"],
+  ["08-ana-kabin.jpg",       "Master cabin",     "INTERIOR"],
+];
+const G0 = 12.5, G_ARA = .93, G_SURE = .5;   // galeri: ilk kaydırma, aralık, kaydırma süresi
 
-// Başlıklar: [başlangıç, bitiş, satırlar]  ( [[metin]] = kırmızı vurgu )
 const BASLIKLAR = [
   [0.3, 3.9,  [{t:"Your next yacht"}, {t:"is [[one tap away.]]"}]],
   [4.2, 8.3,  [{t:"NOW FOR SALE", c:"kucuk"}, {t:"MERMAID", c:"dev"}, {t:"34m Luxury Motor Sailer", c:"alt"}]],
-  [8.6, 13.1, [{t:"Crafted for"}, {t:"[[the open sea.]]"}]],
-  [13.5, 20.9,[{t:"Every detail,"}, {t:"[[refined.]]"}, {t:"Built 2009 · Refit 2020 · Cavusoglu", c:"alt"}]],
-  [21.3, SURE + 1, [{t:"Enquire"}, {t:"[[today.]]"}]],
+  [8.6, 11.8, [{t:"Crafted for"}, {t:"[[the open sea.]]"}]],
+  [12.2, 19.8,[{t:"Every detail,"}, {t:"[[refined.]]"}, {t:"Built 2009 · Refit 2020 · Cavusoglu", c:"alt"}]],
+  [20.2, SURE + 1, [{t:"Enquire"}, {t:"[[today.]]"}]],
 ];
-
-// Rozetler: [giriş, çıkış, x, y, ikon, etiket, değer, büyük?]
 const IKON = {
   boy:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M6 8l-4 4 4 4M18 8l4 4-4 4"/></svg>`,
   en:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 6l4-4 4 4M8 18l4 4 4-4"/></svg>`,
@@ -152,46 +181,46 @@ const IKON = {
 };
 const ROZETLER = [
   [6.9, 8.3,  60, 1000, "fiyat", "ASKING PRICE", "€2,500,000", true],
-  [9.0, 13.1, 50,  760, "boy",   "LENGTH", "33.70 M"],
-  [9.35,13.1, 50,  905, "en",    "BEAM", "7.50 M"],
-  [9.7, 13.1, 50, 1050, "motor", "ENGINES", "2 × 450 HP"],
-  [10.05,13.1,50, 1195, "kabin", "CABINS · GUESTS", "5 · 10"],
-  [21.9, SURE + 1, 60, 560, "mail", "ENQUIRIES", "info@mutluturyachting.com"],
+  [9.0, 11.8, 50,  760, "boy",   "LENGTH", "33.70 M"],
+  [9.35,11.8, 50,  905, "en",    "BEAM", "7.50 M"],
+  [9.7, 11.8, 50, 1050, "motor", "ENGINES", "2 × 450 HP"],
+  [10.05,11.8,50, 1195, "kabin", "CABINS · GUESTS", "5 · 10"],
+  [20.8, SURE + 1, 60, 560, "mail", "ENQUIRIES", "info@mutluturyachting.com"],
 ];
-
-// Telefon duruşları (zaman → konum/açı). Ara değerler yumuşak geçişle hesaplanır.
 const DURUS = [
-  { t:0.0,  x:380, y:2000, ry:-26, rx:8,  rz:6,  s:1.1 },
-  { t:0.9,  x:360, y:640,  ry:-18, rx:6,  rz:4,  s:1.1 },
-  { t:8.6,  x:360, y:640,  ry:-18, rx:6,  rz:4,  s:1.1 },
-  { t:9.2,  x:400, y:610,  ry:-22, rx:5,  rz:5,  s:1.08 },
-  { t:13.1, x:400, y:610,  ry:-22, rx:5,  rz:5,  s:1.08 },
-  { t:13.8, x:224, y:620,  ry:0,   rx:0,  rz:0,  s:1.16 },
-  { t:20.9, x:224, y:620,  ry:0,   rx:0,  rz:0,  s:1.16 },
-  { t:21.6, x:380, y:880,  ry:-18, rx:6,  rz:4,  s:1.06 },
-  { t:SURE, x:380, y:870,  ry:-16, rx:6,  rz:3,  s:1.06 },
+  { t:0.0,  x:380, y:2000, ry:-26, rx:8, rz:6, s:1.1 },
+  { t:0.9,  x:360, y:640,  ry:-18, rx:6, rz:4, s:1.1 },
+  { t:8.6,  x:360, y:640,  ry:-18, rx:6, rz:4, s:1.1 },
+  { t:9.2,  x:400, y:610,  ry:-22, rx:5, rz:5, s:1.08 },
+  { t:11.9, x:400, y:610,  ry:-22, rx:5, rz:5, s:1.08 },
+  { t:12.6, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
+  { t:19.9, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
+  { t:20.6, x:380, y:880,  ry:-18, rx:6, rz:4, s:1.06 },
+  { t:SURE, x:380, y:870,  ry:-16, rx:6, rz:3, s:1.06 },
 ];
-// Parmak dokunuşları: [zaman, ekran x, ekran y] (ekran: 600x1285)
-const DOKUNUS = [[3.85, 300, 1000], [6.35, 300, 1180], [11.0, 300, 900]];
+// Dokunuşlar: [zaman, x, y] (ekran koordinatı 600x1285)
+const DOKUNUS = [[2.2, 300, 760], [3.8, 300, 900], [6.4, 300, 1150], [19.8, 300, 700]];
 
 /* ======================= Yardımcılar ======================= */
 const clamp = (x,a=0,b=1) => Math.min(b, Math.max(a, x));
 const ease = x => 1 - Math.pow(1 - clamp(x), 3);
 const inOut = x => { x = clamp(x); return x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; };
-const back = x => { x = clamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
+const back = (x, c1 = 1.70158) => { x = clamp(x); const c3 = c1 + 1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
+const iosEase = x => 1 - Math.pow(1 - clamp(x), 4);   // iOS geçişine yakın yavaşlama
 const p = (t,a,b) => clamp((t-a)/(b-a));
 const lerp = (a,b,x) => a + (b-a)*x;
 const el = h => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstChild; };
+const yol = (klip, n) => `${KLASOR}${klip}/${String(n).padStart(4, "0")}.jpg`;
+const yukle = (img, src) => img.getAttribute("src") === src ? Promise.resolve()
+  : new Promise(r => { img.onload = img.onerror = r; img.src = src; });
 
-/* Başlıkları kur */
+/* ===== Başlıklar ===== */
 const basliklar = BASLIKLAR.map(([g, c, satirlar]) => {
-  const kap = el(`<div class="baslik"></div>`);
-  const kelimeler = [], vurgular = [];
+  const kap = el(`<div class="baslik"></div>`), kelimeler = [], vurgular = [];
   satirlar.forEach(S => {
     const sat = el(`<div class="satir ${S.c || ""}"></div>`);
     S.t.split(/(\[\[.*?\]\])/).filter(Boolean).forEach(parca => {
-      const vurgu = parca.startsWith("[[");
-      const metin = vurgu ? parca.slice(2, -2) : parca;
+      const vurgu = parca.startsWith("[["), metin = vurgu ? parca.slice(2, -2) : parca;
       const hedef = vurgu ? el(`<span class="vurgu"><span class="bg"></span></span>`) : sat;
       metin.split(/(\s+)/).forEach(w => {
         if (!w) return;
@@ -205,25 +234,44 @@ const basliklar = BASLIKLAR.map(([g, c, satirlar]) => {
   document.getElementById("basliklar").appendChild(kap);
   return { g, c, kap, kelimeler, vurgular };
 });
-// Kapanış e-posta ve web
 const web = el(`<div class="web">MUTLUTURYACHTING.COM</div>`); document.body.appendChild(web);
 
-/* Rozetleri kur */
+/* ===== Rozetler ===== */
 const rozetler = ROZETLER.map(([g, c, x, y, ik, e, d, buyuk]) => {
   const r = el(`<div class="rozet ${buyuk ? "buyuk" : ""}" style="left:${x}px;top:${y}px">
     <div class="ikon">${IKON[ik]}</div><div class="kutu"><div class="e">${e}</div><div class="d">${d}</div></div></div>`);
   document.getElementById("rozetler").appendChild(r);
-  return { g, c, r, kutu:r.querySelector(".kutu"), ikon:r.querySelector(".ikon") };
+  return { g, c, r, ikon:r.querySelector(".ikon") };
 });
 
-const telefon = document.getElementById("telefon"), isik = document.getElementById("isik");
-const kareA = document.getElementById("kareA"), kareB = document.getElementById("kareB"), dokun = document.getElementById("dokun");
-const yol = (klip, n) => `${KLASOR}${klip}/${String(n).padStart(4, "0")}.jpg`;
-function ekranKaresi(t) {
-  let i = 0; for (let j = 0; j < EKRAN.length; j++) if (t >= EKRAN[j][1]) i = j;
-  const [k, b, n] = EKRAN[i];
-  return { i, src: yol(k, Math.min(n, Math.max(1, Math.floor((t - b) * FPS) + 1))), u: t - b };
-}
+/* ===== Ekran katmanları ===== */
+const katmanlar = document.getElementById("katmanlar");
+let galeri = null;
+EKRAN.forEach(E => {
+  if (E.k === "GALERI") {
+    E.el = el(`<div class="katman galeri">
+      <div class="gUst"><div><div class="gKucuk">MERMAID</div><div class="gBaslik">Gallery</div></div><div class="gSayac"></div></div>
+      <div class="gIz">${GALERI.map((g, i) => `<div class="gKart" style="left:${50 + i * 520}px"><img src="${GALERI_KLASOR}${g[0]}"><div class="gr"></div></div>`).join("")}</div>
+      <div class="gAcik">${GALERI.map(g => `<div><span>${g[2]}</span>${g[1]}</div>`).join("")}</div>
+      <div class="gNokta">${GALERI.map(() => "<i></i>").join("")}</div>
+      <div class="gKucukler">${GALERI.map((g, i) => `<div style="left:${50 + i * 156}px"><img src="${GALERI_KLASOR}${g[0]}"></div>`).join("")}</div>
+      <div class="karart"></div></div>`);
+    const q = s => E.el.querySelector(s);
+    galeri = { iz:q(".gIz"), kartImg:[...E.el.querySelectorAll(".gKart img")], sayac:q(".gSayac"),
+      acik:[...E.el.querySelectorAll(".gAcik div")], nokta:[...E.el.querySelectorAll(".gNokta i")],
+      kucukIz:q(".gKucukler"), kucuk:[...E.el.querySelectorAll(".gKucukler div")] };
+  } else {
+    E.el = el(`<div class="katman"><img><div class="karart"></div></div>`);
+    E.img = E.el.querySelector("img");
+  }
+  E.kar = E.el.querySelector(".karart");
+  katmanlar.appendChild(E.el);
+});
+
+const telefon = document.getElementById("telefon"), isik = document.getElementById("isik"), dokun = document.getElementById("dokun");
+const durumEl = document.getElementById("durum"), arkaFoto = document.getElementById("arkaFoto");
+const arkaA = document.getElementById("arkaA"), arkaB = document.getElementById("arkaB");
+
 function durus(t) {
   let a = DURUS[0], b = DURUS[DURUS.length - 1];
   for (let j = 0; j < DURUS.length - 1; j++) if (t >= DURUS[j].t && t <= DURUS[j + 1].t) { a = DURUS[j]; b = DURUS[j + 1]; break; }
@@ -231,61 +279,114 @@ function durus(t) {
   const x = a === b ? 1 : (a.t === 0 ? back(p(t, a.t, b.t) * .92) : inOut(p(t, a.t, b.t)));
   const o = {}; ["x","y","ry","rx","rz","s"].forEach(k => o[k] = lerp(a[k], b[k], x)); return o;
 }
-const yukle = (img, src) => img.getAttribute("src") === src ? Promise.resolve()
-  : new Promise(r => { img.onload = img.onerror = r; img.src = src; });
+// Bir katmanı t anındaki haline getir (klip karesi ya da galeri)
+function katmanCiz(E, t, bekle) {
+  if (E.k === "GALERI") { galeriCiz(t); return; }
+  const n = Math.min(E.b, E.a + Math.max(0, Math.floor((t - E.t) * FPS * E.hiz)));
+  bekle.push(yukle(E.img, yol(E.k, n)));
+}
+// Galeri: kartlar yana kayar, küçük resimler ve sayaç güncellenir
+function galeriPoz(t) {
+  let pos = 0;
+  for (let k = 1; k < GALERI.length; k++) pos += back(p(t, G0 + (k - 1) * G_ARA, G0 + (k - 1) * G_ARA + G_SURE), .9);
+  return pos;
+}
+function galeriCiz(t) {
+  const pos = galeriPoz(t), aktif = Math.round(pos);
+  galeri.iz.style.transform = `translateX(${-520 * pos}px)`;
+  galeri.kartImg.forEach((img, i) => { const d = i - pos;
+    img.style.transform = `translateX(${d * -70}px) scale(${1 + Math.min(1, Math.abs(d)) * .06})`; });
+  galeri.sayac.innerHTML = `<b>${String(aktif + 1).padStart(2, "0")}</b> / ${String(GALERI.length).padStart(2, "0")}`;
+  galeri.acik.forEach((a, i) => { const o = clamp(1 - Math.abs(i - pos) * 2); a.style.opacity = o;
+    a.style.transform = `translateX(${(i - pos) * 60}px)`; });
+  galeri.nokta.forEach((n, i) => { const o = clamp(1 - Math.abs(i - pos));
+    n.style.width = (8 + 26 * o) + "px"; n.style.background = `rgba(255,255,255,${.3 + .7 * o})`; });
+  galeri.kucukIz.style.transform = `translateX(${-Math.max(0, pos - 1.5) * 156}px)`;
+  galeri.kucuk.forEach((k, i) => { const o = clamp(1 - Math.abs(i - pos));
+    k.style.opacity = .5 + .5 * o; k.style.borderColor = `rgba(255,255,255,${o})`; });
+}
 
 /* ======================= Zaman çizelgesi ======================= */
 window.renderAt = async function (t) {
-  // Arka plan ışığı
+  const bekle = [];
   isik.style.left = (300 + Math.sin(t * .35) * 80) + "px"; isik.style.top = (900 + Math.cos(t * .3) * 60) + "px";
 
-  // Telefon
+  // Telefon duruşu
   const d = durus(t);
   telefon.style.transform = `translate(${d.x}px, ${d.y + Math.sin(t * 1.3) * 6}px) rotateY(${d.ry}deg) rotateX(${d.rx}deg) rotateZ(${d.rz}deg) scale(${d.s})`;
 
-  // Ekran: aktif klip + önceki klibin son karesi 0.18 sn'de söner (yumuşak kesme)
-  const e = ekranKaresi(t), bekle = [yukle(kareA, e.src)];
-  if (e.i > 0 && e.u < .18) { const [pk, , pn] = EKRAN[e.i - 1]; bekle.push(yukle(kareB, yol(pk, pn)));
-    kareB.style.opacity = 1 - e.u / .18; kareB.style.display = "block"; }
-  else kareB.style.display = "none";
+  // Ekran: aktif katman + geçiş sırasında önceki katman
+  let i = 0; EKRAN.forEach((E, j) => { if (t >= E.t) i = j; });
+  const cur = EKRAN[i], prev = i > 0 ? EKRAN[i - 1] : null;
+  const g = prev && cur.gecis ? iosEase(p(t, cur.t, cur.t + GECIS)) : 1;
+  EKRAN.forEach(E => { E.el.style.display = "none"; E.el.style.zIndex = 0; });
+  cur.el.style.display = "block"; cur.el.style.zIndex = 2; katmanCiz(cur, t, bekle);
+  cur.el.style.transform = ""; cur.kar.style.opacity = 0;
+  if (g < 1) {
+    prev.el.style.display = "block"; prev.el.style.zIndex = 1; katmanCiz(prev, cur.t, bekle); // önceki: son haliyle donar
+    if (cur.gecis === "it") {
+      cur.el.style.transform = `translateX(${600 * (1 - g)}px)`;
+      cur.el.style.boxShadow = "-20px 0 40px rgba(0,0,0,.35)";
+      prev.el.style.transform = `translateX(${-180 * g}px)`; prev.kar.style.opacity = .35 * g;
+    } else {
+      cur.el.style.transform = `translateY(${1229 * (1 - g)}px)`;
+      prev.el.style.transform = `translateY(${-1229 * g}px)`; prev.kar.style.opacity = .2 * g;
+    }
+  } else cur.el.style.boxShadow = "none";
+  // Durum çubuğu rengi (geçişin ortasında değişir)
+  const durumTip = g < .5 && prev ? prev.durum : cur.durum;
+  durumEl.style.background = durumTip === "acik" ? "#ffffff" : "#0d1626";
+  durumEl.style.color = durumTip === "acik" ? "#000" : "#fff";
 
-  // Parmak dokunuşu
-  let dk = 0, dx = 0, dy = 0;
+  // Galeri sırasında parmak kaydırma, diğer zamanlarda dokunuş
+  let dk = 0, dx = 0, dy = 0, ds = 1;
   DOKUNUS.forEach(([zt, x, y]) => { const u = t - zt; if (u > -.25 && u < .45) { dx = x; dy = y;
-    dk = u < 0 ? ease(p(u, -.25, 0)) : 1 - ease(p(u, .05, .45)); dokun.style.transform = `scale(${u < 0 ? 1 : 1 + u * 1.2})`; } });
-  dokun.style.opacity = dk; dokun.style.left = dx + "px"; dokun.style.top = dy + "px";
+    dk = u < 0 ? ease(p(u, -.25, 0)) : 1 - ease(p(u, .05, .45)); ds = u < 0 ? 1 : 1 + u * 1.2; } });
+  for (let k = 1; k < GALERI.length; k++) { const s0 = G0 + (k - 1) * G_ARA, u = t - s0;
+    if (u > -.2 && u < G_SURE + .1) { dk = u < 0 ? ease(p(u, -.2, 0)) : 1 - ease(p(u, G_SURE - .15, G_SURE + .1));
+      dx = lerp(470, 140, ease(p(u, 0, G_SURE * .8))); dy = 560; ds = .9; } }
+  dokun.style.opacity = dk; dokun.style.left = dx + "px"; dokun.style.top = dy + "px"; dokun.style.transform = `scale(${ds})`;
 
-  // Başlıklar: kelime kelime gelir, topluca çıkar
+  // Arka planda galerinin bulanık fotoğrafı
+  const gOn = ease(p(t, 12.0, 12.8)) * (1 - ease(p(t, 19.8, 20.5)));
+  arkaFoto.style.opacity = gOn;
+  if (gOn > 0) {
+    const pos = galeriPoz(t), a = Math.floor(pos), f = pos - a;
+    bekle.push(yukle(arkaA, GALERI_KLASOR + GALERI[Math.min(a, GALERI.length - 1)][0]));
+    bekle.push(yukle(arkaB, GALERI_KLASOR + GALERI[Math.min(a + 1, GALERI.length - 1)][0]));
+    arkaB.style.opacity = clamp(f);
+  }
+
+  // Başlıklar
   basliklar.forEach(B => {
     const cik = ease(p(t, B.c - .35, B.c));
     B.kap.style.display = t > B.g - .1 && t < B.c + .05 ? "block" : "none";
     B.kelimeler.forEach((k, j) => {
-      const g = ease(p(t, B.g + j * .12, B.g + j * .12 + .45));
-      k.style.opacity = g * (1 - cik);
-      k.style.transform = `translateY(${(1 - g) * 50 - cik * 30}px)`;
-      k.style.filter = g < 1 ? `blur(${(1 - g) * 8}px)` : "none";
+      const gg = ease(p(t, B.g + j * .12, B.g + j * .12 + .45));
+      k.style.opacity = gg * (1 - cik);
+      k.style.transform = `translateY(${(1 - gg) * 50 - cik * 30}px)`;
+      k.style.filter = gg < 1 ? `blur(${(1 - gg) * 8}px)` : "none";
     });
     B.vurgular.forEach(V => { const bs = B.g + (V.sira - 1) * .12;
       V.bg.style.transform = `scaleX(${inOut(p(t, bs - .2, bs + .3))})`; V.bg.style.opacity = 1 - cik; });
   });
 
-  // Rozetler: telefondan fırlar
+  // Rozetler
   rozetler.forEach(R => {
-    const g = p(t, R.g, R.g + .55), cik = ease(p(t, R.c - .3, R.c));
+    const gg = p(t, R.g, R.g + .55), cik = ease(p(t, R.c - .3, R.c));
     R.r.style.display = t > R.g && t < R.c ? "flex" : "none";
-    R.r.style.opacity = Math.min(1, g * 3) * (1 - cik);
-    R.r.style.transform = `translate(${(1 - back(g)) * 260}px, ${(1 - ease(g)) * 30 - cik * 20}px) scale(${lerp(.6, 1, back(g))})`;
-    R.ikon.style.transform = `rotate(${(1 - ease(g)) * -90}deg)`;
+    R.r.style.opacity = Math.min(1, gg * 3) * (1 - cik);
+    R.r.style.transform = `translate(${(1 - back(gg)) * 260}px, ${(1 - ease(gg)) * 30 - cik * 20}px) scale(${lerp(.6, 1, back(gg))})`;
+    R.ikon.style.transform = `rotate(${(1 - ease(gg)) * -90}deg)`;
   });
 
-  // Web adresi kapanışta
-  const w = ease(p(t, 22.5, 23.0)); web.style.opacity = w; web.style.transform = `translateY(${(1 - w) * 20}px)`;
-  web.style.top = "700px";
-
+  const w = ease(p(t, 21.4, 21.9)); web.style.opacity = w; web.style.transform = `translateY(${(1 - w) * 20}px)`;
   await Promise.all(bekle);
 };
 window.SURE = SURE;
-window.HAZIR = document.fonts.ready.then(() => renderAt(0));
+window.HAZIR = Promise.all([document.fonts.ready,
+  ...[...document.images].filter(i => i.getAttribute("src")).map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r))])
+  .then(() => renderAt(0));
 if (!location.search.includes("render")) {
   const t0 = performance.now();
   (function loop(){ renderAt(((performance.now()-t0)/1000) % SURE); requestAnimationFrame(loop); })();
