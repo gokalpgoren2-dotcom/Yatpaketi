@@ -1,0 +1,295 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Mutlutur Mermaid Story</title>
+<style>
+  @font-face { font-family:OswaldL; src:url(../fontlar/Oswald-700-latin.woff2) format("woff2"); font-weight:200 700; }
+  @font-face { font-family:MontL; src:url(../fontlar/Montserrat-700-latin.woff2) format("woff2"); font-weight:100 900; }
+  @font-face { font-family:MontX; src:url(../fontlar/Montserrat-700-latin-ext.woff2) format("woff2"); font-weight:100 900; }
+  :root { --kirmizi:#c7161c; --lacivert:#1e1e66; --gece:#061227; --beyaz:#fff; }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  html, body { width:1080px; height:1920px; overflow:hidden; background:var(--gece); }
+  body { font-family:MontL, MontX, sans-serif; color:var(--beyaz); }
+  .abs { position:absolute; }
+
+  /* Arka plan */
+  #zemin { position:absolute; inset:0;
+    background:radial-gradient(90% 55% at 70% 70%, #16306b 0%, rgba(22,48,107,0) 70%),
+               radial-gradient(70% 40% at 10% 10%, #13245a 0%, rgba(19,36,90,0) 70%),
+               linear-gradient(180deg, #0a1a3f 0%, #061227 100%); }
+  #isik { position:absolute; width:1100px; height:1100px; border-radius:50%;
+    background:radial-gradient(circle, rgba(74,124,255,.28) 0%, rgba(74,124,255,0) 65%); }
+  .cizgiDeniz { position:absolute; left:-200px; right:-200px; height:2px;
+    background:linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,.07), rgba(255,255,255,0)); }
+
+  /* Logo */
+  .logo { position:absolute; top:86px; left:70px; text-align:center; }
+  .logo .m { font-family:OswaldL; font-weight:700; color:var(--kirmizi); line-height:1; font-size:66px; letter-spacing:1px; }
+  .logo .y { background:var(--lacivert); color:#fff; font-weight:600; display:flex; justify-content:space-between;
+    font-size:18px; padding:4px 9px; margin-top:3px; }
+  .logo .s { font-size:13px; color:#d8dcef; margin-top:5px; }
+
+  /* Başlık */
+  .baslik { position:absolute; left:70px; top:250px; width:960px; }
+  .satir { font-size:72px; font-weight:500; line-height:1.18; letter-spacing:-.5px; white-space:nowrap; }
+  .satir.kucuk { font-size:26px; font-weight:600; letter-spacing:9px; color:#aeb8e0; margin-bottom:14px; }
+  .satir.dev { font-family:OswaldL; font-size:150px; font-weight:600; letter-spacing:4px; line-height:1; }
+  .satir.alt { font-size:32px; font-weight:400; color:#d6dbf2; margin-top:16px; letter-spacing:1px; }
+  .k { display:inline-block; will-change:transform, opacity; }
+  .vurgu { position:relative; display:inline-block; padding:2px 18px 8px; margin-left:-6px; }
+  .vurgu .bg { position:absolute; inset:0; background:var(--kirmizi); transform-origin:left center; border-radius:6px; }
+  .vurgu .k { position:relative; }
+
+  /* Telefon */
+  #sahneTel { position:absolute; inset:0; perspective:2400px; }
+  #telefon { position:absolute; left:0; top:0; width:632px; height:1317px; border-radius:92px; padding:16px;
+    background:linear-gradient(140deg, #4a4e57 0%, #1a1c21 30%, #0f1013 60%, #393c44 100%);
+    box-shadow:0 80px 140px rgba(0,0,0,.6), 0 0 0 2px rgba(255,255,255,.06) inset, 0 0 0 1px #000;
+    transform-origin:50% 50%; will-change:transform; }
+  #telefon .tus { position:absolute; width:6px; background:#2b2e35; border-radius:3px; }
+  #ekran { position:relative; width:600px; height:1285px; border-radius:76px; overflow:hidden; background:#000; }
+  #durum { position:absolute; left:0; right:0; top:0; height:56px; background:#0d1626; z-index:3;
+    display:flex; align-items:center; justify-content:space-between; padding:6px 54px 0 62px; font-size:21px; font-weight:600; }
+  #ada { position:absolute; top:14px; left:50%; width:176px; height:50px; margin-left:-88px; background:#000;
+    border-radius:26px; z-index:4; }
+  .kare { position:absolute; left:0; top:56px; width:600px; height:1229px; object-fit:cover; }
+  #parlama { position:absolute; inset:0; border-radius:76px; pointer-events:none; z-index:5;
+    background:linear-gradient(120deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 35%); }
+  #dokun { position:absolute; width:90px; height:90px; margin:-45px 0 0 -45px; border-radius:50%; z-index:6;
+    background:radial-gradient(circle, rgba(255,255,255,.55), rgba(255,255,255,.15) 60%, rgba(255,255,255,0) 72%);
+    border:2px solid rgba(255,255,255,.7); opacity:0; }
+
+  /* Rozetler (telefondan fırlayan bilgi kartları) */
+  .rozet { position:absolute; display:flex; align-items:center; will-change:transform, opacity; }
+  .rozet .ikon { width:96px; height:96px; border-radius:50%; background:radial-gradient(circle at 35% 30%, #e8343a, #a50f14);
+    box-shadow:0 10px 30px rgba(199,22,28,.45), inset 0 2px 0 rgba(255,255,255,.25); display:flex; align-items:center;
+    justify-content:center; position:relative; z-index:2; }
+  .rozet .ikon svg { width:50px; height:50px; }
+  .rozet .kutu { margin-left:-30px; padding:16px 34px 16px 50px; border-radius:0 18px 18px 0;
+    background:linear-gradient(90deg, #1f3c8c, #2a54c4); border:1px solid rgba(255,255,255,.25);
+    box-shadow:0 14px 34px rgba(0,0,0,.35); }
+  .rozet .e { font-size:17px; font-weight:600; letter-spacing:4px; color:#c8d4ff; }
+  .rozet .d { font-size:38px; font-weight:700; margin-top:2px; white-space:nowrap; }
+  .rozet.buyuk .kutu { padding:20px 42px 20px 56px; }
+  .rozet.buyuk .d { font-size:54px; }
+
+  /* Kapanış */
+  .mailKutu { position:absolute; left:70px; top:560px; display:flex; align-items:center; gap:18px;
+    background:rgba(255,255,255,.08); border:1px solid rgba(255,255,255,.3); border-radius:18px; padding:22px 30px; }
+  .mailKutu b { font-size:34px; font-weight:600; }
+  .web { position:absolute; left:74px; top:680px; font-size:24px; letter-spacing:6px; color:#aeb8e0; font-weight:500; }
+</style>
+</head>
+<body>
+<div id="zemin"></div>
+<div id="isik"></div>
+<div class="cizgiDeniz" style="top:1500px"></div><div class="cizgiDeniz" style="top:1580px"></div><div class="cizgiDeniz" style="top:1680px"></div>
+
+<div class="logo"><div class="m">MUTLUTUR</div>
+  <div class="y"><span>Y</span><span>A</span><span>C</span><span>H</span><span>T</span><span>I</span><span>N</span><span>G</span></div>
+  <div class="s">Since 2003</div></div>
+
+<div id="basliklar"></div>
+
+<div id="sahneTel">
+  <div id="telefon">
+    <div class="tus" style="left:-5px;top:250px;height:70px"></div>
+    <div class="tus" style="left:-5px;top:350px;height:120px"></div>
+    <div class="tus" style="left:-5px;top:490px;height:120px"></div>
+    <div class="tus" style="right:-5px;top:380px;height:180px"></div>
+    <div id="ekran">
+      <div id="durum"><span>9:41</span><span style="display:flex;gap:10px;align-items:center">
+        <svg width="34" height="20" viewBox="0 0 34 20"><rect x="0" y="13" width="6" height="7" rx="1.5" fill="#fff"/><rect x="9" y="9" width="6" height="11" rx="1.5" fill="#fff"/><rect x="18" y="5" width="6" height="15" rx="1.5" fill="#fff"/><rect x="27" y="0" width="6" height="20" rx="1.5" fill="#fff"/></svg>
+        <span style="font-size:19px">5G</span>
+        <svg width="46" height="22" viewBox="0 0 46 22"><rect x="1" y="1" width="39" height="20" rx="6" fill="none" stroke="rgba(255,255,255,.5)" stroke-width="2"/><rect x="4" y="4" width="33" height="14" rx="3.5" fill="#fff"/><rect x="42" y="7" width="3" height="8" rx="1.5" fill="rgba(255,255,255,.5)"/></svg>
+      </span></div>
+      <div id="ada"></div>
+      <img class="kare" id="kareA"><img class="kare" id="kareB">
+      <div id="dokun"></div>
+      <div id="parlama"></div>
+    </div>
+  </div>
+</div>
+<div id="rozetler"></div>
+
+<script>
+/* ======================= AYARLAR ======================= */
+const KLASOR = "ekran-mermaid/";
+const FPS = 30;
+// Telefon ekranında oynayacak kayıt parçaları: [klasör, başlangıç sn, kare sayısı]
+const EKRAN = [
+  ["1-anasayfa",   0.0, 72],
+  ["2-koleksiyon", 2.4, 48],
+  ["3-liste",      4.0, 78],
+  ["4-mermaid",    6.6, 57],
+  ["5-ozellik",    8.5, 78],
+  ["6-galeri",    11.1, 72],
+  ["7-dis",       13.5, 96],
+  ["8-ic",        16.7, 90],
+  ["9-kabin",     19.7, 42],
+  ["10-form",     21.1, 16],   // son kare kapanışta donar
+];
+const SURE = 25.0;
+
+// Başlıklar: [başlangıç, bitiş, satırlar]  ( [[metin]] = kırmızı vurgu )
+const BASLIKLAR = [
+  [0.3, 3.9,  [{t:"Your next yacht"}, {t:"is [[one tap away.]]"}]],
+  [4.2, 8.3,  [{t:"NOW FOR SALE", c:"kucuk"}, {t:"MERMAID", c:"dev"}, {t:"34m Luxury Motor Sailer", c:"alt"}]],
+  [8.6, 13.1, [{t:"Crafted for"}, {t:"[[the open sea.]]"}]],
+  [13.5, 20.9,[{t:"Every detail,"}, {t:"[[refined.]]"}, {t:"Built 2009 · Refit 2020 · Cavusoglu", c:"alt"}]],
+  [21.3, SURE + 1, [{t:"Enquire"}, {t:"[[today.]]"}]],
+];
+
+// Rozetler: [giriş, çıkış, x, y, ikon, etiket, değer, büyük?]
+const IKON = {
+  boy:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M6 8l-4 4 4 4M18 8l4 4-4 4"/></svg>`,
+  en:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18M8 6l4-4 4 4M8 18l4 4 4-4"/></svg>`,
+  motor:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L4 14h7l-1 8 9-12h-7z"/></svg>`,
+  kabin:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 18V7M2 13h20v5M22 13v-2a3 3 0 0 0-3-3h-8v5M6.5 11.5a1.5 1.5 0 1 0 0-.01"/></svg>`,
+  fiyat:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 7a7 7 0 1 0 0 10M4 10h9M4 14h9"/></svg>`,
+  mail:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M3 7l9 6 9-6"/></svg>`,
+};
+const ROZETLER = [
+  [6.9, 8.3,  60, 1000, "fiyat", "ASKING PRICE", "€2,500,000", true],
+  [9.0, 13.1, 50,  760, "boy",   "LENGTH", "33.70 M"],
+  [9.35,13.1, 50,  905, "en",    "BEAM", "7.50 M"],
+  [9.7, 13.1, 50, 1050, "motor", "ENGINES", "2 × 450 HP"],
+  [10.05,13.1,50, 1195, "kabin", "CABINS · GUESTS", "5 · 10"],
+  [21.9, SURE + 1, 60, 560, "mail", "ENQUIRIES", "info@mutluturyachting.com"],
+];
+
+// Telefon duruşları (zaman → konum/açı). Ara değerler yumuşak geçişle hesaplanır.
+const DURUS = [
+  { t:0.0,  x:380, y:2000, ry:-26, rx:8,  rz:6,  s:1.1 },
+  { t:0.9,  x:360, y:640,  ry:-18, rx:6,  rz:4,  s:1.1 },
+  { t:8.6,  x:360, y:640,  ry:-18, rx:6,  rz:4,  s:1.1 },
+  { t:9.2,  x:400, y:610,  ry:-22, rx:5,  rz:5,  s:1.08 },
+  { t:13.1, x:400, y:610,  ry:-22, rx:5,  rz:5,  s:1.08 },
+  { t:13.8, x:224, y:620,  ry:0,   rx:0,  rz:0,  s:1.16 },
+  { t:20.9, x:224, y:620,  ry:0,   rx:0,  rz:0,  s:1.16 },
+  { t:21.6, x:380, y:880,  ry:-18, rx:6,  rz:4,  s:1.06 },
+  { t:SURE, x:380, y:870,  ry:-16, rx:6,  rz:3,  s:1.06 },
+];
+// Parmak dokunuşları: [zaman, ekran x, ekran y] (ekran: 600x1285)
+const DOKUNUS = [[3.85, 300, 1000], [6.35, 300, 1180], [11.0, 300, 900]];
+
+/* ======================= Yardımcılar ======================= */
+const clamp = (x,a=0,b=1) => Math.min(b, Math.max(a, x));
+const ease = x => 1 - Math.pow(1 - clamp(x), 3);
+const inOut = x => { x = clamp(x); return x<.5 ? 4*x*x*x : 1-Math.pow(-2*x+2,3)/2; };
+const back = x => { x = clamp(x); const c1 = 1.70158, c3 = c1 + 1; return 1 + c3*Math.pow(x-1,3) + c1*Math.pow(x-1,2); };
+const p = (t,a,b) => clamp((t-a)/(b-a));
+const lerp = (a,b,x) => a + (b-a)*x;
+const el = h => { const d = document.createElement("div"); d.innerHTML = h.trim(); return d.firstChild; };
+
+/* Başlıkları kur */
+const basliklar = BASLIKLAR.map(([g, c, satirlar]) => {
+  const kap = el(`<div class="baslik"></div>`);
+  const kelimeler = [], vurgular = [];
+  satirlar.forEach(S => {
+    const sat = el(`<div class="satir ${S.c || ""}"></div>`);
+    S.t.split(/(\[\[.*?\]\])/).filter(Boolean).forEach(parca => {
+      const vurgu = parca.startsWith("[[");
+      const metin = vurgu ? parca.slice(2, -2) : parca;
+      const hedef = vurgu ? el(`<span class="vurgu"><span class="bg"></span></span>`) : sat;
+      metin.split(/(\s+)/).forEach(w => {
+        if (!w) return;
+        if (/^\s+$/.test(w)) { hedef.appendChild(document.createTextNode(" ")); return; }
+        const k = el(`<span class="k">${w}</span>`); hedef.appendChild(k); kelimeler.push(k);
+      });
+      if (vurgu) { sat.appendChild(hedef); vurgular.push({ bg:hedef.querySelector(".bg"), sira:kelimeler.length }); }
+    });
+    kap.appendChild(sat);
+  });
+  document.getElementById("basliklar").appendChild(kap);
+  return { g, c, kap, kelimeler, vurgular };
+});
+// Kapanış e-posta ve web
+const web = el(`<div class="web">MUTLUTURYACHTING.COM</div>`); document.body.appendChild(web);
+
+/* Rozetleri kur */
+const rozetler = ROZETLER.map(([g, c, x, y, ik, e, d, buyuk]) => {
+  const r = el(`<div class="rozet ${buyuk ? "buyuk" : ""}" style="left:${x}px;top:${y}px">
+    <div class="ikon">${IKON[ik]}</div><div class="kutu"><div class="e">${e}</div><div class="d">${d}</div></div></div>`);
+  document.getElementById("rozetler").appendChild(r);
+  return { g, c, r, kutu:r.querySelector(".kutu"), ikon:r.querySelector(".ikon") };
+});
+
+const telefon = document.getElementById("telefon"), isik = document.getElementById("isik");
+const kareA = document.getElementById("kareA"), kareB = document.getElementById("kareB"), dokun = document.getElementById("dokun");
+const yol = (klip, n) => `${KLASOR}${klip}/${String(n).padStart(4, "0")}.jpg`;
+function ekranKaresi(t) {
+  let i = 0; for (let j = 0; j < EKRAN.length; j++) if (t >= EKRAN[j][1]) i = j;
+  const [k, b, n] = EKRAN[i];
+  return { i, src: yol(k, Math.min(n, Math.max(1, Math.floor((t - b) * FPS) + 1))), u: t - b };
+}
+function durus(t) {
+  let a = DURUS[0], b = DURUS[DURUS.length - 1];
+  for (let j = 0; j < DURUS.length - 1; j++) if (t >= DURUS[j].t && t <= DURUS[j + 1].t) { a = DURUS[j]; b = DURUS[j + 1]; break; }
+  if (t > DURUS[DURUS.length - 1].t) a = b;
+  const x = a === b ? 1 : (a.t === 0 ? back(p(t, a.t, b.t) * .92) : inOut(p(t, a.t, b.t)));
+  const o = {}; ["x","y","ry","rx","rz","s"].forEach(k => o[k] = lerp(a[k], b[k], x)); return o;
+}
+const yukle = (img, src) => img.getAttribute("src") === src ? Promise.resolve()
+  : new Promise(r => { img.onload = img.onerror = r; img.src = src; });
+
+/* ======================= Zaman çizelgesi ======================= */
+window.renderAt = async function (t) {
+  // Arka plan ışığı
+  isik.style.left = (300 + Math.sin(t * .35) * 80) + "px"; isik.style.top = (900 + Math.cos(t * .3) * 60) + "px";
+
+  // Telefon
+  const d = durus(t);
+  telefon.style.transform = `translate(${d.x}px, ${d.y + Math.sin(t * 1.3) * 6}px) rotateY(${d.ry}deg) rotateX(${d.rx}deg) rotateZ(${d.rz}deg) scale(${d.s})`;
+
+  // Ekran: aktif klip + önceki klibin son karesi 0.18 sn'de söner (yumuşak kesme)
+  const e = ekranKaresi(t), bekle = [yukle(kareA, e.src)];
+  if (e.i > 0 && e.u < .18) { const [pk, , pn] = EKRAN[e.i - 1]; bekle.push(yukle(kareB, yol(pk, pn)));
+    kareB.style.opacity = 1 - e.u / .18; kareB.style.display = "block"; }
+  else kareB.style.display = "none";
+
+  // Parmak dokunuşu
+  let dk = 0, dx = 0, dy = 0;
+  DOKUNUS.forEach(([zt, x, y]) => { const u = t - zt; if (u > -.25 && u < .45) { dx = x; dy = y;
+    dk = u < 0 ? ease(p(u, -.25, 0)) : 1 - ease(p(u, .05, .45)); dokun.style.transform = `scale(${u < 0 ? 1 : 1 + u * 1.2})`; } });
+  dokun.style.opacity = dk; dokun.style.left = dx + "px"; dokun.style.top = dy + "px";
+
+  // Başlıklar: kelime kelime gelir, topluca çıkar
+  basliklar.forEach(B => {
+    const cik = ease(p(t, B.c - .35, B.c));
+    B.kap.style.display = t > B.g - .1 && t < B.c + .05 ? "block" : "none";
+    B.kelimeler.forEach((k, j) => {
+      const g = ease(p(t, B.g + j * .12, B.g + j * .12 + .45));
+      k.style.opacity = g * (1 - cik);
+      k.style.transform = `translateY(${(1 - g) * 50 - cik * 30}px)`;
+      k.style.filter = g < 1 ? `blur(${(1 - g) * 8}px)` : "none";
+    });
+    B.vurgular.forEach(V => { const bs = B.g + (V.sira - 1) * .12;
+      V.bg.style.transform = `scaleX(${inOut(p(t, bs - .2, bs + .3))})`; V.bg.style.opacity = 1 - cik; });
+  });
+
+  // Rozetler: telefondan fırlar
+  rozetler.forEach(R => {
+    const g = p(t, R.g, R.g + .55), cik = ease(p(t, R.c - .3, R.c));
+    R.r.style.display = t > R.g && t < R.c ? "flex" : "none";
+    R.r.style.opacity = Math.min(1, g * 3) * (1 - cik);
+    R.r.style.transform = `translate(${(1 - back(g)) * 260}px, ${(1 - ease(g)) * 30 - cik * 20}px) scale(${lerp(.6, 1, back(g))})`;
+    R.ikon.style.transform = `rotate(${(1 - ease(g)) * -90}deg)`;
+  });
+
+  // Web adresi kapanışta
+  const w = ease(p(t, 22.5, 23.0)); web.style.opacity = w; web.style.transform = `translateY(${(1 - w) * 20}px)`;
+  web.style.top = "700px";
+
+  await Promise.all(bekle);
+};
+window.SURE = SURE;
+window.HAZIR = document.fonts.ready.then(() => renderAt(0));
+if (!location.search.includes("render")) {
+  const t0 = performance.now();
+  (function loop(){ renderAt(((performance.now()-t0)/1000) % SURE); requestAnimationFrame(loop); })();
+}
+</script>
+</body>
+</html>
