@@ -24,38 +24,47 @@
   .logo .y { background:var(--lacivert); color:#fff; font-weight:600; display:flex; justify-content:space-between; }
   .logo .s { color:#e8e8f0; font-weight:500; margin-top:10px; }
 
-  /* Tekne sahnesi */
-  .tekne { opacity:0; }
-  .foto { position:absolute; left:0; top:0; width:1080px; height:1160px; overflow:hidden; }
-  .foto img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; will-change:transform, opacity; }
-  .golge { position:absolute; left:0; right:0; top:700px; height:460px;
-    background:linear-gradient(to bottom, rgba(7,20,39,0) 0%, rgba(7,20,39,.85) 70%, var(--gece) 100%); }
-  .ust { position:absolute; left:0; right:0; top:0; height:260px;
-    background:linear-gradient(to bottom, rgba(7,20,39,.65), rgba(7,20,39,0)); }
-  .no { top:70px; left:70px; font-size:30px; font-weight:700; letter-spacing:6px; }
+  /* Tekne sahnesi: tam ekran fotoğraf + etiketler */
+  .tekne { opacity:0; overflow:hidden; }
+  .tekne img.arka { position:absolute; inset:-60px; width:calc(100% + 120px); height:calc(100% + 120px);
+    object-fit:cover; filter:blur(36px) brightness(.55) saturate(1.2); }
+  .serit { position:absolute; left:-135px; width:1350px; top:520px; height:880px; overflow:hidden;
+    -webkit-mask-image:linear-gradient(to bottom, transparent 0%, #000 9%, #000 91%, transparent 100%);
+            mask-image:linear-gradient(to bottom, transparent 0%, #000 9%, #000 91%, transparent 100%); }
+  .serit img { position:absolute; inset:0; width:100%; height:100%; object-fit:cover; will-change:transform, opacity; }
+  .karart { position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(to bottom, rgba(7,20,39,.55) 0%, rgba(7,20,39,0) 30%, rgba(7,20,39,0) 75%, rgba(7,20,39,.6) 100%); }
+  .no { top:90px; left:80px; font-size:28px; font-weight:700; letter-spacing:6px; text-shadow:0 2px 12px rgba(0,0,0,.5); }
   .no b { color:var(--kirmizi); }
-  .satilikRozet { top:62px; right:70px; background:var(--kirmizi); padding:14px 30px; font-size:30px;
+  .satilikRozet { top:80px; right:80px; background:var(--kirmizi); padding:14px 30px; font-size:28px;
     font-weight:800; letter-spacing:6px; }
-  .tip { top:930px; left:80px; font-size:28px; font-weight:600; letter-spacing:5px; color:#d9dbe8; }
-  .ad { top:970px; left:74px; font-size:150px; font-weight:700; line-height:1.05; white-space:nowrap; }
-  .alt { top:1150px; left:80px; height:8px; background:var(--kirmizi); }
-  .izgara { position:absolute; left:80px; right:80px; top:1200px; display:grid;
-    grid-template-columns:1fr 1fr; gap:26px; }
-  .kutu { border-left:6px solid var(--kirmizi); background:rgba(30,30,102,.55); padding:24px 30px; }
-  .kutu .e { font-size:24px; font-weight:700; letter-spacing:5px; color:#aeb3d6; }
-  .kutu .d { font-family:OswaldL,OswaldX; font-size:58px; font-weight:500; margin-top:6px; white-space:nowrap; }
-  .fiyat { position:absolute; left:80px; right:80px; top:1600px; height:130px; background:var(--beyaz);
-    color:var(--gece); display:flex; align-items:center; justify-content:space-between; padding:0 40px; }
-  .fiyat .e { font-size:26px; font-weight:800; letter-spacing:5px; color:var(--kirmizi); }
-  .fiyat .d { font-family:OswaldL,OswaldX; font-size:68px; font-weight:700; }
-  .web { bottom:56px; font-size:26px; letter-spacing:6px; font-weight:600; color:#aeb3d6; }
+  .ad { top:150px; left:76px; font-size:132px; font-weight:700; line-height:1.05; white-space:nowrap;
+    text-shadow:0 4px 30px rgba(0,0,0,.45); }
+  .tip { top:300px; left:80px; font-size:27px; font-weight:600; letter-spacing:5px; color:#eef0f8;
+    text-shadow:0 2px 12px rgba(0,0,0,.6); }
+
+  /* Etiket (referanstaki gibi): küçük başlık + büyük değer + çizgi + nokta */
+  .etiket { position:absolute; text-shadow:0 3px 18px rgba(0,0,0,.55); }
+  .etiket .e { font-size:30px; font-weight:400; letter-spacing:1px; }
+  .etiket .d { font-size:70px; font-weight:800; line-height:1.05; white-space:nowrap; }
+  .cizgi { position:absolute; width:3px; background:#fff; box-shadow:0 0 8px rgba(0,0,0,.4); }
+  .nokta { position:absolute; width:16px; height:16px; margin:-8px 0 0 -8px; border-radius:50%; background:#fff;
+    box-shadow:0 0 0 6px rgba(255,255,255,.25), 0 0 10px rgba(0,0,0,.4); }
+
+  /* Fiyat kartı */
+  .fiyat { position:absolute; left:80px; right:80px; top:1500px; background:var(--beyaz); color:var(--gece);
+    padding:28px 40px; border-left:12px solid var(--kirmizi); }
+  .fiyat .e { font-size:24px; font-weight:800; letter-spacing:5px; color:var(--kirmizi); }
+  .fiyat .d { font-family:OswaldL,OswaldX; font-size:72px; font-weight:700; line-height:1.1; margin-top:4px; }
+  .fiyat .d.mail { font-family:MontL,MontX; font-size:44px; font-weight:800; text-transform:none; margin-top:10px; }
+  .web { bottom:60px; font-size:26px; letter-spacing:6px; font-weight:600; color:#d7dbee; }
 
   /* Giriş & kapanış */
   #girisArka, #kapanisArka { background:radial-gradient(110% 60% at 50% 45%, #14205a 0%, var(--gece) 75%); }
   .baslik { font-size:96px; font-weight:700; letter-spacing:4px; }
   .altBaslik { font-size:32px; font-weight:600; letter-spacing:12px; color:#c9cce3; }
-  .cta { left:50%; transform:translateX(-50%); background:var(--kirmizi); padding:34px 64px; font-size:44px;
-    font-weight:800; letter-spacing:4px; white-space:nowrap; }
+  .cta { left:50%; transform:translateX(-50%); background:var(--kirmizi); padding:30px 56px; font-size:42px;
+    font-weight:800; letter-spacing:1px; white-space:nowrap; }
 </style>
 </head>
 <body>
@@ -63,26 +72,35 @@
 
 <script>
 /* ======================================================================
-   İLANLAR — rakamları buradan güncelle. fiyat: null ise "FİYAT İÇİN DM" yazar.
-   Kaynak: yat broker ilanları (mutluturyachting.com'dan teyit edilmeli)
+   İLANLAR — rakamları buradan güncelle. fiyat: null ise e-posta adresi yazar.
+   foto[].ox = yatay odak (%), foto[].oy = dikey odak (%), s = yakınlaşma [baş, son]
    ====================================================================== */
-const TEKNELER = [
-  { ad:"WHITE SWAN", tip:"GULET · 2004", foto:["white-swan-1.webp","white-swan-2.webp"],
-    boy:"32 m", en:"7,9 m", motor:"2 × 440 HP", kabin:"6 Kabin · 12 Kişi", fiyat:null,
-    kb:[{s:[1.30,1.40], x:[40,-40], y:-170, ox:"55%"}, {s:[1.40,1.30], x:[-30,30], y:-160, ox:"42%"}] },
-  { ad:"MERMAID", tip:"MOTORSAILER · 2009 / REFIT 2020", foto:["mermaid-1.webp","mermaid-2.webp"],
-    boy:"34 m", en:"7,5 m", motor:"2 × 450 HP", kabin:"5 Kabin · 10 Kişi", fiyat:"€ 3.200.000",
-    kb:[{s:[1.28,1.36], x:[0,0], y:-150, ox:"52%"}, {s:[1.22,1.32], x:[40,-30], y:-110, ox:"58%"}] },
-  { ad:"MERELEY I", tip:"AES YACHT · 2024 · TRI-DECK EXPLORER", foto:["mereley-1.webp","mereley-2.webp"],
-    boy:"34,6 m", en:"7,6 m", motor:"2 × 800 HP", kabin:"5 Kabin · 12 Kişi", fiyat:"€ 12.750.000",
-    kb:[{s:[1.12,1.22], x:[-40,40], y:-60, ox:"48%"}, {s:[1.16,1.06], x:[0,0], y:-20, ox:"45%"}] },
-  { ad:"AZIMUT 54 FLY", tip:"AZIMUT · FLYBRIDGE MOTORYAT", foto:["azimut54-1.webp","azimut54-2.webp"],
-    boy:"16,7 m", en:"4,95 m", motor:"2 × 725 HP", kabin:"3 Kabin · 6 Kişi", fiyat:null,
-    kb:[{s:[1.10,1.20], x:[30,-30], y:-50, ox:"50%"}, {s:[1.08,1.18], x:[-30,30], y:-50, ox:"45%"}] },
-];
+const MAIL = "info@mutluturyachting.com";
 const WEB = "MUTLUTURYACHTING.COM";
-const GIRIS = 3.0, TEKNE_SURE = 6.5, KAPANIS = 4.5;
+const TEKNELER = [
+  { ad:"MERELEY I", tip:"AES YACHT · 2024 · TRI-DECK EXPLORER",
+    foto:[{f:"mereley-1.webp", ox:62, oy:50, s:[1.0,1.08]}, {f:"mereley-2.webp", ox:30, oy:50, s:[1.06,1.0]}],
+    boy:"34,62 M", en:"7,60 M", motor:"2 × 800 HP", kap:"5 · 12", kapE:"Kabin · Misafir", fiyat:null },
+  { ad:"MERMAID", tip:"MOTORSAILER · 2009 / REFIT 2020",
+    foto:[{f:"mermaid-2.webp", ox:58, oy:60, s:[1.0,1.08]}, {f:"mermaid-1.webp", ox:48, oy:55, s:[1.0,1.07]}],
+    boy:"34 M", en:"7,50 M", motor:"2 × 450 HP", kap:"5 · 10", kapE:"Kabin · Misafir", fiyat:"€ 3.200.000" },
+  { ad:"WHITE SWAN", tip:"GULET · 2004",
+    foto:[{f:"white-swan-1.webp", ox:55, oy:60, s:[1.0,1.08]}, {f:"white-swan-2.webp", ox:38, oy:55, s:[1.06,1.0]}],
+    boy:"32 M", en:"7,90 M", motor:"2 × 440 HP", kap:"6 · 12", kapE:"Kabin · Misafir", fiyat:null },
+  { ad:"AZIMUT 54 FLY", tip:"AZIMUT · FLYBRIDGE MOTORYAT",
+    foto:[{f:"azimut54-2.webp", ox:48, oy:50, s:[1.0,1.08]}, {f:"azimut54-1.webp", ox:50, oy:50, s:[1.06,1.0]}],
+    boy:"16,70 M", en:"4,95 M", motor:"2 × 725 HP", kap:"3 · 6", kapE:"Kabin · Misafir", fiyat:null },
+];
+const GIRIS = 3.0, TEKNE_SURE = 7.0, KAPANIS = 4.5;
 const SURE = GIRIS + TEKNELER.length * TEKNE_SURE + KAPANIS;
+
+/* Etiket yerleşimi (ekran koordinatı): metin konumu + çizginin uzandığı nokta */
+const ETIKETLER = [
+  { k:"boy",   e:"Length Overall · Boy", x:90,  y:400,  yon:"asagi", nx:200, ny:820  },
+  { k:"en",    e:"Beam · En",            x:620, y:400,  yon:"asagi", nx:760, ny:880, sag:true },
+  { k:"motor", e:"Engine · Motor",       x:90,  y:1460, yon:"yukari", nx:220, ny:1150 },
+  { k:"kap",   e:"Cabins · Guests",      x:620, y:1460, yon:"yukari", nx:780, ny:1190, sag:true },
+];
 
 /* ===== Yardımcılar ===== */
 const clamp = (x,a=0,b=1) => Math.min(b, Math.max(a, x));
@@ -92,11 +110,14 @@ const p = (t,a,b) => clamp((t-a)/(b-a));
 const lerp = (a,b,x) => a + (b-a)*x;
 const el = (html) => { const d = document.createElement("div"); d.innerHTML = html.trim(); return d.firstChild; };
 const sahne = document.getElementById("sahne");
-const logoHTML = (olcek) => `<div class="logo" style="top:0">
-  <div class="m" style="font-size:${150*olcek}px">MUTLUTUR</div>
-  <div class="y" style="font-size:${40*olcek}px;padding:${8*olcek}px ${18*olcek}px;margin-top:${6*olcek}px">
+const logoHTML = (o) => `<div class="logo" style="top:0">
+  <div class="m" style="font-size:${150*o}px">MUTLUTUR</div>
+  <div class="y" style="font-size:${40*o}px;padding:${8*o}px ${18*o}px;margin-top:${6*o}px">
     ${"YACHTING".split("").map(c=>`<span>${c}</span>`).join("")}</div>
-  <div class="s" style="font-size:${28*olcek}px">Since 2003</div></div>`;
+  <div class="s" style="font-size:${28*o}px">Since 2003</div></div>`;
+const set = (e, o, y=0, x=0, s=1) => { e.style.opacity = o;
+  e.style.transform = (e.classList.contains("logo") || e.classList.contains("cta") ? "translateX(-50%) " : "")
+    + `translate(${x}px, ${y}px) scale(${s})`; };
 
 /* ===== Giriş ===== */
 const giris = el(`<div class="kat" id="girisArka"></div>`); sahne.appendChild(giris);
@@ -108,42 +129,44 @@ const gCizgi = el(`<div class="abs" style="top:1180px;left:50%;height:6px;backgr
 /* ===== Tekneler ===== */
 const sahneler = TEKNELER.map((T, i) => {
   const k = el(`<div class="kat tekne">
-    <div class="foto">${T.foto.map(f=>`<img src="../fotograflar/${f}">`).join("")}</div>
-    <div class="ust"></div><div class="golge"></div>
+    ${T.foto.map(f=>`<img class="arka" src="../fotograflar/${f.f}">`).join("")}
+    <div class="karart"></div>
+    <div class="serit">${T.foto.map(f=>`<img class="on" src="../fotograflar/${f.f}" style="object-position:${f.ox}% ${f.oy}%">`).join("")}</div>
     <div class="abs no">0${i+1} <b>/</b> 0${TEKNELER.length}</div>
     <div class="abs satilikRozet">SATILIK</div>
-    <div class="abs tip">${T.tip}</div>
     <div class="abs bas ad">${T.ad}</div>
-    <div class="abs alt"></div>
-    <div class="izgara">
-      <div class="kutu"><div class="e">BOY</div><div class="d">${T.boy}</div></div>
-      <div class="kutu"><div class="e">EN</div><div class="d">${T.en}</div></div>
-      <div class="kutu"><div class="e">MOTOR</div><div class="d">${T.motor}</div></div>
-      <div class="kutu"><div class="e">KONAKLAMA</div><div class="d">${T.kabin}</div></div>
-    </div>
-    <div class="fiyat"><span class="e">${T.fiyat ? "FİYAT" : "FİYAT BİLGİSİ"}</span><span class="d">${T.fiyat || "DM ATIN"}</span></div>
+    <div class="abs tip">${T.tip}</div>
+    <div class="fiyat"><div class="e">${T.fiyat ? "FİYAT" : "FİYAT BİLGİSİ İÇİN"}</div>
+      <div class="d ${T.fiyat ? "" : "mail"}">${T.fiyat || MAIL}</div></div>
     <div class="abs orta web">${WEB}</div>
   </div>`);
   sahne.appendChild(k);
+  const etiketler = ETIKETLER.map(E => {
+    const t = el(`<div class="etiket" style="left:${E.x}px;top:${E.y}px;${E.sag ? "text-align:left" : ""}">
+      <div class="e">${T.kapE && E.k === "kap" ? T.kapE : E.e}</div><div class="d">${T[E.k]}</div></div>`);
+    const c = el(`<div class="cizgi"></div>`), n = el(`<div class="nokta"></div>`);
+    k.append(c, n, t);
+    // çizgi: metnin altından (aşağı) ya da üstünden (yukarı) noktaya
+    const metinUc = E.yon === "asagi" ? E.y + 140 : E.y - 16;
+    return { E, t, c, n, metinUc };
+  });
   const ad = k.querySelector(".ad");
-  if (ad.scrollWidth > 940) ad.style.fontSize = Math.floor(150 * 940 / ad.scrollWidth) + "px";
-  return { k, T, imgs:[...k.querySelectorAll("img")], tip:k.querySelector(".tip"), ad,
-    alt:k.querySelector(".alt"), kutular:[...k.querySelectorAll(".kutu")], fiyat:k.querySelector(".fiyat"),
-    no:k.querySelector(".no"), rozet:k.querySelector(".satilikRozet"), web:k.querySelector(".web") };
+  return { k, T, imgs:[...k.querySelectorAll("img.on")], arkalar:[...k.querySelectorAll("img.arka")], ad, etiketler,
+    tip:k.querySelector(".tip"), fiyat:k.querySelector(".fiyat"), no:k.querySelector(".no"),
+    rozet:k.querySelector(".satilikRozet"), web:k.querySelector(".web") };
 });
+// uzun isimleri sığdır
+requestAnimationFrame(() => sahneler.forEach(S => { S.k.style.display = "block";
+  if (S.ad.scrollWidth > 760) S.ad.style.fontSize = Math.floor(132 * 760 / S.ad.scrollWidth) + "px"; }));
 
 /* ===== Kapanış ===== */
 const kap = el(`<div class="kat" id="kapanisArka" style="opacity:0"></div>`); sahne.appendChild(kap);
-const kLogo = el(logoHTML(1.0)); kap.appendChild(kLogo); kLogo.style.top = "520px";
-const kBas = el(`<div class="abs orta bas baslik" style="top:860px;font-size:84px">HAYALİNİZDEKİ YAT</div>`); kap.appendChild(kBas);
-const kBas2 = el(`<div class="abs orta bas baslik" style="top:965px;font-size:84px;color:var(--kirmizi)">BİR MESAJ UZAKTA</div>`); kap.appendChild(kBas2);
-const kAlt = el(`<div class="abs orta altBaslik" style="top:1110px;font-size:30px;letter-spacing:6px">DETAYLI BİLGİ & GÖRÜNTÜLEME İÇİN</div>`); kap.appendChild(kAlt);
-const kCta = el(`<div class="abs cta" style="top:1210px">HEMEN DM ATIN</div>`); kap.appendChild(kCta);
-const kWeb = el(`<div class="abs orta" style="top:1400px;font-size:40px;font-weight:700;letter-spacing:8px">${WEB}</div>`); kap.appendChild(kWeb);
-
-const set = (e, o, y=0, x=0, s=1) => { e.style.opacity = o;
-  e.style.transform = (e.classList.contains("logo") || e.classList.contains("cta") ? "translateX(-50%) " : "")
-    + `translate(${x}px, ${y}px) scale(${s})`; };
+const kLogo = el(logoHTML(1.0)); kap.appendChild(kLogo); kLogo.style.top = "500px";
+const kBas = el(`<div class="abs orta bas baslik" style="top:840px;font-size:84px">HAYALİNİZDEKİ YAT</div>`); kap.appendChild(kBas);
+const kBas2 = el(`<div class="abs orta bas baslik" style="top:945px;font-size:84px;color:var(--kirmizi)">BİR MAİL UZAKTA</div>`); kap.appendChild(kBas2);
+const kAlt = el(`<div class="abs orta altBaslik" style="top:1100px;font-size:28px;letter-spacing:5px">FİYAT, DETAYLI BİLGİ & GÖRÜNTÜLEME İÇİN</div>`); kap.appendChild(kAlt);
+const kCta = el(`<div class="abs cta" style="top:1180px">${MAIL}</div>`); kap.appendChild(kCta);
+const kWeb = el(`<div class="abs orta" style="top:1360px;font-size:38px;font-weight:700;letter-spacing:8px">${WEB}</div>`); kap.appendChild(kWeb);
 
 /* ===== Zaman çizelgesi ===== */
 window.renderAt = function (t) {
@@ -155,49 +178,63 @@ window.renderAt = function (t) {
   set(gBas, ease(p(t,.9,1.5)), (1-ease(p(t,.9,1.5)))*50);
   set(gAlt, ease(p(t,1.2,1.8)), (1-ease(p(t,1.2,1.8)))*30);
 
-  // Tekneler
+  // Tekneler — her biri: [0–4.2] foto 1 + etiketler, [4.2–7] foto 2 + fiyat
+  const FOTO2 = 4.2;
   sahneler.forEach((S, i) => {
     const t0 = GIRIS + i * TEKNE_SURE, u = t - t0;
-    const gir = ease(p(u, -.4, .3)), cik = ease(p(u, TEKNE_SURE - .4, TEKNE_SURE + .3));
     const gorunur = u > -.5 && u < TEKNE_SURE + .4;
     S.k.style.display = gorunur ? "block" : "none";
     if (!gorunur) return;
-    S.k.style.opacity = i === TEKNELER.length - 1 ? gir : gir;  // üst üste binerek geçiş
+    S.k.style.opacity = ease(p(u, -.4, .3));
     S.k.style.zIndex = i + 1;
-    // Ken Burns: 2 fotoğraf, ortada çapraz geçiş
-    const yari = TEKNE_SURE / 2, gec = ease(p(u, yari - .35, yari + .35));
-    S.imgs.forEach((img, j) => {
-      const kb = S.T.kb[j], x = j === 0 ? p(u, -.5, yari + .4) : p(u, yari - .4, TEKNE_SURE + .4);
-      img.style.objectPosition = `${kb.ox || "50%"} 50%`;
-      img.style.transform = `translateY(${kb.y || 0}px) scale(${lerp(kb.s[0], kb.s[1], x)}) translateX(${lerp(kb.x[0], kb.x[1], x)}px)`;
-      img.style.opacity = j === 0 ? 1 : gec;
-    });
-    // Yazılar
     const a = (s, e) => ease(p(u, s, e));
-    set(S.no, a(.2,.7), 0, 0); set(S.rozet, a(.3,.8), 0, (1-a(.3,.8))*80);
-    set(S.tip, a(.35,.9) * (1-cik), 0, (1-a(.35,.9))*-60);
-    set(S.ad, a(.45,1.05) * (1-cik), (1-a(.45,1.05))*70);
-    S.alt.style.width = inOut(p(u,.8,1.4)) * 220 + "px";
-    S.kutular.forEach((kb, j) => { const g = a(1.0 + j*.18, 1.5 + j*.18);
-      set(kb, g * (1-cik), (1-g)*50, 0, .96 + .04*g); });
-    const f = a(1.9, 2.4);
-    set(S.fiyat, f * (1-cik), (1-f)*40, 0, 1 + (u > 2.4 ? Math.sin((u-2.4)*3.2)*.012 : 0));
-    set(S.web, a(.5,1.0), 0);
+    const gec = ease(p(u, FOTO2 - .35, FOTO2 + .35));
+    S.imgs.forEach((img, j) => {
+      const f = S.T.foto[j];
+      const x = j === 0 ? p(u, -.5, FOTO2 + .4) : p(u, FOTO2 - .4, TEKNE_SURE + .4);
+      img.style.transform = `scale(${lerp(f.s[0], f.s[1], x)})`;
+      img.style.opacity = j === 0 ? 1 : gec;
+      S.arkalar[j].style.opacity = j === 0 ? 1 : gec;
+    });
+    // Başlık
+    set(S.no, a(.2,.7)); set(S.rozet, a(.3,.8), 0, (1-a(.3,.8))*80);
+    set(S.ad, a(.35,.95), (1-a(.35,.95))*60);
+    set(S.tip, a(.6,1.1), 0, (1-a(.6,1.1))*-50);
+    // Etiketler: çizgi uzar → nokta belirir → metin gelir; foto 2'ye geçerken kaybolur
+    const etCik = ease(p(u, FOTO2 - .45, FOTO2 + .1));
+    S.etiketler.forEach((L, j) => {
+      const b = 1.0 + j * .45;
+      const cz = inOut(p(u, b, b + .45)), nt = a(b + .3, b + .6), mt = a(b + .25, b + .75);
+      const ust = Math.min(L.metinUc, L.E.ny), boy = Math.abs(L.E.ny - L.metinUc);
+      const asagi = L.E.yon === "asagi";
+      L.c.style.left = (L.E.nx - 1.5) + "px";
+      L.c.style.height = boy * cz + "px";
+      L.c.style.top = (asagi ? L.metinUc : L.metinUc - boy * cz) + "px";
+      L.c.style.opacity = 1 - etCik;
+      L.n.style.left = L.E.nx + "px"; L.n.style.top = L.E.ny + "px";
+      L.n.style.opacity = nt * (1 - etCik); L.n.style.transform = `scale(${.4 + .6 * nt})`;
+      set(L.t, mt * (1 - etCik), (1 - mt) * (asagi ? -30 : 30));
+    });
+    // Fiyat kartı
+    const fk = a(FOTO2 + .2, FOTO2 + .8);
+    set(S.fiyat, fk, (1 - fk) * 60, 0, 1 + (u > FOTO2 + .8 ? Math.sin((u - FOTO2 - .8) * 3.2) * .01 : 0));
+    set(S.web, a(.5, 1.0));
   });
 
   // Kapanış
-  const k0 = GIRIS + TEKNELER.length * TEKNE_SURE, v = t - k0;
+  const v = t - (GIRIS + TEKNELER.length * TEKNE_SURE);
   kap.style.opacity = ease(p(v, -.3, .4)); kap.style.zIndex = 50;
   set(kLogo, ease(p(v,.1,.8)), (1-ease(p(v,.1,.8)))*50);
   set(kBas, ease(p(v,.5,1.1)), (1-ease(p(v,.5,1.1)))*50);
   set(kBas2, ease(p(v,.75,1.35)), (1-ease(p(v,.75,1.35)))*50);
-  set(kAlt, ease(p(v,1.2,1.7)), 0);
-  set(kCta, ease(p(v,1.5,2.1)), (1-ease(p(v,1.5,2.1)))*40, 0, 1 + (v>2.1 ? Math.sin((v-2.1)*4)*.03 : 0));
-  set(kWeb, ease(p(v,1.9,2.5)), 0);
+  set(kAlt, ease(p(v,1.2,1.7)));
+  set(kCta, ease(p(v,1.5,2.1)), (1-ease(p(v,1.5,2.1)))*40, 0, 1 + (v>2.1 ? Math.sin((v-2.1)*4)*.02 : 0));
+  set(kWeb, ease(p(v,1.9,2.5)));
 };
 window.SURE = SURE;
 window.HAZIR = Promise.all([document.fonts.ready,
-  ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r))]);
+  ...[...document.images].map(i => i.complete ? 1 : new Promise(r => i.onload = i.onerror = r))])
+  .then(() => new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r))));
 if (!location.search.includes("render")) {
   const t0 = performance.now();
   (function loop(){ renderAt(((performance.now()-t0)/1000) % SURE); requestAnimationFrame(loop); })();
