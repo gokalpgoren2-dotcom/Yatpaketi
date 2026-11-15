@@ -1397,5 +1397,74 @@
       ],
       "name": "Uğur"
     }
+  },
+  "happy-hours": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Happy Hours",
+    "bilgi": {
+      "name": "Happy Hours",
+      "tip": "gulet",
+      "home_port": "Bodrum",
+      "year": 2012,
+      "refit_year": 2023,
+      "length_m": 28,
+      "width_m": 6.8,
+      "cabins": 5,
+      "guests": 12,
+      "crew": 5,
+      "captain_included": true,
+      "description_tr": "Happy Hours, 2012 yapımı ve 2023'te yenilenen 28 metrelik lüks bir gulettir. 6,80 metre genişliğindeki yat, 5 kabinde 12 misafir ağırlar ve Bodrum'dan hareket eder.\n\nKabinlerin ve salonun tamamı klimalıdır. Geniş salonda yemek masası, oturma grubu ve televizyon bulunur. Kıç güvertedeki tenteli büyük yemek masası açık havada yemekler için, ön güvertedeki minderler güneşlenmek için ayrılmıştır.\n\n2×330 HP motorlu yatta 27 kW ve 22 kVA iki jeneratör vardır. 5 kişilik mürettebat seyir boyunca hizmet verir. 4,80 metrelik Zodiac servis botu, su kayağı, wakeboard, ringo, kanolar, paddle board'lar, balık tutma ve şnorkel ekipmanı misafirlerin kullanımındadır; tavla, okey ve oyun kartları da teknededir.",
+      "description_en": "Happy Hours is a 28-metre luxury gulet built in 2012 and refitted in 2023. With a beam of 6.80 metres, she accommodates 12 guests in 5 cabins and sails from Bodrum.\n\nAll cabins and the saloon are air-conditioned. The spacious saloon has a dining table, a seating area and a TV. The large shaded dining table on the aft deck is made for alfresco meals, while the cushions on the foredeck are for sunbathing.\n\nPowered by 2×330 hp engines, she carries two generators (27 kW and 22 kVA). A crew of 5 looks after guests throughout the cruise. A 4.80 m Zodiac tender, water skis, wakeboard, ringo, canoes, paddleboards, fishing and snorkelling gear are available, along with backgammon, okey and playing cards.",
+      "equipment": [
+        "Klima — Tüm yatta",
+        "Tender — 4,80 m Zodiac",
+        "Jeneratör — 27 kW ve 22 kVA",
+        "Eğlence sistemi — Salonda TV; tavla, okey, oyun kartları"
+      ],
+      "water_sports": [
+        "Su kayağı",
+        "Wakeboard",
+        "Ringo",
+        "Kano",
+        "Paddle board",
+        "Şnorkel ekipmanı",
+        "Balık tutma ekipmanı"
+      ]
+    }
+  },
+  "cagan-2": {
+    "yayinla": true,
+    "brosur": true,
+    "sadece_yerel_foto": true,
+    "ad": "Çağan 2",
+    "bilgi": {
+      "name": "Çağan 2",
+      "tip": "gulet",
+      "home_port": "Bodrum",
+      "year": 2002,
+      "refit_year": 2022,
+      "length_m": 18,
+      "width_m": 5.3,
+      "cabins": 3,
+      "guests": 7,
+      "captain_included": true,
+      "description_tr": "Çağan 2, 2002 yapımı, 2019–2022 arasında yenilenen 18 metrelik bir gulettir. 5,30 metre genişliğindeki yat, 3 kabinde 7 misafir ağırlar ve Bodrum'dan hareket eder.\n\nKabinler: 1 master kabin (bir çift kişilik ve bir tek kişilik yatak) ve 2 çift kişilik kabin. Tüm kabinlerde klima, duş, tuvalet, sıcak su ve saç kurutma makinesi bulunur. Salonda oturma grubu ve mutfak yer alır; kıç güvertede tenteli yemek masası, ön güvertede güneşlenme minderleri ve şezlonglar vardır. Güvertede duş bulunur.\n\n280 HP MAN motorlu yatta 12 kVA Onan jeneratör, 2.000 litre tatlı su ve 1.000 litre yakıt kapasitesi vardır; ana yelkeni kullanılabilir. 3 metrelik, 6 HP motorlu servis botu, kano, paddle board ve balık tutma ekipmanı misafirlerin kullanımındadır.\n\nRotalar: Bodrum – Gökova – Bodrum ve Bodrum – Hisarönü – Bodrum.",
+      "description_en": "Çağan 2 is an 18-metre gulet built in 2002 and refitted between 2019 and 2022. With a beam of 5.30 metres, she accommodates 7 guests in 3 cabins and sails from Bodrum.\n\nCabins: 1 master cabin (one double and one single bed) and 2 double cabins. All cabins have air conditioning, shower, WC, hot water and a hair dryer. The saloon holds a seating area and the galley; the aft deck has a shaded dining table, and the foredeck offers sun cushions and sunbeds. There is a deck shower.\n\nPowered by a 280 hp MAN engine, she has a 12 kVA Onan generator, 2,000 litres of fresh water and 1,000 litres of fuel, and a working mainsail. A 3 m tender with a 6 hp outboard, a canoe, a paddleboard and fishing gear are available.\n\nRoutes: Bodrum – Gökova – Bodrum and Bodrum – Hisarönü – Bodrum.",
+      "equipment": [
+        "Klima",
+        "Tender — 3 m, 6 HP",
+        "Jeneratör — 12 kVA Onan",
+        "Güverte duşu",
+        "Şezlong",
+        "Saç kurutma makinesi"
+      ],
+      "water_sports": [
+        "Kano",
+        "Paddle board",
+        "Balık tutma ekipmanı"
+      ]
+    }
   }
 }
