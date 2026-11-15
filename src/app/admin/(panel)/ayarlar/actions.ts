@@ -83,3 +83,21 @@ export async function removeInstagram() {
   revalidatePath("/", "layout");
   back("saved");
 }
+
+// ---- Kapalı mod ----
+
+export async function saveGate(formData: FormData) {
+  const { supabase } = await requireAdmin();
+  const closed = formData.get("closed") === "on";
+  const password = String(formData.get("gate_password") ?? "").trim();
+  if (password && password.length < 6) back("error", "Ekip şifresi en az 6 karakter olmalı.");
+  const now = new Date().toISOString();
+  const { error } = await supabase.from("site_settings").upsert({ key: "gate", value: { closed }, updated_at: now });
+  if (error) back("error", "Kaydedilemedi: " + error.message);
+  if (password) {
+    const r = await supabase.from("private_settings").upsert({ key: "gate", value: { password }, updated_at: now });
+    if (r.error) back("error", "Mod kaydedildi ama şifre kaydedilemedi: " + r.error.message);
+  }
+  revalidatePath("/", "layout");
+  back("saved");
+}

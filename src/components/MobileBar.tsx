@@ -21,7 +21,7 @@ export function MobileBar() {
   const favs = useFavorites().length;
   const [hint, hideHint] = useFavHint();
   const bare = lang !== "tr" ? (path === `/${lang}` ? "/" : path.slice(3)) : path;
-  if (path.startsWith("/admin") || path.startsWith("/musteri")) return null;
+  if (path.startsWith("/admin") || path.startsWith("/musteri") || path === "/yakinda") return null;
   return (
     <>
     {hint && favs > 0 && (

@@ -1,7 +1,7 @@
 import { requireAdmin } from "@/lib/admin";
 import { Notice, SubmitButton } from "@/components/admin/FormBits";
 import { formatPhone, normalizePhone } from "@/lib/phone";
-import { removeInstagram, saveContact, saveInstagram, testNotifyMail, testRequestMail } from "./actions";
+import { removeInstagram, saveContact, saveGate, saveInstagram, testNotifyMail, testRequestMail } from "./actions";
 import { igStatus } from "@/lib/instagram";
 
 export const dynamic = "force-dynamic";
@@ -16,6 +16,10 @@ export default async function Settings({ searchParams }: { searchParams: Promise
   const { data } = await supabase.from("site_settings").select("value").eq("key", "contact").maybeSingle();
   const v = (data?.value ?? {}) as { phone?: string; whatsapp?: string; email?: string; instagram?: string; tiktok?: string; linkedin?: string };
   const ig = await igStatus();
+  const g = await supabase.from("site_settings").select("value").eq("key", "gate").maybeSingle();
+  const closed = !!(g.data?.value as { closed?: boolean } | null)?.closed;
+  const gp = await supabase.from("private_settings").select("value").eq("key", "gate").maybeSingle();
+  const hasPw = !!(gp.data?.value as { password?: string } | null)?.password;
   const pt = await supabase.from("private_settings").select("key").limit(1);
   const igTable = !pt.error;
   return (
@@ -24,6 +28,20 @@ export default async function Settings({ searchParams }: { searchParams: Promise
       <p className="mt-1 text-sm text-navy/60">Bu bilgiler sitede herkese açık görünür. Paylaşmak istemediğinizi boş bırakın.</p>
       {saved && <Notice key={"s" + t} kind="ok" text="Kaydedildi." />}
       {error && <Notice key={"e" + t} kind="error" text={error} />}
+      <form action={saveGate} className={`mt-6 space-y-4 rounded-2xl p-5 shadow-sm ${closed ? "bg-amber-50 ring-1 ring-amber-300" : "bg-white"}`}>
+        <h2 className="font-semibold">Kapalı mod {closed && <span className="ml-2 rounded-full bg-amber-500 px-2 py-0.5 text-xs font-bold text-white">Site şu an kapalı</span>}</h2>
+        <p className="-mt-2 text-sm text-navy/60">Açıkken ziyaretçiler yalnızca &quot;Çok yakında&quot; sayfasını görür ve site Google&apos;da listelenmez. Yönetime giriş yaptığınız cihazlarda site normal görünür.</p>
+        <label className="flex items-center gap-3 text-base font-medium">
+          <input type="checkbox" name="closed" defaultChecked={closed} className="h-5 w-5 accent-turquoise" />
+          Site ziyaretçilere kapalı
+        </label>
+        <div>
+          <label htmlFor="gate_password" className={lab}>Ekip şifresi {hasPw ? "(kayıtlı, değiştirmek için yazın)" : "(isteğe bağlı)"}</label>
+          <input id="gate_password" name="gate_password" type="text" autoComplete="off" placeholder={hasPw ? "••••••" : "En az 6 karakter"} className={input} />
+          <p className="mt-1 text-xs text-navy/50">Yönetime girmeden siteyi görmesini istediğiniz kişilere verin. &quot;Çok yakında&quot; sayfasının altındaki &quot;Ekip girişi&quot;ne yazılır.</p>
+        </div>
+        <SubmitButton>Kaydet</SubmitButton>
+      </form>
       <form action={saveContact} className="mt-6 space-y-4 rounded-2xl bg-white p-5 shadow-sm">
         <h2 className="font-semibold">İletişim bilgileri</h2>
         <div>
