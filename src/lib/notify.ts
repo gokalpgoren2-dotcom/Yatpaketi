@@ -7,7 +7,7 @@ export async function notifyAdmin(d: NotifyData): Promise<{ ok: boolean; message
   try {
     const to = adminMail();
     if (!to) return { ok: false, message: "GMAIL_USER tanımlı değil." };
-    const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+    const base = process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com";
     const boat = d.boat || "Yat belirtilmedi";
     const text = `Yeni rezervasyon talebi\n\nAd: ${d.name}\nTekne: ${boat}\nTarih: ${fmtDate(d.start)} - ${fmtDate(d.end)}\nMisafir: ${d.guests}\nTelefon: ${d.phone || "-"}\nE-posta: ${d.email || "-"}\n${d.message ? "Mesaj: " + d.message + "\n" : ""}\nPanel: ${base}/admin/rezervasyonlar`;
     const html = wrap(

@@ -40,7 +40,7 @@ export async function CompareView({ lang, a: sa, b: sb }: { lang: Lang; a?: stri
   const featured = curated.filter((c) => c.featured && boats.some((x) => x.slug === c.a) && boats.some((x) => x.slug === c.b));
   const askPrice = ru ? "Цена по запросу" : en ? "Ask for price" : "Fiyat sorunuz";
   const result = both ? { rows: compareRows(A, B, lang, (x) => priceLabel(x, lang), askPrice), ...buildPoints(A, B, lang) } : null;
-  const origin = "https://yatpaketi.com";
+  const origin = "https://www.yatpaketi.com";
   const wa = both && contact.whatsapp
     ? `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(ru
         ? `Здравствуйте, я сравниваю ${A.name} и ${B.name}. Поможете выбрать?\n${origin}${href(lang, `/tekneler/${A.slug}`)}\n${origin}${href(lang, `/tekneler/${B.slug}`)}\n\nМои даты: `

@@ -8,7 +8,7 @@ import { PhotoGuard } from "@/components/PhotoGuard";
 const headline = Urbanist({ subsets: ["latin", "latin-ext"], weight: ["500", "600", "700", "800"], variable: "--font-urbanist" });
 const sans = Inter({ subsets: ["latin", "latin-ext", "cyrillic"], variable: "--font-inter" });
 
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://yatpaketi.com";
+const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://www.yatpaketi.com";
 
 export const metadata: Metadata = {
   metadataBase: new URL(siteUrl),

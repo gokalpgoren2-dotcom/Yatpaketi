@@ -29,7 +29,7 @@ export function CodeBox({ code, email, boat, portalId, autoSend = false }: { cod
     if (autoSend && portalId && !sent.current) { sent.current = true; void send(); }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  const text = `Merhaba, ${boat ?? "turunuz"} için müşteri paneli giriş bilgileriniz:\nAdres: https://yatpaketi.vercel.app/musteri\nE-posta: ${email ?? ""}\nKod: ${code}\nKod tur bitiş tarihinden sonra geçersiz olur.`;
+  const text = `Merhaba, ${boat ?? "turunuz"} için müşteri paneli giriş bilgileriniz:\nAdres: https://www.yatpaketi.com/musteri\nE-posta: ${email ?? ""}\nKod: ${code}\nKod tur bitiş tarihinden sonra geçersiz olur.`;
   async function copy() {
     try { await navigator.clipboard.writeText(text); setCopied(true); } catch { setCopied(false); }
   }

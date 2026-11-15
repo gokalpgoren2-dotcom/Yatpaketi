@@ -74,7 +74,7 @@ export function FavoritesClient({ boats, whatsapp, email, lang, curated }: { boa
     [L.rows.jacuzzi, (b) => (has(b, /jakuzi|jacuzzi/i) ? L.yes : L.no)],
   ];
 
-  const origin = typeof window !== "undefined" ? window.location.origin : "https://yatpaketi.com";
+  const origin = typeof window !== "undefined" ? window.location.origin : "https://www.yatpaketi.com";
   const text = L.msg(list.map((b, i) => `${i + 1}) ${b.name}${b.port ? ` (${b.port})` : ""} – ${origin}${href(lang, `/tekneler/${b.slug}`)}`).join("\n"));
   const cta = "inline-flex items-center justify-center rounded-full px-6 py-3.5 text-base font-semibold transition";
 

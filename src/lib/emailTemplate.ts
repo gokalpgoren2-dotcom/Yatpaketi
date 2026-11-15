@@ -2,7 +2,7 @@
 const NAVY = "#06264b";
 const TURQ = "#1bb4c4";
 
-const baseUrl = () => (process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app").replace(/\/+$/, "");
+const baseUrl = () => (process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com").replace(/\/+$/, "");
 
 export const esc2 = (s: string) => s.replace(/[&<>"']/g, (c) => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" })[c] as string);
 
@@ -38,7 +38,7 @@ export function brandedMail(inner: string, opts: { title?: string; preheader?: s
       <p style="margin:18px 0 0">İyi yolculuklar dileriz,<br><b>Yatpaketi ekibi</b></p>
     </td></tr>
     <tr><td style="padding:16px 12px 0;text-align:center;font-family:Arial,Helvetica,sans-serif;font-size:12px;line-height:1.6;color:#8294a8">
-      Bu e-posta rezervasyonunuz nedeniyle gönderilmiştir.<br><a href="${base}" style="color:#8294a8">yatpaketi.vercel.app</a>
+      Bu e-posta rezervasyonunuz nedeniyle gönderilmiştir.<br><a href="${base}" style="color:#8294a8">yatpaketi.com</a>
     </td></tr>
   </table>
 </td></tr></table></body></html>`;

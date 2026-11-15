@@ -15,7 +15,7 @@ export async function sendPortalEmail(portalId: string, code: string): Promise<{
   if (!data) return { ok: false, message: "Panel bulunamadı." };
   if (!/^[A-Z0-9-]{8,16}$/.test(code)) return { ok: false, message: "Kod biçimi geçersiz." };
 
-  const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+  const base = process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com";
   const url = `${base.replace(/\/+$/, "")}/musteri`;
   const hello = data.customer_name ? `Merhaba ${data.customer_name},` : "Merhaba,";
   const text = `${hello}\n\n${data.boat_name} turunuz için müşteri paneli giriş bilgileriniz:\n\nAdres: ${url}\nE-posta: ${data.email}\nGiriş kodu: ${code}\n\nPanelden sözleşmenizi görebilir, imzalı hâlini yükleyebilir ve tur hazırlığını takip edebilirsiniz. Kod ${data.tour_end} tarihinden sonra geçersiz olur. Kodu kimseyle paylaşmayın.\n\nYatpaketi`;
@@ -49,7 +49,7 @@ export async function emailContractToCustomer(portalId: string): Promise<{ ok: b
   const buf = Buffer.from(await dl.data.arrayBuffer());
   const ext = (p.contract_path as string).split(".").pop() ?? "pdf";
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
-  const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+  const base = process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com";
   const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
   const who = String(p.customer_name || p.email);
   const text = `${hello}\n\n${p.boat_name} yatı için ${range} tarihli kiralama sözleşmeniz ekte yer almaktadır. Lütfen inceleyip imzalayın ve müşteri panelinizden (${base}/musteri) imzalı hâlini yükleyin.\n\nYatpaketi`;
@@ -99,7 +99,7 @@ export async function notifyChecklistDone(portalId: string, itemId: string): Pro
   const left = list.filter((i) => !i.done).map((i) => i.label);
   const range = `${fmtDate(String(p.tour_start))} – ${fmtDate(String(p.tour_end))}`;
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
-  const base = process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app";
+  const base = process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com";
   const text = `${hello}\n\n${p.boat_name} yatı için ${range} tarihli turunuzun hazırlığıyla ilgili bir güncelleme:\n\n${sent.line}\n\nHazırlık durumu: ${list.length} maddeden ${done} tanesi tamamlandı.${left.length ? "\nKalan: " + left.join(", ") + "." : "\nTüm hazırlıklar tamamlandı."}\n\nDetaylar için müşteri panelinize girebilirsiniz: ${base}/musteri\n\nYatpaketi`;
   const html = wrap(
     `<p style="margin:0 0 12px">${esc(hello)}</p><p style="margin:0 0 12px">Turunuzun hazırlığıyla ilgili bir güncelleme:</p>` +
@@ -125,7 +125,7 @@ export async function sendReviewRequest(portalId: string): Promise<{ ok: boolean
     p_email: p.email, p_name: p.customer_name ?? "", p_boat_slug: boat?.slug ?? "", p_boat_name: p.boat_name, p_tour_end: p.tour_end, p_portal_id: portalId,
   });
   if (error || !token) return { ok: false, message: "Bağlantı oluşturulamadı (" + (error?.message ?? "bilinmeyen hata") + "). Supabase'e yorumlar SQL kodunu yapıştırdınız mı?" };
-  const base = (process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app").replace(/\/+$/, "");
+  const base = (process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com").replace(/\/+$/, "");
   const url = `${base}/yorum/${token}`;
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
   const text = `${hello}\n\n${p.boat_name} yolculuğunuz nasıldı? Deneyiminizi ve isterseniz bir fotoğrafınızı paylaşırsanız, sonraki misafirlerimize çok yardımcı olur.\n\nYorum bağlantınız (45 gün geçerli): ${url}\n\nYatpaketi`;
@@ -146,7 +146,7 @@ export async function setReviewOpen(portalId: string, open: boolean, notify: boo
   const { data: p, error } = await supabase.from("customer_portals").update({ review_open: open }).eq("id", portalId).select("email,customer_name,boat_name,tour_end").maybeSingle();
   if (error || !p) return { ok: false, message: "Güncellenemedi (" + (error?.message ?? "panel bulunamadı") + "). Supabase'e turum-yorum SQL kodunu yapıştırdınız mı?" };
   if (!open || !notify) return { ok: true, message: open ? "Tur yorumu açıldı." : "Tur yorumu kapatıldı." };
-  const base = (process.env.PORTAL_BASE_URL || "https://yatpaketi.vercel.app").replace(/\/+$/, "");
+  const base = (process.env.PORTAL_BASE_URL || "https://www.yatpaketi.com").replace(/\/+$/, "");
   const hello = p.customer_name ? `Merhaba ${p.customer_name},` : "Merhaba,";
   const text = `${hello}\n\n${p.boat_name} yolculuğunuz nasıldı? Turum sayfanızdan deneyiminizi ve isterseniz bir fotoğrafınızı paylaşabilirsiniz: ${base}/musteri\n\nGiriş için e-posta adresiniz ve daha önce size gönderilen giriş kodunuz yeterli. Yorum alanı 45 gün açık kalır.\n\nYatpaketi`;
   const html = wrap(
