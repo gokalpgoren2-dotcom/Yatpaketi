@@ -64,16 +64,12 @@ jobs:
           target: google_apis
           arch: x86_64
           profile: pixel_6
-          disable-animations: true
+          disable-animations: false
           working-directory: mobil
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             mkdir -p ekran
-            adb shell "screenrecord --time-limit 14 --bit-rate 6000000 /sdcard/acilis.mp4" &
-            sleep 1
-            adb shell am start -n com.yatpaketi.app/.MainActivity
-            sleep 16
-            adb pull /sdcard/acilis.mp4 ekran/acilis.mp4 || true
+            (adb shell "screenrecord --time-limit 14 --bit-rate 6000000 /sdcard/acilis.mp4" &) ; sleep 1 ; adb shell am start -n com.yatpaketi.app/.MainActivity ; sleep 17 ; adb pull /sdcard/acilis.mp4 ekran/acilis.mp4 || true
             sleep 4
             adb exec-out screencap -p > ekran/2-site.png
       - uses: actions/upload-artifact@v4
