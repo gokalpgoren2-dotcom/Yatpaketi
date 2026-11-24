@@ -10,10 +10,12 @@ export default async function Soon({ searchParams }: { searchParams: Promise<{ h
   const c = await getContact();
   const wa = c.whatsapp ? `https://wa.me/${c.whatsapp.replace(/\D+/g, "").replace(/^0/, "90")}?text=${encodeURIComponent("Merhaba, yat kiralama hakkında bilgi almak istiyorum.")}` : "";
   return (
-    <main className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-navy via-navy-soft to-[#0f6f8c] px-6 py-16 text-center text-white">
+    <main className="relative flex min-h-[100dvh] flex-col items-center justify-center overflow-hidden bg-gradient-to-b from-navy via-navy-soft to-[#0f6f8c] px-6 py-16 text-center text-white">
       <svg aria-hidden viewBox="0 0 1440 320" preserveAspectRatio="none" className="absolute inset-x-0 bottom-0 h-40 w-full text-white/10 sm:h-56">
         <path fill="currentColor" d="M0 192l60-16c60-16 180-48 300-42.7S600 181 720 197.3 960 203 1080 176s240-80 300-106.7l60-26.6V320H0z" />
       </svg>
+      {/* Sayfa kaydırılınca altta beyaz görünmesin */}
+      <style>{"html,body{background:#0f6f8c;overscroll-behavior:none}"}</style>
       <div className="relative w-full max-w-md">
         {/* eslint-disable-next-line @next/next/no-img-element */}
         <img src="/logo-beyaz.png" alt="yatpaketi" className="mx-auto h-14 w-auto sm:h-16" />
