@@ -68,10 +68,13 @@ jobs:
           working-directory: mobil
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
-            adb shell am start -n com.yatpaketi.app/.MainActivity
             mkdir -p ekran
-            for i in 1 2 3 4 5 6; do sleep 0.7; adb exec-out screencap -p > ekran/1-animasyon-$i.png; done
-            sleep 22
+            adb shell "screenrecord --time-limit 14 --bit-rate 6000000 /sdcard/acilis.mp4" &
+            sleep 1
+            adb shell am start -n com.yatpaketi.app/.MainActivity
+            sleep 16
+            adb pull /sdcard/acilis.mp4 ekran/acilis.mp4 || true
+            sleep 4
             adb exec-out screencap -p > ekran/2-site.png
       - uses: actions/upload-artifact@v4
         if: always()
@@ -85,12 +88,12 @@ jobs:
         working-directory: .
         run: |
           set -e
-          mkdir -p /tmp/ekr && cp mobil/ekran/*.png /tmp/ekr/ 2>/dev/null || exit 0
+          mkdir -p /tmp/ekr && cp mobil/ekran/* /tmp/ekr/ 2>/dev/null || exit 0
           git config user.name "github-actions" && git config user.email "github-actions@users.noreply.github.com"
           git fetch origin mobil-ekran || true
           git switch --orphan ekran-tmp
           git rm -rfq . >/dev/null 2>&1 || true
-          cp /tmp/ekr/*.png . && git add *.png && git commit -qm "Android ekran görüntüleri (${GITHUB_SHA::7})"
+          cp /tmp/ekr/* . && git add -A . && git commit -qm "Android ekran görüntüleri (${GITHUB_SHA::7})"
           git push -f origin HEAD:mobil-ekran
       # Telefondan indirilebilsin diye APK "android-deneme" sürüm sayfasına konur.
       - name: APK'yı sürüm sayfasına koy
