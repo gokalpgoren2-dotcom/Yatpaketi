@@ -65,12 +65,11 @@ jobs:
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             adb shell am start -n com.yatpaketi.app/.MainActivity
-            sleep 25
+            sleep 1
             mkdir -p ekran
-            adb exec-out screencap -p > ekran/1-acilis.png
-            adb shell input swipe 540 1800 540 700 400
-            sleep 4
-            adb exec-out screencap -p > ekran/2-kaydir.png
+            adb exec-out screencap -p > ekran/1-animasyon.png
+            sleep 25
+            adb exec-out screencap -p > ekran/2-site.png
       - uses: actions/upload-artifact@v4
         if: always()
         with:

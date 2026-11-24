@@ -5,14 +5,16 @@
   "backgroundColor": "#06264B",
   "appendUserAgent": "YatpaketiApp",
   "server": {
-    "url": "https://www.yatpaketi.com",
-    "cleartext": false,
-    "errorPath": "index.html",
-    "allowNavigation": ["yatpaketi.com", "www.yatpaketi.com"]
+    "allowNavigation": [
+      "yatpaketi.com",
+      "www.yatpaketi.com"
+    ],
+    "androidScheme": "https",
+    "iosScheme": "capacitor"
   },
   "plugins": {
     "SplashScreen": {
-      "launchShowDuration": 1200,
+      "launchShowDuration": 0,
       "launchAutoHide": true,
       "backgroundColor": "#06264B",
       "showSpinner": false
