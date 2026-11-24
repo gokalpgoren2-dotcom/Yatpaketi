@@ -1,0 +1,101 @@
+name: Mobil uygulama
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["mobil/**", ".github/workflows/mobil.yml"]
+
+concurrency:
+  group: mobil-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  android:
+    name: Android (deneme APK)
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: mobil
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: 21
+      - name: Paketleri kur
+        run: npm install --no-audit --no-fund && npx cap --version
+      - name: Android projesini oluştur
+        run: |
+          npx cap add android
+          npx capacitor-assets generate --android --iconBackgroundColor "#06264B" --iconBackgroundColorDark "#06264B" --splashBackgroundColor "#06264B" --splashBackgroundColorDark "#06264B"
+          npx cap sync android
+      - name: APK derle
+        working-directory: mobil/android
+        run: ./gradlew assembleDebug --no-daemon
+      - uses: actions/upload-artifact@v4
+        with:
+          name: yatpaketi-android-apk
+          path: mobil/android/app/build/outputs/apk/debug/app-debug.apk
+          retention-days: 30
+
+      # Ekran görüntüsü: APK'yı bir Android öykünücüsünde açıp uygulamanın nasıl göründüğünü kaydeder.
+      - name: Öykünücü için KVM izni
+        working-directory: .
+        run: |
+          echo 'KERNEL=="kvm", GROUP="kvm", MODE="0666", OPTIONS+="static_node=kvm"' | sudo tee /etc/udev/rules.d/99-kvm4all.rules
+          sudo udevadm control --reload-rules
+          sudo udevadm trigger --name-match=kvm
+      - name: Öykünücüde aç ve ekran görüntüsü al
+        uses: reactivecircus/android-emulator-runner@v2
+        with:
+          api-level: 34
+          target: google_apis
+          arch: x86_64
+          profile: pixel_6
+          disable-animations: true
+          working-directory: mobil
+          script: |
+            adb install -r android/app/build/outputs/apk/debug/app-debug.apk
+            adb shell am start -n com.yatpaketi.app/.MainActivity
+            sleep 25
+            mkdir -p ekran
+            adb exec-out screencap -p > ekran/1-acilis.png
+            adb shell input swipe 540 1800 540 700 400
+            sleep 4
+            adb exec-out screencap -p > ekran/2-kaydir.png
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: yatpaketi-android-ekran
+          path: mobil/ekran/
+          retention-days: 30
+
+  ios:
+    name: iOS (imzasız derleme denemesi)
+    runs-on: macos-latest
+    timeout-minutes: 45
+    defaults:
+      run:
+        working-directory: mobil
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Paketleri kur
+        run: npm install --no-audit --no-fund
+      - name: iOS projesini oluştur
+        run: |
+          npx cap add ios
+          npx capacitor-assets generate --ios --iconBackgroundColor "#06264B" --splashBackgroundColor "#06264B" --splashBackgroundColorDark "#06264B"
+          npx cap sync ios
+      - name: Simülatör için derle
+        working-directory: mobil/ios/App
+        run: |
+          if [ -d App.xcworkspace ]; then SRC="-workspace App.xcworkspace"; else SRC="-project App.xcodeproj"; fi
+          xcodebuild $SRC -scheme App -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -40

@@ -1,0 +1,26 @@
+{
+  "appId": "com.yatpaketi.app",
+  "appName": "Yatpaketi",
+  "webDir": "www",
+  "backgroundColor": "#06264B",
+  "appendUserAgent": "YatpaketiApp",
+  "server": {
+    "url": "https://www.yatpaketi.com",
+    "cleartext": false,
+    "errorPath": "index.html",
+    "allowNavigation": ["yatpaketi.com", "www.yatpaketi.com"]
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchShowDuration": 1200,
+      "launchAutoHide": true,
+      "backgroundColor": "#06264B",
+      "showSpinner": false
+    },
+    "StatusBar": {
+      "overlaysWebView": false,
+      "style": "LIGHT",
+      "backgroundColor": "#06264B"
+    }
+  }
+}

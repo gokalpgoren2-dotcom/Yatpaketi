@@ -1,0 +1,17 @@
+{
+  "name": "yatpaketi-mobil",
+  "private": true,
+  "version": "1.0.0",
+  "description": "Yatpaketi App Store ve Google Play uygulaması (siteyi uygulama kabuğunda açar)",
+  "dependencies": {
+    "@capacitor/android": "latest",
+    "@capacitor/core": "latest",
+    "@capacitor/ios": "latest",
+    "@capacitor/splash-screen": "latest",
+    "@capacitor/status-bar": "latest"
+  },
+  "devDependencies": {
+    "@capacitor/assets": "latest",
+    "@capacitor/cli": "latest"
+  }
+}
