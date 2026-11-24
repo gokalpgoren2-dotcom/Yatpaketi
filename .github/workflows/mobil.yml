@@ -37,6 +37,10 @@ jobs:
           npx cap add android
           npx capacitor-assets generate --android --iconBackgroundColor "#06264B" --iconBackgroundColorDark "#06264B" --splashBackgroundColor "#06264B" --splashBackgroundColorDark "#06264B"
           npx cap sync android
+          # Android'in zorunlu ilk açılış ekranı lacivert olsun (varsayılan gri).
+          ST=android/app/src/main/res/values/styles.xml
+          sed -i 's#<style name="AppTheme.NoActionBarLaunch"\([^>]*\)>#<style name="AppTheme.NoActionBarLaunch"\1>\n        <item name="windowSplashScreenBackground">\#06264B</item>\n        <item name="android:windowSplashScreenBackground">\#06264B</item>#' $ST
+          grep -n -A4 NoActionBarLaunch $ST
       - name: APK derle
         working-directory: mobil/android
         run: ./gradlew assembleDebug --no-daemon
@@ -65,10 +69,9 @@ jobs:
           script: |
             adb install -r android/app/build/outputs/apk/debug/app-debug.apk
             adb shell am start -n com.yatpaketi.app/.MainActivity
-            sleep 1
             mkdir -p ekran
-            adb exec-out screencap -p > ekran/1-animasyon.png
-            sleep 25
+            for i in 1 2 3 4 5 6; do sleep 0.7; adb exec-out screencap -p > ekran/1-animasyon-$i.png; done
+            sleep 22
             adb exec-out screencap -p > ekran/2-site.png
       - uses: actions/upload-artifact@v4
         if: always()
