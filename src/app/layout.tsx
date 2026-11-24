@@ -17,6 +17,8 @@ export const metadata: Metadata = {
     "Türkiye'nin en özel koylarını gulet, motoryat, katamaran ve yelkenli seçenekleriyle keşfedin. Mavi yolculuk için rezervasyon talebi oluşturun.",
   alternates: { canonical: "/" },
   openGraph: { type: "website", siteName: "yatpaketi", locale: "tr_TR" },
+  // iPhone'da "Ana Ekrana Ekle" ile adres çubuğu olmadan, uygulama gibi açılır.
+  appleWebApp: { capable: true, title: "Yatpaketi", statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = { themeColor: "#06264b", width: "device-width", initialScale: 1 };
