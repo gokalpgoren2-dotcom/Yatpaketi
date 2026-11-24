@@ -6,6 +6,9 @@ on:
     branches: [main]
     paths: ["mobil/**", ".github/workflows/mobil.yml"]
 
+permissions:
+  contents: write
+
 concurrency:
   group: mobil-${{ github.ref }}
   cancel-in-progress: true
@@ -74,6 +77,28 @@ jobs:
           name: yatpaketi-android-ekran
           path: mobil/ekran/
           retention-days: 30
+      # Ekran görüntüleri "mobil-ekran" dalına konur (kontrol için).
+      - name: Ekran görüntülerini dala koy
+        if: always()
+        working-directory: .
+        run: |
+          set -e
+          mkdir -p /tmp/ekr && cp mobil/ekran/*.png /tmp/ekr/ 2>/dev/null || exit 0
+          git config user.name "github-actions" && git config user.email "github-actions@users.noreply.github.com"
+          git fetch origin mobil-ekran || true
+          git switch --orphan ekran-tmp
+          git rm -rfq . >/dev/null 2>&1 || true
+          cp /tmp/ekr/*.png . && git add *.png && git commit -qm "Android ekran görüntüleri (${GITHUB_SHA::7})"
+          git push -f origin HEAD:mobil-ekran
+      # Telefondan indirilebilsin diye APK "android-deneme" sürüm sayfasına konur.
+      - name: APK'yı sürüm sayfasına koy
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp mobil/android/app/build/outputs/apk/debug/app-debug.apk Yatpaketi.apk
+          gh release view android-deneme >/dev/null 2>&1 || gh release create android-deneme --prerelease --title "Yatpaketi Android (deneme)" --notes "Deneme sürümü. Android telefonda Yatpaketi.apk dosyasını indirip açın; 'Bilinmeyen kaynaklardan yüklemeye izin ver' sorusuna izin verin."
+          gh release upload android-deneme Yatpaketi.apk --clobber
 
   ios:
     name: iOS (imzasız derleme denemesi)
