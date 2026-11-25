@@ -120,8 +120,20 @@ jobs:
           npx cap add ios
           npx capacitor-assets generate --ios --iconBackgroundColor "#06264B" --splashBackgroundColor "#06264B" --splashBackgroundColorDark "#06264B"
           npx cap sync ios
-      - name: Simülatör için derle
+      - name: iPhone için derle (imzasız, Sideloadly ile imzalanır)
         working-directory: mobil/ios/App
         run: |
           if [ -d App.xcworkspace ]; then SRC="-workspace App.xcworkspace"; else SRC="-project App.xcodeproj"; fi
-          xcodebuild $SRC -scheme App -configuration Debug -sdk iphonesimulator -derivedDataPath build CODE_SIGNING_ALLOWED=NO build | tail -40
+          xcodebuild $SRC -scheme App -configuration Release -sdk iphoneos -destination "generic/platform=iOS" -derivedDataPath build CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY="" build | tail -25
+          APP=$(find build/Build/Products/Release-iphoneos -maxdepth 1 -name "*.app" | head -1)
+          echo "Uygulama: $APP"
+          rm -rf Payload && mkdir Payload && cp -R "$APP" Payload/
+          zip -qry ../../Yatpaketi.ipa Payload
+          ls -la ../../Yatpaketi.ipa
+      - name: IPA'yı sürüm sayfasına koy
+        working-directory: .
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release view ios-deneme >/dev/null 2>&1 || gh release create ios-deneme --prerelease --title "Yatpaketi iPhone (deneme)" --notes "İmzasız deneme sürümü. Windows'ta Sideloadly ile kendi Apple kimliğinizle imzalayıp iPhone'a yükleyin. Ücretsiz Apple kimliğiyle 7 gün çalışır."
+          gh release upload ios-deneme mobil/Yatpaketi.ipa --clobber
