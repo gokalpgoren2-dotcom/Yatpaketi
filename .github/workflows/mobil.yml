@@ -103,7 +103,7 @@ jobs:
 
   ios:
     name: iOS (imzasız derleme denemesi)
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     timeout-minutes: 45
     defaults:
       run:
