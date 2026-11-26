@@ -21,7 +21,7 @@
     },
     "StatusBar": {
       "overlaysWebView": false,
-      "style": "LIGHT",
+      "style": "DARK",
       "backgroundColor": "#06264B"
     }
   }

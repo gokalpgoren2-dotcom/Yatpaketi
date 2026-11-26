@@ -87,6 +87,14 @@ document.body.className = mode;
 setTimeout(function () {
   try { var H = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.Haptics; if (H) H.impact({ style: "LIGHT" }); } catch (e) {}
 }, 780);
+// Üst çubuk (saat, şarj): lacivert zemin üzerinde beyaz yazı; uygulama boyunca böyle kalır.
+try {
+  var SB = window.Capacitor && window.Capacitor.Plugins && window.Capacitor.Plugins.StatusBar;
+  if (SB) {
+    SB.setStyle({ style: "DARK" });
+    if (window.Capacitor.getPlatform && window.Capacitor.getPlatform() === "android") SB.setBackgroundColor({ color: "#06264B" });
+  }
+} catch (e) {}
 var gone = false;
 function go() {
   if (gone) return; gone = true;
