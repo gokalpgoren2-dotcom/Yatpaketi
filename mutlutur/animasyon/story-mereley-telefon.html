@@ -137,7 +137,7 @@
 <script>
 /* ======================= AYARLAR ======================= */
 const KLASOR = "ekran-mereley/", GALERI_KLASOR = "../fotograflar/mereley-galeri/", TEKNE = "MERELEY I";
-const FPS = 30, SURE = 25.0, GECIS = .45;
+const FPS = 30, SURE = 27.5, GECIS = .45;
 // Telefon ekranı: kayıt klipleri (kare aralığı + hız) ve araya giren sayfa geçişleri
 // gecis: "it" = iPhone sayfa itme (sağdan gelir), "kaydir" = aşağı kaydırma, durum = durum çubuğu rengi
 const EKRAN = [
@@ -145,9 +145,9 @@ const EKRAN = [
   { k:"2-koleksiyon", t:1.9,  a:1, b:29,  hiz:.75, durum:"koyu",  gecis:"it" },
   { k:"3-liste",      t:3.2,  a:1, b:56,  hiz:.75, durum:"acik",  gecis:"it" },
   { k:"4-hero",       t:5.7,  a:1, b:57,  hiz:.45, durum:"koyu",  gecis:"it" },
-  { k:"5-ozellik",    t:9.5,  a:1, b:108, hiz:.95, durum:"acik",  gecis:"kaydir" },
-  { k:"GALERI",       t:13.0,                      durum:"koyu",  gecis:"kaydir" },
-  { k:"6-form",       t:21.0, a:1, b:18,  hiz:.8,  durum:"acik",  gecis:"it" },
+  { k:"5-ozellik",    t:9.5,  a:1, b:108, hiz:.62, durum:"acik",  gecis:"kaydir" },
+  { k:"GALERI",       t:15.5,                      durum:"koyu",  gecis:"kaydir" },
+  { k:"6-form",       t:23.5, a:1, b:18,  hiz:.8,  durum:"acik",  gecis:"it" },
 ];
 // Galeri fotoğrafları (dosya, başlık, üst etiket)
 const GALERI = [
@@ -160,14 +160,14 @@ const GALERI = [
   ["07-beach-club.jpg", "Swim platform",          "DECK"],
   ["08-salon.jpg",      "Guest lounge",           "INTERIOR"],
 ];
-const G0 = 13.5, G_ARA = .93, G_SURE = .5;   // galeri: ilk kaydırma, aralık, kaydırma süresi
+const G0 = 16.0, G_ARA = .93, G_SURE = .5;   // galeri: ilk kaydırma, aralık, kaydırma süresi
 
 const BASLIKLAR = [
   [0.3, 3.9,  [{t:"Your next yacht"}, {t:"is [[one tap away.]]"}]],
   [4.2, 9.3,  [{t:"NOW FOR SALE", c:"kucuk"}, {t:"MERELEY I", c:"dev"}, {t:"34.62m Tri-Deck Explorer · 2024", c:"alt"}]],
-  [9.6, 12.8, [{t:"Built to"}, {t:"[[go further.]]"}]],
-  [13.2, 20.8,[{t:"Explorer spirit,"}, {t:"[[superyacht comfort.]]"}, {t:"AES Yacht · Design by Hot Lab", c:"alt"}]],
-  [21.2, SURE + 1, [{t:"Enquire"}, {t:"[[today.]]"}]],
+  [9.6, 15.3, [{t:"Built to"}, {t:"[[go further.]]"}]],
+  [15.7, 23.3,[{t:"Explorer spirit,"}, {t:"[[superyacht comfort.]]"}, {t:"AES Yacht · Design by Hot Lab", c:"alt"}]],
+  [23.7, SURE + 1, [{t:"Enquire"}, {t:"[[today.]]"}]],
 ];
 const IKON = {
   boy:`<svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M6 8l-4 4 4 4M18 8l4 4-4 4"/></svg>`,
@@ -180,26 +180,26 @@ const IKON = {
 };
 const ROZETLER = [
   [6.3, 9.3,  60, 1000, "fiyat", "ASKING PRICE", "€9,750,000", true],
-  [10.0, 12.8, 50,  720, "boy",   "LENGTH", "34.62 M"],
-  [10.3, 12.8, 50,  865, "en",    "BEAM", "7.60 M"],
-  [10.6, 12.8, 50, 1010, "motor", "ENGINES", "2 × 800 HP MAN"],
-  [10.9, 12.8, 50, 1155, "kabin", "CABINS · GUESTS", "5 · 12"],
-  [11.2, 12.8, 50, 1300, "menzil","RANGE", "3,800 NM"],
-  [21.8, SURE + 1, 60, 560, "mail", "ENQUIRIES", "brokerage@mutluturyachting.com"],
+  [10.0, 15.3, 50,  720, "boy",   "LENGTH", "34.62 M"],
+  [10.3, 15.3, 50,  865, "en",    "BEAM", "7.60 M"],
+  [10.6, 15.3, 50, 1010, "motor", "ENGINES", "2 × 800 HP MAN"],
+  [10.9, 15.3, 50, 1155, "kabin", "CABINS · GUESTS", "5 · 12"],
+  [11.2, 15.3, 50, 1300, "menzil","RANGE", "3,800 NM"],
+  [24.3, SURE + 1, 60, 560, "mail", "ENQUIRIES", "brokerage@mutluturyachting.com"],
 ];
 const DURUS = [
   { t:0.0,  x:380, y:2000, ry:-26, rx:8, rz:6, s:1.1 },
   { t:0.9,  x:360, y:640,  ry:-18, rx:6, rz:4, s:1.1 },
   { t:9.6,  x:360, y:640,  ry:-18, rx:6, rz:4, s:1.1 },
   { t:10.2, x:400, y:610,  ry:-22, rx:5, rz:5, s:1.08 },
-  { t:12.9, x:400, y:610,  ry:-22, rx:5, rz:5, s:1.08 },
-  { t:13.6, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
-  { t:20.9, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
-  { t:21.6, x:380, y:880,  ry:-18, rx:6, rz:4, s:1.06 },
+  { t:15.4, x:400, y:610,  ry:-22, rx:5, rz:5, s:1.08 },
+  { t:16.1, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
+  { t:23.4, x:224, y:620,  ry:0,   rx:0, rz:0, s:1.16 },
+  { t:24.1, x:380, y:880,  ry:-18, rx:6, rz:4, s:1.06 },
   { t:SURE, x:380, y:870,  ry:-16, rx:6, rz:3, s:1.06 },
 ];
 // Dokunuşlar: [zaman, x, y] (ekran koordinatı 600x1285)
-const DOKUNUS = [[1.75, 300, 760], [3.05, 300, 900], [5.55, 300, 640], [20.8, 300, 700]];
+const DOKUNUS = [[1.75, 300, 760], [3.05, 300, 900], [5.55, 300, 640], [23.3, 300, 700]];
 
 /* ======================= Yardımcılar ======================= */
 const clamp = (x,a=0,b=1) => Math.min(b, Math.max(a, x));
@@ -348,7 +348,7 @@ window.renderAt = async function (t) {
   dokun.style.opacity = dk; dokun.style.left = dx + "px"; dokun.style.top = dy + "px"; dokun.style.transform = `scale(${ds})`;
 
   // Arka planda galerinin bulanık fotoğrafı
-  const gOn = ease(p(t, 13.0, 13.8)) * (1 - ease(p(t, 20.8, 21.5)));
+  const gOn = ease(p(t, 15.5, 16.3)) * (1 - ease(p(t, 23.3, 24.0)));
   arkaFoto.style.opacity = gOn;
   if (gOn > 0) {
     const pos = galeriPoz(t), a = Math.floor(pos), f = pos - a;
@@ -380,7 +380,7 @@ window.renderAt = async function (t) {
     R.ikon.style.transform = `rotate(${(1 - ease(gg)) * -90}deg)`;
   });
 
-  const w = ease(p(t, 22.4, 22.9)); web.style.opacity = w; web.style.transform = `translateY(${(1 - w) * 20}px)`;
+  const w = ease(p(t, 24.9, 25.4)); web.style.opacity = w; web.style.transform = `translateY(${(1 - w) * 20}px)`;
   await Promise.all(bekle);
 };
 window.SURE = SURE;
