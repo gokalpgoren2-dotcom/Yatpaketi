@@ -59,6 +59,10 @@
   .katman { position:absolute; left:0; top:56px; width:600px; height:1229px; overflow:hidden; display:none; background:#0d1626; }
   .katman > img { width:100%; height:100%; object-fit:cover; display:block; }
   .karart { position:absolute; inset:0; background:#000; opacity:0; pointer-events:none; }
+  .katman .sayfa { position:absolute; left:0; top:0; width:600px; height:auto; object-fit:fill; will-change:transform; }
+  .katman .aracTam { position:absolute; left:0; top:auto; bottom:0; width:600px; height:211px; object-fit:fill; will-change:transform, opacity; }
+  .katman .aracKucuk { position:absolute; left:0; top:auto; bottom:0; width:600px; height:80px; object-fit:fill; opacity:0; }
+  .katman .wa { position:absolute; left:32px; width:101px; height:83px; border-radius:12px; object-fit:fill; }
   #parlama { position:absolute; inset:0; border-radius:76px; pointer-events:none; z-index:5;
     background:linear-gradient(120deg, rgba(255,255,255,.10) 0%, rgba(255,255,255,0) 35%); }
   #dokun { position:absolute; width:90px; height:90px; margin:-45px 0 0 -45px; border-radius:50%; z-index:6;
@@ -141,13 +145,15 @@ const FPS = 30, SURE = 27.5, GECIS = .45;
 // Telefon ekranı: kayıt klipleri (kare aralığı + hız) ve araya giren sayfa geçişleri
 // gecis: "it" = iPhone sayfa itme (sağdan gelir), "kaydir" = aşağı kaydırma, durum = durum çubuğu rengi
 const EKRAN = [
-  { k:"1-anasayfa",   t:0.0,  a:1, b:57,  hiz:1,   durum:"koyu" },
-  { k:"2-koleksiyon", t:1.9,  a:1, b:29,  hiz:.75, durum:"koyu",  gecis:"it" },
-  { k:"3-liste",      t:3.2,  a:1, b:56,  hiz:.75, durum:"acik",  gecis:"it" },
-  { k:"4-hero",       t:5.7,  a:1, b:57,  hiz:.45, durum:"koyu",  gecis:"it" },
-  { k:"5-ozellik",    t:9.5,  a:1, b:108, hiz:.62, durum:"acik",  gecis:"kaydir" },
-  { k:"GALERI",       t:15.5,                      durum:"koyu",  gecis:"kaydir" },
-  { k:"6-form",       t:23.5, a:1, b:18,  hiz:.8,  durum:"acik",  gecis:"it" },
+  { k:"1-anasayfa", t:0.0, a:1, b:57, hiz:1, durum:"koyu" },
+  // SAYFA: kayıttan birleştirilmiş tam boy sayfa; kay = [zaman, kaydırma(px, 750 ölçeği)] — pürüzsüz kaydırma
+  { k:"SAYFA", src:"sayfa-liste.jpg", koyuBitis:1759, t:1.9,  gecis:"it",
+    kay:[[1.9,0],[2.9,0],[5.2,2434]] },
+  { k:"SAYFA", src:"sayfa-detay.jpg", koyuBitis:1440, t:5.7,  gecis:"it",
+    kay:[[5.7,0],[9.6,0],[10.5,1560],[15.3,3380]] },
+  { k:"GALERI", t:15.5, durum:"koyu", gecis:"kaydir" },
+  { k:"SAYFA", src:"sayfa-detay.jpg", koyuBitis:1440, t:23.5, gecis:"it",
+    kay:[[23.5,5560]] },
 ];
 // Galeri fotoğrafları (dosya, başlık, üst etiket)
 const GALERI = [
@@ -199,7 +205,7 @@ const DURUS = [
   { t:SURE, x:380, y:870,  ry:-16, rx:6, rz:3, s:1.06 },
 ];
 // Dokunuşlar: [zaman, x, y] (ekran koordinatı 600x1285)
-const DOKUNUS = [[1.75, 300, 760], [3.05, 300, 900], [5.55, 300, 640], [23.3, 300, 700]];
+const DOKUNUS = [[1.75, 300, 760], [5.45, 300, 800], [23.3, 300, 700]];
 
 /* ======================= Yardımcılar ======================= */
 const clamp = (x,a=0,b=1) => Math.min(b, Math.max(a, x));
@@ -260,6 +266,12 @@ EKRAN.forEach(E => {
     galeri = { iz:q(".gIz"), kartImg:[...E.el.querySelectorAll(".gKart img")], sayac:q(".gSayac"),
       acik:[...E.el.querySelectorAll(".gAcik div")], nokta:[...E.el.querySelectorAll(".gNokta i")],
       kucukIz:q(".gKucukler"), kucuk:[...E.el.querySelectorAll(".gKucukler div")] };
+  } else if (E.k === "SAYFA") {
+    E.el = el(`<div class="katman" style="background:#fff"><img class="sayfa" src="${KLASOR}${E.src}">
+      <img class="aracKucuk" src="${KLASOR}arac-kucuk.png"><img class="aracTam" src="${KLASOR}arac-tam.png">
+      <img class="wa" src="${KLASOR}whatsapp.png"><div class="karart"></div></div>`);
+    E.sayfa = E.el.querySelector(".sayfa"); E.tam = E.el.querySelector(".aracTam");
+    E.kucuk = E.el.querySelector(".aracKucuk"); E.wa = E.el.querySelector(".wa");
   } else {
     E.el = el(`<div class="katman"><img><div class="karart"></div></div>`);
     E.img = E.el.querySelector("img");
@@ -280,8 +292,22 @@ function durus(t) {
   const o = {}; ["x","y","ry","rx","rz","s"].forEach(k => o[k] = lerp(a[k], b[k], x)); return o;
 }
 // Bir katmanı t anındaki haline getir (klip karesi ya da galeri)
+function kaydirma(E, t) {
+  const K = E.kay; if (t <= K[0][0]) return K[0][1];
+  for (let j = 0; j < K.length - 1; j++) if (t <= K[j + 1][0]) return lerp(K[j][1], K[j + 1][1], inOut(p(t, K[j][0], K[j + 1][0])));
+  return K[K.length - 1][1];
+}
 function katmanCiz(E, t, bekle) {
   if (E.k === "GALERI") { galeriCiz(t); return; }
+  if (E.k === "SAYFA") {
+    const y = kaydirma(E, t), f = clamp(y / 140);           // kaydırınca Safari çubuğu küçülür
+    E.sayfa.style.transform = `translateY(${-y * .8}px)`;
+    E.tam.style.opacity = 1 - f; E.tam.style.transform = `translateY(${f * 120}px)`;
+    E.kucuk.style.opacity = f;
+    E.wa.style.top = lerp(861, 1035, f) + "px";
+    E.durum = y < E.koyuBitis - 20 ? "koyu" : "acik";
+    return;
+  }
   const n = Math.min(E.b, E.a + Math.max(0, Math.floor((t - E.t) * FPS * E.hiz)));
   bekle.push(yukle(E.img, yol(E.k, n)));
 }
